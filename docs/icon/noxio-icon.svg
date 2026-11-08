@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Noxio icon, "Crescent and Sparkle": a slim crescent moon, a centred play button and a sparkle.
+     Used to render the legacy launcher icons and the store icon. The adaptive icon itself is in
+     app/src/main/res/drawable/ic_launcher_*.xml and uses the same shapes. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="18 18 72 72" width="512" height="512">
+  <defs>
+    <linearGradient id="moon" gradientUnits="userSpaceOnUse" x1="24" y1="24" x2="84" y2="84">
+      <stop offset="0" stop-color="#ECE6FF"/>
+      <stop offset="1" stop-color="#A79DFF"/>
+    </linearGradient>
+  </defs>
+  <rect x="18" y="18" width="72" height="72" rx="16" fill="#000"/>
+  <path d="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z" fill="url(#moon)"/>
+  <path d="M47 41L47 67L68 54Z" fill="#fff" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M75 33Q76.4 36.6 80 38Q76.4 39.4 75 43Q73.6 39.4 70 38Q73.6 36.6 75 33Z" fill="#fff"/>
+</svg>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Single-color version for themed icons. The launcher tints it, only the alpha matters. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z" />
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M47 41L47 67L68 54Z"
+        android:strokeColor="#000000"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M75 33Q76.4 36.6 80 38Q76.4 39.4 75 43Q73.6 39.4 70 38Q73.6 36.6 75 33Z" />
+</vector>

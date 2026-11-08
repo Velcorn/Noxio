@@ -80,44 +80,38 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
       '<path d="M47 41L47 67L68 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
   }
 
-  // A lunar crater, lit from the top left: a shadowed floor and a bright inner wall on the lower right.
-  function crater(cx, cy, r, mode, fg) {
-    var floor = mode === 'mono' ? 'none' : '#0f0c1d';
-    var wall = mode === 'mono' ? fg : '#8a7be0';
-    var start = polar2(cx, cy, r, 20), end = polar2(cx, cy, r, 160);
-    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + floor + '"/>' +
-      '<path d="M' + start[0].toFixed(2) + ' ' + start[1].toFixed(2) + 'A' + r + ' ' + r + ' 0 0 1 ' + end[0].toFixed(2) + ' ' + end[1].toFixed(2) + '" fill="none" stroke="' + wall + '" stroke-width="1.3" stroke-linecap="round" opacity="' + (mode === 'mono' ? .75 : .9) + '"/>';
-  }
-  function polar2(cx, cy, r, deg) { var a = deg * Math.PI / 180; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; }
+  // The play button is centred: its centroid is the middle of the icon (54, 54).
+  var TRI = 'M47 41L47 67L68 54Z';
+  function playButton(fill) { return '<path d="' + TRI + '" fill="' + fill + '" stroke="' + fill + '" stroke-width="5" stroke-linejoin="round"/>'; }
+  function crescentGradient(id) { return '<linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>'; }
+  // A four-pointed sparkle centred at (x, y).
+  function sparkle(x, y, r, fill) { var k = r * 0.28; return '<path d="M' + x + ' ' + (y - r) + 'Q' + (x + k) + ' ' + (y - k) + ' ' + (x + r) + ' ' + y + 'Q' + (x + k) + ' ' + (y + k) + ' ' + x + ' ' + (y + r) + 'Q' + (x - k) + ' ' + (y + k) + ' ' + (x - r) + ' ' + y + 'Q' + (x - k) + ' ' + (y - k) + ' ' + x + ' ' + (y - r) + 'Z" fill="' + fill + '"/>'; }
 
   var concepts = [
-    { name: 'Textured Eclipse (previous)',
-      text: 'The version you liked. The craters and seas run behind the play button, and one crater touches the ring.',
+    { name: 'Slim Crescent',
+      text: 'A slim crescent that hugs the left of the play button and curves round it, with its tips reaching past the middle. The button sits dead centre and the crescent frames it.',
       art: function (mode, fg, id) {
-        var rim = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var moon = mode === 'mono' ? fg : 'url(#g' + id + ')';
         var tri = mode === 'mono' ? fg : '#ffffff';
-        var line = mode === 'mono' ? fg : '#5b4fa6';
-        var seas = mode === 'mono' ? '' : '<ellipse cx="42" cy="44" rx="7" ry="5" fill="#241e42" transform="rotate(-25 42 44)"/><ellipse cx="65" cy="66" rx="6" ry="4" fill="#241e42" transform="rotate(20 65 66)"/><ellipse cx="66" cy="43" rx="4" ry="3" fill="#241e42"/>';
-        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="26" fill="#14121f"/>';
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0c7ff"/><stop offset="1" stop-color="#8f7dff"/></linearGradient></defs>' +
-          ring(54, 54, 31, 3.2, rim, .3) + ring(54, 54, 27.5, 3.6, rim, 1) + body + seas +
-          ring(41, 63, 3.4, 1.3, line, .8) + ring(67, 42, 2.8, 1.3, line, .8) + ring(66, 68, 2.4, 1.3, line, .8) + ring(44, 40, 2.2, 1.2, line, .7) +
-          '<path d="M47 41L47 67L68 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
+        return '<defs>' + crescentGradient(id) + '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="58.5" cy="54" r="28" fill="#000"/></mask></defs>' +
+          '<circle cx="54" cy="54" r="30" fill="' + moon + '" mask="url(#m' + id + ')"/>' + playButton(tri);
       } },
-    { name: 'Textured Eclipse (refined)',
-      text: 'Everything sits in the free space around the play button: nothing runs behind it, and nothing touches the ring. Craters have a shadowed floor and a lit inner wall, all lit from the top left, in a few sizes. The seas are irregular patches, darker than the highlands, like on the real moon.',
+    { name: 'Crescent Ring',
+      text: 'The slimmest of the three: a thin crescent that wraps almost all the way round the play button like an open ring. Calm, light, and perfectly balanced around the centre.',
       art: function (mode, fg, id) {
-        var rim = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var moon = mode === 'mono' ? fg : 'url(#g' + id + ')';
         var tri = mode === 'mono' ? fg : '#ffffff';
-        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="26" fill="#252048"/>';
-        var seas = mode === 'mono' ? '' :
-          '<path d="M33 51C35 47 39 46 41.5 49C42 53 41 58 39 60C36 61 33 58 32.5 55Z" fill="#120f24"/>' +
-          '<ellipse cx="70" cy="43" rx="3.8" ry="2.5" fill="#120f24" transform="rotate(-22 70 43)"/>';
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0c7ff"/><stop offset="1" stop-color="#8f7dff"/></linearGradient></defs>' +
-          ring(54, 54, 31, 3.2, rim, .3) + ring(54, 54, 27.5, 3.6, rim, 1) + body + seas +
-          crater(38, 40, 2.6, mode, fg) + crater(64, 36, 2.4, mode, fg) + crater(38, 66, 2.4, mode, fg) +
-          crater(62, 72, 2.8, mode, fg) + crater(72, 64, 2, mode, fg) +
-          '<path d="M47 41L47 67L68 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
+        return '<defs>' + crescentGradient(id) + '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="57.5" cy="54" r="29.5" fill="#000"/></mask></defs>' +
+          '<circle cx="54" cy="54" r="32" fill="' + moon + '" mask="url(#m' + id + ')"/>' + playButton(tri);
+      } },
+    { name: 'Crescent and Sparkle',
+      text: 'A slim crescent with a slightly fuller body, a sparkle in the opening, and the play button in the middle. The sparkle makes it read as a night sky at a glance.',
+      art: function (mode, fg, id) {
+        var moon = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var tri = mode === 'mono' ? fg : '#ffffff';
+        var spark = mode === 'mono' ? fg : '#ffffff';
+        return '<defs>' + crescentGradient(id) + '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="59.5" cy="54" r="27.5" fill="#000"/></mask></defs>' +
+          '<circle cx="54" cy="54" r="30" fill="' + moon + '" mask="url(#m' + id + ')"/>' + playButton(tri) + sparkle(75, 38, 5, spark);
       } }
   ];
 

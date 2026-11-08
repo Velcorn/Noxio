@@ -1,3 +1,4 @@
+<p align="center"><img src="fastlane/metadata/android/en-US/images/icon.png" width="120" alt="Noxio icon"></p>
 <h1 align="center"><b>Noxio</b></h1>
 <h4 align="center">A simple, rational music player for Android, built for listening through the night.</h4>
 <p align="center">

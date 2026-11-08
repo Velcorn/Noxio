@@ -1,41 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Crescent and Sparkle: a slim crescent moon, a centred play button and a sparkle. Drawn on the 108 dp adaptive icon grid. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <group
-        android:scaleX="2.835"
-        android:scaleY="2.835"
-        android:translateX="19.98"
-        android:translateY="19.98">
-        <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="m 13,17 -3,3 -3,-3 3,-3"
-            android:strokeWidth="2"
-            android:strokeColor="#004894"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="M 13,10.5 V 17"
-            android:strokeWidth="2"
-            android:strokeColor="#1a61ae"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="m 13,4v 6.5"
-            android:strokeWidth="2"
-            android:strokeColor="#357ac9"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-        <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="m 13,4 4,4"
-            android:strokeWidth="2"
-            android:strokeColor="#5093e4"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-    </group>
+    <!-- Slim crescent moon -->
+    <path android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="84"
+                android:endY="84"
+                android:startX="24"
+                android:startY="24"
+                android:type="linear">
+                <item
+                    android:color="#ECE6FF"
+                    android:offset="0" />
+                <item
+                    android:color="#A79DFF"
+                    android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Play button, centred -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M47 41L47 67L68 54Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+
+    <!-- Sparkle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M75 33Q76.4 36.6 80 38Q76.4 39.4 75 43Q73.6 39.4 70 38Q73.6 36.6 75 33Z" />
 </vector>
