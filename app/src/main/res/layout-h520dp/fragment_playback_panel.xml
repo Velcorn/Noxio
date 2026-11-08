@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/toolbar_playback"
         app:navigationIcon="@drawable/ic_down_24"
         app:subtitleCentered="true"
         app:subtitleTextAppearance="?attr/textAppearanceBodySmall"
@@ -28,6 +27,7 @@
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintDimensionRatio="1"
+        app:layout_constraintVertical_bias="1.0"
         app:layout_constraintBottom_toTopOf="@+id/playback_info_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
         android:layout_marginStart="@dimen/spacing_medium"
         android:layout_marginEnd="@dimen/spacing_medium"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/playback_seek_bar"
+        app:layout_constraintBottom_toTopOf="@+id/playback_sleep_timer"
         app:layout_constraintEnd_toStartOf="@+id/playback_more"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +87,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/playback_info_container" />
 
+    <org.oxycblt.auxio.ui.RippleFixMaterialButton
+        android:id="@+id/playback_sleep_timer"
+        style="@style/Widget.Auxio.Button.Playback.More"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/lbl_sleep_timer"
+        app:icon="@drawable/ic_sleep_timer_24"
+        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small"
+        android:layout_marginStart="@dimen/spacing_small"
+        app:layout_constraintBottom_toTopOf="@+id/playback_seek_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playback_info_container" />
     <org.oxycblt.auxio.playback.ui.StyledSeekBar
         android:id="@+id/playback_seek_bar"
         android:layout_width="match_parent"
@@ -95,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playback_info_container" />
+        app:layout_constraintTop_toBottomOf="@+id/playback_sleep_timer" />
 
     <org.oxycblt.auxio.playback.ui.ForcedLTRFrameLayout
         android:id="@+id/playback_controls_container"

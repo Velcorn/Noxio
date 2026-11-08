@@ -23,9 +23,7 @@ import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.updatePadding
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.activityViewModels
@@ -72,7 +70,6 @@ import timber.log.Timber as L
 @AndroidEntryPoint
 class PlaybackPanelFragment :
     ViewBindingFragment<FragmentPlaybackPanelBinding>(),
-    Toolbar.OnMenuItemClickListener,
     StyledSeekBar.Listener,
     StepperOverlay.Listener {
     private val coverPagerAdapter = CoverPagerAdapter(this)
@@ -101,7 +98,6 @@ class PlaybackPanelFragment :
 
         binding.playbackToolbar.apply {
             setNavigationOnClickListener { playbackModel.openMain() }
-            setOnMenuItemClickListener(this@PlaybackPanelFragment)
         }
 
         binding.playbackPager?.apply {
@@ -160,6 +156,10 @@ class PlaybackPanelFragment :
         }
         binding.playbackSkipNext.setOnClickListener { playbackModel.next() }
         binding.playbackShuffle.setOnClickListener { playbackModel.toggleShuffled() }
+        binding.playbackSleepTimer.setOnClickListener {
+            L.d("Opening sleep timer")
+            SleepTimerDialog().show(childFragmentManager, SleepTimerDialog.TAG)
+        }
         binding.playbackMore?.setOnClickListener {
             playbackModel.song.value?.let {
                 listModel.openMenu(R.menu.playback_song, it, PlaySong.ByItself)
@@ -217,19 +217,8 @@ class PlaybackPanelFragment :
         binding.playbackSong.isSelected = false
         binding.playbackArtist.isSelected = false
         binding.playbackAlbum?.isSelected = false
-        binding.playbackToolbar.setOnMenuItemClickListener(null)
         userAwarePagerCallback?.release()
         binding.playbackPager?.adapter = null
-    }
-
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_sleep_timer) {
-            L.d("Opening sleep timer")
-            SleepTimerDialog().show(childFragmentManager, SleepTimerDialog.TAG)
-            return true
-        }
-
-        return false
     }
 
     override fun onSeekConfirmed(positionDs: Long) {
@@ -237,9 +226,8 @@ class PlaybackPanelFragment :
     }
 
     private fun updateSleepTimer(state: SleepTimerState) {
-        // Tint the toolbar button while a timer is running so it is visible at a glance.
-        val button =
-            requireBinding().playbackToolbar.getMenuButton(R.id.action_sleep_timer) ?: return
+        // Tint the button while a timer is running so it is visible at a glance.
+        val button = requireBinding().playbackSleepTimer
         val color =
             if (state is SleepTimerState.Active) {
                 MaterialColors.getColor(button, androidx.appcompat.R.attr.colorPrimary)

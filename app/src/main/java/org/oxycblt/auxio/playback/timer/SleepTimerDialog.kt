@@ -20,10 +20,10 @@ package org.oxycblt.auxio.playback.timer
 
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -39,8 +39,11 @@ import org.oxycblt.auxio.ui.ViewBindingBottomSheetDialogFragment
 import org.oxycblt.auxio.util.systemBarInsetsCompat
 
 /**
- * A bottom sheet for starting, checking and stopping the [SleepTimer]. Opened from the toolbar of
- * the playback panel.
+ * A bottom sheet for starting, checking and stopping the [SleepTimer]. Opened from the button above
+ * the seek bar of the playback panel.
+ *
+ * The Custom tile doubles as the input: tap it to type a number of minutes, after which it shows
+ * "N min". Tapping it again while selected edits the value again.
  */
 @AndroidEntryPoint
 class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBinding>() {
@@ -54,6 +57,8 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
     }
 
     private var choice = Choice.END_OF_TRACK
+    private var customMinutes: Int? = null
+    private var editing = false
 
     override fun onCreateBinding(inflater: LayoutInflater) =
         DialogSleepTimerBinding.inflate(inflater)
@@ -69,10 +74,10 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
         binding.sleep30.text = getString(R.string.fmt_sleep_minutes, SHORT_MINUTES)
         binding.sleep60.text = getString(R.string.fmt_sleep_minutes, LONG_MINUTES)
 
+        customMinutes = sleepTimer.lastCustomMinutes
         if (savedInstanceState == null) {
             // Start from whatever was used last time. Only the first-ever run falls back to
             // the end of the track.
-            binding.sleepCustomInput.setText(sleepTimer.lastCustomMinutes.toString())
             choice =
                 when (val last = sleepTimer.lastMode) {
                     SleepTimerMode.EndOfTrack -> Choice.END_OF_TRACK
@@ -81,7 +86,7 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
                             SHORT_MINUTES -> Choice.SHORT
                             LONG_MINUTES -> Choice.LONG
                             else -> {
-                                binding.sleepCustomInput.setText(last.minutes.toString())
+                                customMinutes = last.minutes
                                 Choice.CUSTOM
                             }
                         }
@@ -93,17 +98,31 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
 
         binding.sleepEndOfTrack.setOnClickListener { select(Choice.END_OF_TRACK) }
         binding.sleep30.setOnClickListener { select(Choice.SHORT) }
-        binding.sleepCustom.setOnClickListener { select(Choice.CUSTOM) }
         binding.sleep60.setOnClickListener { select(Choice.LONG) }
-        binding.sleepCustomInput.addTextChangedListener(
-            object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, st: Int, c: Int, a: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, st: Int, b: Int, c: Int) {}
-
-                override fun afterTextChanged(s: Editable?) = updateStartEnabled()
+        binding.sleepCustom.setOnClickListener {
+            if (editing) {
+                return@setOnClickListener
             }
-        )
+            // The first tap on a saved value selects it, a tap on the selected tile edits it.
+            if (customMinutes != null && choice != Choice.CUSTOM) {
+                select(Choice.CUSTOM)
+            } else {
+                startEditing()
+            }
+        }
+        binding.sleepCustomInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                finishEditing()
+                true
+            } else {
+                false
+            }
+        }
+        binding.sleepCustomInput.setOnFocusChangeListener { _, focused ->
+            if (!focused) {
+                finishEditing()
+            }
+        }
         binding.sleepFade.setOnCheckedChangeListener { _, checked -> sleepTimer.fade = checked }
         binding.sleepStart.setOnClickListener { start() }
         binding.sleepRestart.setOnClickListener { sleepTimer.reset() }
@@ -127,48 +146,72 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
     }
 
     private fun select(newChoice: Choice) {
+        finishEditing()
         choice = newChoice
+        updateTiles()
+    }
+
+    private fun updateTiles() {
         val binding = requireBinding()
         binding.sleepEndOfTrack.isChecked = choice == Choice.END_OF_TRACK
         binding.sleep30.isChecked = choice == Choice.SHORT
         binding.sleepCustom.isChecked = choice == Choice.CUSTOM
         binding.sleep60.isChecked = choice == Choice.LONG
-        binding.sleepCustomContainer.visibility =
-            if (choice == Choice.CUSTOM) View.VISIBLE else View.GONE
-        updateStartEnabled()
+        val custom = customMinutes
+        binding.sleepCustom.text =
+            when {
+                editing -> ""
+                custom != null -> getString(R.string.fmt_sleep_minutes, custom)
+                else -> getString(R.string.lbl_sleep_custom)
+            }
+        binding.sleepCustomEditRow.visibility = if (editing) View.VISIBLE else View.GONE
+        binding.sleepStart.isEnabled = choice != Choice.CUSTOM || (custom != null && !editing)
     }
 
-    private fun customMinutes(): Int? =
-        requireBinding()
-            .sleepCustomInput
-            .text
-            ?.toString()
-            ?.toIntOrNull()
-            ?.takeIf { it in SleepTimer.MIN_MINUTES..SleepTimer.MAX_MINUTES }
-
-    private fun updateStartEnabled() {
+    private fun startEditing() {
         val binding = requireBinding()
-        val valid = choice != Choice.CUSTOM || customMinutes() != null
-        binding.sleepStart.isEnabled = valid
-        binding.sleepCustomContainer.error =
-            if (!valid && !binding.sleepCustomInput.text.isNullOrEmpty()) {
-                getString(R.string.err_sleep_minutes)
-            } else {
-                null
+        choice = Choice.CUSTOM
+        editing = true
+        updateTiles()
+        binding.sleepCustomInput.apply {
+            setText((customMinutes ?: SleepTimer.DEFAULT_CUSTOM_MINUTES).toString())
+            requestFocus()
+            selectAll()
+            post {
+                context
+                    .getSystemService(InputMethodManager::class.java)
+                    ?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
             }
+        }
+    }
+
+    private fun finishEditing() {
+        if (!editing) {
+            return
+        }
+        // Clear this first, since hiding the keyboard and clearing focus re-enter here.
+        editing = false
+        val binding = requireBinding()
+        val minutes = binding.sleepCustomInput.text?.toString()?.toIntOrNull()
+        if (minutes != null && minutes in SleepTimer.MIN_MINUTES..SleepTimer.MAX_MINUTES) {
+            customMinutes = minutes
+            sleepTimer.lastCustomMinutes = minutes
+        }
+        binding.sleepCustomInput.clearFocus()
+        context
+            ?.getSystemService(InputMethodManager::class.java)
+            ?.hideSoftInputFromWindow(binding.sleepCustomInput.windowToken, 0)
+        updateTiles()
     }
 
     private fun start() {
+        finishEditing()
         val mode =
             when (choice) {
                 Choice.END_OF_TRACK -> SleepTimerMode.EndOfTrack
                 Choice.SHORT -> SleepTimerMode.Minutes(SHORT_MINUTES)
                 Choice.LONG -> SleepTimerMode.Minutes(LONG_MINUTES)
-                Choice.CUSTOM -> {
-                    val minutes = customMinutes() ?: return
-                    sleepTimer.lastCustomMinutes = minutes
-                    SleepTimerMode.Minutes(minutes)
-                }
+                Choice.CUSTOM -> SleepTimerMode.Minutes(customMinutes ?: return)
             }
         sleepTimer.fade = requireBinding().sleepFade.isChecked
         sleepTimer.start(mode)

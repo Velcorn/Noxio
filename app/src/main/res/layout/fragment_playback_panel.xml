@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/toolbar_playback"
         app:navigationIcon="@drawable/ic_down_24"
         app:subtitleCentered="true"
         app:subtitleTextAppearance="?attr/textAppearanceBodySmall"
@@ -42,7 +41,7 @@
         android:layout_marginBottom="@dimen/spacing_tiny"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/playback_controls_wrapper"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/playback_sleep_timer"
         app:layout_constraintStart_toEndOf="@+id/playback_pager"
         app:layout_constraintTop_toTopOf="@+id/playback_pager"
         app:layout_constraintVertical_chainStyle="packed">
@@ -64,6 +63,20 @@
             tools:text="Artist Name" />
 
     </LinearLayout>
+
+    <org.oxycblt.auxio.ui.RippleFixMaterialButton
+        android:id="@+id/playback_sleep_timer"
+        style="@style/Widget.Auxio.Button.Playback.More"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:contentDescription="@string/lbl_sleep_timer"
+        app:icon="@drawable/ic_sleep_timer_24"
+        app:layout_constraintBottom_toBottomOf="@+id/playback_info_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/playback_info_container"
+        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
+
     <org.oxycblt.auxio.playback.ui.ForcedLTRFrameLayout
         android:id="@+id/playback_controls_wrapper"
         android:layout_width="0dp"

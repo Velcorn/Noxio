@@ -55,15 +55,52 @@
                     android:layout_weight="1"
                     android:checkable="true" />
 
-                <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                    android:id="@+id/sleep_custom"
-                    style="?attr/materialButtonOutlinedStyle"
+                <!-- The label button and the input share one tile -->
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/spacing_small"
-                    android:layout_weight="1"
-                    android:checkable="true"
-                    android:text="@string/lbl_sleep_custom" />
+                    android:layout_weight="1">
+
+                    <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                        android:id="@+id/sleep_custom"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/lbl_sleep_custom" />
+
+                    <LinearLayout
+                        android:id="@+id/sleep_custom_edit_row"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/sleep_custom_input"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autofillHints="off"
+                            android:gravity="center"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:minWidth="40dp"
+                            android:contentDescription="@string/lbl_sleep_minutes"
+                            android:textAppearance="?attr/textAppearanceLabelLarge" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lbl_sleep_unit"
+                            android:textAppearance="?attr/textAppearanceLabelLarge" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
 
                 <org.oxycblt.auxio.ui.RippleFixMaterialButton
                     android:id="@+id/sleep_60"
@@ -74,25 +111,6 @@
                     android:checkable="true" />
 
             </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sleep_custom_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:hint="@string/lbl_sleep_minutes"
-                android:visibility="gone"
-                app:suffixText="min">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sleep_custom_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/sleep_fade"

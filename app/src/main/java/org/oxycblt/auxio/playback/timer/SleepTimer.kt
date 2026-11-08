@@ -64,8 +64,8 @@ interface SleepTimer {
     val state: StateFlow<SleepTimerState>
     /** The mode that was started last, used as the default the next time. */
     val lastMode: SleepTimerMode
-    /** The last minutes value entered as a custom duration. */
-    var lastCustomMinutes: Int
+    /** The last minutes value entered as a custom duration, or null if never customized. */
+    var lastCustomMinutes: Int?
     /** Whether to fade out before stopping. */
     var fade: Boolean
     /** Whether shaking the device restarts a running minutes timer. */
@@ -83,6 +83,7 @@ interface SleepTimer {
     companion object {
         const val MIN_MINUTES = 1
         const val MAX_MINUTES = 12 * 60
+        const val DEFAULT_CUSTOM_MINUTES = 45
     }
 }
 
@@ -102,9 +103,17 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
             return if (minutes > 0) SleepTimerMode.Minutes(minutes) else SleepTimerMode.EndOfTrack
         }
 
-    override var lastCustomMinutes: Int
-        get() = sharedPreferences.getInt(KEY_CUSTOM_MINUTES, DEFAULT_CUSTOM_MINUTES)
-        set(value) = sharedPreferences.edit { putInt(KEY_CUSTOM_MINUTES, value) }
+    override var lastCustomMinutes: Int?
+        get() =
+            if (sharedPreferences.contains(KEY_CUSTOM_MINUTES)) {
+                sharedPreferences.getInt(KEY_CUSTOM_MINUTES, 0)
+            } else {
+                null
+            }
+        set(value) =
+            sharedPreferences.edit {
+                if (value != null) putInt(KEY_CUSTOM_MINUTES, value) else remove(KEY_CUSTOM_MINUTES)
+            }
 
     override var fade: Boolean
         get() = sharedPreferences.getBoolean(KEY_FADE, true)
@@ -150,6 +159,5 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
         const val KEY_LAST_MINUTES = "noxio_sleep_last_minutes"
         const val KEY_CUSTOM_MINUTES = "noxio_sleep_custom_minutes"
         const val KEY_FADE = "noxio_sleep_fade"
-        const val DEFAULT_CUSTOM_MINUTES = 45
     }
 }

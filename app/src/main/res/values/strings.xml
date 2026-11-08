@@ -123,6 +123,7 @@
     <string name="lbl_sleep_end_of_track">End of track</string>
     <string name="lbl_sleep_custom">Custom</string>
     <string name="lbl_sleep_minutes">Minutes</string>
+    <string name="lbl_sleep_unit">min</string>
     <string name="lbl_sleep_fade">Fade out before stopping</string>
     <string name="lbl_sleep_start">Start</string>
     <string name="lbl_sleep_restart">Restart</string>
@@ -131,7 +132,6 @@
     <string name="lbl_sleep_stops_when_over">Playback stops when the timer ends</string>
     <string name="fmt_sleep_minutes">%d min</string>
     <string name="fmt_sleep_timer_reset">Reset %d min timer</string>
-    <string name="err_sleep_minutes">Enter 1 to 720 minutes</string>
     <string name="lbl_play">Play</string>
     <string name="lbl_shuffle">Shuffle</string>
 
