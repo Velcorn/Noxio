@@ -22,19 +22,31 @@ started because a music player that is good to fall asleep to needs a sleep time
 Noxio is a personal project and will keep diverging from upstream. It is **not** affiliated with the Auxio project, and
 upstream issues should not be reported against it.
 
-## What's different
+## What's different from Auxio
 
-Planned and in progress, tracked in [ROADMAP.md](/ROADMAP.md):
+| | Auxio | Noxio |
+| --- | --- | --- |
+| Sleep timer | none | Moon icon above the seek bar. End of track, 30 min, custom minutes or 60 min, with fade-out. Remembers your last choice. Restart it from the notification or by shaking the device. |
+| Listening stats | none | Home menu > Listening stats. Top songs, artists and albums plus time listened, per week, month or year. Stored on the device only. |
+| Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use |
+| Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Audio |
+| Package name | `org.oxycblt.auxio` | `de.devfin.noxio`, so it installs next to Auxio |
 
-- [ ] Sleep timer, reachable from the now playing screen
-- [ ] Listening stats: weekly, monthly and yearly top songs, artists and albums, a barebones "Wrapped" (implemented, untested; Home menu > Listening stats)
-- [ ] Assorted smaller tweaks
+Both features are implemented but have only been build-tested so far. Progress is tracked in
+[ROADMAP.md](/ROADMAP.md). Everything else is inherited from Auxio: Media3 playback, gapless playback, ReplayGain, rich
+tag support (multiple artists, release types, disc numbers, sort tags), playlists, playback persistence, Android Auto,
+widgets, and being completely private and offline.
 
-Everything else is inherited from Auxio: Media3 playback, gapless playback, ReplayGain, rich tag support (multiple
-artists, release types, disc numbers, sort tags), playlists, playback persistence, Android Auto, widgets, and being
-completely private and offline.
+## Mockups
 
-Noxio installs alongside Auxio (`de.devfin.noxio`), so you can try both.
+Clickable mockups of the added features, with the same behavior as the app. They are single HTML files: download them
+(or clone the repo) and open them in a browser.
+
+- [Sleep timer](docs/mockups/sleep-timer.html): the timer button, the bottom sheet, the editable Custom tile, shake to
+  reset, and a toggle that highlights the one-handed thumb zone
+- [Listening stats](docs/mockups/stats.html): week, month and year views with example data
+
+Screenshots from a real device will be added here once the features have been tested on one.
 
 ## Branches
 
