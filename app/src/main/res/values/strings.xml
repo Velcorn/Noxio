@@ -130,6 +130,8 @@
     <string name="lbl_stats_top_artists">Top artists</string>
     <string name="lbl_stats_top_albums">Top albums</string>
     <string name="lbl_stats_empty">Nothing played in this period yet. A song counts after 30 seconds of listening.</string>
+    <string name="lbl_stats_under_minute">&lt;1 min</string>
+    <string name="fmt_stats_row">%1$s\n%2$s</string>
     <string name="fmt_stats_time_hm">%1$d h %2$d min</string>
     <string name="fmt_stats_time_m">%1$d min</string>
     <plurals name="fmt_stats_plays">

@@ -102,9 +102,9 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         binding.statsSummary.text = formatListened(stats.listenedMs)
         binding.statsSummaryPlays.text = formatPlays(stats.plays)
 
-        fill(binding.statsSongsHeader, binding.statsSongs, stats.songs)
         fill(binding.statsArtistsHeader, binding.statsArtists, stats.artists)
         fill(binding.statsAlbumsHeader, binding.statsAlbums, stats.albums)
+        fill(binding.statsSongsHeader, binding.statsSongs, stats.songs)
     }
 
     private fun fill(
@@ -121,7 +121,12 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             row.statsName.text = item.name
             row.statsSubtitle.text = item.subtitle
             row.statsSubtitle.isVisible = !item.subtitle.isNullOrEmpty()
-            row.statsCount.text = formatPlays(item.plays)
+            row.statsCount.text =
+                getString(
+                    R.string.fmt_stats_row,
+                    formatPlays(item.plays),
+                    formatListened(item.listenedMs),
+                )
             container.addView(row.root)
         }
     }
@@ -131,6 +136,9 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
 
     private fun formatListened(ms: Long): String {
         val totalMinutes = ms / 60_000
+        if (totalMinutes == 0L) {
+            return getString(R.string.lbl_stats_under_minute)
+        }
         val hours = totalMinutes / 60
         val minutes = totalMinutes % 60
         return if (hours > 0) {

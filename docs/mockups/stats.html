@@ -54,7 +54,7 @@ h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: u
 .row .t { flex: 1; min-width: 0; }
 .row .t b { display: block; font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .row .t span { display: block; color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.row .c { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.row .c { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; line-height: 1.35; }
 .empty { margin: 36px 24px; text-align: center; color: var(--muted); }
 [hidden] { display: none !important; }
 @media (max-width: 760px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; justify-items: center; } .notes { width: 100%; } }
@@ -103,7 +103,7 @@ h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: u
       <ul>
         <li><b>Week, month, year:</b> calendar periods. The week starts on the first day of the week of your locale.</li>
         <li>Step back to earlier periods. The next arrow is disabled on the current one.</li>
-        <li>Top 10 songs, artists and albums, ranked by plays and then by time listened.</li>
+        <li>Top 10 artists, albums and songs, in that order. Every row shows its plays and the time listened. Rows are ranked by plays, then by time.</li>
       </ul>
     </div>
     <div>
@@ -143,11 +143,16 @@ h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: u
     var f = function (d) { return months[d.getMonth()].slice(0, 3) + ' ' + d.getDate(); };
     return f(start) + ' \u2013 ' + f(end) + ', ' + end.getFullYear();
   }
+  // Example listening time: about 3.5 minutes per play.
+  function duration(plays) {
+    var mins = Math.round(plays * 3.5);
+    return mins >= 60 ? Math.floor(mins / 60) + ' h ' + (mins % 60) + ' min' : mins + ' min';
+  }
   function rows(title, items, withSub) {
     return '<div class="sec">' + title + '</div>' + items.map(function (r, i) {
       var sub = withSub ? '<span>' + r[1] + '</span>' : '';
       var count = withSub ? r[2] : r[1];
-      return '<div class="row"><div class="n">' + (i + 1) + '</div><div class="t"><b>' + r[0] + '</b>' + sub + '</div><div class="c">' + count + (count === 1 ? ' play' : ' plays') + '</div></div>';
+      return '<div class="row"><div class="n">' + (i + 1) + '</div><div class="t"><b>' + r[0] + '</b>' + sub + '</div><div class="c">' + count + (count === 1 ? ' play' : ' plays') + '<br>' + duration(count) + '</div></div>';
     }).join('');
   }
   function render() {
@@ -162,12 +167,12 @@ h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: u
     // Earlier periods show the same example numbers scaled down, just to demonstrate stepping back.
     var k = offset === 0 ? 1 : (offset === -1 ? .8 : .6);
     var scale = function (n) { return Math.max(1, Math.round(n * k)); };
-    var hm = d.time.match(/(\d+) h (\d+) min/); var mins = Math.round((hm[1] * 60 + +hm[2]) * k);
+    var hm = d.time.match(/(\d+) h (\d+) min/); var mins = Math.round((+hm[1] * 60 + +hm[2]) * k);
     $('body').innerHTML =
       '<div class="total"><b>' + Math.floor(mins / 60) + ' h ' + (mins % 60) + ' min</b><span>' + scale(d.plays) + ' plays</span></div>' +
-      rows('Top songs', d.songs.map(function (r) { return [r[0], r[1], scale(r[2])]; }), true) +
       rows('Top artists', d.artists.map(function (r) { return [r[0], scale(r[1])]; }), false) +
-      rows('Top albums', d.albums.map(function (r) { return [r[0], r[1], scale(r[2])]; }), true);
+      rows('Top albums', d.albums.map(function (r) { return [r[0], r[1], scale(r[2])]; }), true) +
+      rows('Top songs', d.songs.map(function (r) { return [r[0], r[1], scale(r[2])]; }), true);
   }
   ['week', 'month', 'year'].forEach(function (p) {
     $('p' + p[0].toUpperCase() + p.slice(1)).onclick = function () { period = p; offset = 0; render(); };

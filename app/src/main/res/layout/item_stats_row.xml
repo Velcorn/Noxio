@@ -49,7 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_small"
+        android:gravity="end"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        tools:text="12 plays" />
+        tools:text="12 plays\n48 min" />
 
 </LinearLayout>
