@@ -42,8 +42,7 @@ object StatsCsv {
                 DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
                     Instant.ofEpochMilli(event.startedAt).atZone(zone).withNano(0)
                 )
-            val artists =
-                event.artists.split(PlayEvent.ARTIST_SEPARATOR).filter { it.isNotBlank() }
+            val artists = event.artists.split(PlayEvent.ARTIST_SEPARATOR).filter { it.isNotBlank() }
             val row =
                 listOf(
                     time,

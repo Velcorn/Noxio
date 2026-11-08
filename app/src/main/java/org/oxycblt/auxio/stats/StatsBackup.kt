@@ -125,8 +125,7 @@ class StatsBackupWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
         val backup =
-            EntryPointAccessors.fromApplication(applicationContext, Entry::class.java)
-                .statsBackup()
+            EntryPointAccessors.fromApplication(applicationContext, Entry::class.java).statsBackup()
         return try {
             // Without a usable folder retrying will not help, the next weekly run will try again.
             if (backup.run()) Result.success() else Result.failure()
