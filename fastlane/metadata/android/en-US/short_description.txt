@@ -1,1 +1,1 @@
-A simple, rational music player
+A simple, rational music player, built for listening through the night.

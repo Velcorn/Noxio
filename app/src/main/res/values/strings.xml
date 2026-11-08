@@ -3,7 +3,7 @@
     <!-- Info namespace | App labels -->
     <eat-comment />
 
-    <string name="info_app_desc">A simple, rational music player for android.</string>
+    <string name="info_app_desc">A simple, rational music player for Android, built for listening through the night.</string>
 
     <!-- Label Namespace | Static Labels -->
     <eat-comment />

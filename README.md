@@ -44,8 +44,11 @@ Clickable mockups of the added features, with the same behavior as the app. They
 (or clone the repo) and open them in a browser.
 
 - [Sleep timer](docs/mockups/sleep-timer.html): the timer button, the bottom sheet, the editable Custom tile, shake to
-  reset, and a toggle that highlights the one-handed thumb zone
-- [Listening stats](docs/mockups/stats.html): week, month and year views with example data
+  reset, the notification action, a thumb-zone overlay, and a theme switcher with AMOLED black and Material You colors
+- [Listening stats](docs/mockups/stats.html): week, month and year views with example data, the category pill, sharing
+  a card as an image, the CSV export and import menu, and the same theme switcher
+- [App icon](docs/mockups/icons.html): the icon with its adaptive layers, the themed (Material You) versions, the
+  splash screen, the notification glyph and a home screen preview
 
 Screenshots from a real device will be added here once the features have been tested on one.
 
