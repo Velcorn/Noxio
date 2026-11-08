@@ -4,12 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Noxio Listening Stats Mockup</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one interactive phone beside short notes; stacks on narrow screens. Example data only. */
+/* Layout: one interactive phone beside short notes; stacks on narrow screens. Example data only.
+   Each category (artists, albums, songs) has its own gradient, shared by the on-screen card and the exported image. */
 :root {
   --bg: #f1f1f6; --surface: #ffffff; --surface-2: #e8e8f1; --fg: #16162b; --muted: #5d5d7a;
   --line: #d6d6e4; --accent: #4b3fd1; --on-accent: #ffffff;
+  --g-artists: linear-gradient(145deg, #7b4dff 0%, #d24dd8 100%);
+  --g-albums: linear-gradient(145deg, #0fa3b1 0%, #3b6cf0 100%);
+  --g-songs: linear-gradient(145deg, #ff8a3d 0%, #e8365d 100%);
+  --g-hero: linear-gradient(145deg, #2b2370 0%, #5a3fd0 100%);
   --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --font-body: "DM Sans", system-ui, sans-serif;
   --font-mono: "DM Mono", ui-monospace, monospace;
@@ -17,53 +22,80 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0d0d1c; --surface: #17172c; --surface-2: #23233f; --fg: #ececf8; --muted: #9b9bbd;
-    --line: #2d2d4d; --accent: #9d93ff; --on-accent: #12112b;
+    --bg: #0d0d1c; --surface: #15152a; --surface-2: #23233f; --fg: #ececf8; --muted: #9b9bbd;
+    --line: #2d2d4d; --accent: #a79dff; --on-accent: #12112b;
   }
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font-body); padding: 32px 16px; }
 .wrap { max-width: 920px; margin: 0 auto; display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 48px; align-items: start; }
-h1 { font: 700 34px/1.1 var(--font-display); margin: 0 0 6px; text-wrap: balance; }
+h1 { font: 800 34px/1.1 var(--font-display); margin: 0 0 6px; text-wrap: balance; }
 h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
 .notes { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 .notes p, .notes li { color: var(--muted); margin: 0; max-width: 60ch; }
 .notes ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
 .notes b { color: var(--fg); font-weight: 600; }
-.phone { width: 340px; max-width: 100%; height: 660px; background: var(--surface); border: 1px solid var(--line); border-radius: 36px; overflow: hidden; display: flex; flex-direction: column; }
+
+.phone { width: 340px; max-width: 100%; height: 700px; background: var(--surface); border: 1px solid var(--line); border-radius: 36px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
 .bar { display: flex; align-items: center; gap: 4px; padding: 14px 10px 6px; }
-.bar b { font: 600 18px var(--font-body); margin-left: 6px; }
-.icon-btn { border: 0; background: none; color: var(--fg); width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center; cursor: pointer; }
-.icon-btn:hover:not(:disabled) { background: var(--surface-2); }
+.bar b { font: 700 18px var(--font-body); margin-left: 6px; }
+.icon-btn { border: 0; background: none; color: inherit; width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center; cursor: pointer; flex: none; }
+.icon-btn:hover:not(:disabled) { background: color-mix(in srgb, currentColor 14%, transparent); }
 .icon-btn:disabled { opacity: .3; cursor: default; }
-.icon-btn:focus-visible, .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .icon-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.scroll { overflow-y: auto; flex: 1; padding-bottom: 18px; }
-.seg { display: grid; grid-template-columns: repeat(3, 1fr); margin: 6px 16px 0; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
-.seg button { border: 0; background: none; color: var(--fg); height: 40px; font: 500 14px var(--font-body); cursor: pointer; }
-.seg button + button { border-left: 1px solid var(--line); }
+.scroll { overflow-y: auto; flex: 1; padding: 0 16px 100px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface-2); border-radius: 22px; padding: 4px; margin-top: 6px; }
+.seg button { border: 0; background: none; color: var(--fg); height: 36px; border-radius: 18px; font: 600 14px var(--font-body); cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
-.range { display: flex; align-items: center; justify-content: space-between; margin: 6px 8px 0; }
-.range span { font: 600 15px var(--font-body); }
-.total { text-align: center; margin-top: 6px; }
-.total b { display: block; font: 700 32px/1.2 var(--font-display); font-variant-numeric: tabular-nums; }
-.total span { color: var(--muted); font-size: 14px; }
-.sec { margin: 18px 16px 4px; font: 700 12px var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-.row { display: flex; align-items: center; gap: 8px; padding: 6px 16px; min-height: 52px; }
-.row .n { width: 24px; font: 500 15px var(--font-mono); color: var(--accent); }
+.range { display: flex; align-items: center; justify-content: space-between; margin: 4px -6px 0; }
+.range span { font: 700 15px var(--font-body); }
+
+.hero { background: var(--g-hero); color: #fff; border-radius: 24px; padding: 16px 20px; margin-top: 4px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.hero b { font: 800 30px/1.1 var(--font-display); font-variant-numeric: tabular-nums; }
+.hero span { opacity: .85; font-size: 14px; white-space: nowrap; }
+.card { color: #fff; border-radius: 28px; padding: 18px 16px 12px; margin-top: 12px; }
+.card.artists { background: var(--g-artists); } .card.albums { background: var(--g-albums); } .card.songs { background: var(--g-songs); }
+.card-head { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 6px; }
+.card-head b { font: 800 13px var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+.card-head .icon-btn { width: 36px; height: 36px; background: rgba(255,255,255,.2); }
+.row { display: flex; align-items: center; gap: 10px; padding: 7px 4px; }
+.row .n { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.22); display: grid; place-items: center; font: 700 13px var(--font-body); flex: none; }
+.card .row:nth-child(2) .n { background: #fff; color: #222; }
 .row .t { flex: 1; min-width: 0; }
-.row .t b { display: block; font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.row .t span { display: block; color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.row .c { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; line-height: 1.35; }
-.empty { margin: 36px 24px; text-align: center; color: var(--muted); }
+.row .t b { display: block; font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .t span { display: block; opacity: .8; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .c { text-align: right; font-size: 13px; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.row .c small { display: block; opacity: .8; font-size: 12px; }
+.more { display: block; width: 100%; border: 0; background: none; color: var(--accent); font: 600 14px var(--font-body); padding: 12px; cursor: pointer; }
+.rest .row { color: var(--fg); } .rest .row .n { background: var(--surface-2); color: var(--fg); }
+.empty { margin: 36px 12px; text-align: center; color: var(--muted); }
+
+.pill { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; gap: 2px; padding: 4px; border-radius: 28px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(10,10,40,.22); }
+.pill button { border: 0; background: none; color: var(--fg); height: 44px; padding: 0 18px; border-radius: 22px; font: 700 14px var(--font-body); cursor: pointer; }
+.pill button[aria-pressed="true"] { color: #fff; }
+.pill button[data-c="artists"][aria-pressed="true"] { background: var(--g-artists); }
+.pill button[data-c="albums"][aria-pressed="true"] { background: var(--g-albums); }
+.pill button[data-c="songs"][aria-pressed="true"] { background: var(--g-songs); }
+
+.sheet { position: absolute; inset: 0; background: rgba(8,8,24,.6); display: flex; flex-direction: column; justify-content: flex-end; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.sheet.open { opacity: 1; pointer-events: auto; }
+.sheet .panel { background: var(--surface); border-radius: 28px 28px 0 0; padding: 16px; display: flex; flex-direction: column; gap: 12px; align-items: center; transform: translateY(8%); transition: transform .2s; }
+.sheet.open .panel { transform: none; }
+.sheet canvas { width: 62%; border-radius: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+.sheet .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+.sheet .acts button { height: 48px; border-radius: 16px; border: 0; font: 700 15px var(--font-body); cursor: pointer; background: var(--accent); color: var(--on-accent); }
+.sheet .acts button.ghost { background: var(--surface-2); color: var(--fg); }
+.sheet small { color: var(--muted); text-align: center; min-height: 1.4em; }
 [hidden] { display: none !important; }
 @media (max-width: 760px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; justify-items: center; } .notes { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .sheet, .sheet .panel { transition: none; } }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div>
-    <div class="phone">
+    <div class="phone" id="phone">
       <div class="bar">
         <button class="icon-btn" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
         <b>Listening stats</b>
@@ -81,36 +113,49 @@ h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: u
         </div>
         <div id="body"></div>
       </div>
+      <div class="pill" role="group" aria-label="Category">
+        <button data-c="artists" aria-pressed="true">Artists</button>
+        <button data-c="albums" aria-pressed="false">Albums</button>
+        <button data-c="songs" aria-pressed="false">Songs</button>
+      </div>
+      <div class="sheet" id="sheet">
+        <div class="panel">
+          <canvas id="img" width="1080" height="1350" aria-label="Preview of the image to share"></canvas>
+          <div class="acts"><button id="share">Share</button><button class="ghost" id="save">Save image</button></div>
+          <small id="shareNote"></small>
+          <button class="more" id="closeSheet">Close</button>
+        </div>
+      </div>
     </div>
-    <p style="text-align:center;color:var(--muted);font-size:13px;margin-top:12px">Example data. Switch the period and step back with the arrows.</p>
+    <p style="text-align:center;color:var(--muted);font-size:13px;margin-top:12px">Example data. Switch period and category, then tap the share icon on a card.</p>
   </div>
 
   <div class="notes">
     <div>
       <h1>Listening stats</h1>
-      <p>A barebones listening summary, like a small Wrapped that is always on. It lives in the Home overflow menu.</p>
+      <p>A barebones, always-on Wrapped. Pick a period at the top and a category in the pill at the bottom. Both are within thumb reach, and every card can be shared as an image.</p>
+    </div>
+    <div>
+      <h2>Cards and sharing</h2>
+      <ul>
+        <li>Each category has its own colors. The card on screen and the shared image look the same.</li>
+        <li>The share icon on a card makes a portrait image with the period, the top 5, plays and time, and the total.</li>
+        <li>Share sends it to any app. Save image keeps it on the device.</li>
+        <li>The rest of the top 10 sits under the card.</li>
+      </ul>
     </div>
     <div>
       <h2>What counts</h2>
       <ul>
-        <li>A song counts as a play after <b>30 seconds</b> of listening, or half of it if it is under a minute.</li>
-        <li>Only time spent playing counts. Pausing adds nothing, and skipping ahead in a song does not add time.</li>
-        <li>Plays are stored on the device only, in their own database.</li>
+        <li>A song counts as a play after <b>30 seconds</b>, or half of it if it is under a minute.</li>
+        <li>Only time spent playing counts. Pausing adds nothing, and skipping ahead does not add time.</li>
+        <li>Plays are stored on the device only.</li>
       </ul>
     </div>
     <div>
-      <h2>Periods</h2>
+      <h2>Export</h2>
       <ul>
-        <li><b>Week, month, year:</b> calendar periods. The week starts on the first day of the week of your locale.</li>
-        <li>Step back to earlier periods. The next arrow is disabled on the current one.</li>
-        <li>Top 10 artists, albums and songs, in that order. Every row shows its plays and the time listened. Rows are ranked by plays, then by time.</li>
-      </ul>
-    </div>
-    <div>
-      <h2>Not yet</h2>
-      <ul>
-        <li>Live updates while the screen is open, export, and deleting the history.</li>
-        <li>A shareable summary card.</li>
+        <li>CSV export of the play history is planned. The format is still open, see the project roadmap.</li>
       </ul>
     </div>
   </div>
@@ -118,65 +163,122 @@ h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: u
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  // Example data. The real screen reads the plays recorded on the device.
+  // Example data, not real listening. The app reads the plays recorded on the device.
   var data = {
-    week:  { time: '6 h 41 min', plays: 112,
-      songs: [['Lose My Mind','Lil Peep',9],['Midnight City','M83',8],['Sweater Weather','The Neighbourhood',7],['Nightcall','Kavinsky',6],['Intro','The xx',6]],
-      artists: [['Lil Peep',21],['M83',14],['The xx',11],['Kavinsky',9],['Chvrches',7]],
-      albums: [['Come Over When You\'re Sober','Lil Peep',17],['Hurry Up, We\'re Dreaming','M83',12],['xx','The xx',11]] },
-    month: { time: '27 h 5 min', plays: 463,
-      songs: [['Midnight City','M83',31],['Lose My Mind','Lil Peep',28],['Intro','The xx',24],['Nightcall','Kavinsky',22],['Sweater Weather','The Neighbourhood',19]],
-      artists: [['M83',72],['Lil Peep',66],['The xx',48],['Kavinsky',37],['The Neighbourhood',30]],
-      albums: [['Hurry Up, We\'re Dreaming','M83',58],['Come Over When You\'re Sober','Lil Peep',54],['xx','The xx',44]] },
-    year:  { time: '241 h 30 min', plays: 3980,
-      songs: [['Intro','The xx',142],['Midnight City','M83',131],['Nightcall','Kavinsky',117],['Lose My Mind','Lil Peep',109],['Sweater Weather','The Neighbourhood',98]],
-      artists: [['M83',520],['The xx',410],['Lil Peep',388],['Kavinsky',301],['The Neighbourhood',260]],
-      albums: [['Hurry Up, We\'re Dreaming','M83',402],['xx','The xx',365],['Come Over When You\'re Sober','Lil Peep',301]] }
+    week:  { mins: 401, plays: 112,
+      songs: [['Lose My Mind','Lil Peep',9],['Midnight City','M83',8],['Sweater Weather','The Neighbourhood',7],['Nightcall','Kavinsky',6],['Intro','The xx',6],['Heartbeats','José González',5],['Do I Wanna Know?','Arctic Monkeys',5],['Re: Stacks','Bon Iver',4],['Gooey','Glass Animals',4],['Time','Hans Zimmer',3]],
+      artists: [['Lil Peep',21],['M83',14],['The xx',11],['Kavinsky',9],['Chvrches',7],['Bon Iver',6],['Glass Animals',5],['Hans Zimmer',5],['Arctic Monkeys',4],['José González',3]],
+      albums: [["Come Over When You're Sober",'Lil Peep',17],["Hurry Up, We're Dreaming",'M83',12],['xx','The xx',11],['OutRun','Kavinsky',9],['Every Open Eye','Chvrches',7],['For Emma, Forever Ago','Bon Iver',6],['Zaba','Glass Animals',5],['Inception','Hans Zimmer',5],['AM','Arctic Monkeys',4],['Veneer','José González',3]] },
+    month: { mins: 1625, plays: 463,
+      songs: [['Midnight City','M83',31],['Lose My Mind','Lil Peep',28],['Intro','The xx',24],['Nightcall','Kavinsky',22],['Sweater Weather','The Neighbourhood',19],['Heartbeats','José González',17],['Do I Wanna Know?','Arctic Monkeys',16],['Re: Stacks','Bon Iver',14],['Gooey','Glass Animals',13],['Time','Hans Zimmer',11]],
+      artists: [['M83',72],['Lil Peep',66],['The xx',48],['Kavinsky',37],['The Neighbourhood',30],['Chvrches',27],['Bon Iver',24],['Glass Animals',20],['Hans Zimmer',18],['Arctic Monkeys',15]],
+      albums: [["Hurry Up, We're Dreaming",'M83',58],["Come Over When You're Sober",'Lil Peep',54],['xx','The xx',44],['OutRun','Kavinsky',35],['I Love You.','The Neighbourhood',28],['Every Open Eye','Chvrches',25],['For Emma, Forever Ago','Bon Iver',22],['Zaba','Glass Animals',19],['Inception','Hans Zimmer',17],['AM','Arctic Monkeys',14]] },
+    year:  { mins: 14490, plays: 3980,
+      songs: [['Intro','The xx',142],['Midnight City','M83',131],['Nightcall','Kavinsky',117],['Lose My Mind','Lil Peep',109],['Sweater Weather','The Neighbourhood',98],['Heartbeats','José González',90],['Do I Wanna Know?','Arctic Monkeys',84],['Re: Stacks','Bon Iver',77],['Gooey','Glass Animals',70],['Time','Hans Zimmer',66]],
+      artists: [['M83',520],['The xx',410],['Lil Peep',388],['Kavinsky',301],['The Neighbourhood',260],['Chvrches',231],['Bon Iver',205],['Glass Animals',190],['Hans Zimmer',170],['Arctic Monkeys',160]],
+      albums: [["Hurry Up, We're Dreaming",'M83',402],['xx','The xx',365],["Come Over When You're Sober",'Lil Peep',301],['OutRun','Kavinsky',250],['I Love You.','The Neighbourhood',221],['Every Open Eye','Chvrches',200],['For Emma, Forever Ago','Bon Iver',180],['Zaba','Glass Animals',165],['Inception','Hans Zimmer',150],['AM','Arctic Monkeys',140]] }
   };
-  var period = 'week', offset = 0;
+  var titles = { artists: 'Top artists', albums: 'Top albums', songs: 'Top songs' };
+  var grads = { artists: ['#7b4dff', '#d24dd8'], albums: ['#0fa3b1', '#3b6cf0'], songs: ['#ff8a3d', '#e8365d'] };
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var period = 'week', cat = 'artists', offset = 0, expanded = false;
 
   function label() {
     if (period === 'year') return String(2026 + offset);
     if (period === 'month') { var m = 10 + offset; var y = 2026 + Math.floor(m / 12); return months[((m % 12) + 12) % 12] + ' ' + y; }
     var start = new Date(2026, 10, 2 + offset * 7), end = new Date(2026, 10, 8 + offset * 7);
     var f = function (d) { return months[d.getMonth()].slice(0, 3) + ' ' + d.getDate(); };
-    return f(start) + ' \u2013 ' + f(end) + ', ' + end.getFullYear();
+    return f(start) + ' – ' + f(end) + ', ' + end.getFullYear();
   }
-  // Example listening time: about 3.5 minutes per play.
-  function duration(plays) {
-    var mins = Math.round(plays * 3.5);
-    return mins >= 60 ? Math.floor(mins / 60) + ' h ' + (mins % 60) + ' min' : mins + ' min';
+  function k() { return offset === 0 ? 1 : (offset === -1 ? .8 : .6); }
+  function dur(mins) { mins = Math.round(mins); return mins >= 60 ? Math.floor(mins / 60) + ' h ' + (mins % 60) + ' min' : mins + ' min'; }
+  function items() {
+    var d = data[period], s = k();
+    return d[cat].map(function (r) {
+      var plays = Math.max(1, Math.round((cat === 'artists' ? r[1] : r[2]) * s));
+      return { name: r[0], sub: cat === 'artists' ? '' : r[1], plays: plays, time: dur(plays * 3.5) };
+    });
   }
-  function rows(title, items, withSub) {
-    return '<div class="sec">' + title + '</div>' + items.map(function (r, i) {
-      var sub = withSub ? '<span>' + r[1] + '</span>' : '';
-      var count = withSub ? r[2] : r[1];
-      return '<div class="row"><div class="n">' + (i + 1) + '</div><div class="t"><b>' + r[0] + '</b>' + sub + '</div><div class="c">' + count + (count === 1 ? ' play' : ' plays') + '<br>' + duration(count) + '</div></div>';
-    }).join('');
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function row(it, i) {
+    return '<div class="row"><div class="n">' + (i + 1) + '</div><div class="t"><b>' + esc(it.name) + '</b>' + (it.sub ? '<span>' + esc(it.sub) + '</span>' : '') + '</div>' +
+      '<div class="c">' + it.plays + (it.plays === 1 ? ' play' : ' plays') + '<small>' + it.time + '</small></div></div>';
   }
   function render() {
     ['Week', 'Month', 'Year'].forEach(function (p) { $('p' + p).setAttribute('aria-pressed', String(period === p.toLowerCase())); });
+    document.querySelectorAll('.pill button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.c === cat)); });
     $('label').textContent = label();
     $('next').disabled = offset >= 0;
-    var d = data[period];
     if (offset < -2) {
       $('body').innerHTML = '<div class="empty">Nothing played in this period yet. A song counts after 30 seconds of listening.</div>';
       return;
     }
-    // Earlier periods show the same example numbers scaled down, just to demonstrate stepping back.
-    var k = offset === 0 ? 1 : (offset === -1 ? .8 : .6);
-    var scale = function (n) { return Math.max(1, Math.round(n * k)); };
-    var hm = d.time.match(/(\d+) h (\d+) min/); var mins = Math.round((+hm[1] * 60 + +hm[2]) * k);
+    var d = data[period], s = k(), list = items();
+    var share = '<svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 11l8-4M8 13l8 4"/></svg>';
     $('body').innerHTML =
-      '<div class="total"><b>' + Math.floor(mins / 60) + ' h ' + (mins % 60) + ' min</b><span>' + scale(d.plays) + ' plays</span></div>' +
-      rows('Top artists', d.artists.map(function (r) { return [r[0], scale(r[1])]; }), false) +
-      rows('Top albums', d.albums.map(function (r) { return [r[0], r[1], scale(r[2])]; }), true) +
-      rows('Top songs', d.songs.map(function (r) { return [r[0], r[1], scale(r[2])]; }), true);
+      '<div class="hero"><b>' + dur(d.mins * s) + '</b><span>' + Math.round(d.plays * s) + ' plays</span></div>' +
+      '<div class="card ' + cat + '"><div class="card-head"><b>' + titles[cat] + '</b><button class="icon-btn" id="shareBtn" aria-label="Share ' + titles[cat].toLowerCase() + ' as image">' + share + '</button></div>' +
+      list.slice(0, 5).map(row).join('') + '</div>' +
+      (expanded ? '<div class="rest">' + list.slice(5).map(function (it, i) { return row(it, i + 5); }).join('') + '</div>' : '') +
+      '<button class="more" id="moreBtn">' + (expanded ? 'Show less' : 'Show top 10') + '</button>';
+    $('shareBtn').onclick = openSheet;
+    $('moreBtn').onclick = function () { expanded = !expanded; render(); };
   }
+
+  // --- image card ---
+  function rr(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function fit(c, text, maxW) { while (c.measureText(text).width > maxW && text.length > 1) text = text.slice(0, -2) + '…'; return text; }
+  function drawCard() {
+    var cv = $('img'), c = cv.getContext('2d'), W = 1080, H = 1350, g = grads[cat], list = items().slice(0, 5), d = data[period], s = k();
+    var bg = c.createLinearGradient(0, 0, W, H); bg.addColorStop(0, g[0]); bg.addColorStop(1, g[1]);
+    c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    c.fillStyle = 'rgba(255,255,255,.08)'; c.beginPath(); c.arc(W - 120, 140, 320, 0, 7); c.fill();
+    c.beginPath(); c.arc(80, H - 60, 260, 0, 7); c.fill();
+    c.fillStyle = '#fff'; c.textBaseline = 'alphabetic';
+    c.font = '700 34px "DM Sans", sans-serif'; c.globalAlpha = .85; c.fillText('NOXIO', 80, 120); c.globalAlpha = 1;
+    c.font = '800 96px "Bricolage Grotesque", "DM Sans", sans-serif'; c.fillText(titles[cat], 80, 250);
+    c.font = '500 40px "DM Sans", sans-serif'; c.globalAlpha = .9; c.fillText(label(), 80, 312); c.globalAlpha = 1;
+    list.forEach(function (it, i) {
+      var y = 400 + i * 150;
+      c.fillStyle = i === 0 ? '#fff' : 'rgba(255,255,255,.22)'; c.beginPath(); c.arc(124, y + 40, 40, 0, 7); c.fill();
+      c.fillStyle = i === 0 ? '#222' : '#fff'; c.font = '700 40px "DM Sans", sans-serif'; c.textAlign = 'center'; c.fillText(String(i + 1), 124, y + 54); c.textAlign = 'left';
+      c.fillStyle = '#fff'; c.font = '700 44px "DM Sans", sans-serif'; c.fillText(fit(c, it.name, 560), 200, y + 36);
+      if (it.sub) { c.globalAlpha = .8; c.font = '400 32px "DM Sans", sans-serif'; c.fillText(fit(c, it.sub, 560), 200, y + 80); c.globalAlpha = 1; }
+      c.textAlign = 'right'; c.font = '700 38px "DM Sans", sans-serif'; c.fillText(it.plays + (it.plays === 1 ? ' play' : ' plays'), W - 80, y + 36);
+      c.globalAlpha = .8; c.font = '400 32px "DM Sans", sans-serif'; c.fillText(it.time, W - 80, y + 80); c.globalAlpha = 1; c.textAlign = 'left';
+    });
+    c.fillStyle = 'rgba(255,255,255,.2)'; rr(c, 80, H - 190, W - 160, 110, 55); c.fill();
+    c.fillStyle = '#fff'; c.font = '700 44px "DM Sans", sans-serif'; c.fillText(dur(d.mins * s), 124, H - 120);
+    c.textAlign = 'right'; c.font = '500 36px "DM Sans", sans-serif'; c.fillText(Math.round(d.plays * s) + ' plays', W - 124, H - 120); c.textAlign = 'left';
+  }
+  function openSheet() {
+    var go = function () { drawCard(); $('sheet').classList.add('open'); $('shareNote').textContent = ''; };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
+  }
+  function blob(cb) { $('img').toBlob(cb, 'image/png'); }
+  $('closeSheet').onclick = function () { $('sheet').classList.remove('open'); };
+  $('save').onclick = function () {
+    blob(function (b) {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'noxio-' + cat + '-' + period + '.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      $('shareNote').textContent = 'In the app this saves to Pictures.';
+    });
+  };
+  $('share').onclick = function () {
+    blob(function (b) {
+      var file = new File([b], 'noxio-' + cat + '.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file] }).catch(function () {});
+      } else {
+        $('shareNote').textContent = 'In the app this opens the Android share sheet.';
+      }
+    });
+  };
+
   ['week', 'month', 'year'].forEach(function (p) {
-    $('p' + p[0].toUpperCase() + p.slice(1)).onclick = function () { period = p; offset = 0; render(); };
+    $('p' + p[0].toUpperCase() + p.slice(1)).onclick = function () { period = p; offset = 0; expanded = false; render(); };
   });
+  document.querySelectorAll('.pill button').forEach(function (b) { b.onclick = function () { cat = b.dataset.c; expanded = false; render(); }; });
   $('prev').onclick = function () { offset -= 1; render(); };
   $('next').onclick = function () { if (offset < 0) { offset += 1; render(); } };
   render();

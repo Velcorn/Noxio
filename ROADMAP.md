@@ -6,6 +6,8 @@
 - [ ] Rebrand: icon, fastlane metadata, about screen
 
 ## Later
+- [ ] Stats redesign (see docs/mockups/stats.html): colorful per-category cards, bottom pill to switch artists / albums / songs, share a card as an image
+- [ ] CSV export of the play history (format open: matching Musicolet needs a sample of its export)
 - [ ] Listening stats: implemented, needs a build and on-device testing (Room database, week / month / year, top songs, artists, albums, total time; open it from the home overflow menu)
 - [ ] Shareable "Wrapped" cards
 
