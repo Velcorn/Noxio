@@ -92,7 +92,11 @@ abstract class StatsDatabase : RoomDatabase() {
 
 @Dao
 interface PlayEventDao {
-    @Insert suspend fun insert(event: PlayEvent)
+    /** @return The id of the new row. */
+    @Insert suspend fun insert(event: PlayEvent): Long
+
+    @Query("UPDATE PlayEvent SET listenedMs = :listenedMs WHERE id = :id")
+    suspend fun updateListened(id: Long, listenedMs: Long)
 
     @Insert suspend fun insertAll(events: List<PlayEvent>)
 

@@ -28,6 +28,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.toColorInt
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
@@ -39,6 +40,7 @@ import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.time.LocalDate
+import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -64,14 +66,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             }
         }
 
-    private var pendingMostPlayedRange: LongRange? = null
-    private val exportMostPlayedLauncher =
-        registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
-            val range = pendingMostPlayedRange
-            if (uri != null && range != null) {
-                exportMostPlayed(uri, range)
-            }
-        }
     private val importLauncher =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
             if (uris.isNotEmpty()) {
@@ -97,15 +91,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                     when (it.itemId) {
                         R.id.action_export_stats -> {
                             exportLauncher.launch("noxio-stats-${LocalDate.now()}.csv")
-                            true
-                        }
-                        R.id.action_export_most_played -> {
-                            statsModel.ui.value?.let { ui ->
-                                pendingMostPlayedRange = ui.range
-                                val context = requireContext()
-                                val label = StatsFormat.range(context, ui.query.period, ui.range)
-                                exportMostPlayedLauncher.launch("Most played Songs - $label.csv")
-                            }
                             true
                         }
                         R.id.action_import_stats -> {
@@ -216,10 +201,10 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         val inflater = LayoutInflater.from(context)
         items.take(if (expanded) EXPANDED_ROWS else COLLAPSED_ROWS).forEachIndexed { index, item ->
             val row = ItemStatsRowBinding.inflate(inflater, binding.statsList, false)
-            row.statsRank.text = (index + 1).toString()
+            row.statsRank.text = String.format(Locale.getDefault(), "%d", index + 1)
             if (index == 0) {
                 row.statsRank.setBackgroundResource(R.drawable.bg_stats_rank_first)
-                row.statsRank.setTextColor(Color.parseColor("#222222"))
+                row.statsRank.setTextColor("#222222".toColorInt())
             }
             row.statsName.text = item.name
             row.statsSubtitle.text = item.subtitle
@@ -261,25 +246,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                     else Color.TRANSPARENT
                 )
             button.setTextColor(if (selected) Color.WHITE else onSurface)
-        }
-    }
-
-    private fun exportMostPlayed(uri: Uri, range: LongRange) {
-        val context = requireContext()
-        viewLifecycleOwner.lifecycleScope.launch {
-            val exported =
-                withContext(Dispatchers.IO) {
-                    try {
-                        context.contentResolver.openOutputStream(uri, "wt")?.use {
-                            statsModel.exportMostPlayedCsv(range, it)
-                        } != null
-                    } catch (e: IOException) {
-                        false
-                    }
-                }
-            context.showToast(
-                if (exported) R.string.lbl_stats_exported else R.string.err_stats_export
-            )
         }
     }
 

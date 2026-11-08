@@ -29,6 +29,7 @@ import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.TextUtils
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import org.oxycblt.auxio.R
 
 /** What goes onto the image that can be shared from the stats screen. */
@@ -53,7 +54,7 @@ object StatsImage {
     private const val ROW_HEIGHT = 150f
 
     fun render(context: Context, content: StatsImageContent): Bitmap {
-        val bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(WIDTH, HEIGHT)
         val canvas = Canvas(bitmap)
         val (start, end) = gradientOf(context, content.category)
 

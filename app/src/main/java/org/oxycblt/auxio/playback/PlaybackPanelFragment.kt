@@ -20,10 +20,12 @@ package org.oxycblt.auxio.playback
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.format.DateUtils
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.updatePadding
@@ -241,6 +243,8 @@ class PlaybackPanelFragment :
         if (state is SleepTimerState.Active) {
             // While a timer is running, the moon makes way for the time that is left.
             button.icon = null
+            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, COUNTDOWN_TEXT_SP)
+            button.setTypeface(null, Typeface.BOLD)
             button.setTextColor(
                 MaterialColors.getColor(button, androidx.appcompat.R.attr.colorPrimary)
             )
@@ -420,5 +424,8 @@ class PlaybackPanelFragment :
     private companion object {
         /** How often the sleep timer countdown is refreshed. */
         const val COUNTDOWN_TICK_MS = 1000L
+
+        /** The size of the countdown that takes the place of the moon icon. */
+        const val COUNTDOWN_TEXT_SP = 24f
     }
 }

@@ -22,14 +22,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -38,7 +34,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.R
@@ -50,7 +45,6 @@ import org.oxycblt.auxio.home.list.ArtistListFragment
 import org.oxycblt.auxio.home.list.GenreListFragment
 import org.oxycblt.auxio.home.list.PlaylistListFragment
 import org.oxycblt.auxio.home.list.SongListFragment
-import org.oxycblt.auxio.home.tabs.NamedTabStrategy
 import org.oxycblt.auxio.home.tabs.Tab
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.list.SelectionFragment
@@ -134,23 +128,6 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
             FadingToolbarOffsetListener(binding.homeToolbar, binding.homeContent)
         )
 
-        // The main controls are at the bottom: a search row above the tabs, both on the plain
-        // surface. They are padded by the bottom inset, which includes the playback bar, so they
-        // always sit right above it, and the lists end where they begin.
-        binding.homeSearch.setOnClickListener { openSearch() }
-        binding.homeSort.setOnClickListener { openSort() }
-        binding.homeMore.setOnClickListener { showMoreMenu(it) }
-        binding.homeBottom.setOnApplyWindowInsetsListener { view, insets ->
-            view.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
-            insets
-        }
-        binding.homeBottom.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
-            binding.homeContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                if (bottomMargin != view.height) {
-                    bottomMargin = view.height
-                }
-            }
-        }
         // Without the app bar the content has to stay clear of the status bar itself.
         binding.homeContent.setOnApplyWindowInsetsListener { _, insets ->
             topInset = insets.systemBarInsetsCompat.top
@@ -172,12 +149,12 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
 
             // ViewPager2 will nominally consume window insets, which will then break the window
             // insets applied to the indexing view before API 30. Fix this by overriding the
-            // listener with a non-consuming listener. The lists do not need the top and bottom
-            // insets: the status bar is handled by the content and the bottom controls cover
-            // the system bars and the playback bar.
+            // listener with a non-consuming listener. The lists do not need the top inset, as the
+            // content stays clear of the status bar itself. The bottom inset includes the playback
+            // bar and the main navigation.
             setOnApplyWindowInsetsListener { _, insets ->
                 val bars = insets.systemBarInsetsCompat
-                insets.replaceSystemBarInsetsCompat(bars.left, 0, bars.right, 0)
+                insets.replaceSystemBarInsetsCompat(bars.left, 0, bars.right, bars.bottom)
             }
 
             // We know that there will only be a fixed amount of tabs, so we manually set this
@@ -210,7 +187,6 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
         super.onDestroyBinding(binding)
         storagePermissionLauncher = null
         binding.homeContent.setOnApplyWindowInsetsListener(null)
-        binding.homeBottom.setOnApplyWindowInsetsListener(null)
     }
 
     private fun updateContentTop() {
@@ -219,78 +195,29 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
         binding.homeContent.updatePadding(top = if (binding.homeAppbar.isVisible) 0 else topInset)
     }
 
-    private fun openSearch() {
-        L.d("Navigating to search")
-        findNavController().navigateSafe(HomeFragmentDirections.search())
-    }
-
-    private fun openSort() {
-        val directions =
-            when (homeModel.currentTabType.value) {
-                MusicType.SONGS -> HomeFragmentDirections.sortSongs()
-                MusicType.ALBUMS -> HomeFragmentDirections.sortAlbums()
-                MusicType.ARTISTS -> HomeFragmentDirections.sortArtists()
-                MusicType.GENRES -> HomeFragmentDirections.sortGenres()
-                MusicType.PLAYLISTS -> HomeFragmentDirections.sortPlaylists()
-            }
-        findNavController().navigateSafe(directions)
-    }
-
-    private fun showMoreMenu(anchor: View) {
-        PopupMenu(requireContext(), anchor).apply {
-            inflate(R.menu.home_overflow)
-            setOnMenuItemClickListener { onMenuItemClick(it) }
-            show()
-        }
-    }
-
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (super.onMenuItemClick(item)) {
             return true
         }
 
-        return when (item.itemId) {
-            // Handle the actions of the "more" menu (Stats, Settings, About)
-            R.id.action_settings -> {
-                L.d("Navigating to preferences")
-                homeModel.showSettings()
-                true
-            }
-            R.id.action_stats -> {
-                L.d("Navigating to listening stats")
-                homeModel.showStats()
-                true
-            }
-            R.id.action_about -> {
-                L.d("Navigating to about")
-                homeModel.showAbout()
-                true
-            }
-            else -> {
-                L.w("Unexpected menu item selected")
-                false
-            }
-        }
+        // The search, sort and more actions are in the main navigation (see MainFragment).
+        L.w("Unexpected menu item selected")
+        return false
     }
 
     private fun setupPager(binding: FragmentHomeBinding) {
         binding.homePager.adapter =
             HomePagerAdapter(homeModel.currentTabTypes, childFragmentManager, viewLifecycleOwner)
-
-        // A single tab makes the tab layout redundant, hide it.
-        binding.homeTabs.isVisible = homeModel.currentTabTypes.size > 1
-
-        // Set up the mapping between the ViewPager and TabLayout.
-        TabLayoutMediator(
-                binding.homeTabs,
-                binding.homePager,
-                NamedTabStrategy(homeModel.currentTabTypes),
-            )
-            .attach()
     }
 
     private fun updateCurrentTab(tabType: MusicType) {
         val binding = requireBinding()
+
+        // The tabs are in the main navigation, so follow them when one is tapped there.
+        val position = homeModel.currentTabTypes.indexOf(tabType)
+        if (position >= 0 && binding.homePager.currentItem != position) {
+            binding.homePager.setCurrentItem(position, false)
+        }
 
         // Update the scrolling view in AppBarLayout to align with the current tab's
         // scrolling state. This prevents the lift state from being confused as one

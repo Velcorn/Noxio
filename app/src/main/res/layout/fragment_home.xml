@@ -9,7 +9,7 @@
     android:transitionGroup="true">
 
 
-    <!-- Only shown while selecting songs: the normal controls live at the bottom (home_bottom). -->
+    <!-- Only shown while selecting songs: the normal controls live at the bottom (see main_bottom_nav in fragment_main). -->
     <org.oxycblt.auxio.ui.CoordinatorAppBarLayout
         android:id="@+id/home_appbar"
         style="@style/Widget.Auxio.AppBarLayout"
@@ -86,72 +86,5 @@
         </com.google.android.material.card.MaterialCardView>
 
     </FrameLayout>
-
-    <!-- Everything on plain surface: the search row (search, sort, more) above the tabs. The
-         bottom padding is set in code so this sits above the playback bar. -->
-    <LinearLayout
-        android:id="@+id/home_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?attr/colorSurface"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/home_search_row"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/spacing_medium"
-            android:paddingEnd="@dimen/spacing_tiny">
-
-            <TextView
-                android:id="@+id/home_search"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="@string/lbl_search"
-                android:drawablePadding="@dimen/spacing_mid_medium"
-                android:drawableStart="@drawable/ic_search_20"
-                android:gravity="center_vertical"
-                android:text="@string/hint_search_music"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
-                android:textColor="?android:attr/textColorSecondary" />
-
-            <ImageButton
-                android:id="@+id/home_sort"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/lbl_sort"
-                android:src="@drawable/ic_sort_20"
-                app:tint="?android:attr/textColorSecondary" />
-
-            <ImageButton
-                android:id="@+id/home_more"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/lbl_more"
-                android:src="@drawable/ic_more_vert_20"
-                app:tint="?android:attr/textColorSecondary" />
-
-        </LinearLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/home_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:tabGravity="fill"
-            app:tabIndicatorHeight="0dp"
-            app:tabInlineLabel="false"
-            app:tabMode="fixed"
-            app:tabRippleColor="@android:color/transparent"
-            app:tabTextAppearance="?attr/textAppearanceLabelSmall" />
-
-    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

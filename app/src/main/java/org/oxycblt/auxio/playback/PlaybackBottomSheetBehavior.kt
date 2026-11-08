@@ -48,7 +48,8 @@ class PlaybackBottomSheetBehavior<V : View>(context: Context, attributeSet: Attr
     fun makeBackgroundDrawable(context: Context) {
         sheetBackgroundDrawable =
             MaterialShapeDrawable.createWithElevationOverlay(context).apply {
-                fillColor = context.getAttrColorCompat(MR.attr.colorSurfaceContainerLow)
+                // Plain surface, the same as the lists and the main navigation.
+                fillColor = context.getAttrColorCompat(MR.attr.colorSurface)
                 shapeAppearanceModel =
                     if (uiSettings.roundMode) {
                         ShapeAppearanceModel.builder(

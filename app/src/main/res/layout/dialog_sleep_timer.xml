@@ -32,18 +32,9 @@
             android:layout_marginTop="@dimen/spacing_medium"
             android:orientation="vertical">
 
-            <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                android:id="@+id/sleep_end_of_track"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="@string/lbl_sleep_end_of_track" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
                 android:orientation="horizontal"
                 android:baselineAligned="false">
 
@@ -95,6 +86,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:labelFor="@id/sleep_custom_input"
                             android:text="@string/lbl_sleep_unit"
                             android:textAppearance="?attr/textAppearanceLabelLarge" />
 
@@ -111,6 +103,14 @@
                     android:checkable="true" />
 
             </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/sleep_finish_song"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:minHeight="@dimen/size_touchable_small"
+                android:text="@string/lbl_sleep_finish_song" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/sleep_fade"

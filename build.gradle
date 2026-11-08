@@ -48,3 +48,43 @@ spotless {
         licenseHeaderFile("NOTICE")
     }
 }
+
+apply plugin: "jacoco"
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+// Coverage of all the code: the app and the music library. Only generated code (view and data
+// binding, Hilt, Dagger, Room, navigation and resources) is left out. Code that has no tests counts
+// as not covered, which is the point: the number shows what still needs tests.
+def generatedCode = [
+    "**/R.class", "**/R\$*.class", "**/BuildConfig.*", "**/databinding/**", "**/*Binding.class",
+    "**/*Binding\$*.class", "**/Hilt_*", "**/*_Hilt*", "**/hilt_aggregated_deps/**",
+    "**/dagger/hilt/**", "**/*_Factory*", "**/*_MembersInjector*", "**/Dagger*", "**/*_Impl*",
+    "**/*Directions*", "**/*Args*", "**/*\$\$*",
+]
+
+tasks.register("coverageReport", JacocoReport) {
+    group = "verification"
+    description = "Runs the unit tests of the app and musikr and writes one coverage report."
+    dependsOn ":app:testDebugUnitTest", ":musikr:testDebugUnitTest"
+    ["app", "musikr"].each { name ->
+        def module = project(":$name")
+        classDirectories.from(
+            fileTree(
+                dir: module.layout.buildDirectory.dir("intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes"),
+                excludes: generatedCode,
+            )
+        )
+        sourceDirectories.from(module.files("src/main/java"))
+        executionData.from(
+            module.layout.buildDirectory.file("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+        )
+    }
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}

@@ -189,8 +189,15 @@ class StatsRepositoryTest {
     private class FakeDao : PlayEventDao {
         val events = mutableListOf<PlayEvent>()
 
-        override suspend fun insert(event: PlayEvent) {
-            events += event
+        override suspend fun insert(event: PlayEvent): Long {
+            val saved = event.copy(id = events.size + 1L)
+            events += saved
+            return saved.id
+        }
+
+        override suspend fun updateListened(id: Long, listenedMs: Long) {
+            val index = events.indexOfFirst { it.id == id }
+            events[index] = events[index].copy(listenedMs = listenedMs)
         }
 
         override suspend fun insertAll(events: List<PlayEvent>) {

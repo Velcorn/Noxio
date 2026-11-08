@@ -865,8 +865,19 @@
         errorLine1="                android:drawableStart=&quot;@drawable/ic_search_20&quot;"
         errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/fragment_home.xml"
-            line="117"
+            file="src/main/res/layout-w720dp/fragment_main.xml"
+            line="167"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
+        errorLine1="                android:drawableStart=&quot;@drawable/ic_search_20&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_main.xml"
+            line="176"
             column="17"/>
     </issue>
 
@@ -899,7 +910,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="517"
+            line="518"
             column="5"/>
     </issue>
 
@@ -1090,17 +1101,6 @@
         errorLine1="    android:background=&quot;?attr/colorSurface&quot;"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/fragment_stats.xml"
-            line="7"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="Overdraw"
-        message="Possible overdraw: Root element paints background `?attr/colorSurface` with a theme that also paints a background (inferred theme is `@style/Theme.Auxio.App`)"
-        errorLine1="    android:background=&quot;?attr/colorSurface&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
             file="src/main/res/layout/item_edit_header.xml"
             line="7"
             column="5"/>
@@ -1163,138 +1163,6 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.dimen.size_hero_medium` appears to be unused"
-        errorLine1="    &lt;dimen name=&quot;size_hero_medium&quot;>192dp&lt;/dimen>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/dimens.xml"
-            line="19"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.dimen.size_icon_large` appears to be unused"
-        errorLine1="    &lt;dimen name=&quot;size_icon_large&quot;>40dp&lt;/dimen>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/dimens.xml"
-            line="24"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.dimen.size_icon_huge` appears to be unused"
-        errorLine1="    &lt;dimen name=&quot;size_icon_huge&quot;>48dp&lt;/dimen>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/dimens.xml"
-            line="25"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.dimen.outline_small` appears to be unused"
-        errorLine1="    &lt;dimen name=&quot;outline_small&quot;>1dp&lt;/dimen>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/dimens.xml"
-            line="54"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.dimen.outline_large` appears to be unused"
-        errorLine1="    &lt;dimen name=&quot;outline_large&quot;>2dp&lt;/dimen>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/dimens.xml"
-            line="55"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.drop_down_24` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/drop_down_24.xml"
-            line="1"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.drop_up_24` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/drop_up_24.xml"
-            line="1"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_filter_24` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/ic_filter_24.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_pause_48` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/ic_pause_48.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_search_24` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/ic_search_24.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_skip_next_40` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/ic_skip_next_40.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_skip_prev_40` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/ic_skip_prev_40.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.string.set_key_excluded_dirs` appears to be unused"
         errorLine1="    &lt;string name=&quot;set_key_excluded_dirs&quot; translatable=&quot;false&quot;>auxio_excluded_dirs&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
@@ -1333,7 +1201,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="402"
+            line="403"
             column="13"/>
     </issue>
 
@@ -1344,7 +1212,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="403"
+            line="404"
             column="13"/>
     </issue>
 
@@ -1355,7 +1223,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="404"
+            line="405"
             column="13"/>
     </issue>
 
@@ -1366,7 +1234,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="405"
+            line="406"
             column="13"/>
     </issue>
 
@@ -1377,7 +1245,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="432"
+            line="433"
             column="13"/>
     </issue>
 
@@ -1388,118 +1256,8 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="438"
+            line="439"
             column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.Widget_Auxio_Image_Small_Circular` appears to be unused"
-        errorLine1="    &lt;style name=&quot;Widget.Auxio.Image.Small.Circular&quot; parent=&quot;&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles_ui.xml"
-            line="129"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.Widget_Auxio_Image_Medium_Circular` appears to be unused"
-        errorLine1="    &lt;style name=&quot;Widget.Auxio.Image.Medium.Circular&quot; parent=&quot;&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles_ui.xml"
-            line="143"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.Widget_Auxio_Image_MidHuge` appears to be unused"
-        errorLine1="    &lt;style name=&quot;Widget.Auxio.Image.MidHuge&quot; parent=&quot;&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles_ui.xml"
-            line="162"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.Widget_Auxio_Button_Icon_Medium` appears to be unused"
-        errorLine1="    &lt;style name=&quot;Widget.Auxio.Button.Icon.Medium&quot; parent=&quot;Widget.Material3Expressive.Button.IconButton.Outlined&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles_ui.xml"
-            line="403"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.ThemeOverlay_Auxio_IconButton_Palette_Secondary` appears to be unused"
-        errorLine1="    &lt;style name=&quot;ThemeOverlay.Auxio.IconButton.Palette.Secondary&quot; parent=&quot;&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles_ui.xml"
-            line="447"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.Widget_Auxio_Button_PlayPause` appears to be unused"
-        errorLine1="    &lt;style name=&quot;Widget.Auxio.Button.PlayPause&quot; parent=&quot;Widget.Material3Expressive.Button.IconButton&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles_ui.xml"
-            line="460"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.Widget_Auxio_Button_PlayPause_Secondary` appears to be unused"
-        errorLine1="    &lt;style name=&quot;Widget.Auxio.Button.PlayPause.Secondary&quot; parent=&quot;Widget.Material3Expressive.Button.IconButton&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles_ui.xml"
-            line="464"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.menu.toolbar_search` appears to be unused"
-        errorLine1="&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/menu/toolbar_search.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ui_popup` appears to be unused"
-        errorLine1="&lt;shape xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/ui_popup.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ui_six_sided_cookie` appears to be unused"
-        errorLine1="&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/ui_six_sided_cookie.xml"
-            line="2"
-            column="1"/>
     </issue>
 
     <issue
@@ -1558,39 +1316,6 @@
     </issue>
 
     <issue
-        id="UseKtx"
-        message="Use the KTX function `createBitmap` instead?"
-        errorLine1="        private val EMPTY_BITMAP: Bitmap = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888)"
-        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/oxycblt/auxio/playback/service/MediaSessionHolder.kt"
-            line="529"
-            column="44"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `String.toColorInt` instead?"
-        errorLine1="                row.statsRank.setTextColor(Color.parseColor(&quot;#222222&quot;))"
-        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/oxycblt/auxio/stats/StatsFragment.kt"
-            line="222"
-            column="44"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX function `createBitmap` instead?"
-        errorLine1="        val bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)"
-        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/oxycblt/auxio/stats/StatsImage.kt"
-            line="56"
-            column="22"/>
-    </issue>
-
-    <issue
         id="ClickableViewAccessibility"
         message="Custom view ``FrameLayout`` has `setOnTouchListener` called on it but does not override `performClick`"
         errorLine1="    bottomSheet.setOnTouchListener("
@@ -1646,50 +1371,6 @@
     </issue>
 
     <issue
-        id="LabelFor"
-        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
-        errorLine1="                        &lt;EditText"
-        errorLine2="                         ~~~~~~~~">
-        <location
-            file="src/main/res/layout/dialog_sleep_timer.xml"
-            line="81"
-            column="26"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
-        errorLine1="            setText((customMinutes ?: SleepTimer.DEFAULT_CUSTOM_MINUTES).toString())"
-        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/oxycblt/auxio/playback/timer/SleepTimerDialog.kt"
-            line="177"
-            column="21"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="            row.statsRank.text = (index + 1).toString()"
-        errorLine2="                                  ~~~~~~~~~">
-        <location
-            file="src/main/java/org/oxycblt/auxio/stats/StatsFragment.kt"
-            line="219"
-            column="35"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Number formatting does not take into account locale settings. Consider using `String.format` instead."
-        errorLine1="            row.statsRank.text = (index + 1).toString()"
-        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/org/oxycblt/auxio/stats/StatsFragment.kt"
-            line="219"
-            column="34"/>
-    </issue>
-
-    <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Add Folder&quot;, should use `@string` resource"
         errorLine1="            android:contentDescription=&quot;Add Folder&quot;"
@@ -1698,17 +1379,6 @@
             file="src/main/res/layout/dialog_music_locations.xml"
             line="169"
             column="13"/>
-    </issue>
-
-    <issue
-        id="RtlSymmetry"
-        message="When you define `paddingStart` you should probably also define `paddingEnd` for right-to-left symmetry"
-        errorLine1="                    android:paddingStart=&quot;@dimen/spacing_tiny&quot;>"
-        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/fragment_stats.xml"
-            line="176"
-            column="21"/>
     </issue>
 
 </issues>

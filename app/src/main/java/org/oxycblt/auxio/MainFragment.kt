@@ -21,13 +21,16 @@ package org.oxycblt.auxio
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -36,6 +39,7 @@ import com.google.android.material.bottomsheet.BackportBottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.transition.MaterialFadeThrough
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
@@ -47,8 +51,10 @@ import kotlin.math.min
 import org.oxycblt.auxio.databinding.FragmentMainBinding
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.detail.Show
+import org.oxycblt.auxio.home.HomeFragmentDirections
 import org.oxycblt.auxio.home.HomeViewModel
 import org.oxycblt.auxio.home.Outer
+import org.oxycblt.auxio.home.tabs.NamedTabStrategy
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicType
@@ -68,6 +74,7 @@ import org.oxycblt.auxio.util.getAttrColorCompat
 import org.oxycblt.auxio.util.getDimen
 import org.oxycblt.auxio.util.lazyReflectedMethod
 import org.oxycblt.auxio.util.navigateSafe
+import org.oxycblt.auxio.util.systemBarInsetsCompat
 import org.oxycblt.auxio.util.unlikelyToBeNull
 import org.oxycblt.musikr.Music
 import org.oxycblt.musikr.Song
@@ -99,6 +106,8 @@ class MainFragment :
     private var lastCornerSize = Float.NaN
     private var maxScaleXDistance = 0f
     private var sheetRising: Boolean? = null
+    private var shownTabTypes: List<MusicType> = emptyList()
+    private var settingTabs = false
     @Inject lateinit var uiSettings: UISettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -199,6 +208,7 @@ class MainFragment :
             setChangeListener(::updateSpeedDial)
         }
 
+        setupBottomNav(binding)
         forceHideAllFabs()
         updateSpeedDial(false)
         updateFabVisibility(
@@ -266,6 +276,122 @@ class MainFragment :
         navigationListener = null
         binding.homeNewPlaylistFab.setChangeListener(null)
         binding.homeNewPlaylistFab.setOnActionSelectedListener(null)
+        binding.mainBottomNav.setOnApplyWindowInsetsListener(null)
+    }
+
+    // --- MAIN NAVIGATION (search row and tabs) ---
+
+    private fun setupBottomNav(binding: FragmentMainBinding) {
+        binding.mainSearch.setOnClickListener {
+            L.d("Navigating to search")
+            exploreNavigate(HomeFragmentDirections.search())
+        }
+        binding.mainSort.setOnClickListener {
+            exploreNavigate(
+                when (homeModel.currentTabType.value) {
+                    MusicType.SONGS -> HomeFragmentDirections.sortSongs()
+                    MusicType.ALBUMS -> HomeFragmentDirections.sortAlbums()
+                    MusicType.ARTISTS -> HomeFragmentDirections.sortArtists()
+                    MusicType.GENRES -> HomeFragmentDirections.sortGenres()
+                    MusicType.PLAYLISTS -> HomeFragmentDirections.sortPlaylists()
+                }
+            )
+        }
+        binding.mainMore.setOnClickListener { showMoreMenu(it) }
+        binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
+            // Keep the tabs clear of the system navigation.
+            view.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
+            insets
+        }
+        binding.mainTabs.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    if (!settingTabs) {
+                        homeModel.synchronizeTabPosition(tab.position)
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {}
+
+                override fun onTabReselected(tab: TabLayout.Tab) {}
+            }
+        )
+        shownTabTypes = emptyList()
+        rebuildTabs(binding)
+    }
+
+    private fun exploreNavigate(directions: androidx.navigation.NavDirections) {
+        requireBinding().exploreNavHost.findNavController().navigateSafe(directions)
+    }
+
+    private fun showMoreMenu(anchor: View) {
+        PopupMenu(requireContext(), anchor).apply {
+            inflate(R.menu.home_overflow)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_stats -> homeModel.showStats()
+                    R.id.action_settings -> homeModel.showSettings()
+                    R.id.action_about -> homeModel.showAbout()
+                    else -> return@setOnMenuItemClickListener false
+                }
+                true
+            }
+            show()
+        }
+    }
+
+    private fun rebuildTabs(binding: FragmentMainBinding) {
+        val types = homeModel.currentTabTypes
+        val strategy = NamedTabStrategy(types)
+        settingTabs = true
+        binding.mainTabs.removeAllTabs()
+        types.indices.forEach { position ->
+            val tab = binding.mainTabs.newTab()
+            strategy.onConfigureTab(tab, position)
+            binding.mainTabs.addTab(tab, false)
+        }
+        shownTabTypes = types
+        settingTabs = false
+        selectCurrentTab(binding)
+    }
+
+    private fun selectCurrentTab(binding: FragmentMainBinding) {
+        val position = shownTabTypes.indexOf(homeModel.currentTabType.value)
+        if (position >= 0 && binding.mainTabs.selectedTabPosition != position) {
+            settingTabs = true
+            binding.mainTabs.getTabAt(position)?.select()
+            settingTabs = false
+        }
+    }
+
+    /**
+     * Show the main navigation on the home screen only, fade it out together with the playback bar
+     * when the playback panel opens, and tell the playback sheet how much space it takes so that
+     * the playback bar sits right above it.
+     */
+    private fun updateBottomNav(
+        binding: FragmentMainBinding,
+        playbackSheetBehavior: PlaybackBottomSheetBehavior<*>,
+        fadeRatio: Float,
+    ) {
+        val onHome =
+            binding.exploreNavHost.findNavController().currentDestination?.id == R.id.home_fragment
+        val nav = binding.mainBottomNav
+        if (homeModel.currentTabTypes != shownTabTypes) {
+            rebuildTabs(binding)
+        }
+        // A single tab makes the tabs redundant.
+        binding.mainTabs.isVisible = homeModel.currentTabTypes.size > 1
+        nav.alpha = if (onHome) fadeRatio else 0f
+        nav.isInvisible = nav.alpha == 0f
+
+        val obstruction = if (onHome) nav.height else 0
+        if (playbackSheetBehavior.bottomObstruction != obstruction) {
+            playbackSheetBehavior.bottomObstruction = obstruction
+            binding.playbackSheet.requestApplyInsets()
+            // The content is only re-inset when the sheet moves, so ask for it explicitly.
+            (binding.exploreNavHost.parent as View).requestApplyInsets()
+        }
     }
 
     override fun onPreDraw(): Boolean {
@@ -299,6 +425,7 @@ class MainFragment :
 
         val playbackOutRatio = 1 - min(playbackRatio * 2, 1f)
         val playbackInRatio = max(playbackRatio - 0.5f, 0f) * 2
+        updateBottomNav(binding, playbackSheetBehavior, playbackOutRatio)
 
         val playbackMaxXScaleDelta = maxScaleXDistance / binding.playbackSheet.width
         val playbackEdgeRatio = max(playbackRatio - 0.9f, 0f) / 0.1f
@@ -424,6 +551,7 @@ class MainFragment :
 
     private fun updateCurrentTab(tabType: MusicType) {
         val binding = requireBinding()
+        selectCurrentTab(binding)
         updateFabVisibility(
             binding,
             homeModel.songList.value,

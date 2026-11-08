@@ -18,7 +18,7 @@ jobs:
     name: Format and lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-build
       - name: Check formatting (ktfmt via spotless)
         run: ./gradlew spotlessCheck
@@ -26,7 +26,7 @@ jobs:
         run: ./gradlew app:lintDebug
       - name: Upload lint report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lint-report
           path: app/build/reports/lint-results-debug.html
@@ -37,21 +37,21 @@ jobs:
     permissions:
       contents: write # to publish the coverage badge on the "badges" branch
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-build
       - name: Run the tests
-        run: ./gradlew app:jacocoDebugReport musikr:testDebugUnitTest
+        run: ./gradlew coverageReport
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: coverage-report
-          path: app/build/reports/jacoco/jacocoDebugReport/
+          path: build/reports/jacoco/coverageReport/
       - name: Publish coverage badge
         # The badge lives on its own branch, so no token or external service is needed.
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         run: |
-          python3 scripts/coverage_badge.py app/build/reports/jacoco/jacocoDebugReport/jacocoDebugReport.xml coverage.json
+          python3 scripts/coverage_badge.py build/reports/jacoco/coverageReport/coverageReport.xml coverage.json
           mkdir /tmp/badges && cp coverage.json /tmp/badges/
           cd /tmp/badges
           git init -q -b badges

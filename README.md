@@ -97,22 +97,25 @@ minimal conflicts. Only the application ID and branding differ.
 
 ## Tests
 
-The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the listening stats (CSV
-export and import, ranking, the weekly, monthly and yearly ranges, the undated "before Noxio" plays) and the sleep
-timer. They run in WSL, Linux or macOS like the build:
+The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the listening stats (play
+counting including repeated songs, CSV export and import, ranking, the weekly, monthly, yearly and all time ranges,
+the undated "before Noxio" plays, the safe weekly backup) and the sleep timer (state, fade, shake detection). The
+music library (`musikr`) comes with its own tests. They run in WSL, Linux or macOS like the build:
 
 ```bash
-./gradlew app:jacocoDebugReport     # runs the tests and writes the coverage report
-./gradlew musikr:testDebugUnitTest  # the tests that came with the music library
+./gradlew coverageReport            # runs the tests of the app and musikr, writes the coverage report
 ./gradlew spotlessCheck app:lintDebug
 ```
 
-The coverage report is in `app/build/reports/jacoco/jacocoDebugReport/index.html`. The coverage badge counts Noxio's
-own testable logic only (stats and sleep timer), not the screens, generated code or Auxio's code. Screens are not
-covered by tests, so everything visible still needs a look on a device. GitHub Actions runs the formatting check,
-Android lint and the tests on every push and pull request, and refreshes the badge from `dev`.
+The coverage report is in `build/reports/jacoco/coverageReport/index.html`.
 
-Android lint knows the problems that came with Auxio (`app/lint-baseline.xml`), so only new ones fail the build.
+**The coverage badge counts all the code**, the app and the music library, and leaves out only generated code (view
+binding, Hilt, Room, resources). Screens and most of Auxio's own code have no tests, so the number is low on purpose:
+it shows how much is still untested, not just the tested parts. Everything visible still needs a look on a device.
+
+GitHub Actions runs the formatting check, Android lint and the tests on every push and pull request, and refreshes
+the badge from `dev`. Android lint knows the problems that came with Auxio (`app/lint-baseline.xml`), so only new
+ones fail the build.
 
 ## Credits & License
 

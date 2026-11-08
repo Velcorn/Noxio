@@ -58,12 +58,6 @@ class StatsCsvTest {
         return out.toString(Charsets.UTF_8).lines().filter { it.isNotEmpty() }
     }
 
-    private fun mostPlayed(vararg events: PlayEvent): List<String> {
-        val out = ByteArrayOutputStream()
-        StatsCsv.writeMostPlayed(events.toList(), out)
-        return out.toString(Charsets.UTF_8).lines().filter { it.isNotEmpty() }
-    }
-
     @Test
     fun historyStartsWithTheMusicoletColumnsAndTwoExtras() {
         assertEquals(
@@ -120,28 +114,5 @@ class StatsCsvTest {
     fun playsFromBeforeNoxioHaveAnEmptyTime() {
         val row = history(play(startedAt = PlayEvent.BASELINE_TIME))[1]
         assertEquals(true, row.endsWith(",1,,200000"))
-    }
-
-    @Test
-    fun mostPlayedCountsPlaysPerSongAndSortsByCountThenTitle() {
-        val rows =
-            mostPlayed(
-                play(title = "Beta"),
-                play(title = "Alpha"),
-                play(title = "Beta", startedAt = 2),
-                play(title = "Gamma"),
-                play(title = "Beta", startedAt = 3),
-            )
-        assertEquals(4, rows.size) // header and three songs
-        assertEquals("Beta", rows[1].split(",")[1])
-        assertEquals("3", rows[1].split(",").last())
-        assertEquals("Alpha", rows[2].split(",")[1])
-        assertEquals("Gamma", rows[3].split(",")[1])
-    }
-
-    @Test
-    fun theSameTitleOnADifferentAlbumIsAnotherSong() {
-        val rows = mostPlayed(play(album = "One"), play(album = "Two"))
-        assertEquals(3, rows.size)
     }
 }

@@ -94,6 +94,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/lbl_sleep_timer"
         app:icon="@drawable/ic_sleep_timer_24"
+        app:iconSize="@dimen/size_icon_medium"
         app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small"
         app:layout_constraintBottom_toTopOf="@+id/playback_seek_bar"
         app:layout_constraintEnd_toEndOf="parent"

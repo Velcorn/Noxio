@@ -139,17 +139,21 @@ fun summarize(events: List<PlayEvent>, limit: Int = 10): ListeningStats {
 }
 
 interface StatsRepository {
-    /** Record a counted play. */
-    suspend fun record(event: PlayEvent)
+    /**
+     * Record a counted play.
+     *
+     * @return The id of the saved play, for [updateListened].
+     */
+    suspend fun record(event: PlayEvent): Long
+
+    /** Change how long a saved play was listened to, as it goes on. */
+    suspend fun updateListened(id: Long, listenedMs: Long)
 
     /** Summarize the plays inside [range]. */
     suspend fun summary(range: LongRange): ListeningStats
 
     /** Write the whole play history as CSV into [out]. The stream is not closed. */
     suspend fun exportCsv(out: OutputStream)
-
-    /** Write the songs played inside [range] with their play counts, Musicolet-style. */
-    suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream)
 
     /**
      * Add the plays of imported files to the history. Most-played lists have no dates, so they
@@ -164,13 +168,13 @@ interface StatsRepository {
 class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : StatsRepository {
     override suspend fun record(event: PlayEvent) = dao.insert(event)
 
+    override suspend fun updateListened(id: Long, listenedMs: Long) =
+        dao.updateListened(id, listenedMs)
+
     override suspend fun summary(range: LongRange) =
         summarize(dao.between(range.first, range.last + 1))
 
     override suspend fun exportCsv(out: OutputStream) = StatsCsv.writeHistory(dao.all(), out)
-
-    override suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream) =
-        StatsCsv.writeMostPlayed(dao.between(range.first, range.last + 1), out)
 
     override suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
         // Skip dated plays that are already there, so importing a backup twice is harmless.

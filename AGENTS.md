@@ -9,9 +9,9 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 - `./gradlew spotlessApply` before every commit; CI checks formatting.
 
 ## Tests
-- Unit tests for Noxio's own logic live in `app/src/test` and run on the JVM (Robolectric where Android classes are needed): `./gradlew app:jacocoDebugReport` runs them and writes the coverage report (`app/build/reports/jacoco/jacocoDebugReport/`). `./gradlew musikr:testDebugUnitTest` runs the upstream library tests.
-- Write or extend tests for every change to the stats (CSV, import, ranking, ranges) and sleep timer logic, and fix failures before committing. The user does not write Android code, so tests are how mistakes get caught. Screens and dialogs have no tests: say clearly that they are untested.
-- CI (`.github/workflows/ci.yml`) runs `spotlessCheck`, `app:lintDebug` and the tests, and publishes the coverage badge from `dev` to the `badges` branch. The coverage number only counts the classes listed in `jacocoDebugReport` in `app/build.gradle`: add a new logic class there when it gets tests.
+- Unit tests live in `app/src/test` (the app) and `musikr/src/test` and run on the JVM (Robolectric where Android classes are needed): `./gradlew coverageReport` runs both and writes one coverage report (`build/reports/jacoco/coverageReport/`).
+- Write or extend tests for every change to code that has logic: the stats (CSV, import, ranking, ranges, play counting, backup) and the sleep timer have the most. Fix failures before committing. The user does not write Android code, so tests are how mistakes get caught. Screens and dialogs have no tests: say clearly that they are untested.
+- CI (`.github/workflows/ci.yml`) runs `spotlessCheck`, `app:lintDebug` and the tests, and publishes the coverage badge from `dev` to the `badges` branch. The coverage number counts all the code except generated code (see `coverageReport` in the root `build.gradle`), so it only goes up when tests are added.
 - `app/lint-baseline.xml` holds the lint problems that came with Auxio. Do not add new ones to it to make lint pass; fix them.
 
 ## Releases

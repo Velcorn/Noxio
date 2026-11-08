@@ -35,6 +35,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.io.ByteArrayOutputStream
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -92,15 +93,15 @@ constructor(
             L.w("Stats backup folder is missing or not writable")
             return false
         }
-        val file = tree.findFile(FILE_NAME) ?: tree.createFile("text/csv", FILE_NAME)
-        if (file == null) {
-            L.w("Could not create the stats backup file")
+        // The export is made first and written safely: a failure halfway must not damage the last
+        // good backup. See SafeDocumentWriter.
+        val csv = ByteArrayOutputStream().also { repository.exportCsv(it) }.toByteArray()
+        val written =
+            SafeDocumentWriter.write(context, tree, FILE_NAME, "text/csv") { it.write(csv) }
+        if (!written) {
+            L.w("Could not write the stats backup file")
             return false
         }
-        // "wt" truncates, so a shorter export does not leave the end of an older one behind.
-        context.contentResolver.openOutputStream(file.uri, "wt")?.use {
-            repository.exportCsv(it)
-        } ?: return false
         sharedPreferences.edit { putLong(KEY_LAST, System.currentTimeMillis()) }
         L.d("Stats backup written")
         return true

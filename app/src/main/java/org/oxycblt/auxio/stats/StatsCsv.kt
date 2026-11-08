@@ -26,13 +26,11 @@ import java.time.format.DateTimeFormatter
 /**
  * Writes the play history as CSV.
  *
- * Both files start with the ten columns of Musicolet's "Most played songs" export: `FILE_PATH`,
- * `TITLE`, `ARTIST`, `ALBUM`, `ALBUM_ARTIST`, `COMPOSER`, `GENRE`, `YEAR`, `DURATION_MS` and
- * `PLAY_COUNT`, with `<unknown>` for what is not known. Artist and album rankings can be derived
- * from that.
- * - [writeHistory] writes one row per play with a `PLAY_COUNT` of 1 and two extra columns,
- *   `PLAYED_AT` (ISO 8601) and `LISTENED_MS`. Nothing is lost, so it is the format for backups.
- * - [writeMostPlayed] writes one row per song with its number of plays, like Musicolet does.
+ * The file has one row per play. It starts with the ten columns of Musicolet's "Most played songs"
+ * export (`FILE_PATH`, `TITLE`, `ARTIST`, `ALBUM`, `ALBUM_ARTIST`, `COMPOSER`, `GENRE`, `YEAR`,
+ * `DURATION_MS` and `PLAY_COUNT`, with `<unknown>` for what is not known), so Musicolet-style tools
+ * can read it, and has two extra columns: `PLAYED_AT` (ISO 8601, empty for plays from before Noxio)
+ * and `LISTENED_MS`. Nothing is lost, so it is the format for backups.
  *
  * Several artists are joined with "; ". Files are UTF-8 and use RFC 4180 quoting.
  */
@@ -64,22 +62,6 @@ object StatsCsv {
         }
         writer.flush()
     }
-
-    fun writeMostPlayed(events: List<PlayEvent>, out: OutputStream) {
-        val writer = out.bufferedWriter(Charsets.UTF_8)
-        writer.write(MUSICOLET_HEADER)
-        writer.write("\n")
-        val songs = events.groupBy { songKey(it) }.values
-        songs
-            .map { plays -> plays.first() to plays.size }
-            .sortedWith(
-                compareByDescending<Pair<PlayEvent, Int>> { it.second }.thenBy { it.first.title }
-            )
-            .forEach { (event, plays) -> writer.write(row(songColumns(event, plays))) }
-        writer.flush()
-    }
-
-    private fun songKey(event: PlayEvent) = listOf(event.title, event.artists, event.album)
 
     private fun songColumns(event: PlayEvent, plays: Int): List<String> =
         listOf(

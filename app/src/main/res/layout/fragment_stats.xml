@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorSurface"
     android:orientation="vertical"
     android:transitionGroup="true"
     tools:context=".stats.StatsFragment">
@@ -173,7 +172,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/spacing_tiny">
+                    android:paddingStart="@dimen/spacing_tiny"
+                    android:paddingEnd="@dimen/spacing_tiny">
 
                     <TextView
                         android:id="@+id/stats_card_title"

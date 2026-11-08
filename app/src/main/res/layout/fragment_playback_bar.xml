@@ -64,6 +64,16 @@
             app:buttonSizeChange="@xml/safe_button_group_size_change">
 
             <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/playback_skip_prev"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/desc_skip_prev"
+                app:backgroundTint="?attr/colorSurface"
+                app:icon="@drawable/ic_skip_prev_24"
+                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
+
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
                 android:id="@+id/playback_play_pause"
                 style="@style/Widget.Auxio.Button.Playback.PlayPause"
                 android:layout_width="wrap_content"
@@ -81,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 app:toggleCheckedStateOnClick="false"
-                app:backgroundTint="?attr/colorSurfaceContainerLow"
+                app:backgroundTint="?attr/colorSurface"
                 app:iconTint="@color/sel_checkable_icon"
                 app:strokeColor="@color/sel_checkable_outline"
                 tools:icon="@drawable/ic_skip_next_24" />

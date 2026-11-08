@@ -29,6 +29,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -50,13 +51,12 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
     @Inject lateinit var sleepTimer: SleepTimer
 
     private enum class Choice {
-        END_OF_TRACK,
         SHORT,
         CUSTOM,
         LONG,
     }
 
-    private var choice = Choice.END_OF_TRACK
+    private var choice = Choice.SHORT
     private var customMinutes: Int? = null
     private var editing = false
 
@@ -76,27 +76,23 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
 
         customMinutes = sleepTimer.lastCustomMinutes
         if (savedInstanceState == null) {
-            // Start from whatever was used last time. Only the first-ever run falls back to
-            // the end of the track.
+            // Start from whatever was used last time.
+            val last = sleepTimer.lastMode
             choice =
-                when (val last = sleepTimer.lastMode) {
-                    SleepTimerMode.EndOfTrack -> Choice.END_OF_TRACK
-                    is SleepTimerMode.Minutes ->
-                        when (last.minutes) {
-                            SHORT_MINUTES -> Choice.SHORT
-                            LONG_MINUTES -> Choice.LONG
-                            else -> {
-                                customMinutes = last.minutes
-                                Choice.CUSTOM
-                            }
-                        }
+                when (last.minutes) {
+                    SHORT_MINUTES -> Choice.SHORT
+                    LONG_MINUTES -> Choice.LONG
+                    else -> {
+                        customMinutes = last.minutes
+                        Choice.CUSTOM
+                    }
                 }
         } else {
             choice = Choice.valueOf(savedInstanceState.getString(KEY_CHOICE, choice.name))
         }
+        binding.sleepFinishSong.isChecked = sleepTimer.finishSong
         binding.sleepFade.isChecked = sleepTimer.fade
 
-        binding.sleepEndOfTrack.setOnClickListener { select(Choice.END_OF_TRACK) }
         binding.sleep30.setOnClickListener { select(Choice.SHORT) }
         binding.sleep60.setOnClickListener { select(Choice.LONG) }
         binding.sleepCustom.setOnClickListener {
@@ -122,6 +118,9 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
             if (!focused) {
                 finishEditing()
             }
+        }
+        binding.sleepFinishSong.setOnCheckedChangeListener { _, checked ->
+            sleepTimer.finishSong = checked
         }
         binding.sleepFade.setOnCheckedChangeListener { _, checked -> sleepTimer.fade = checked }
         binding.sleepStart.setOnClickListener { start() }
@@ -153,7 +152,6 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
 
     private fun updateTiles() {
         val binding = requireBinding()
-        binding.sleepEndOfTrack.isChecked = choice == Choice.END_OF_TRACK
         binding.sleep30.isChecked = choice == Choice.SHORT
         binding.sleepCustom.isChecked = choice == Choice.CUSTOM
         binding.sleep60.isChecked = choice == Choice.LONG
@@ -174,7 +172,13 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
         editing = true
         updateTiles()
         binding.sleepCustomInput.apply {
-            setText((customMinutes ?: SleepTimer.DEFAULT_CUSTOM_MINUTES).toString())
+            setText(
+                String.format(
+                    Locale.US,
+                    "%d",
+                    customMinutes ?: SleepTimer.DEFAULT_CUSTOM_MINUTES,
+                )
+            )
             requestFocus()
             selectAll()
             post {
@@ -208,11 +212,11 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
         finishEditing()
         val mode =
             when (choice) {
-                Choice.END_OF_TRACK -> SleepTimerMode.EndOfTrack
                 Choice.SHORT -> SleepTimerMode.Minutes(SHORT_MINUTES)
                 Choice.LONG -> SleepTimerMode.Minutes(LONG_MINUTES)
                 Choice.CUSTOM -> SleepTimerMode.Minutes(customMinutes ?: return)
             }
+        sleepTimer.finishSong = requireBinding().sleepFinishSong.isChecked
         sleepTimer.fade = requireBinding().sleepFade.isChecked
         sleepTimer.start(mode)
         dismiss()
@@ -233,7 +237,10 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
                 binding.sleepRestart.visibility = View.GONE
             }
             is SleepTimerMode.Minutes -> {
-                binding.sleepRemainingNote.setText(R.string.lbl_sleep_stops_when_over)
+                binding.sleepRemainingNote.setText(
+                    if (active.finishSong) R.string.lbl_sleep_stops_after_song_over
+                    else R.string.lbl_sleep_stops_when_over
+                )
                 binding.sleepRestart.visibility = View.VISIBLE
                 // collectLatest cancels this suspend function as soon as the state changes.
                 while (true) {

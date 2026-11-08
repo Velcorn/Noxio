@@ -28,8 +28,15 @@ class StatsRepositoryExportTest {
     private class Dao : PlayEventDao {
         val events = mutableListOf<PlayEvent>()
 
-        override suspend fun insert(event: PlayEvent) {
-            events += event
+        override suspend fun insert(event: PlayEvent): Long {
+            val saved = event.copy(id = events.size + 1L)
+            events += saved
+            return saved.id
+        }
+
+        override suspend fun updateListened(id: Long, listenedMs: Long) {
+            val index = events.indexOfFirst { it.id == id }
+            events[index] = events[index].copy(listenedMs = listenedMs)
         }
 
         override suspend fun insertAll(events: List<PlayEvent>) {
@@ -75,18 +82,5 @@ class StatsRepositoryExportTest {
         val fresh = StatsRepositoryImpl(Dao())
         assertEquals(3, fresh.importCsv(listOf(parsed)))
         assertEquals(3, fresh.summary(0L until Long.MAX_VALUE).plays)
-    }
-
-    @Test
-    fun mostPlayedOnlyHoldsTheRequestedRange() = runBlocking {
-        repository.record(play("In", 5_000))
-        repository.record(play("Out", 50_000))
-
-        val out = ByteArrayOutputStream()
-        repository.exportMostPlayedCsv(0L until 10_000L, out)
-
-        val lines = out.toString(Charsets.UTF_8).lines().filter { it.isNotEmpty() }
-        assertEquals(2, lines.size) // header and one song
-        assertEquals("In", lines[1].split(",")[1])
     }
 }

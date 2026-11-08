@@ -119,7 +119,9 @@ class SleepTimerController(
     }
 
     private suspend fun countdown(state: SleepTimerState.Active) {
-        val fadeMs = if (state.fade) FADE_MS else 0L
+        // When the last song is allowed to finish, the fade happens at the end of that song
+        // instead, so playback carries on at full volume when the time is up.
+        val fadeMs = if (state.fade && !state.finishSong) FADE_MS else 0L
         delay((state.endsAt - fadeMs - SystemClock.elapsedRealtime()).coerceAtLeast(0))
         while (true) {
             val remaining = state.endsAt - SystemClock.elapsedRealtime()
@@ -130,6 +132,12 @@ class SleepTimerController(
                 player.volume = SleepFade.volume(remaining, fadeMs)
             }
             delay(STEP_MS)
+        }
+        if (state.finishSong && player.isPlaying) {
+            // The state change starts waiting for the end of the track, see onState.
+            L.d("Sleep timer expired, letting the song finish")
+            sleepTimer.finishTrack()
+            return
         }
         L.d("Sleep timer expired, pausing")
         playbackManager.playing(false)

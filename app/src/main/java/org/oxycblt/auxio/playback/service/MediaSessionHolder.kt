@@ -29,6 +29,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import androidx.annotation.DrawableRes
 import androidx.car.app.mediaextensions.MetadataExtras
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.createBitmap
 import androidx.media.app.NotificationCompat.MediaStyle
 import androidx.media.session.MediaButtonReceiver
 import coil3.request.CachePolicy
@@ -342,7 +343,7 @@ private constructor(
             PlaybackStateCompat.CustomAction.Builder(
                     PlaybackActions.ACTION_INC_REPEAT_MODE,
                     context.getString(R.string.desc_change_repeat),
-                    playbackManager.repeatMode.icon,
+                    playbackManager.repeatMode.notificationIcon,
                 )
                 .build()
         state.addCustomAction(repeatAction)
@@ -353,7 +354,7 @@ private constructor(
                     PlaybackActions.ACTION_INVERT_SHUFFLE,
                     context.getString(R.string.desc_shuffle),
                     if (playbackManager.isShuffled) {
-                        R.drawable.ic_shuffle_on_24
+                        R.drawable.ic_shuffle_on_dot_24
                     } else {
                         R.drawable.ic_shuffle_off_24
                     },
@@ -491,7 +492,11 @@ private class PlaybackNotification(
         context: Context,
         repeatMode: RepeatMode,
     ): NotificationCompat.Action {
-        return buildAction(context, PlaybackActions.ACTION_INC_REPEAT_MODE, repeatMode.icon)
+        return buildAction(
+            context,
+            PlaybackActions.ACTION_INC_REPEAT_MODE,
+            repeatMode.notificationIcon,
+        )
     }
 
     private fun buildShuffleAction(
@@ -500,7 +505,7 @@ private class PlaybackNotification(
     ): NotificationCompat.Action {
         val drawableRes =
             if (isShuffled) {
-                R.drawable.ic_shuffle_on_24
+                R.drawable.ic_shuffle_on_dot_24
             } else {
                 R.drawable.ic_shuffle_off_24
             }
@@ -526,6 +531,6 @@ private class PlaybackNotification(
             )
 
         /** Cached 2x2 transparent bitmap. 2x2 to stop palette extraction blowing up the app */
-        private val EMPTY_BITMAP: Bitmap = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888)
+        private val EMPTY_BITMAP: Bitmap = createBitmap(2, 2)
     }
 }

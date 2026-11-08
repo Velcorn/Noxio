@@ -110,10 +110,6 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
     /** Write the full play history as CSV. Must be called off the main thread. */
     suspend fun exportCsv(out: OutputStream) = repository.exportCsv(out)
 
-    /** Write the songs played in [range] with their play counts. Call off the main thread. */
-    suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream) =
-        repository.exportMostPlayedCsv(range, out)
-
     /** Add the plays of imported files. Must be called off the main thread. */
     suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
         val added = repository.importCsv(files)

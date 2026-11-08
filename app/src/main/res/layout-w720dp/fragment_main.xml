@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
-        android:background="?attr/colorSurfaceContainerLow" />
+        android:background="?attr/colorSurface" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/playback_sheet"
@@ -135,5 +135,73 @@
             android:layout_height="match_parent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- The main navigation: a search row above the tabs, on the plain surface. It is drawn over
+         the bottom of the playback sheet, which is raised by its height so that the playback bar
+         sits right above it. Only shown on the home screen (see MainFragment). -->
+    <LinearLayout
+        android:id="@+id/main_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical"
+        android:translationZ="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="@dimen/spacing_tiny">
+
+            <TextView
+                android:id="@+id/main_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/lbl_search"
+                android:drawablePadding="@dimen/spacing_mid_medium"
+                android:drawableStart="@drawable/ic_search_20"
+                android:gravity="center_vertical"
+                android:text="@string/hint_search_music"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?android:attr/textColorSecondary" />
+
+            <ImageButton
+                android:id="@+id/main_sort"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lbl_sort"
+                android:src="@drawable/ic_sort_20"
+                app:tint="?android:attr/textColorSecondary" />
+
+            <ImageButton
+                android:id="@+id/main_more"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lbl_more"
+                android:src="@drawable/ic_more_vert_20"
+                app:tint="?android:attr/textColorSecondary" />
+
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/main_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="0dp"
+            app:tabInlineLabel="false"
+            app:tabMode="fixed"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabTextAppearance="?attr/textAppearanceLabelSmall" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

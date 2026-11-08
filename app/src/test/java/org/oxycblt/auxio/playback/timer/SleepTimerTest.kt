@@ -79,14 +79,55 @@ class SleepTimerTest {
     }
 
     @Test
-    fun theLastModeIsRememberedForNextTime() {
-        assertEquals(SleepTimerMode.EndOfTrack, timer.lastMode) // first run
+    fun theLastDurationIsRememberedForNextTime() {
+        assertEquals(
+            SleepTimerMode.Minutes(SleepTimer.DEFAULT_MINUTES),
+            timer.lastMode,
+        ) // first run
 
         timer.start(SleepTimerMode.Minutes(25))
         assertEquals(SleepTimerMode.Minutes(25), timer.lastMode)
+    }
+
+    @Test
+    fun waitingForTheEndOfTheSongDoesNotChangeTheRememberedDuration() {
+        timer.start(SleepTimerMode.Minutes(25))
+        timer.finishTrack()
+        assertEquals(SleepTimerMode.Minutes(25), timer.lastMode)
+    }
+
+    @Test
+    fun finishingTheLastSongIsOnByDefaultAndCopiedIntoTheTimer() {
+        assertTrue(timer.finishSong)
+        timer.start(SleepTimerMode.Minutes(5))
+        assertTrue(active().finishSong)
+
+        timer.finishSong = false
+        timer.start(SleepTimerMode.Minutes(5))
+        assertFalse(active().finishSong)
+    }
+
+    @Test
+    fun whenTheTimeIsUpTheTimerWaitsForTheEndOfTheSongAndKeepsTheFade() {
+        timer.fade = false
+        timer.start(SleepTimerMode.Minutes(5))
+        timer.finishTrack()
+
+        assertEquals(SleepTimerMode.EndOfTrack, active().mode)
+        assertEquals(0L, active().endsAt)
+        assertFalse(active().fade)
+        // This is the last phase: it does not wait for another song after that.
+        assertFalse(active().finishSong)
+    }
+
+    @Test
+    fun finishingTheTrackDoesNothingWithoutAMinutesTimer() {
+        timer.finishTrack()
+        assertEquals(SleepTimerState.Off, timer.state.value)
 
         timer.start(SleepTimerMode.EndOfTrack)
-        assertEquals(SleepTimerMode.EndOfTrack, timer.lastMode)
+        timer.finishTrack()
+        assertEquals(SleepTimerMode.EndOfTrack, active().mode)
     }
 
     @Test

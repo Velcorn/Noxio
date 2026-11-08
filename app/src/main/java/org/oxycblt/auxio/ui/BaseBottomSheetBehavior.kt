@@ -51,6 +51,14 @@ abstract class BaseBottomSheetBehavior<V : View>(context: Context, attributeSet:
     // TODO: Just use another library. Tired of Hilt.
     lateinit var uiSettings: UISettings
 
+    /**
+     * Height in pixels of something drawn over the bottom of the screen on top of this sheet, such
+     * as the main navigation. The bar sits right above it, and content is inset by at least this
+     * much even when the sheet is hidden. The owner must request window insets on the sheet again
+     * after changing it.
+     */
+    var bottomObstruction = 0
+
     init {
         // Disable isFitToContents to make the bottom sheet expand to the top of the screen and
         // not just how much the content takes up.
@@ -82,11 +90,12 @@ abstract class BaseBottomSheetBehavior<V : View>(context: Context, attributeSet:
         // first child) plus the gesture insets.
         val gestures = insets.systemGestureInsetsCompat
         val bar = (child as ViewGroup).getChildAt(0)
+        val below = maxOf(gestures.bottom, bottomObstruction)
         peekHeight =
             if (bar.measuredHeight > 0) {
-                bar.measuredHeight + gestures.bottom
+                bar.measuredHeight + below
             } else {
-                getIdealBarHeight(child.context) + gestures.bottom
+                getIdealBarHeight(child.context) + below
             }
         return insets
     }

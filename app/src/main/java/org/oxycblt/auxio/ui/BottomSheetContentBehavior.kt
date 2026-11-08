@@ -142,10 +142,14 @@ class BottomSheetContentBehavior<V : View>(context: Context, attributeSet: Attri
             return Int.MIN_VALUE
         }
 
-        return if (offset >= 0) {
-            peekHeight
-        } else {
-            (peekHeight * (1 - abs(offset))).toInt()
-        }
+        val consumed =
+            if (offset >= 0) {
+                peekHeight
+            } else {
+                (peekHeight * (1 - abs(offset))).toInt()
+            }
+        // Whatever covers the bottom of the screen (the main navigation) stays inset even when
+        // the sheet itself is hidden.
+        return maxOf(consumed, (this as? BaseBottomSheetBehavior<*>)?.bottomObstruction ?: 0)
     }
 }

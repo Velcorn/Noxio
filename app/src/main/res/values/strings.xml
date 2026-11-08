@@ -140,7 +140,6 @@
     <string name="lbl_stats_show_ten">Show top 10</string>
     <string name="lbl_stats_show_five">Show top 5</string>
     <string name="lbl_stats_export">Export history as CSV</string>
-    <string name="lbl_stats_export_most_played">Export most played songs (Musicolet format)</string>
     <string name="lbl_stats_import">Import CSV (Noxio or Musicolet)</string>
     <string name="lbl_stats_all">All time</string>
     <string name="lbl_stats_import_baseline">Import as your history before Noxio?</string>
@@ -171,12 +170,14 @@
     <string name="lbl_sleep_custom">Custom</string>
     <string name="lbl_sleep_minutes">Minutes</string>
     <string name="lbl_sleep_unit">min</string>
+    <string name="lbl_sleep_finish_song">Finish last song</string>
     <string name="lbl_sleep_fade">Fade out before stopping</string>
     <string name="lbl_sleep_start">Start</string>
     <string name="lbl_sleep_restart">Restart</string>
     <string name="lbl_sleep_stop">Stop timer</string>
     <string name="lbl_sleep_stops_after_track">Playback stops after this track</string>
     <string name="lbl_sleep_stops_when_over">Playback stops when the timer ends</string>
+    <string name="lbl_sleep_stops_after_song_over">Playback stops when the song that is playing then ends</string>
     <string name="fmt_sleep_minutes">%d min</string>
     <string name="lbl_play">Play</string>
     <string name="lbl_shuffle">Shuffle</string>
