@@ -45,8 +45,6 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
     <button data-shape="round" aria-pressed="true">Circle</button>
     <button data-shape="squircle" aria-pressed="false">Squircle</button>
     <button data-shape="rsquare" aria-pressed="false">Rounded square</button>
-    <span style="margin-left:12px">Texture</span>
-    <button id="craterBtn" aria-pressed="false">Craters</button>
   </div>
   <div class="grid" id="grid"></div>
   <div class="notes">
@@ -59,55 +57,59 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
   var circleD = function (cx, cy, r) { return 'M' + (cx - r) + ' ' + cy + 'a' + r + ' ' + r + ' 0 1 0 ' + 2 * r + ' 0a' + r + ' ' + r + ' 0 1 0 ' + (-2 * r) + ' 0z'; };
 
   // Each concept returns the foreground artwork. In 'mono' mode everything uses one color, in 'color' mode gradients.
-  var craters = false;
-  // Crater positions stay clear of the play button. Colored: darker patches. Monochrome: cut-outs.
-  var CRATERS = [[37, 42, 3.2], [40, 68, 2.6], [70, 36, 2.6], [72, 70, 3.4]];
-  function craterMask() { return craters ? CRATERS.map(function (c) { return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + c[2] + '" fill="#000"/>'; }).join('') : ''; }
-  function craterPaint(mode) { return craters && mode !== 'mono' ? CRATERS.map(function (c) { return '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + c[2] + '" fill="#5b4bc4" opacity=".28"/>'; }).join('') : ''; }
-  var star = function (x, y, r, fill) { return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + fill + '"/>'; };
+  var uid2 = 0;
+  var star = function (x, y, r, fill, o) { return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + fill + '"' + (o ? ' opacity="' + o + '"' : '') + '/>'; };
+  var DARK = '#17142a';
+  var ring = function (cx, cy, r, w, stroke, o) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + stroke + '" stroke-width="' + w + '" opacity="' + o + '"/>'; };
 
   var concepts = [
-    { name: 'Full Moon Play', pick: true,
-      text: 'Your pick. A bold moon disc with the play button cut out and a few stars. Use the Craters button to add texture so it reads as the moon even more clearly.',
-      art: function (mode, fg, id) {
-        var disc = mode === 'mono' ? fg : 'url(#g' + id + ')';
-        var dots = mode === 'mono' ? fg : '#ffffff';
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3dcff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
-          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><path d="M47 40L47 68L71 54Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/>' + craterMask() + '</mask></defs>' +
-          '<circle cx="54" cy="54" r="30" fill="' + disc + '" mask="url(#m' + id + ')"/>' + craterPaint(mode) +
-          star(24, 26, 2.6, dots) + star(86, 84, 2, dots) + star(84, 24, 1.6, dots);
-      } },
-    { name: 'Quarter Moon Play',
-      text: 'A moon in first quarter: one half lit, one half in shadow, with the play button straddling the line between them. Perfectly round and mirror-symmetrical.',
-      art: function (mode, fg, id) {
-        var lit = mode === 'mono' ? fg : 'url(#g' + id + ')';
-        var shade = mode === 'mono' ? fg : '#3a3560';
-        var shadeOpacity = mode === 'mono' ? .38 : 1;
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3dcff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
-          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><path d="M47 41L47 67L70 54Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/>' + craterMask() + '</mask></defs>' +
-          '<g mask="url(#m' + id + ')"><path d="M54 24A30 30 0 0 0 54 84Z" fill="' + lit + '"/><path d="M54 24A30 30 0 0 1 54 84Z" fill="' + shade + '" opacity="' + shadeOpacity + '"/></g>' + craterPaint(mode) +
-          '<path d="M54 24A30 30 0 0 1 54 84A30 30 0 0 1 54 24Z" fill="none" stroke="' + (mode === 'mono' ? fg : '#a79dff') + '" stroke-width="1.6" opacity="' + (mode === 'mono' ? .6 : .55) + '"/>';
-      } },
-    { name: 'Crescent Play',
-      text: 'A crescent that opens to the right, with the play button sitting in its curve. Symmetrical top to bottom, and the moon is unmistakable.',
-      art: function (mode, fg, id) {
-        var moon = mode === 'mono' ? fg : 'url(#g' + id + ')';
-        var tri = mode === 'mono' ? fg : '#ffffff';
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3dcff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
-          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="64" cy="54" r="26" fill="#000"/></mask></defs>' +
-          '<g transform="translate(6 0)"><circle cx="48" cy="54" r="31" fill="' + moon + '" mask="url(#m' + id + ')"/>' +
-          '<path d="M59 43L59 65L78 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/></g>';
-      } },
-    { name: 'Eclipse Play',
-      text: 'A dark moon with a glowing rim, like a total eclipse, and a bright play button on it. Round and centered, a little more mysterious.',
+    { name: 'Eclipse Play (current)',
+      text: 'The version you liked: a dark disc with a glowing rim and a play button. The uniform ring is why it can read as a sun eclipse instead of a moon.',
       art: function (mode, fg, id) {
         var rim = mode === 'mono' ? fg : 'url(#g' + id + ')';
         var tri = mode === 'mono' ? fg : '#ffffff';
         var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="26" fill="#14121f"/>';
         return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0c7ff"/><stop offset="1" stop-color="#8f7dff"/></linearGradient></defs>' +
-          '<circle cx="54" cy="54" r="31" fill="none" stroke="' + rim + '" stroke-width="3.2" opacity=".35"/>' +
-          '<circle cx="54" cy="54" r="27.5" fill="none" stroke="' + rim + '" stroke-width="3.6"/>' + body +
+          ring(54, 54, 31, 3.2, rim, .35) + ring(54, 54, 27.5, 3.6, rim, 1) + body +
           '<path d="M47 41L47 67L68 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
+      } },
+    { name: 'Earthshine Moon',
+      text: 'A dark moon lit only along one edge, with a faint ring for the rest of it and craters on the dark side. A lit crescent is the one thing nothing else looks like.',
+      art: function (mode, fg, id) {
+        var lit = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var tri = mode === 'mono' ? fg : '#ffffff';
+        var crater = mode === 'mono' ? fg : '#c9bfff';
+        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="30" fill="' + DARK + '"/>';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ecff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
+          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="61" cy="57" r="27" fill="#000"/></mask></defs>' +
+          body + '<circle cx="54" cy="54" r="30" fill="' + lit + '" mask="url(#m' + id + ')"/>' + ring(54, 54, 29.2, 1.4, lit, .4) +
+          ring(72, 40, 3.2, 1.3, crater, .5) + ring(74, 68, 2.6, 1.3, crater, .5) + ring(50, 74, 2.2, 1.3, crater, .5) +
+          '<path d="M55 43L55 67L74 55Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
+      } },
+    { name: 'Gibbous Play',
+      text: 'A bright moon disc with an offset dark circle holding the play button. The lit edge is thick on the left and thin on the right, and the craters sit on the lit part.',
+      art: function (mode, fg, id) {
+        var lit = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var tri = mode === 'mono' ? fg : '#ffffff';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ecff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
+          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="59.5" cy="55" r="23.5" fill="#000"/>' +
+          '<circle cx="30" cy="50" r="2.6" fill="#000"/><circle cx="33" cy="65" r="2.2" fill="#000"/><circle cx="41" cy="36" r="2.4" fill="#000"/></mask></defs>' +
+          (mode === 'mono' ? '' : '<circle cx="59.5" cy="55" r="23.5" fill="' + DARK + '"/>') +
+          '<circle cx="54" cy="54" r="30" fill="' + lit + '" mask="url(#m' + id + ')"/>' +
+          '<path d="M53 43L53 67L72 55Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
+      } },
+    { name: 'Moonlit Night Play',
+      text: 'The Earthshine moon with a soft halo and a few stars, so the night sky does the explaining. The busiest of the three, but it is clearly the moon.',
+      art: function (mode, fg, id) {
+        var lit = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var tri = mode === 'mono' ? fg : '#ffffff';
+        var dots = mode === 'mono' ? fg : '#ffffff';
+        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="28" fill="' + DARK + '"/>';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ecff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
+          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="60" cy="56" r="25" fill="#000"/></mask></defs>' +
+          ring(54, 54, 33, 1.4, lit, .22) + body + '<circle cx="54" cy="54" r="28" fill="' + lit + '" mask="url(#m' + id + ')"/>' + ring(54, 54, 27.3, 1.3, lit, .4) +
+          '<path d="M54 44L54 66L72 55Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>' +
+          star(24, 28, 2.4, dots) + star(88, 26, 1.8, dots) + star(84, 86, 2.2, dots) + star(22, 80, 1.5, dots, .8);
       } }
   ];
 
@@ -127,7 +129,7 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
   var shape = 'round';
   function render() {
     var html = concepts.map(function (c, i) {
-      return '<section class="card"><h2>' + (i + 1) + '. ' + c.name + (c.pick ? ' <span style="font:600 12px var(--font-body);color:var(--accent);vertical-align:middle">your pick</span>' : '') + '</h2><p>' + c.text + '</p>' +
+      return '<section class="card"><h2>' + (i + 1) + '. ' + c.name + '</h2><p>' + c.text + '</p>' +
         '<div class="hero">' + icon(c, 'color', 132) + '</div>' +
         '<div><div class="cap" style="text-align:left;margin-bottom:6px">Themed icon, tinted by Material You</div><div class="row">' +
         themed.map(function (t) { return '<div class="tile">' + icon(c, 'mono', 56, t.bg, t.fg) + '<div class="cap">' + t.name + '</div></div>'; }).join('') +
@@ -139,11 +141,6 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
     document.getElementById('grid').innerHTML = html;
     document.querySelectorAll('.shape').forEach(function (el) { el.setAttribute('class', 'ico shape ' + shape); });
   }
-  document.getElementById('craterBtn').onclick = function () {
-    craters = !craters;
-    this.setAttribute('aria-pressed', String(craters));
-    render();
-  };
   document.querySelectorAll('.bar button[data-shape]').forEach(function (b) {
     b.onclick = function () {
       shape = b.dataset.shape;
