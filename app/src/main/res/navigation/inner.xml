@@ -264,6 +264,9 @@
             android:id="@+id/sort"
             app:destination="@+id/artist_song_sort_dialog" />
         <action
+            android:id="@+id/sort_albums"
+            app:destination="@+id/artist_album_sort_dialog" />
+        <action
             android:id="@+id/show_song"
             app:destination="@id/song_detail_dialog" />
         <action
@@ -299,6 +302,12 @@
         android:id="@+id/artist_song_sort_dialog"
         android:name="org.oxycblt.auxio.detail.sort.ArtistSongSortDialog"
         android:label="artist_song_sort_dialog"
+        tools:layout="@layout/dialog_sort" />
+
+    <dialog
+        android:id="@+id/artist_album_sort_dialog"
+        android:name="org.oxycblt.auxio.detail.sort.ArtistAlbumSortDialog"
+        android:label="artist_album_sort_dialog"
         tools:layout="@layout/dialog_sort" />
 
     <fragment

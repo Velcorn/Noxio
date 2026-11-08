@@ -128,6 +128,18 @@ constructor(
     val artistSongSort: Sort
         get() = listSettings.artistSongSort
 
+    /** Which list of the artist is shown: their songs or their albums. */
+    val artistTab: StateFlow<ArtistTab>
+        field = MutableStateFlow(ArtistTab.ALBUMS)
+
+    /** What the shown list of the artist is filtered by, empty to show all. */
+    var artistQuery = ""
+        private set
+
+    /** The current [Sort] used for [Album]s in [artistSongList]. */
+    val artistAlbumSort: Sort
+        get() = listSettings.artistAlbumSort
+
     /** The [PlaySong] instructions to use when playing a [Song] from [Artist] details. */
     val playInArtistWith
         get() = playbackSettings.inParentPlaybackMode ?: PlaySong.FromArtist(currentArtist.value)
@@ -207,14 +219,7 @@ constructor(
                 refreshDetail(album, currentAlbum, albumSongList, albumSongInstructions, replace)
             }
             MusicType.ARTISTS -> {
-                val artist = detailGenerator.artist(currentArtist.value?.uid ?: return)
-                refreshDetail(
-                    artist,
-                    currentArtist,
-                    _artistSongList,
-                    artistSongInstructions,
-                    replace,
-                )
+                refreshArtist(currentArtist.value?.uid ?: return, replace)
             }
             MusicType.GENRES -> {
                 val genre = detailGenerator.genre(currentGenre.value?.uid ?: return)
@@ -360,8 +365,73 @@ constructor(
         if (uid === currentArtist.value?.uid) {
             return
         }
-        val artist = detailGenerator.artist(uid)
-        refreshDetail(artist, currentArtist, _artistSongList, artistSongInstructions, null)
+        // A new artist starts with its albums, or its songs if it has no albums, and no filter.
+        artistQuery = ""
+        artistTab.value =
+            if (detailGenerator.artist(uid)?.sections?.any { it is DetailSection.Albums } == true) {
+                ArtistTab.ALBUMS
+            } else {
+                ArtistTab.SONGS
+            }
+        refreshArtist(uid, null)
+    }
+
+    /** Show the songs or the albums of the current artist. */
+    fun setArtistTab(tab: ArtistTab) {
+        val artist = currentArtist.value ?: return
+        if (tab == artistTab.value) {
+            return
+        }
+        artistTab.value = tab
+        refreshArtist(artist.uid, null)
+    }
+
+    /** Only show the songs or albums of the current artist that match [query]. */
+    fun setArtistQuery(query: String) {
+        val artist = currentArtist.value ?: return
+        if (query == artistQuery) {
+            return
+        }
+        artistQuery = query
+        refreshArtist(artist.uid, null)
+    }
+
+    /**
+     * Apply a new [Sort] to the albums of the artist. Each of the two lists of an artist keeps its
+     * own sort.
+     */
+    fun applyArtistAlbumSort(sort: Sort) {
+        listSettings.artistAlbumSort = sort
+    }
+
+    private fun refreshArtist(uid: Music.UID, replace: Int?) {
+        val artist = detailGenerator.artist(uid)?.let(::filterArtist)
+        refreshDetail(artist, currentArtist, _artistSongList, artistSongInstructions, replace)
+    }
+
+    /** Keep the list that is shown, and the items of it that match the filter. */
+    private fun filterArtist(detail: Detail<Artist>): Detail<Artist> {
+        val tab = artistTab.value
+        val needle = artistQuery.trim()
+        val sections =
+            detail.sections.mapNotNull { section ->
+                when {
+                    tab == ArtistTab.ALBUMS && section is DetailSection.Albums -> {
+                        val items =
+                            if (needle.isEmpty()) section.items
+                            else section.items.filter { nameMatches(it.name, needle) }
+                        if (items.isEmpty()) null else section.copy(items = items)
+                    }
+                    tab == ArtistTab.SONGS && section is DetailSection.Songs ->
+                        section.copy(
+                            items =
+                                if (needle.isEmpty()) section.items
+                                else section.items.filter { matches(it, needle) }
+                        )
+                    else -> null
+                }
+            }
+        return detail.copy(sections = sections)
     }
 
     /**
@@ -672,6 +742,19 @@ constructor(
         _playlistSongList.value = list
     }
 }
+
+/** What the artist page shows. */
+enum class ArtistTab {
+    SONGS,
+    ALBUMS,
+}
+
+/**
+ * Whether a name contains [needle]. The raw name is used so that no Context is needed, which means
+ * unknown names never match.
+ */
+private fun nameMatches(name: Name, needle: String) =
+    (name as? Name.Known)?.raw?.contains(needle, ignoreCase = true) == true
 
 /**
  * A command for navigation to detail views. These can be handled partially if a certain command

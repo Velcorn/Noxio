@@ -123,14 +123,20 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
     /**
      * Show the top toolbar, which has the actions for selected songs, or collapse it to nothing.
      */
-    fun setTopToolbarShown(shown: Boolean) {
-        binding.detailToolbar.updateLayoutParams<ViewGroup.LayoutParams> {
-            height = if (shown) ViewGroup.LayoutParams.WRAP_CONTENT else 0
-        }
-    }
+    fun setTopToolbarShown(shown: Boolean) = setTopToolbarShown(binding, shown)
 
     companion object {
         private const val DISABLED_ALPHA = 0.38f
+
+        /**
+         * Collapse the top toolbar of a detail screen to nothing, or bring it back. Screens whose
+         * controls are not in a [DetailBottomBar] but in the main navigation use this too.
+         */
+        fun setTopToolbarShown(binding: FragmentDetailBinding, shown: Boolean) {
+            binding.detailToolbar.updateLayoutParams<ViewGroup.LayoutParams> {
+                height = if (shown) ViewGroup.LayoutParams.WRAP_CONTENT else 0
+            }
+        }
 
         /**
          * Add the bar to a detail screen.

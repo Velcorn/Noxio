@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.PopupMenu
@@ -31,6 +32,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -49,6 +51,8 @@ import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 import org.oxycblt.auxio.databinding.FragmentMainBinding
+import org.oxycblt.auxio.detail.ArtistDetailFragmentDirections
+import org.oxycblt.auxio.detail.ArtistTab
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.detail.Show
 import org.oxycblt.auxio.home.HomeFragmentDirections
@@ -59,6 +63,7 @@ import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicType
 import org.oxycblt.auxio.music.MusicViewModel
+import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.playback.OpenPanel
 import org.oxycblt.auxio.playback.PlaybackBottomSheetBehavior
 import org.oxycblt.auxio.playback.PlaybackViewModel
@@ -108,6 +113,7 @@ class MainFragment :
     private var sheetRising: Boolean? = null
     private var shownTabTypes: List<MusicType> = emptyList()
     private var settingTabs = false
+    private var navMode = NavMode.NONE
     @Inject lateinit var uiSettings: UISettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -201,7 +207,13 @@ class MainFragment :
 
         binding.mainScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
         binding.sheetScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
-        binding.homeShuffleFab.setOnClickListener { playbackModel.shuffleAll() }
+        binding.homeShuffleFab.setOnClickListener {
+            if (currentNavMode(binding) == NavMode.ARTIST) {
+                detailModel.currentArtist.value?.let(playbackModel::shuffle)
+            } else {
+                playbackModel.shuffleAll()
+            }
+        }
         binding.homeNewPlaylistFab.apply {
             inflate(R.menu.new_playlist_actions)
             setOnActionSelectedListener(this@MainFragment)
@@ -215,7 +227,7 @@ class MainFragment :
             binding,
             homeModel.songList.value,
             homeModel.isFastScrolling.value,
-            homeModel.currentTabType.value,
+            fabTabType(binding),
         )
 
         // --- VIEWMODEL SETUP ---
@@ -227,6 +239,8 @@ class MainFragment :
         collectImmediately(detailModel.editedPlaylist, detailBackCallback::invalidateEnabled)
         collectImmediately(homeModel.showOuter.flow, ::handleShowOuter)
         collectImmediately(homeModel.currentTabType, ::updateCurrentTab)
+        collectImmediately(detailModel.currentArtist) { updateSearchHint(binding) }
+        collectImmediately(detailModel.artistTab) { selectCurrentTab(binding) }
         collectImmediately(homeModel.songList, homeModel.isFastScrolling, ::updateFab)
         collectImmediately(musicModel.indexingState, ::updateIndexerState)
         collectImmediately(listModel.selected, selectionBackCallback::invalidateEnabled)
@@ -281,23 +295,72 @@ class MainFragment :
 
     // --- MAIN NAVIGATION (search row and tabs) ---
 
+    /**
+     * What the main navigation is for. It is the same row of search, sort and more above the tabs
+     * on two screens: the home screen (search the library, sort the list, the tabs are the music
+     * types) and an artist page (filter the artist, sort the list that is shown, the tabs are their
+     * songs and albums).
+     */
+    private enum class NavMode {
+        NONE,
+        HOME,
+        ARTIST,
+    }
+
+    private fun currentNavMode(binding: FragmentMainBinding) =
+        when (binding.exploreNavHost.findNavController().currentDestination?.id) {
+            R.id.home_fragment -> NavMode.HOME
+            R.id.artist_detail_fragment -> NavMode.ARTIST
+            else -> NavMode.NONE
+        }
+
     private fun setupBottomNav(binding: FragmentMainBinding) {
         binding.mainSearch.setOnClickListener {
             L.d("Navigating to search")
             exploreNavigate(HomeFragmentDirections.search())
         }
+        binding.mainSearchInput.doAfterTextChanged {
+            if (navMode == NavMode.ARTIST) {
+                detailModel.setArtistQuery(it?.toString().orEmpty())
+            }
+        }
+        binding.mainSearchInput.setOnEditorActionListener { view, _, _ ->
+            view.clearFocus()
+            view.context
+                .getSystemService(InputMethodManager::class.java)
+                ?.hideSoftInputFromWindow(view.windowToken, 0)
+            true
+        }
         binding.mainSort.setOnClickListener {
             exploreNavigate(
-                when (homeModel.currentTabType.value) {
-                    MusicType.SONGS -> HomeFragmentDirections.sortSongs()
-                    MusicType.ALBUMS -> HomeFragmentDirections.sortAlbums()
-                    MusicType.ARTISTS -> HomeFragmentDirections.sortArtists()
-                    MusicType.GENRES -> HomeFragmentDirections.sortGenres()
-                    MusicType.PLAYLISTS -> HomeFragmentDirections.sortPlaylists()
+                when (navMode) {
+                    NavMode.ARTIST ->
+                        // Each of the two lists of an artist has its own sort.
+                        if (detailModel.artistTab.value == ArtistTab.SONGS) {
+                            ArtistDetailFragmentDirections.sort()
+                        } else {
+                            ArtistDetailFragmentDirections.sortAlbums()
+                        }
+                    else ->
+                        when (homeModel.currentTabType.value) {
+                            MusicType.SONGS -> HomeFragmentDirections.sortSongs()
+                            MusicType.ALBUMS -> HomeFragmentDirections.sortAlbums()
+                            MusicType.ARTISTS -> HomeFragmentDirections.sortArtists()
+                            MusicType.GENRES -> HomeFragmentDirections.sortGenres()
+                            MusicType.PLAYLISTS -> HomeFragmentDirections.sortPlaylists()
+                        }
                 }
             )
         }
-        binding.mainMore.setOnClickListener { showMoreMenu(it) }
+        binding.mainMore.setOnClickListener {
+            if (navMode == NavMode.ARTIST) {
+                detailModel.currentArtist.value?.let {
+                    listModel.openMenu(R.menu.detail_parent, it)
+                }
+            } else {
+                showMoreMenu(it)
+            }
+        }
         binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
             // Keep the tabs clear of the system navigation.
             view.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
@@ -306,8 +369,13 @@ class MainFragment :
         binding.mainTabs.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    if (!settingTabs) {
-                        homeModel.synchronizeTabPosition(tab.position)
+                    if (settingTabs) {
+                        return
+                    }
+                    when (navMode) {
+                        NavMode.HOME -> homeModel.synchronizeTabPosition(tab.position)
+                        NavMode.ARTIST -> detailModel.setArtistTab(ARTIST_TABS[tab.position])
+                        NavMode.NONE -> {}
                     }
                 }
 
@@ -317,7 +385,27 @@ class MainFragment :
             }
         )
         shownTabTypes = emptyList()
+        navMode = NavMode.NONE
+        applyNavMode(binding, currentNavMode(binding))
+    }
+
+    /** Set the search field and the tabs up for the screen that is shown. */
+    private fun applyNavMode(binding: FragmentMainBinding, mode: NavMode) {
+        navMode = mode
+        val artist = mode == NavMode.ARTIST
+        binding.mainSearch.isVisible = !artist
+        binding.mainSearchInput.isVisible = artist
+        if (artist) {
+            binding.mainSearchInput.setText(detailModel.artistQuery)
+            updateSearchHint(binding)
+        }
         rebuildTabs(binding)
+    }
+
+    private fun updateSearchHint(binding: FragmentMainBinding) {
+        val artist = detailModel.currentArtist.value ?: return
+        binding.mainSearchInput.hint =
+            getString(R.string.fmt_search_in, artist.name.resolve(requireContext()))
     }
 
     private fun exploreNavigate(directions: androidx.navigation.NavDirections) {
@@ -341,22 +429,40 @@ class MainFragment :
     }
 
     private fun rebuildTabs(binding: FragmentMainBinding) {
-        val types = homeModel.currentTabTypes
-        val strategy = NamedTabStrategy(types)
         settingTabs = true
         binding.mainTabs.removeAllTabs()
-        types.indices.forEach { position ->
-            val tab = binding.mainTabs.newTab()
-            strategy.onConfigureTab(tab, position)
-            binding.mainTabs.addTab(tab, false)
+        if (navMode == NavMode.ARTIST) {
+            for (tab in ARTIST_TABS) {
+                val songs = tab == ArtistTab.SONGS
+                binding.mainTabs.addTab(
+                    binding.mainTabs
+                        .newTab()
+                        .setText(if (songs) R.string.lbl_songs else R.string.lbl_albums)
+                        .setIcon(if (songs) R.drawable.ic_song_20 else R.drawable.ic_album_20),
+                    false,
+                )
+            }
+        } else {
+            val types = homeModel.currentTabTypes
+            val strategy = NamedTabStrategy(types)
+            types.indices.forEach { position ->
+                val tab = binding.mainTabs.newTab()
+                strategy.onConfigureTab(tab, position)
+                binding.mainTabs.addTab(tab, false)
+            }
+            shownTabTypes = types
         }
-        shownTabTypes = types
         settingTabs = false
         selectCurrentTab(binding)
     }
 
     private fun selectCurrentTab(binding: FragmentMainBinding) {
-        val position = shownTabTypes.indexOf(homeModel.currentTabType.value)
+        val position =
+            if (navMode == NavMode.ARTIST) {
+                ARTIST_TABS.indexOf(detailModel.artistTab.value)
+            } else {
+                shownTabTypes.indexOf(homeModel.currentTabType.value)
+            }
         if (position >= 0 && binding.mainTabs.selectedTabPosition != position) {
             settingTabs = true
             binding.mainTabs.getTabAt(position)?.select()
@@ -365,27 +471,30 @@ class MainFragment :
     }
 
     /**
-     * Show the main navigation on the home screen only, fade it out together with the playback bar
-     * when the playback panel opens, and tell the playback sheet how much space it takes so that
-     * the playback bar sits right above it.
+     * Show the main navigation on the home screen and on artist pages only, fade it out together
+     * with the playback bar when the playback panel opens, and tell the playback sheet how much
+     * space it takes so that the playback bar sits right above it.
      */
     private fun updateBottomNav(
         binding: FragmentMainBinding,
         playbackSheetBehavior: PlaybackBottomSheetBehavior<*>,
         fadeRatio: Float,
     ) {
-        val onHome =
-            binding.exploreNavHost.findNavController().currentDestination?.id == R.id.home_fragment
+        val mode = currentNavMode(binding)
+        if (mode != navMode) {
+            applyNavMode(binding, mode)
+        }
+        val shown = mode != NavMode.NONE
         val nav = binding.mainBottomNav
-        if (homeModel.currentTabTypes != shownTabTypes) {
+        if (mode == NavMode.HOME && homeModel.currentTabTypes != shownTabTypes) {
             rebuildTabs(binding)
         }
-        // A single tab makes the tabs redundant.
-        binding.mainTabs.isVisible = homeModel.currentTabTypes.size > 1
-        nav.alpha = if (onHome) fadeRatio else 0f
+        // On the home screen a single tab makes the tabs redundant.
+        binding.mainTabs.isVisible = mode != NavMode.HOME || homeModel.currentTabTypes.size > 1
+        nav.alpha = if (shown) fadeRatio else 0f
         nav.isInvisible = nav.alpha == 0f
 
-        val obstruction = if (onHome) nav.height else 0
+        val obstruction = if (shown) nav.height else 0
         if (playbackSheetBehavior.bottomObstruction != obstruction) {
             playbackSheetBehavior.bottomObstruction = obstruction
             binding.playbackSheet.requestApplyInsets()
@@ -419,7 +528,7 @@ class MainFragment :
                 binding,
                 homeModel.songList.value,
                 homeModel.isFastScrolling.value,
-                homeModel.currentTabType.value,
+                fabTabType(requireBinding()),
             )
         }
 
@@ -545,7 +654,7 @@ class MainFragment :
             requireBinding(),
             homeModel.songList.value,
             homeModel.isFastScrolling.value,
-            homeModel.currentTabType.value,
+            fabTabType(requireBinding()),
         )
     }
 
@@ -568,14 +677,14 @@ class MainFragment :
                 binding,
                 homeModel.songList.value,
                 homeModel.isFastScrolling.value,
-                homeModel.currentTabType.value,
+                fabTabType(requireBinding()),
             )
         }
     }
 
     private fun updateFab(songs: List<Song>, isFastScrolling: Boolean) {
         val binding = requireBinding()
-        updateFabVisibility(binding, songs, isFastScrolling, homeModel.currentTabType.value)
+        updateFabVisibility(binding, songs, isFastScrolling, fabTabType(binding))
     }
 
     private fun updateFabVisibility(
@@ -652,12 +761,20 @@ class MainFragment :
         }
     }
 
+    /** The kind of list the floating button is for: an artist page has songs, like the song tab. */
+    private fun fabTabType(binding: FragmentMainBinding) =
+        if (currentNavMode(binding) == NavMode.ARTIST) {
+            MusicType.SONGS
+        } else {
+            homeModel.currentTabType.value
+        }
+
     private fun shouldHideAllFabs(
         binding: FragmentMainBinding,
         songs: List<Song>,
         isFastScrolling: Boolean,
     ) =
-        binding.exploreNavHost.findNavController().currentDestination?.id != R.id.home_fragment ||
+        currentNavMode(binding) == NavMode.NONE ||
             sheetRising == true ||
             songs.isEmpty() ||
             isFastScrolling
@@ -928,6 +1045,9 @@ class MainFragment :
     }
 
     private companion object {
+        /** The tabs of an artist page, in the order they are shown. */
+        val ARTIST_TABS = listOf(ArtistTab.SONGS, ArtistTab.ALBUMS)
+
         val FAB_HIDE_FROM_USER_FIELD: Method by
             lazyReflectedMethod(
                 FloatingActionButton::class,

@@ -41,6 +41,8 @@ interface ListSettings : Settings<ListSettings.Listener> {
     var albumSongSort: Sort
     /** The [Sort] mode used in an Artist's Song list. */
     var artistSongSort: Sort
+    /** The [Sort] mode used in an Artist's Album list. */
+    var artistAlbumSort: Sort
     /** The [Sort] mode used in a Genre's Song list. */
     var genreSongSort: Sort
 
@@ -54,6 +56,8 @@ interface ListSettings : Settings<ListSettings.Listener> {
         fun onArtistSortChanged() {}
 
         fun onArtistSongSortChanged() {}
+
+        fun onArtistAlbumSortChanged() {}
 
         fun onGenreSortChanged() {}
 
@@ -155,6 +159,21 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
             }
         }
 
+    override var artistAlbumSort: Sort
+        get() =
+            Sort.fromIntCode(
+                sharedPreferences.getInt(
+                    getString(R.string.set_key_artist_albums_sort),
+                    Int.MIN_VALUE,
+                )
+            ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
+        set(value) {
+            sharedPreferences.edit {
+                putInt(getString(R.string.set_key_artist_albums_sort), value.intCode)
+                apply()
+            }
+        }
+
     override var genreSongSort: Sort
         get() =
             Sort.fromIntCode(
@@ -177,6 +196,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
             getString(R.string.set_key_album_songs_sort) -> listener.onAlbumSongSortChanged()
             getString(R.string.set_key_artists_sort) -> listener.onArtistSortChanged()
             getString(R.string.set_key_artist_songs_sort) -> listener.onArtistSongSortChanged()
+            getString(R.string.set_key_artist_albums_sort) -> listener.onArtistAlbumSortChanged()
             getString(R.string.set_key_genres_sort) -> listener.onGenreSortChanged()
             getString(R.string.set_key_genre_songs_sort) -> listener.onGenreSongSortChanged()
             getString(R.string.set_key_playlists_sort) -> listener.onPlaylistSortChanged()

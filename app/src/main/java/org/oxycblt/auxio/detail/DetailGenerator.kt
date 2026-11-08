@@ -88,6 +88,11 @@ private class DetailGeneratorImpl(
         invalidator.invalidate(MusicType.ARTISTS, -1)
     }
 
+    override fun onArtistAlbumSortChanged() {
+        super.onArtistAlbumSortChanged()
+        invalidator.invalidate(MusicType.ARTISTS, -1)
+    }
+
     override fun onGenreSongSortChanged() {
         super.onGenreSongSortChanged()
         invalidator.invalidate(MusicType.GENRES, -1)
@@ -163,7 +168,7 @@ private class DetailGeneratorImpl(
 
         val sections =
             grouping.mapTo(mutableListOf<DetailSection>()) { (category, albums) ->
-                DetailSection.Albums(category, ARTIST_ALBUM_SORT.albums(albums))
+                DetailSection.Albums(category, listSettings.artistAlbumSort.albums(albums))
             }
         if (artist.songs.isNotEmpty()) {
             val songs = DetailSection.Songs(listSettings.artistSongSort.songs(artist.songs))
@@ -189,7 +194,6 @@ private class DetailGeneratorImpl(
     }
 
     private companion object {
-        val ARTIST_ALBUM_SORT = Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
         val GENRE_ARTIST_SORT = Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
     }
 }

@@ -98,6 +98,7 @@
     <!-- Search for music -->
     <string name="lbl_search">Search</string>
     <string name="hint_search_music">Search your music</string>
+    <string name="fmt_search_in">Search %s</string>
     <!-- As in filtering to particular types of music in the search view -->
     <string name="lbl_filter">Filter</string>
     <!-- As in to not filter -->

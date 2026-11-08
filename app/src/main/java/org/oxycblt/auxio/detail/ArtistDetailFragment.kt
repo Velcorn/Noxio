@@ -66,6 +66,10 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
     override fun onBindingCreated(binding: FragmentDetailBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
 
+        // The controls are in the main navigation along the bottom, so the top toolbar is only
+        // needed for the actions of selected items.
+        DetailBottomBar.setTopToolbarShown(binding, false)
+
         // --- VIEWMODEL SETUP ---
         // DetailViewModel handles most initialization from the navigation argument.
         detailModel.setArtist(args.artistUid)
@@ -274,6 +278,7 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
         } else {
             binding.detailToolbar.setVisible(R.id.detail_normal_toolbar)
         }
+        DetailBottomBar.setTopToolbarShown(binding, selected.isNotEmpty())
     }
 
     private fun handlePlaylistDecision(decision: PlaylistDecision?) {
