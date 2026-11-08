@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+ 
 package org.oxycblt.auxio.playback.timer
 
 import android.content.Context
@@ -110,10 +110,9 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
             } else {
                 null
             }
-        set(value) =
-            sharedPreferences.edit {
-                if (value != null) putInt(KEY_CUSTOM_MINUTES, value) else remove(KEY_CUSTOM_MINUTES)
-            }
+        set(value) = sharedPreferences.edit {
+            if (value != null) putInt(KEY_CUSTOM_MINUTES, value) else remove(KEY_CUSTOM_MINUTES)
+        }
 
     override var fade: Boolean
         get() = sharedPreferences.getBoolean(KEY_FADE, true)
