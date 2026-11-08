@@ -10,4 +10,6 @@
 - [ ] Shareable "Wrapped" cards
 
 ## Ideas
+- Move the sleep timer to an icon row above the seek bar (Musicolet style) and the controls lower on the now playing screen, so it is reachable one-handed (see mockup)
+- Bottom bar on the now playing screen for jumping to Songs, Albums, Artists and Playlists (deferred)
 - Show the remaining time next to the toolbar icon (currently the icon is only tinted)
