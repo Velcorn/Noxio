@@ -18,6 +18,7 @@
  
 package org.oxycblt.auxio.stats
 
+import java.io.OutputStream
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -132,6 +133,9 @@ interface StatsRepository {
 
     /** Summarize the plays inside [range]. */
     suspend fun summary(range: LongRange): ListeningStats
+
+    /** Write the whole play history as CSV into [out]. The stream is not closed. */
+    suspend fun exportCsv(out: OutputStream)
 }
 
 class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : StatsRepository {
@@ -139,4 +143,6 @@ class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : S
 
     override suspend fun summary(range: LongRange) =
         summarize(dao.between(range.first, range.last + 1))
+
+    override suspend fun exportCsv(out: OutputStream) = StatsCsv.write(dao.all(), out)
 }

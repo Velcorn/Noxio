@@ -18,6 +18,7 @@
             android:id="@+id/stats_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:menu="@menu/toolbar_stats"
             app:navigationIcon="@drawable/ic_back_24"
             app:title="@string/lbl_stats" />
 
@@ -34,13 +35,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/spacing_medium">
+            android:paddingHorizontal="@dimen/spacing_medium"
+            android:paddingBottom="96dp">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/stats_period_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_medium"
                 android:layout_marginTop="@dimen/spacing_small"
                 app:selectionRequired="true"
                 app:singleSelection="true">
@@ -74,7 +75,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_small"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -109,26 +109,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/stats_summary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_medium"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:gravity="center"
-                android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                tools:text="3 h 12 min" />
-
-            <TextView
-                android:id="@+id/stats_summary_plays"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_medium"
-                android:gravity="center"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                tools:text="54 plays" />
-
-            <TextView
                 android:id="@+id/stats_empty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -138,46 +118,135 @@
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/stats_artists_header"
-                style="@style/Widget.Auxio.TextView.Header"
+            <LinearLayout
+                android:id="@+id/stats_hero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:text="@string/lbl_stats_top_artists" />
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:background="@drawable/bg_stats_hero"
+                android:baselineAligned="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/spacing_mid_large"
+                android:paddingVertical="@dimen/spacing_medium">
+
+                <TextView
+                    android:id="@+id/stats_hero_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAppearance="?attr/textAppearanceHeadlineSmallEmphasized"
+                    android:textColor="@color/stats_on_card"
+                    tools:text="6 h 41 min" />
+
+                <TextView
+                    android:id="@+id/stats_hero_plays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="@color/stats_on_card_dim"
+                    tools:text="112 plays" />
+
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/stats_artists"
+                android:id="@+id/stats_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginTop="@dimen/spacing_mid_medium"
+                android:background="@drawable/bg_stats_artists"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/spacing_medium"
+                android:paddingTop="@dimen/spacing_mid_medium"
+                android:paddingBottom="@dimen/spacing_small">
 
-            <TextView
-                android:id="@+id/stats_albums_header"
-                style="@style/Widget.Auxio.TextView.Header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_stats_top_albums" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/spacing_tiny">
 
-            <LinearLayout
-                android:id="@+id/stats_albums"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                    <TextView
+                        android:id="@+id/stats_card_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAllCaps="true"
+                        android:textAppearance="?attr/textAppearanceLabelLargeEmphasized"
+                        android:textColor="@color/stats_on_card"
+                        tools:text="Top artists" />
 
-            <TextView
-                android:id="@+id/stats_songs_header"
-                style="@style/Widget.Auxio.TextView.Header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_stats_top_songs" />
+                    <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                        android:id="@+id/stats_share"
+                        style="@style/Widget.Auxio.Button.Playback.More"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/lbl_stats_share"
+                        app:icon="@drawable/ic_share_24"
+                        app:iconTint="@color/stats_on_card"
+                        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
 
-            <LinearLayout
-                android:id="@+id/stats_songs"
-                android:layout_width="match_parent"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/stats_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/stats_more"
+                style="?attr/materialButtonStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_gravity="center_horizontal"
+                android:text="@string/lbl_stats_show_ten" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/stats_pill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="6dp">
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/stats_category_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_tiny"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/stats_artists"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_stats_artists" />
+
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/stats_albums"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_stats_albums" />
+
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/stats_songs"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_stats_songs" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </com.google.android.material.card.MaterialCardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

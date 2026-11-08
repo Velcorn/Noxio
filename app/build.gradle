@@ -145,6 +145,12 @@ dependencies {
     ksp "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
+    // Background work (weekly stats backup)
+    implementation "androidx.work:work-runtime-ktx:2.10.0"
+
+    // Writing the stats backup into a folder the user picked
+    implementation "androidx.documentfile:documentfile:1.0.1"
+
     // Build
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugaring_version"
 

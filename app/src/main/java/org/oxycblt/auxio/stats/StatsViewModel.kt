@@ -21,6 +21,7 @@ package org.oxycblt.auxio.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.OutputStream
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,6 +33,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 
+/** What the ranked list on the stats screen is about. */
+enum class StatsCategory {
+    ARTISTS,
+    ALBUMS,
+    SONGS,
+}
+
 @HiltViewModel
 class StatsViewModel @Inject constructor(private val repository: StatsRepository) : ViewModel() {
     /** Which period is shown. [offset] 0 is the current one, -1 the one before it. */
@@ -42,6 +50,13 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
 
     private val mutableQuery = MutableStateFlow(Query(StatsPeriod.WEEK, 0))
     val query: StateFlow<Query> = mutableQuery.asStateFlow()
+
+    private val mutableCategory = MutableStateFlow(StatsCategory.ARTISTS)
+    val category: StateFlow<StatsCategory> = mutableCategory.asStateFlow()
+
+    /** Whether the card shows the top 10 instead of the top 5. */
+    private val mutableExpanded = MutableStateFlow(false)
+    val expanded: StateFlow<Boolean> = mutableExpanded.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val ui: StateFlow<Ui?> =
@@ -56,6 +71,7 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
     fun setPeriod(period: StatsPeriod) {
         if (period != mutableQuery.value.period) {
             mutableQuery.value = Query(period, 0)
+            mutableExpanded.value = false
         }
     }
 
@@ -67,4 +83,26 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
         mutableQuery.value =
             mutableQuery.value.let { it.copy(offset = (it.offset + 1).coerceAtMost(0)) }
     }
+
+    fun setCategory(category: StatsCategory) {
+        if (category != mutableCategory.value) {
+            mutableCategory.value = category
+            mutableExpanded.value = false
+        }
+    }
+
+    fun toggleExpanded() {
+        mutableExpanded.value = !mutableExpanded.value
+    }
+
+    /** The ranked rows of the current category in [ui]. */
+    fun items(ui: Ui): List<RankedItem> =
+        when (category.value) {
+            StatsCategory.ARTISTS -> ui.stats.artists
+            StatsCategory.ALBUMS -> ui.stats.albums
+            StatsCategory.SONGS -> ui.stats.songs
+        }
+
+    /** Write the full play history as CSV. Must be called off the main thread. */
+    suspend fun exportCsv(out: OutputStream) = repository.exportCsv(out)
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Each stats category has its own gradient. They are shared by the card on screen and the exported image. -->
+    <color name="stats_artists_start">#7B4DFF</color>
+    <color name="stats_artists_end">#D24DD8</color>
+    <color name="stats_albums_start">#0FA3B1</color>
+    <color name="stats_albums_end">#3B6CF0</color>
+    <color name="stats_songs_start">#FF8A3D</color>
+    <color name="stats_songs_end">#E8365D</color>
+    <color name="stats_hero_start">#2B2370</color>
+    <color name="stats_hero_end">#5A3FD0</color>
+    <color name="stats_on_card">#FFFFFF</color>
+    <color name="stats_on_card_dim">#CCFFFFFF</color>
+    <color name="stats_rank_chip">#38FFFFFF</color>
+</resources>

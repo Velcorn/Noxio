@@ -44,4 +44,18 @@
             app:title="@string/set_square_covers" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/set_stats">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="@string/set_key_stats_backup"
+            app:summary="@string/set_stats_backup_desc"
+            app:title="@string/set_stats_backup" />
+
+        <Preference
+            app:key="@string/set_key_stats_backup_folder"
+            app:title="@string/set_stats_backup_folder" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

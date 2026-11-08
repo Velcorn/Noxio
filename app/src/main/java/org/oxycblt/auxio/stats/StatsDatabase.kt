@@ -69,5 +69,7 @@ interface PlayEventDao {
     @Query("SELECT * FROM PlayEvent WHERE startedAt >= :fromMs AND startedAt < :toMs")
     suspend fun between(fromMs: Long, toMs: Long): List<PlayEvent>
 
+    @Query("SELECT * FROM PlayEvent ORDER BY startedAt ASC") suspend fun all(): List<PlayEvent>
+
     @Query("DELETE FROM PlayEvent") suspend fun deleteAll()
 }

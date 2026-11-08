@@ -104,6 +104,17 @@
         <!--
         Expose Noxio's cover data to the android system
         -->
+        <!-- Hands shared stats images to other apps -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <provider
             android:name=".image.CoverProvider"
             android:authorities="@string/pkg_authority_cover"

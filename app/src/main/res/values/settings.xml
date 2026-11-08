@@ -41,6 +41,8 @@
     <string name="set_key_rewind_prev" translatable="false">KEY_PREV_REWIND</string>
     <string name="set_key_repeat_pause" translatable="false">KEY_LOOP_PAUSE</string>
     <string name="set_key_remember_pause" translatable="false">auxio_remember_pause</string>
+    <string name="set_key_stats_backup" translatable="false">noxio_stats_backup</string>
+    <string name="set_key_stats_backup_folder" translatable="false">noxio_stats_backup_folder</string>
     <string name="set_key_sleep_shake" translatable="false">noxio_sleep_shake</string>
     <string name="set_key_equalizer" translatable="false">noxio_equalizer</string>
 

@@ -4,22 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:minHeight="@dimen/size_touchable_small"
     android:orientation="horizontal"
-    android:paddingHorizontal="@dimen/spacing_medium"
-    android:paddingVertical="@dimen/spacing_tiny">
+    android:paddingHorizontal="@dimen/spacing_tiny"
+    android:paddingVertical="@dimen/spacing_small">
 
     <TextView
         android:id="@+id/stats_rank"
-        android:layout_width="32dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
-        android:textColor="?attr/colorSecondary"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/bg_stats_rank"
+        android:gravity="center"
+        android:textAppearance="?attr/textAppearanceLabelLargeEmphasized"
+        android:textColor="@color/stats_on_card"
         tools:text="1" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_mid_medium"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -30,6 +32,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="@color/stats_on_card"
             tools:text="Lose My Mind" />
 
         <TextView
@@ -38,8 +41,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="@color/stats_on_card_dim"
             tools:text="Lil Peep" />
 
     </LinearLayout>
@@ -48,9 +51,9 @@
         android:id="@+id/stats_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_small"
         android:gravity="end"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textAppearance="?attr/textAppearanceBodySmall"
+        android:textColor="@color/stats_on_card"
         tools:text="12 plays\n48 min" />
 
 </LinearLayout>

@@ -18,32 +18,46 @@
  
 package org.oxycblt.auxio.stats
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
+import java.io.IOException
+import java.time.LocalDate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentStatsBinding
 import org.oxycblt.auxio.databinding.ItemStatsRowBinding
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.util.collectImmediately
+import org.oxycblt.auxio.util.showToast
 import org.oxycblt.auxio.util.systemBarInsetsCompat
 
 /**
- * Shows the listening history of a week, month or year: total time and the top songs, artists and
- * albums.
+ * Shows the listening history of a week, month or year: total time and the top artists, albums and
+ * songs. One category is shown at a time as a colored card that can be shared as an image.
  */
 @AndroidEntryPoint
 class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     private val statsModel: StatsViewModel by viewModels()
+    private val exportLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+            if (uri != null) {
+                export(uri)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +70,24 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     override fun onBindingCreated(binding: FragmentStatsBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
 
-        binding.statsToolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.statsToolbar.apply {
+            setNavigationOnClickListener { findNavController().navigateUp() }
+            setOnMenuItemClickListener(
+                Toolbar.OnMenuItemClickListener {
+                    if (it.itemId == R.id.action_export_stats) {
+                        exportLauncher.launch("noxio-stats-${LocalDate.now()}.csv")
+                        true
+                    } else {
+                        false
+                    }
+                }
+            )
+        }
         binding.statsContents.setOnApplyWindowInsetsListener { view, insets ->
+            view.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
+            insets
+        }
+        binding.statsPill.setOnApplyWindowInsetsListener { view, insets ->
             view.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
             insets
         }
@@ -80,100 +110,141 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 )
             }
         }
+        binding.statsCategoryGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                statsModel.setCategory(
+                    when (checkedId) {
+                        R.id.stats_albums -> StatsCategory.ALBUMS
+                        R.id.stats_songs -> StatsCategory.SONGS
+                        else -> StatsCategory.ARTISTS
+                    }
+                )
+            }
+        }
         binding.statsPrev.setOnClickListener { statsModel.previous() }
         binding.statsNext.setOnClickListener { statsModel.next() }
-
-        collectImmediately(statsModel.ui, ::updateUi)
-    }
-
-    private fun updateUi(ui: StatsViewModel.Ui?) {
-        if (ui == null) {
-            return
+        binding.statsMore.setOnClickListener { statsModel.toggleExpanded() }
+        binding.statsShare.setOnClickListener {
+            StatsShareDialog().show(childFragmentManager, StatsShareDialog.TAG)
         }
-        val binding = requireBinding()
-        val stats = ui.stats
 
-        binding.statsRange.text = formatRange(ui.query.period, ui.range)
-        binding.statsNext.isEnabled = ui.query.offset < 0
-
-        binding.statsEmpty.isVisible = stats.isEmpty
-        binding.statsSummary.isVisible = !stats.isEmpty
-        binding.statsSummaryPlays.isVisible = !stats.isEmpty
-        binding.statsSummary.text = formatListened(stats.listenedMs)
-        binding.statsSummaryPlays.text = formatPlays(stats.plays)
-
-        fill(binding.statsArtistsHeader, binding.statsArtists, stats.artists)
-        fill(binding.statsAlbumsHeader, binding.statsAlbums, stats.albums)
-        fill(binding.statsSongsHeader, binding.statsSongs, stats.songs)
+        collectImmediately(statsModel.ui) { render() }
+        collectImmediately(statsModel.category) { render() }
+        collectImmediately(statsModel.expanded) { render() }
     }
 
-    private fun fill(
-        header: View,
-        container: ViewGroup,
-        items: List<RankedItem>,
-    ) {
-        header.isVisible = items.isNotEmpty()
-        container.removeAllViews()
-        val inflater = LayoutInflater.from(container.context)
-        items.forEachIndexed { index, item ->
-            val row = ItemStatsRowBinding.inflate(inflater, container, false)
+    private fun render() {
+        val ui = statsModel.ui.value ?: return
+        val binding = requireBinding()
+        val context = requireContext()
+        val stats = ui.stats
+        val category = statsModel.category.value
+        val items = statsModel.items(ui)
+        val expanded = statsModel.expanded.value
+
+        binding.statsRange.text = StatsFormat.range(context, ui.query.period, ui.range)
+        binding.statsNext.isEnabled = ui.query.offset < 0
+        updatePill(category)
+
+        val hasPlays = !stats.isEmpty
+        binding.statsEmpty.isVisible = !hasPlays
+        binding.statsHero.isVisible = hasPlays
+        binding.statsCard.isVisible = hasPlays
+        binding.statsMore.isVisible = hasPlays && items.size > COLLAPSED_ROWS
+        binding.statsHeroTime.text = StatsFormat.listened(context, stats.listenedMs)
+        binding.statsHeroPlays.text = StatsFormat.plays(context, stats.plays)
+        binding.statsMore.setText(
+            if (expanded) R.string.lbl_stats_show_five else R.string.lbl_stats_show_ten
+        )
+
+        binding.statsCard.setBackgroundResource(
+            when (category) {
+                StatsCategory.ARTISTS -> R.drawable.bg_stats_artists
+                StatsCategory.ALBUMS -> R.drawable.bg_stats_albums
+                StatsCategory.SONGS -> R.drawable.bg_stats_songs
+            }
+        )
+        binding.statsCardTitle.setText(
+            when (category) {
+                StatsCategory.ARTISTS -> R.string.lbl_stats_top_artists
+                StatsCategory.ALBUMS -> R.string.lbl_stats_top_albums
+                StatsCategory.SONGS -> R.string.lbl_stats_top_songs
+            }
+        )
+
+        binding.statsList.removeAllViews()
+        val inflater = LayoutInflater.from(context)
+        items.take(if (expanded) EXPANDED_ROWS else COLLAPSED_ROWS).forEachIndexed { index, item ->
+            val row = ItemStatsRowBinding.inflate(inflater, binding.statsList, false)
             row.statsRank.text = (index + 1).toString()
+            if (index == 0) {
+                row.statsRank.setBackgroundResource(R.drawable.bg_stats_rank_first)
+                row.statsRank.setTextColor(Color.parseColor("#222222"))
+            }
             row.statsName.text = item.name
             row.statsSubtitle.text = item.subtitle
             row.statsSubtitle.isVisible = !item.subtitle.isNullOrEmpty()
             row.statsCount.text =
                 getString(
                     R.string.fmt_stats_row,
-                    formatPlays(item.plays),
-                    formatListened(item.listenedMs),
+                    StatsFormat.plays(context, item.plays),
+                    StatsFormat.listened(context, item.listenedMs),
                 )
-            container.addView(row.root)
+            binding.statsList.addView(row.root)
         }
     }
 
-    private fun formatPlays(plays: Int) =
-        resources.getQuantityString(R.plurals.fmt_stats_plays, plays, plays)
-
-    private fun formatListened(ms: Long): String {
-        val totalMinutes = ms / 60_000
-        if (totalMinutes == 0L) {
-            return getString(R.string.lbl_stats_under_minute)
-        }
-        val hours = totalMinutes / 60
-        val minutes = totalMinutes % 60
-        return if (hours > 0) {
-            getString(R.string.fmt_stats_time_hm, hours, minutes)
-        } else {
-            getString(R.string.fmt_stats_time_m, minutes)
-        }
-    }
-
-    private fun formatRange(period: StatsPeriod, range: LongRange): String {
+    /** Color the selected category in the pill with its own gradient color. */
+    private fun updatePill(category: StatsCategory) {
+        val binding = requireBinding()
         val context = requireContext()
-        return when (period) {
-            StatsPeriod.WEEK ->
-                DateUtils.formatDateRange(
-                    context,
-                    range.first,
-                    range.last,
-                    DateUtils.FORMAT_SHOW_DATE or
-                        DateUtils.FORMAT_SHOW_YEAR or
-                        DateUtils.FORMAT_ABBREV_MONTH,
-                )
-            StatsPeriod.MONTH ->
-                DateUtils.formatDateRange(
-                    context,
-                    range.first,
-                    range.last,
-                    DateUtils.FORMAT_SHOW_DATE or
-                        DateUtils.FORMAT_NO_MONTH_DAY or
-                        DateUtils.FORMAT_SHOW_YEAR,
-                )
-            StatsPeriod.YEAR ->
-                Calendar.getInstance()
-                    .apply { timeInMillis = range.first }
-                    .get(Calendar.YEAR)
-                    .toString()
+        val buttons =
+            listOf(
+                StatsCategory.ARTISTS to binding.statsArtists,
+                StatsCategory.ALBUMS to binding.statsAlbums,
+                StatsCategory.SONGS to binding.statsSongs,
+            )
+        val checked = buttons.first { it.first == category }.second
+        if (binding.statsCategoryGroup.checkedButtonId != checked.id) {
+            binding.statsCategoryGroup.check(checked.id)
         }
+        val onSurface =
+            MaterialColors.getColor(
+                binding.statsPill,
+                com.google.android.material.R.attr.colorOnSurface,
+            )
+        for ((buttonCategory, button) in buttons) {
+            val selected = buttonCategory == category
+            button.backgroundTintList =
+                ColorStateList.valueOf(
+                    if (selected) StatsImage.gradientOf(context, buttonCategory).first
+                    else Color.TRANSPARENT
+                )
+            button.setTextColor(if (selected) Color.WHITE else onSurface)
+        }
+    }
+
+    private fun export(uri: android.net.Uri) {
+        val context = requireContext()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val exported =
+                withContext(Dispatchers.IO) {
+                    try {
+                        context.contentResolver.openOutputStream(uri, "wt")?.use {
+                            statsModel.exportCsv(it)
+                        } != null
+                    } catch (e: IOException) {
+                        false
+                    }
+                }
+            context.showToast(
+                if (exported) R.string.lbl_stats_exported else R.string.err_stats_export
+            )
+        }
+    }
+
+    private companion object {
+        const val COLLAPSED_ROWS = 5
+        const val EXPANDED_ROWS = 10
     }
 }
