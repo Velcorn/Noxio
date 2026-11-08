@@ -305,8 +305,8 @@
     <string name="set_launcher">Launcher</string>
     <string name="set_launcher_icon">App icon</string>
     <string name="set_launcher_icon_default">Default</string>
-    <string name="set_launcher_icon_minimal_dark">Minimal, white on black</string>
-    <string name="set_launcher_icon_minimal_light">Minimal, black on white</string>
+    <string name="set_launcher_icon_minimal_black">Minimal, white on black</string>
+    <string name="set_launcher_icon_minimal_transparent">Minimal, white, no background</string>
     <string name="set_bar_action">Custom playback bar action</string>
     <string name="set_action_mode_next">Skip to next</string>
     <string name="set_action_mode_repeat">Repeat mode</string>

@@ -33,9 +33,9 @@ enum class LauncherIcon(val intCode: Int, private val aliasName: String) {
     /** The full color icon. */
     DEFAULT(0xA400, "MainActivityDefault"),
     /** A flat white silhouette on black. */
-    MINIMAL_DARK(0xA401, "MainActivityMinimalDark"),
-    /** A flat black silhouette on white. */
-    MINIMAL_LIGHT(0xA402, "MainActivityMinimalLight");
+    MINIMAL_BLACK(0xA401, "MainActivityMinimalBlack"),
+    /** A flat white silhouette without a background. */
+    MINIMAL_TRANSPARENT(0xA402, "MainActivityMinimalTransparent");
 
     private fun component(context: Context) =
         ComponentName(context.packageName, "org.oxycblt.auxio.$aliasName")
