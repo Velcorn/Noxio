@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="info_app_name" translatable="false">Noxio Debug</string>
-    <string name="pkg_authority_cover">eu.willruth.noxio.debug.image.CoverProvider</string>
+    <string name="pkg_authority_cover">de.devfin.noxio.debug.image.CoverProvider</string>
 </resources>

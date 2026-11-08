@@ -26,7 +26,7 @@ Everything else is inherited from Auxio: Media3 playback, gapless playback, Repl
 artists, release types, disc numbers, sort tags), playlists, playback persistence, Android Auto, widgets, and being
 completely private and offline.
 
-Noxio installs alongside Auxio (`eu.willruth.noxio`), so you can try both.
+Noxio installs alongside Auxio (`de.devfin.noxio`), so you can try both.
 
 ## Branches
 

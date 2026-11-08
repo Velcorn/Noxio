@@ -17,7 +17,7 @@
     <string name="cnt_ogg">Ogg %s</string>
 
     <!-- Pkg Namespace | Dynamic package names -->
-    <string name="pkg_authority_cover">eu.willruth.noxio.image.CoverProvider</string>
+    <string name="pkg_authority_cover">de.devfin.noxio.image.CoverProvider</string>
 
     <!-- Supporter Namespace | Sponsor usernames  -->
     <string name="sup_bkkellyh">bkkellyh - $500!</string>
