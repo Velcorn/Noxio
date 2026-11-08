@@ -40,6 +40,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
+import org.oxycblt.auxio.playback.timer.ShakeDetector
+import org.oxycblt.auxio.playback.timer.SleepFade
 import org.oxycblt.auxio.playback.timer.SleepTimer
 import org.oxycblt.auxio.playback.timer.SleepTimerMode
 import org.oxycblt.auxio.playback.timer.SleepTimerState
@@ -66,10 +68,7 @@ class SleepTimerController(
 
     private val sensorManager = context.getSystemService(SensorManager::class.java)
     private var listeningForShake = false
-    private var shakeCount = 0
-    private var shakeWindowStart = 0L
-    private var lastSpike = 0L
-    private var lastReset = 0L
+    private val shakeDetector = ShakeDetector()
 
     fun attach() {
         scope.launch { sleepTimer.state.collect(::onState) }
@@ -128,7 +127,7 @@ class SleepTimerController(
                 break
             }
             if (fadeMs > 0) {
-                player.volume = fadeCurve(remaining / fadeMs.toFloat())
+                player.volume = SleepFade.volume(remaining, fadeMs)
             }
             delay(STEP_MS)
         }
@@ -146,8 +145,7 @@ class SleepTimerController(
             val duration = player.duration
             val volume =
                 if (player.isPlaying && duration != C.TIME_UNSET) {
-                    val remaining = duration - player.currentPosition
-                    if (remaining in 0..FADE_MS) fadeCurve(remaining / FADE_MS.toFloat()) else 1f
+                    SleepFade.volume(duration - player.currentPosition, FADE_MS)
                 } else {
                     1f
                 }
@@ -156,10 +154,6 @@ class SleepTimerController(
         }
     }
 
-    // Perceived loudness is roughly logarithmic, so a squared ramp sounds more even than a
-    // linear one.
-    private fun fadeCurve(fraction: Float) = fraction.coerceIn(0f, 1f).let { it * it }
-
     // --- SHAKE TO RESET ---
 
     private fun startListeningForShake() {
@@ -167,7 +161,7 @@ class SleepTimerController(
             return
         }
         val accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) ?: return
-        shakeCount = 0
+        shakeDetector.clear()
         listeningForShake =
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
     }
@@ -182,23 +176,8 @@ class SleepTimerController(
     override fun onSensorChanged(event: SensorEvent) {
         val (x, y, z) = event.values
         val g = sqrt(x * x + y * y + z * z) / SensorManager.GRAVITY_EARTH
-        if (g < SHAKE_THRESHOLD_G) {
-            return
-        }
-        val now = SystemClock.elapsedRealtime()
-        if (now - lastReset < SHAKE_COOLDOWN_MS || now - lastSpike < SHAKE_MIN_SPIKE_GAP_MS) {
-            return
-        }
-        lastSpike = now
-        if (now - shakeWindowStart > SHAKE_WINDOW_MS) {
-            shakeWindowStart = now
-            shakeCount = 0
-        }
-        shakeCount++
-        if (shakeCount >= SHAKE_SPIKES) {
+        if (shakeDetector.onSample(g, SystemClock.elapsedRealtime())) {
             L.d("Shake detected, resetting sleep timer")
-            shakeCount = 0
-            lastReset = now
             sleepTimer.reset()
             vibrate()
         }
@@ -220,11 +199,6 @@ class SleepTimerController(
     private companion object {
         const val FADE_MS = 8_000L
         const val STEP_MS = 100L
-        const val SHAKE_THRESHOLD_G = 2.5f
-        const val SHAKE_SPIKES = 3
-        const val SHAKE_WINDOW_MS = 1_000L
-        const val SHAKE_MIN_SPIKE_GAP_MS = 100L
-        const val SHAKE_COOLDOWN_MS = 2_000L
         const val VIBRATE_MS = 80L
     }
 }

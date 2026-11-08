@@ -182,7 +182,7 @@ svg.i { width: 20px; height: 20px; fill: currentColor; }
   </div>
 
   <h2>2. Playlist</h2>
-  <p class="sub">Close to the current screen: cover, "Playlist", name and info on top, then the song list. Changes: the top bar is gone. Back, play, shuffle and the overflow menu are in a bar at the bottom, in the thumb zone. The pencil is gone: the sort button directly opens the sort sheet, and "Custom order" in that sheet lets you drag songs (with Cancel and Save at the bottom). The list header also has the search for this playlist. The overflow menu keeps today's items (Play next, Add to queue, Rename, Delete, Share) and adds Export as M3U and Calculate ReplayGain.</p>
+  <p class="sub">Close to the current screen: cover, "Playlist", name and info on top, then the song list. Changes: the top bar is gone. Back, play, shuffle and the overflow menu are in a bar at the bottom, in the thumb zone. The pencil is gone: the sort button directly opens the sort sheet, and "Custom order" in that sheet lets you drag songs (with Cancel and Save at the bottom). The list header also has the search for this playlist. The overflow menu keeps today's items (Play next, Add to queue, Rename, Delete, Share) and adds Export as M3U.</p>
   <div class="row">
     <figure>
       <div class="phone" data-pl="even">
@@ -235,7 +235,7 @@ svg.i { width: 20px; height: 20px; fill: currentColor; }
     </figure>
   </div>
 
-  <h2>Open question: ReplayGain</h2>
+  <h2>ReplayGain (later)</h2>
   <p class="sub">Calculating ReplayGain means decoding every song and measuring its loudness (EBU R128). Android has no built-in way to do that, so it needs a loudness library. It would run as a background job with a progress notification and store the values in Noxio's own database, not in your files. It works, but it is the largest item on the list, so I would do it last and as its own step. The menu item is in the mockups so you can see where it would live.</p>
 </div>
 
@@ -319,8 +319,8 @@ function gainSheet(phone, what) {
 }
 function buildMenu(menu, phone, playlist) {
   const items = playlist
-    ? [['Play next', ICON.next, () => toast(phone, 'Playing next')], ['Add to queue', ICON.queue, () => toast(phone, 'Added to queue')], ['Rename', ICON.edit, () => toast(phone, 'Rename dialog')], ['Delete', ICON.del, () => toast(phone, 'Delete dialog')], ['Share', ICON.share, () => toast(phone, 'Share sheet')], null, ['Export as M3U…', ICON.export, () => exportSheet(phone)], ['Calculate ReplayGain…', ICON.eq, () => gainSheet(phone, 'this playlist')]]
-    : [['Listening stats', ICON.stats, () => toast(phone, 'Opens Listening stats')], ['Calculate ReplayGain…', ICON.eq, () => gainSheet(phone, 'your whole library')], ['Settings', ICON.settings, () => toast(phone, 'Opens Settings')], ['About', ICON.about, () => toast(phone, 'Opens About')]];
+    ? [['Play next', ICON.next, () => toast(phone, 'Playing next')], ['Add to queue', ICON.queue, () => toast(phone, 'Added to queue')], ['Rename', ICON.edit, () => toast(phone, 'Rename dialog')], ['Delete', ICON.del, () => toast(phone, 'Delete dialog')], ['Share', ICON.share, () => toast(phone, 'Share sheet')], null, ['Export as M3U…', ICON.export, () => exportSheet(phone)]]
+    : [['Listening stats', ICON.stats, () => toast(phone, 'Opens Listening stats')], ['Settings', ICON.settings, () => toast(phone, 'Opens Settings')], ['About', ICON.about, () => toast(phone, 'Opens About')]];
   menu.innerHTML = items.map((it, i) => it ? `<button data-i="${i}">${svg(it[1])}${it[0]}</button>` : '<hr>').join('');
   menu.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { menu.classList.remove('open'); items[b.dataset.i][2](); }));
 }

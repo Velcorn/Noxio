@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Format and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-build
+      - name: Check formatting (ktfmt via spotless)
+        run: ./gradlew spotlessCheck
+      - name: Android lint
+        run: ./gradlew app:lintDebug
+      - name: Upload lint report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-report
+          path: app/build/reports/lint-results-debug.html
+
+  test:
+    name: Tests and coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to publish the coverage badge on the "badges" branch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-build
+      - name: Run the tests
+        run: ./gradlew app:jacocoDebugReport musikr:testDebugUnitTest
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: app/build/reports/jacoco/jacocoDebugReport/
+      - name: Publish coverage badge
+        # The badge lives on its own branch, so no token or external service is needed.
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+        run: |
+          python3 scripts/coverage_badge.py app/build/reports/jacoco/jacocoDebugReport/jacocoDebugReport.xml coverage.json
+          mkdir /tmp/badges && cp coverage.json /tmp/badges/
+          cd /tmp/badges
+          git init -q -b badges
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add coverage.json
+          git commit -q -m "Update coverage badge"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" badges

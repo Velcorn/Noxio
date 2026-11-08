@@ -14,35 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install ninja-build
-      run: sudo apt-get install -y ninja-build
-    - name: Clone repository
-      uses: actions/checkout@v4
-    - name: Clone submodules
-      # git.ffmpeg.org often returns 502 to CI runners, so use the GitHub mirror and retry.
-      run: |
-        git config --global url."https://github.com/FFmpeg/FFmpeg.git".insteadOf https://git.ffmpeg.org/ffmpeg.git
-        for i in 1 2 3; do
-          git submodule update --init --force --depth=1 --recursive && exit 0
-          echo "Submodule clone failed (attempt $i), retrying..."
-          sleep 10
-        done
-        exit 1
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: "21"
-        distribution: "temurin"
-        cache: gradle
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build release APK
-      run: ./gradlew app:assembleRelease -PbuildNumber=${{ github.run_number }}
-    - name: Rename APK
-      run: cp app/build/outputs/apk/release/app-release.apk "Noxio-${{ github.ref_name }}.apk"
-    - name: Publish release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: Noxio-${{ github.ref_name }}.apk
-        prerelease: ${{ contains(github.ref_name, '-') }}
-        generate_release_notes: true
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-build
+      - name: Build release APK
+        run: ./gradlew app:assembleRelease -PbuildNumber=${{ github.run_number }}
+      - name: Rename APK
+        run: cp app/build/outputs/apk/release/app-release.apk "Noxio-${{ github.ref_name }}.apk"
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Noxio-${{ github.ref_name }}.apk
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
