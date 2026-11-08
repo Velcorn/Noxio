@@ -90,6 +90,18 @@ fun summarize(events: List<PlayEvent>, limit: Int = 10): ListeningStats {
             .take(limit)
             .map { RankedItem(it.name, it.subtitle, it.plays, it.listenedMs) }
 
+    fun count(
+        tallies: MutableMap<String, Tally>,
+        key: String,
+        name: String,
+        subtitle: String?,
+        event: PlayEvent,
+    ) {
+        val tally = tallies.getOrPut(key) { Tally(name, subtitle) }
+        tally.plays++
+        tally.listenedMs += event.listenedMs
+    }
+
     val songs = LinkedHashMap<String, Tally>()
     val artists = LinkedHashMap<String, Tally>()
     val albums = LinkedHashMap<String, Tally>()
@@ -97,24 +109,13 @@ fun summarize(events: List<PlayEvent>, limit: Int = 10): ListeningStats {
         val artistNames = event.artists.split(PlayEvent.ARTIST_SEPARATOR).filter { it.isNotBlank() }
         val artistLine = artistNames.joinToString(", ")
 
-        songs.getOrPut(event.songUid) { Tally(event.title, artistLine) }.apply {
-            plays++
-            listenedMs += event.listenedMs
-        }
+        count(songs, event.songUid, event.title, artistLine, event)
         for (artist in artistNames.distinct()) {
-            artists.getOrPut(artist) { Tally(artist, null) }.apply {
-                plays++
-                listenedMs += event.listenedMs
-            }
+            count(artists, artist, artist, null, event)
         }
         // Albums are keyed together with their artist, so two "Greatest Hits" stay separate.
-        albums.getOrPut(event.album + PlayEvent.ARTIST_SEPARATOR + artistLine) {
-                Tally(event.album, artistLine)
-            }
-            .apply {
-                plays++
-                listenedMs += event.listenedMs
-            }
+        val albumKey = event.album + PlayEvent.ARTIST_SEPARATOR + artistLine
+        count(albums, albumKey, event.album, artistLine, event)
     }
     return ListeningStats(
         plays = events.size,

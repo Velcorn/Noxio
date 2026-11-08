@@ -119,8 +119,7 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
         set(value) = sharedPreferences.edit { putBoolean(KEY_FADE, value) }
 
     override val shakeToReset: Boolean
-        get() =
-            sharedPreferences.getBoolean(context.getString(R.string.set_key_sleep_shake), true)
+        get() = sharedPreferences.getBoolean(context.getString(R.string.set_key_sleep_shake), true)
 
     override fun start(mode: SleepTimerMode) {
         val fixed =

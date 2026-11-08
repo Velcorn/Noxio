@@ -42,8 +42,8 @@ import org.oxycblt.auxio.util.systemBarInsetsCompat
  * A bottom sheet for starting, checking and stopping the [SleepTimer]. Opened from the button above
  * the seek bar of the playback panel.
  *
- * The Custom tile doubles as the input: tap it to type a number of minutes, after which it shows
- * "N min". Tapping it again while selected edits the value again.
+ * The Custom tile doubles as the input: tap it to type a number of minutes, after which it shows "N
+ * min". Tapping it again while selected edits the value again.
  */
 @AndroidEntryPoint
 class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBinding>() {
