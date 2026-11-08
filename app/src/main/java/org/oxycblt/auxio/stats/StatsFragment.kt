@@ -307,16 +307,15 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                     add(Calendar.MONTH, -it)
                 }
             }
-        val labels =
-            months.map {
-                DateUtils.formatDateTime(
-                    context,
-                    it.timeInMillis,
-                    DateUtils.FORMAT_SHOW_DATE or
-                        DateUtils.FORMAT_NO_MONTH_DAY or
-                        DateUtils.FORMAT_SHOW_YEAR,
-                )
-            }
+        val labels = months.map {
+            DateUtils.formatDateTime(
+                context,
+                it.timeInMillis,
+                DateUtils.FORMAT_SHOW_DATE or
+                    DateUtils.FORMAT_NO_MONTH_DAY or
+                    DateUtils.FORMAT_SHOW_YEAR,
+            )
+        }
         // Musicolet puts the month in the name of the file, like "Most played Songs - October
         // 2026". Without it, the last month is the most likely one.
         val named = fileName?.let { monthInName(it) }
@@ -371,8 +370,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     private fun monthInName(name: String): Pair<Int, Int>? {
         fun english(month: Month) = month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
         val names = Month.values().joinToString("|") { english(it) }
-        val match =
-            Regex("($names)\\W+(\\d{4})", RegexOption.IGNORE_CASE).find(name) ?: return null
+        val match = Regex("($names)\\W+(\\d{4})", RegexOption.IGNORE_CASE).find(name) ?: return null
         val month = Month.values().first { english(it).equals(match.groupValues[1], true) }
         return match.groupValues[2].toInt() to month.ordinal
     }
