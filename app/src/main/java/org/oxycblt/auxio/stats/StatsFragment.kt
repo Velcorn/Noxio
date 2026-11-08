@@ -19,9 +19,14 @@
 package org.oxycblt.auxio.stats
 
 import android.content.res.ColorStateList
+import android.content.Context
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
+import android.text.format.DateUtils
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
@@ -30,10 +35,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.time.LocalDate
+import java.time.Month
+import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,6 +69,21 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             }
         }
 
+    private var pendingMostPlayedRange: LongRange? = null
+    private val exportMostPlayedLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+            val range = pendingMostPlayedRange
+            if (uri != null && range != null) {
+                exportMostPlayed(uri, range)
+            }
+        }
+    private val importLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            if (uri != null) {
+                import(uri)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = MaterialFadeThrough()
@@ -74,11 +99,25 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             setNavigationOnClickListener { findNavController().navigateUp() }
             setOnMenuItemClickListener(
                 Toolbar.OnMenuItemClickListener {
-                    if (it.itemId == R.id.action_export_stats) {
-                        exportLauncher.launch("noxio-stats-${LocalDate.now()}.csv")
-                        true
-                    } else {
-                        false
+                    when (it.itemId) {
+                        R.id.action_export_stats -> {
+                            exportLauncher.launch("noxio-stats-${LocalDate.now()}.csv")
+                            true
+                        }
+                        R.id.action_export_most_played -> {
+                            statsModel.ui.value?.let { ui ->
+                                pendingMostPlayedRange = ui.range
+                                val context = requireContext()
+                                val label = StatsFormat.range(context, ui.query.period, ui.range)
+                                exportMostPlayedLauncher.launch("Most played Songs - $label.csv")
+                            }
+                            true
+                        }
+                        R.id.action_import_stats -> {
+                            importLauncher.launch(arrayOf("*/*"))
+                            true
+                        }
+                        else -> false
                     }
                 }
             )
@@ -224,7 +263,123 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         }
     }
 
-    private fun export(uri: android.net.Uri) {
+    private fun exportMostPlayed(uri: Uri, range: LongRange) {
+        val context = requireContext()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val exported =
+                withContext(Dispatchers.IO) {
+                    try {
+                        context.contentResolver.openOutputStream(uri, "wt")?.use {
+                            statsModel.exportMostPlayedCsv(range, it)
+                        } != null
+                    } catch (e: IOException) {
+                        false
+                    }
+                }
+            context.showToast(
+                if (exported) R.string.lbl_stats_exported else R.string.err_stats_export
+            )
+        }
+    }
+
+    private fun import(uri: Uri) {
+        val context = requireContext()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val (parsed, name) =
+                withContext(Dispatchers.IO) {
+                    val text =
+                        try {
+                            context.contentResolver
+                                .openInputStream(uri)
+                                ?.bufferedReader()
+                                ?.use { it.readText() }
+                        } catch (e: IOException) {
+                            null
+                        }
+                    text?.let(StatsCsvImport::parse) to displayName(context, uri)
+                }
+            when (parsed) {
+                null -> context.showToast(R.string.err_stats_import)
+                is StatsCsvImport.Parsed.History -> finishImport(parsed, null)
+                is StatsCsvImport.Parsed.MostPlayed -> askMonth(parsed, name)
+            }
+        }
+    }
+
+    /** A most-played list has no dates, so ask which month it is from. */
+    private fun askMonth(parsed: StatsCsvImport.Parsed.MostPlayed, fileName: String?) {
+        val context = requireContext()
+        val months =
+            (0 until MONTH_CHOICES).map {
+                Calendar.getInstance().apply {
+                    set(Calendar.DAY_OF_MONTH, 1)
+                    add(Calendar.MONTH, -it)
+                }
+            }
+        val labels =
+            months.map {
+                DateUtils.formatDateTime(
+                    context,
+                    it.timeInMillis,
+                    DateUtils.FORMAT_SHOW_DATE or
+                        DateUtils.FORMAT_NO_MONTH_DAY or
+                        DateUtils.FORMAT_SHOW_YEAR,
+                )
+            }
+        // Musicolet puts the month in the name of the file, like "Most played Songs - October
+        // 2026". Without it, the last month is the most likely one.
+        val named = fileName?.let { monthInName(it) }
+        var selected =
+            months
+                .indexOfFirst {
+                    named != null &&
+                        it.get(Calendar.YEAR) == named.first &&
+                        it.get(Calendar.MONTH) == named.second
+                }
+                .takeIf { it >= 0 } ?: 1
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.lbl_stats_import_month)
+            .setSingleChoiceItems(labels.toTypedArray(), selected) { _, which -> selected = which }
+            .setPositiveButton(R.string.lbl_ok) { _, _ ->
+                val month = months[selected]
+                finishImport(
+                    parsed,
+                    StatsCsvImport.monthRange(month.get(Calendar.YEAR), month.get(Calendar.MONTH)),
+                )
+            }
+            .setNegativeButton(R.string.lbl_cancel, null)
+            .show()
+    }
+
+    private fun finishImport(parsed: StatsCsvImport.Parsed, month: LongRange?) {
+        val context = requireContext()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val added = withContext(Dispatchers.IO) { statsModel.importCsv(parsed, month) }
+            Toast.makeText(
+                    context,
+                    context.resources.getQuantityString(R.plurals.fmt_stats_imported, added, added),
+                    Toast.LENGTH_SHORT,
+                )
+                .show()
+        }
+    }
+
+    private fun displayName(context: Context, uri: Uri): String? =
+        context.contentResolver
+            .query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+            ?.use { if (it.moveToFirst()) it.getString(0) else null }
+
+    /** Finds "October 2026" (in English) in a file name, as year and zero-based month. */
+    private fun monthInName(name: String): Pair<Int, Int>? {
+        fun english(month: Month) = month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+        val names = Month.values().joinToString("|") { english(it) }
+        val match =
+            Regex("($names)\\W+(\\d{4})", RegexOption.IGNORE_CASE).find(name) ?: return null
+        val month = Month.values().first { english(it).equals(match.groupValues[1], true) }
+        return match.groupValues[2].toInt() to month.ordinal
+    }
+
+    private fun export(uri: Uri) {
         val context = requireContext()
         viewLifecycleOwner.lifecycleScope.launch {
             val exported =
@@ -244,6 +399,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     }
 
     private companion object {
+        const val MONTH_CHOICES = 36
         const val COLLAPSED_ROWS = 5
         const val EXPANDED_ROWS = 10
     }

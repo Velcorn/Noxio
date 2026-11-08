@@ -18,6 +18,7 @@
  
 package org.oxycblt.auxio.stats
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -26,6 +27,7 @@ import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 
 /**
  * One counted play of a song. Names are stored next to the UID on purpose: the UID changes when a
@@ -38,6 +40,11 @@ import androidx.room.RoomDatabase
  * @param startedAt When the song started, in milliseconds since the unix epoch.
  * @param listenedMs How long it was actually listened to, in milliseconds.
  * @param durationMs The length of the song, in milliseconds.
+ * @param filePath The path of the file relative to its volume, for the CSV export. Empty if not
+ *   known.
+ * @param albumArtist The album artists of the song's album, joined with "; ". Empty if not known.
+ * @param genre The first genre of the song. Empty if not known.
+ * @param year The release year of the song. 0 if not known.
  */
 @Entity(indices = [Index("startedAt")])
 data class PlayEvent(
@@ -49,6 +56,10 @@ data class PlayEvent(
     val startedAt: Long,
     val listenedMs: Long,
     val durationMs: Long,
+    @ColumnInfo(defaultValue = "''") val filePath: String = "",
+    @ColumnInfo(defaultValue = "''") val albumArtist: String = "",
+    @ColumnInfo(defaultValue = "''") val genre: String = "",
+    @ColumnInfo(defaultValue = "0") val year: Int = 0,
 ) {
     companion object {
         /** Unit separator control character, which does not show up in artist names. */
@@ -57,14 +68,34 @@ data class PlayEvent(
 }
 
 /** Raw access to the listening history. */
-@Database(entities = [PlayEvent::class], version = 1, exportSchema = false)
+@Database(entities = [PlayEvent::class], version = 2, exportSchema = false)
 abstract class StatsDatabase : RoomDatabase() {
     abstract fun playEventDao(): PlayEventDao
+
+    companion object {
+        /** Added the file path, album artist, genre and year for the CSV export. */
+        val MIGRATION_1_2 =
+            Migration(1, 2) {
+                it.execSQL("ALTER TABLE PlayEvent ADD COLUMN filePath TEXT NOT NULL DEFAULT ''")
+                it.execSQL("ALTER TABLE PlayEvent ADD COLUMN albumArtist TEXT NOT NULL DEFAULT ''")
+                it.execSQL("ALTER TABLE PlayEvent ADD COLUMN genre TEXT NOT NULL DEFAULT ''")
+                it.execSQL("ALTER TABLE PlayEvent ADD COLUMN year INTEGER NOT NULL DEFAULT 0")
+            }
+    }
 }
 
 @Dao
 interface PlayEventDao {
     @Insert suspend fun insert(event: PlayEvent)
+
+    @Insert suspend fun insertAll(events: List<PlayEvent>)
+
+    /** Remove plays that came from an import of a most-played list, inside a time range. */
+    @Query(
+        "DELETE FROM PlayEvent WHERE songUid LIKE 'import:%' AND startedAt >= :fromMs " +
+            "AND startedAt < :toMs"
+    )
+    suspend fun deleteImported(fromMs: Long, toMs: Long)
 
     @Query("SELECT * FROM PlayEvent WHERE startedAt >= :fromMs AND startedAt < :toMs")
     suspend fun between(fromMs: Long, toMs: Long): List<PlayEvent>

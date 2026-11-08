@@ -43,6 +43,7 @@ class StatsRoomModule {
         // No destructive fallback: this is the user's history, a missing migration should crash
         // loudly in development instead of silently wiping it.
         Room.databaseBuilder(context.applicationContext, StatsDatabase::class.java, "stats.db")
+            .addMigrations(StatsDatabase.MIGRATION_1_2)
             .build()
 
     @Provides fun playEventDao(database: StatsDatabase) = database.playEventDao()

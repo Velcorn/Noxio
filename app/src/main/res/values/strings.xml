@@ -138,7 +138,15 @@
     <string name="lbl_stats_image_saved">Image saved</string>
     <string name="lbl_stats_show_ten">Show top 10</string>
     <string name="lbl_stats_show_five">Show top 5</string>
-    <string name="lbl_stats_export">Export as CSV</string>
+    <string name="lbl_stats_export">Export history as CSV</string>
+    <string name="lbl_stats_export_most_played">Export most played songs (Musicolet format)</string>
+    <string name="lbl_stats_import">Import CSV (Noxio or Musicolet)</string>
+    <string name="lbl_stats_import_month">Which month is this list from?</string>
+    <plurals name="fmt_stats_imported">
+        <item quantity="one">Imported %d play</item>
+        <item quantity="other">Imported %d plays</item>
+    </plurals>
+    <string name="err_stats_import">This is not a stats file Noxio can read</string>
     <string name="lbl_stats_exported">Exported</string>
     <string name="err_stats_export">Could not write the file</string>
     <string name="set_stats">Listening stats</string>

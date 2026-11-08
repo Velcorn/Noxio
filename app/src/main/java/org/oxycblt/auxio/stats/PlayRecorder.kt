@@ -139,6 +139,13 @@ private constructor(
                     startedAt = startedAt,
                     listenedMs = listenedMs,
                     durationMs = duration,
+                    filePath = finished.path.components.toString(),
+                    albumArtist =
+                        finished.album.artists.joinToString(PlayEvent.ARTIST_SEPARATOR) {
+                            it.name.resolve(context)
+                        },
+                    genre = finished.genres.firstOrNull()?.name?.resolve(context) ?: "",
+                    year = finished.date?.year ?: 0,
                 )
             scope.launch { repository.record(event) }
         }

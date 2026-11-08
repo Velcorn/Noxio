@@ -110,13 +110,18 @@ fun summarize(events: List<PlayEvent>, limit: Int = 10): ListeningStats {
         val artistNames = event.artists.split(PlayEvent.ARTIST_SEPARATOR).filter { it.isNotBlank() }
         val artistLine = artistNames.joinToString(", ")
 
-        count(songs, event.songUid, event.title, artistLine, event)
+        // Songs are matched by their text rather than their UID, so a retagged file or an
+        // imported play still counts towards the same song.
+        val songKey = event.title + PlayEvent.ARTIST_SEPARATOR + artistLine + event.album
+        count(songs, songKey, event.title, artistLine, event)
         for (artist in artistNames.distinct()) {
             count(artists, artist, artist, null, event)
         }
         // Albums are keyed together with their artist, so two "Greatest Hits" stay separate.
-        val albumKey = event.album + PlayEvent.ARTIST_SEPARATOR + artistLine
-        count(albums, albumKey, event.album, artistLine, event)
+        if (event.album.isNotBlank()) {
+            val albumKey = event.album + PlayEvent.ARTIST_SEPARATOR + artistLine
+            count(albums, albumKey, event.album, artistLine, event)
+        }
     }
     return ListeningStats(
         plays = events.size,
@@ -136,6 +141,17 @@ interface StatsRepository {
 
     /** Write the whole play history as CSV into [out]. The stream is not closed. */
     suspend fun exportCsv(out: OutputStream)
+
+    /** Write the songs played inside [range] with their play counts, Musicolet-style. */
+    suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream)
+
+    /**
+     * Add the plays of an imported file to the history.
+     *
+     * @param month The time the plays of a most-played list happened in. Not used for a history.
+     * @return How many plays were added.
+     */
+    suspend fun importCsv(parsed: StatsCsvImport.Parsed, month: LongRange?): Int
 }
 
 class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : StatsRepository {
@@ -144,5 +160,27 @@ class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : S
     override suspend fun summary(range: LongRange) =
         summarize(dao.between(range.first, range.last + 1))
 
-    override suspend fun exportCsv(out: OutputStream) = StatsCsv.write(dao.all(), out)
+    override suspend fun exportCsv(out: OutputStream) = StatsCsv.writeHistory(dao.all(), out)
+
+    override suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream) =
+        StatsCsv.writeMostPlayed(dao.between(range.first, range.last + 1), out)
+
+    override suspend fun importCsv(parsed: StatsCsvImport.Parsed, month: LongRange?): Int =
+        when (parsed) {
+            is StatsCsvImport.Parsed.History -> {
+                // Skip plays that are already there, so importing a backup twice is harmless.
+                val known = dao.all().map { StatsCsvImport.historyKey(it) }.toHashSet()
+                val added = parsed.events.filter { known.add(StatsCsvImport.historyKey(it)) }
+                dao.insertAll(added)
+                added.size
+            }
+            is StatsCsvImport.Parsed.MostPlayed -> {
+                val range = requireNotNull(month) { "A most-played list needs a month" }
+                val events = StatsCsvImport.spreadOver(parsed.rows, range)
+                // Importing the same month again replaces the earlier import.
+                dao.deleteImported(range.first, range.last + 1)
+                dao.insertAll(events)
+                events.size
+            }
+        }
 }

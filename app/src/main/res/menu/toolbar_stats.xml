@@ -6,4 +6,14 @@
         android:id="@+id/action_export_stats"
         android:title="@string/lbl_stats_export"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_export_most_played"
+        android:title="@string/lbl_stats_export_most_played"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_stats"
+        android:title="@string/lbl_stats_import"
+        app:showAsAction="never" />
 </menu>

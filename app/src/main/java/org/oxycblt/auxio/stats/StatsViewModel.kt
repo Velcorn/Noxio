@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -58,9 +59,12 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
     private val mutableExpanded = MutableStateFlow(false)
     val expanded: StateFlow<Boolean> = mutableExpanded.asStateFlow()
 
+    /** Bumped when the history changed outside of the player, for example after an import. */
+    private val refresh = MutableStateFlow(0)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val ui: StateFlow<Ui?> =
-        mutableQuery
+        combine(mutableQuery, refresh) { query, _ -> query }
             .mapLatest {
                 val range = statsRange(it.period, it.offset)
                 Ui(it, range, repository.summary(range))
@@ -105,4 +109,15 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
 
     /** Write the full play history as CSV. Must be called off the main thread. */
     suspend fun exportCsv(out: OutputStream) = repository.exportCsv(out)
+
+    /** Write the songs played in [range] with their play counts. Call off the main thread. */
+    suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream) =
+        repository.exportMostPlayedCsv(range, out)
+
+    /** Add the plays of an imported file. Must be called off the main thread. */
+    suspend fun importCsv(parsed: StatsCsvImport.Parsed, month: LongRange?): Int {
+        val added = repository.importCsv(parsed, month)
+        refresh.value += 1
+        return added
+    }
 }

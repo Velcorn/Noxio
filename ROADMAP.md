@@ -7,7 +7,7 @@
 
 ## Later
 - [ ] Stats redesign, image sharing, CSV export and weekly backup: implemented, needs on-device testing (see docs/mockups/stats.html)
-- [ ] CSV format: currently one row per play (date_time, title, artist, album, duration_seconds, listened_seconds); matching Musicolet needs a sample of its export
+- [ ] CSV: Musicolet-compatible columns, history export with timestamps (backup), most-played export, import of Noxio and Musicolet files (needs on-device testing)
 - [ ] Listening stats: implemented, needs a build and on-device testing (Room database, week / month / year, top songs, artists, albums, total time; open it from the home overflow menu)
 - [ ] Shareable "Wrapped" cards
 
