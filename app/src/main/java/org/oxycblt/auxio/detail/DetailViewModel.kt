@@ -53,6 +53,7 @@ import org.oxycblt.musikr.Music
 import org.oxycblt.musikr.MusicParent
 import org.oxycblt.musikr.Playlist
 import org.oxycblt.musikr.Song
+import org.oxycblt.musikr.tag.Name
 import timber.log.Timber as L
 
 /**
@@ -175,6 +176,13 @@ constructor(
      */
     val editedPlaylist: StateFlow<List<Song>?>
         field = MutableStateFlow<List<Song>?>(null)
+
+    /**
+     * What the songs of the playlist are filtered by, empty to show all. Only applies outside of an
+     * editing session, since moving songs around in a filtered list does not make sense.
+     */
+    var playlistQuery = ""
+        private set
 
     /** The [PlaySong] instructions to use when playing a [Song] from [Genre] details. */
     val playInPlaylistWith
@@ -407,7 +415,21 @@ constructor(
     fun startPlaylistEdit() {
         val playlist = currentPlaylist.value ?: return
         L.d("Starting playlist edit")
+        playlistQuery = ""
         editedPlaylist.value = playlist.songs
+        refreshPlaylist(playlist.uid)
+    }
+
+    /**
+     * Only show the songs of the playlist that match [query] in the title, artist or album. Does
+     * nothing during an editing session.
+     */
+    fun setPlaylistQuery(query: String) {
+        val playlist = currentPlaylist.value ?: return
+        if (editedPlaylist.value != null || query == playlistQuery) {
+            return
+        }
+        playlistQuery = query
         refreshPlaylist(playlist.uid)
     }
 
@@ -595,6 +617,32 @@ constructor(
         list.value = newList
     }
 
+    /** Keep only the songs that match [query]. All of them if it is empty. */
+    private fun filterSongs(detail: Detail<Playlist>, query: String): Detail<Playlist> {
+        if (query.isBlank()) {
+            return detail
+        }
+        val needle = query.trim()
+        return detail.copy(
+            sections =
+                detail.sections.map { section ->
+                    if (section is DetailSection.Songs) {
+                        section.copy(items = section.items.filter { matches(it, needle) })
+                    } else {
+                        section
+                    }
+                }
+        )
+    }
+
+    private fun matches(song: Song, needle: String): Boolean {
+        // The raw names are used so that no Context is needed. Unknown names have none.
+        fun Name.matches() = (this as? Name.Known)?.raw?.contains(needle, ignoreCase = true) == true
+        return song.name.matches() ||
+            song.artists.any { it.name.matches() } ||
+            song.album.name.matches()
+    }
+
     private fun refreshPlaylist(
         uid: Music.UID,
         instructions: UpdateInstructions = UpdateInstructions.Diff,
@@ -602,7 +650,7 @@ constructor(
         L.d("Refreshing playlist list")
         val edited = editedPlaylist.value
         if (edited == null) {
-            val playlist = detailGenerator.playlist(uid)
+            val playlist = detailGenerator.playlist(uid)?.let { filterSongs(it, playlistQuery) }
             refreshDetail(
                 playlist,
                 currentPlaylist,

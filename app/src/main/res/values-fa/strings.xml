@@ -52,7 +52,6 @@
     <string name="lbl_rename_playlist">بازنام‌گذاری فهرست‌ پخش</string>
     <string name="lbl_delete">حذف</string>
     <string name="lbl_confirm_delete_playlist">حذف فهرست پخش؟</string>
-    <string name="lbl_edit">ویرایش</string>
     <string name="lbl_search">جست و جو</string>
     <string name="lbl_filter">فیلتر</string>
     <string name="lbl_filter_all">همه</string>

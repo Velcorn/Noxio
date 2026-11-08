@@ -85,8 +85,8 @@ class QueueBottomSheetBehavior<V : View>(context: Context, attributeSet: Attribu
 
     override fun createBackground(context: Context, uiSettings: UISettings) =
         MaterialShapeDrawable.createWithElevationOverlay(context).apply {
-            // The queue sheet's background is a static elevated background.
-            fillColor = context.getAttrColorCompat(MR.attr.colorSurfaceContainerHigh)
+            // The queue sheet is plain black like the rest, no lighter gray.
+            fillColor = context.getAttrColorCompat(MR.attr.colorSurface)
             if (uiSettings.roundMode) {
                 shapeAppearanceModel =
                     ShapeAppearanceModel.builder(

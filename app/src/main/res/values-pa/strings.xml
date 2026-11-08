@@ -222,7 +222,6 @@
     <string name="fmt_lib_genre_count">%d: ਸ਼ੈਲੀਆਂ ਲੋਡ ਕੀਤੀਆਂ</string>
     <string name="fmt_lib_album_count">%d: ਐਲਬਮ ਲੋਡ ਕੀਤੇ</string>
     <string name="fmt_lib_artist_count">%d: ਕਲਾਕਾਰ ਲੋਡ ਕੀਤੇ</string>
-    <string name="lbl_edit">ਸੋਧ ਕਰੋ</string>
     <string name="desc_album_cover">%s ਲਈ ਐਲਬਮ ਕਵਰ</string>
     <string name="desc_no_cover">ਐਲਬਮ ਕਵਰ</string>
     <string name="desc_artist_image">%s ਲਈ ਕਲਾਕਾਰ ਚਿੱਤਰ</string>

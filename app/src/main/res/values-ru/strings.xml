@@ -256,7 +256,6 @@
     <string name="lbl_confirm_delete_playlist">Удалить плейлист?</string>
     <string name="lng_playlist_renamed">Плейлист переименован</string>
     <string name="lng_playlist_deleted">Плейлист удалён</string>
-    <string name="lbl_edit">Редактировать</string>
     <string name="fmt_deletion_info">Удалить %s? Это действие не может быть отменено.</string>
     <string name="lbl_appears_on">Появляется на</string>
     <string name="fmt_editing">Редактирование %s</string>

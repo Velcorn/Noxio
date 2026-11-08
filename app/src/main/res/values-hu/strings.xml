@@ -183,7 +183,6 @@
     <string name="cdc_ogg">Ogg audio</string>
     <string name="set_display">Megjelenítés</string>
     <string name="lbl_track">Hangsáv</string>
-    <string name="lbl_edit">Szerkeszt</string>
     <string name="lbl_disc">Lemez</string>
     <string name="lng_playlist_created">Lejátszólista létrehozva</string>
     <string name="set_black_mode">Fekete téma</string>

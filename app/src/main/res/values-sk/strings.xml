@@ -52,7 +52,6 @@
     <string name="lbl_rename_playlist">Premenovať zoznam skladieb</string>
     <string name="lbl_delete">Odstrániť</string>
     <string name="lbl_confirm_delete_playlist">Odstrániť zoznam skladieb?</string>
-    <string name="lbl_edit">Upraviť</string>
     <string name="lbl_search">Hľadať</string>
     <string name="lbl_filter">Filtrovať</string>
     <string name="lbl_filter_all">Všetko</string>

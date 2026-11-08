@@ -52,7 +52,6 @@
     <string name="lbl_rename_playlist">Canvia el nom de la llista de reproducció</string>
     <string name="lbl_delete">Suprimeix</string>
     <string name="lbl_confirm_delete_playlist">Voleu suprimir la llista de reproducció?</string>
-    <string name="lbl_edit">Edita</string>
     <string name="lbl_search">Cerca</string>
     <string name="lbl_filter">Filtra</string>
     <string name="lbl_filter_all">Tot</string>

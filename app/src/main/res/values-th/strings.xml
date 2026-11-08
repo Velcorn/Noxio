@@ -52,7 +52,6 @@
     <string name="lbl_rename_playlist">เปลี่ยนชื่อเพลย์ลิสต์</string>
     <string name="lbl_delete">ลบ</string>
     <string name="lbl_confirm_delete_playlist">ลบเพลย์ลิสต์?</string>
-    <string name="lbl_edit">แก้ไข</string>
     <string name="lbl_search">ค้นหา</string>
     <string name="lbl_filter">กรอง</string>
     <string name="lbl_filter_all">ทั้งหมด</string>

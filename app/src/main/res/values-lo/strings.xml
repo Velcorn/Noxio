@@ -52,7 +52,6 @@
     <string name="lbl_rename_playlist">ປ່ຽນຊື່ລາຍການເພງ</string>
     <string name="lbl_delete">ລຶບ</string>
     <string name="lbl_confirm_delete_playlist">ລຶບລາຍການເພງບໍ?</string>
-    <string name="lbl_edit">ແກ້ໄຂ</string>
     <string name="lbl_search">ຄົ້ນຫາ</string>
     <string name="lbl_filter">ໂຕກັ່ນ</string>
     <string name="lbl_filter_all">ທັງໝົດ</string>

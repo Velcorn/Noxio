@@ -255,7 +255,6 @@
     <string name="lbl_rename">Zmień nazwę</string>
     <string name="lbl_rename_playlist">Zmień nazwę listy odtwarzania</string>
     <string name="lbl_confirm_delete_playlist">Usunąć playlistę?</string>
-    <string name="lbl_edit">Edytuj</string>
     <string name="lbl_appears_on">Pojawia się na</string>
     <string name="lbl_share">Udostępnij</string>
     <string name="lng_playlist_renamed">Zmieniono nazwę listy odtwarzania</string>

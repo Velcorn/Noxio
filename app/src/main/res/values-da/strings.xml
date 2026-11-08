@@ -52,7 +52,6 @@
     <string name="lbl_rename_playlist">Omdøb spilleliste</string>
     <string name="lbl_delete">Slet</string>
     <string name="lbl_confirm_delete_playlist">Slet spilleliste?</string>
-    <string name="lbl_edit">Rediger</string>
     <string name="lbl_search">Søg</string>
     <string name="lbl_filter">Filtrer</string>
     <string name="lbl_filter_all">Alle</string>

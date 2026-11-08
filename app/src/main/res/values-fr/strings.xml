@@ -229,7 +229,6 @@
         <item quantity="many">%d artistes</item>
         <item quantity="other">%d artistes</item>
     </plurals>
-    <string name="lbl_edit">Modifier</string>
     <string name="set_repeat_pause">Pause en cas de répétition</string>
     <string name="set_rewind_prev_desc">Revenez en arrière avant de passer au titre précédent</string>
     <string name="desc_exit">Arrêter la lecture</string>

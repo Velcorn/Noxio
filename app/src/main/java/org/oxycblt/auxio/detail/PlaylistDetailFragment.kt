@@ -67,6 +67,7 @@ class PlaylistDetailFragment :
     private val args: PlaylistDetailFragmentArgs by navArgs()
     private val playlistListAdapter = PlaylistDetailListAdapter(this)
     private var touchHelper: ItemTouchHelper? = null
+    private var bottomBar: DetailBottomBar? = null
     private var editNavigationListener: DialogAwareNavigationListener? = null
     private var getContentLauncher: ActivityResultLauncher<String>? = null
     private var pendingImportTarget: Playlist? = null
@@ -79,6 +80,18 @@ class PlaylistDetailFragment :
         super.onBindingCreated(binding, savedInstanceState)
 
         editNavigationListener = DialogAwareNavigationListener(detailModel::dropPlaylistEdit)
+
+        // The controls are along the bottom: back, name, play, shuffle and more, which become
+        // Cancel and Save while the order is edited.
+        bottomBar =
+            DetailBottomBar.attach(binding)?.apply {
+                onBack = { findNavController().navigateUp() }
+                onPlay = { getToolbarParent()?.let(::onPlayParent) }
+                onShuffle = { getToolbarParent()?.let(::onShuffleParent) }
+                onMore = { onOpenParentMenu() }
+                onCancel = { detailModel.dropPlaylistEdit() }
+                onSave = { detailModel.savePlaylistEdit() }
+            }
 
         getContentLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -159,6 +172,7 @@ class PlaylistDetailFragment :
         binding.detailNormalToolbar.setOnMenuItemClickListener(null)
         touchHelper = null
         binding.detailRecycler.adapter = null
+        bottomBar = null
         // Avoid possible race conditions that could cause a bad replace instruction to be consumed
         // during list initialization and crash the app. Could happen if the user is fast enough.
         detailModel.playlistSongInstructions.consume()
@@ -177,8 +191,11 @@ class PlaylistDetailFragment :
         playbackModel.play(item, detailModel.playInPlaylistWith)
     }
 
-    override fun onStartEdit() {
-        detailModel.startPlaylistEdit()
+    override val playlistQuery: String
+        get() = detailModel.playlistQuery
+
+    override fun onSearchPlaylist(query: String) {
+        detailModel.setPlaylistQuery(query)
     }
 
     override fun onPickUp(viewHolder: RecyclerView.ViewHolder) {
@@ -206,6 +223,7 @@ class PlaylistDetailFragment :
         }
         val binding = requireBinding()
         binding.detailNormalToolbar.title = playlist.name.resolve(requireContext())
+        bottomBar?.setTitle(playlist.name.resolve(requireContext()))
         binding.detailEditToolbar.title =
             getString(R.string.fmt_editing, playlist.name.resolve(requireContext()))
 
@@ -254,6 +272,7 @@ class PlaylistDetailFragment :
             setOnClickListener { playbackModel.shuffle(playlist) }
         }
         setToolbarPlaybackButtonsEnabled(playable)
+        bottomBar?.setPlayable(playable)
         updatePlayback(
             playbackModel.song.value,
             playbackModel.parent.value,
@@ -267,6 +286,12 @@ class PlaylistDetailFragment :
 
     private fun updateEditedList(editedPlaylist: List<Song>?) {
         playlistListAdapter.setEditing(editedPlaylist != null)
+        bottomBar?.setEditing(
+            editing = editedPlaylist != null,
+            canSave =
+                editedPlaylist != null &&
+                    editedPlaylist != detailModel.currentPlaylist.value?.songs,
+        )
         listModel.dropSelection()
 
         if (editedPlaylist != null) {
@@ -443,5 +468,7 @@ class PlaylistDetailFragment :
             }
 
         requireBinding().detailToolbar.setVisible(id)
+        // Only the selection actions need the top toolbar, everything else is along the bottom.
+        bottomBar?.setTopToolbarShown(id == R.id.detail_selection_toolbar)
     }
 }

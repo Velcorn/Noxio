@@ -257,7 +257,6 @@
     <string name="lbl_rename">이름 바꾸기</string>
     <string name="lbl_rename_playlist">재생 목록 이름 바꾸기</string>
     <string name="lbl_confirm_delete_playlist">재생 목록을 삭제하시겠습니까?</string>
-    <string name="lbl_edit">편집</string>
     <string name="lbl_appears_on">에 나타납니다</string>
     <string name="lbl_share">공유</string>
     <string name="lng_playlist_renamed">재생 목록의 이름을 바꿨습니다.</string>

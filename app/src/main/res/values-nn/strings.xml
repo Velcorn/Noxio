@@ -56,7 +56,6 @@
     <string name="lbl_export_playlist">Eksporter speleliste</string>
     <string name="lbl_delete">Tak bort</string>
     <string name="lbl_confirm_delete_playlist">Tak bort speleliste?</string>
-    <string name="lbl_edit">Brigd</string>
     <string name="lbl_duration">Lengd</string>
     <string name="lbl_song_count">Songtal</string>
     <string name="lbl_disc">Platetal</string>

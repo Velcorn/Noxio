@@ -40,7 +40,6 @@
     <string name="lbl_rename">Преименуване</string>
     <string name="lbl_delete">Изтриване</string>
     <string name="lbl_confirm_delete_playlist">Изтриване на плейлист?</string>
-    <string name="lbl_edit">Редактиране</string>
     <string name="lbl_search">Търсене</string>
     <string name="lbl_filter">Филтър</string>
     <string name="lbl_filter_all">Всички</string>

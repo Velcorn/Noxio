@@ -160,7 +160,6 @@
     <string name="lbl_rename">שינוי שם</string>
     <string name="lbl_rename_playlist">שינוי שם רשימת השמעה</string>
     <string name="lbl_confirm_delete_playlist">למחוק את רשימת ההשמעה?</string>
-    <string name="lbl_edit">עריכה</string>
     <string name="clr_orange">כתום</string>
     <string name="set_locations">תיקיות מוזיקה</string>
     <string name="set_reindex_desc">טעינה מחדש של ספריית המוזיקה, במידה וניתן ייעשה שימוש בתגיות מהמטמון</string>

@@ -246,7 +246,6 @@
     <string name="lbl_copied">Copiado</string>
     <string name="lbl_playlist_add">Adicionar à playlist</string>
     <string name="lbl_share">Compartilhar</string>
-    <string name="lbl_edit">Editar</string>
     <string name="lbl_rename">Renomear</string>
     <string name="lng_playlist_added">Adicionada à playlist</string>
     <string name="fmt_editing">Editando %s</string>

@@ -34,7 +34,6 @@
     <string name="lbl_export_playlist">დასაკრავი სიის ექსპორტი</string>
     <string name="lbl_delete">წაშლა</string>
     <string name="lbl_confirm_delete_playlist">დასაკრავი სიის წაშლა ?</string>
-    <string name="lbl_edit">ჩასწორება</string>
     <string name="lbl_search">ძებნა</string>
     <string name="lbl_filter">ფილტრი</string>
     <string name="lbl_filter_all">ყველა</string>

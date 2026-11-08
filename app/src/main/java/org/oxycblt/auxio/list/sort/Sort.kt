@@ -374,6 +374,19 @@ data class Sort(val mode: Mode, val direction: Direction) {
             }
         }
 
+        /**
+         * Not a sort: the playlist keeps the order it has and the songs can be moved by hand. Only
+         * offered when editing a playlist, where choosing it starts an editing session.
+         */
+        data object ByCustom : Mode {
+            override val intCode = IntegerTable.SORT_BY_CUSTOM
+            override val stringRes = R.string.lbl_sort_custom
+
+            override fun sortSongs(songs: MutableList<Song>, direction: Direction) {
+                // Keeps the current order.
+            }
+        }
+
         companion object {
             fun fromIntCode(intCode: Int): Mode? =
                 when (intCode) {
@@ -386,6 +399,7 @@ data class Sort(val mode: Mode, val direction: Direction) {
                     ByDisc.intCode -> ByDisc
                     ByTrack.intCode -> ByTrack
                     ByDateAdded.intCode -> ByDateAdded
+                    ByCustom.intCode -> ByCustom
                     else -> null
                 }
         }

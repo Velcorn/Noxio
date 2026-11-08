@@ -269,7 +269,6 @@
     <string name="set_replay_gain_mode_off">Nonaktif</string>
     <string name="lbl_empty_playlist">Daftar putar kosong</string>
     <string name="lbl_import_playlist">Impor daftar putar</string>
-    <string name="lbl_edit">Atur</string>
     <string name="lbl_equalizer">Ekualiser</string>
     <string name="lbl_reset">Atur ulang</string>
     <string name="set_rescan">Pindai ulang musik</string>

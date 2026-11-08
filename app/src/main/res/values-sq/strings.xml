@@ -52,7 +52,6 @@
     <string name="lbl_rename">Riemërto</string>
     <string name="lbl_delete">Fshije</string>
     <string name="lbl_confirm_delete_playlist">Të fshihet lista e këngëve?</string>
-    <string name="lbl_edit">Modifiko</string>
     <string name="lbl_search">Kërko</string>
     <string name="lbl_filter">Filtro</string>
     <string name="lbl_filter_all">Të gjitha</string>

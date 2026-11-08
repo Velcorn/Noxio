@@ -217,7 +217,6 @@
     <string name="set_cover_mode_high_quality">Hoge kwaliteit</string>
     <string name="lbl_genre">Genre</string>
     <string name="set_separators_and">Ampersand (&amp;)</string>
-    <string name="lbl_edit">Bewerk</string>
     <string name="lbl_sort_dsc">Aflopend</string>
     <string name="desc_playlist_image">Afspeellijst afbeelding voor %s</string>
     <string name="def_song_count">Geen nummers</string>

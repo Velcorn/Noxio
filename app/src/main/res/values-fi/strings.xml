@@ -225,7 +225,6 @@
     <string name="lbl_rename_playlist">Nimeä soittolista uudelleen</string>
     <string name="lbl_confirm_delete_playlist">Poistetaanko soittolista?</string>
     <string name="fmt_editing">Muokataan %s</string>
-    <string name="lbl_edit">Muokkaa</string>
     <string name="desc_remove_song">Poista tämä kappale</string>
     <string name="lng_playlist_created">Soittolista luotu</string>
     <string name="lng_playlist_renamed">Soittolista nimetty uudelleen</string>

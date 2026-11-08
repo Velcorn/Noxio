@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- The "Songs" header of a playlist: the title, a button to search the playlist and a button to
+     sort it. While searching, the title makes way for the search field. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorSurface"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <TextView
@@ -14,19 +17,29 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing_mid_medium"
         android:layout_weight="1"
-        app:layout_constraintEnd_toStartOf="@+id/header_button"
-        app:layout_constraintStart_toStartOf="parent"
         tools:text="Songs" />
 
+    <EditText
+        android:id="@+id/header_search_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_medium"
+        android:layout_weight="1"
+        android:hint="@string/hint_search_playlist"
+        android:imeOptions="actionSearch"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLines="1"
+        android:visibility="gone"
+        tools:ignore="Autofill" />
+
     <org.oxycblt.auxio.ui.RippleFixMaterialButton
-        android:id="@+id/header_edit"
+        android:id="@+id/header_search"
         style="@style/Widget.Auxio.Button.Icon.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_mid_medium"
-        android:contentDescription="@string/lbl_edit"
-        app:icon="@drawable/ic_edit_24"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:contentDescription="@string/lbl_search"
+        app:icon="@drawable/ic_search_20" />
 
     <org.oxycblt.auxio.ui.RippleFixMaterialButton
         android:id="@+id/header_sort"
@@ -34,8 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing_mid_medium"
-        android:contentDescription="@string/lbl_edit"
-        app:icon="@drawable/ic_sort_24"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:contentDescription="@string/lbl_sort"
+        app:icon="@drawable/ic_sort_24" />
 
 </LinearLayout>

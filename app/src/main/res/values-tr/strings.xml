@@ -259,7 +259,6 @@
     <string name="lbl_copied">Kopyalandı</string>
     <string name="lbl_playlist_add">Çalma listesine ekle</string>
     <string name="lbl_share">Paylaş</string>
-    <string name="lbl_edit">Düzenle</string>
     <string name="lng_playlist_added">Çalma listesine eklendi</string>
     <string name="def_song_count">Şarkı yok</string>
     <string name="set_square_covers_desc">Tüm albüm kapaklarını 1:1 en boy oranında kırp</string>

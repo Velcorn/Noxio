@@ -108,7 +108,6 @@
     <string name="lbl_import">Impordi</string>
     <string name="lbl_export">Ekspordi</string>
     <string name="lbl_confirm_delete_playlist">Kas kustutad esitusloendi?</string>
-    <string name="lbl_edit">Muuda</string>
     <string name="lbl_filter">Filtreeri</string>
     <string name="lbl_duration">Kestus</string>
     <string name="lbl_sort">Järjesta</string>

@@ -93,7 +93,6 @@
     <string name="lbl_rename_playlist">பிளேலிச்ட்டை மறுபெயரிடுங்கள்</string>
     <string name="lbl_delete">நீக்கு</string>
     <string name="lbl_confirm_delete_playlist">பிளேலிச்ட்டை நீக்கவா?</string>
-    <string name="lbl_edit">தொகு</string>
     <string name="lbl_search">தேடல்</string>
     <string name="lbl_filter">வடிப்பி</string>
     <string name="lbl_filter_all">அனைத்தும்</string>

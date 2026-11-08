@@ -253,7 +253,6 @@
     <string name="lng_playlist_renamed">Popis pjesama je preimenovan</string>
     <string name="lng_playlist_deleted">Popis pjesama je izbrisan</string>
     <string name="lng_playlist_added">Dodano u popis pjesama</string>
-    <string name="lbl_edit">Uredi</string>
     <string name="fmt_deletion_info">Izbrisati %s? To je nepovratna radnja.</string>
     <string name="fmt_editing">Uređivanje popisa pjesama %s</string>
     <string name="lbl_appears_on">Sudjeluje u</string>

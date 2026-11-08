@@ -132,7 +132,6 @@
     <string name="lbl_live_group">रहना</string>
     <string name="lbl_rename_playlist">प्लेलिस्ट का नाम बदलें</string>
     <string name="lbl_delete">हटाएँ</string>
-    <string name="lbl_edit">संपादन करें</string>
     <string name="set_behavior">व्यवहार</string>
     <plurals name="fmt_artist_count">
         <item quantity="one">%d कलाकार</item>

@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/spacing_mid_medium"
-                android:contentDescription="@string/desc_song_handle"
+                android:importantForAccessibility="no"
                 app:icon="@drawable/ic_handle_24"
                 app:layout_constraintBottom_toBottomOf="@+id/song_album_cover"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -23,7 +23,6 @@
     <string name="lbl_artists">فنانون</string>
     <string name="lbl_new_playlist">قائمة تشغيل جديدة</string>
     <string name="lbl_rename_playlist">إعادة تسمية قائمة التشغيل</string>
-    <string name="lbl_edit">تعديل</string>
     <string name="lbl_queue">طابور</string>
     <string name="lbl_shuffle">خلط</string>
     <string name="lbl_artist_details">اذهب للفنان</string>

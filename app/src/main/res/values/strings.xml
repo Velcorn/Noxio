@@ -94,7 +94,6 @@
     <string name="lbl_rename_playlist">Rename playlist</string>
     <string name="lbl_delete">Delete</string>
     <string name="lbl_confirm_delete_playlist">Delete playlist?</string>
-    <string name="lbl_edit">Edit</string>
 
     <!-- Search for music -->
     <string name="lbl_search">Search</string>
@@ -170,6 +169,9 @@
     <string name="lbl_sleep_custom">Custom</string>
     <string name="lbl_sleep_minutes">Minutes</string>
     <string name="lbl_sleep_unit">min</string>
+    <string name="lbl_sort_custom">Custom order</string>
+    <string name="desc_back">Back</string>
+    <string name="hint_search_playlist">Search this playlist</string>
     <string name="lbl_sleep_finish_song">Finish last song</string>
     <string name="lbl_sleep_fade">Fade out before stopping</string>
     <string name="lbl_sleep_start">Start</string>

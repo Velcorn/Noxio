@@ -26,10 +26,12 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R as MR
 import com.google.android.material.shape.MaterialShapeDrawable
 import org.oxycblt.auxio.IntegerTable
+import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.ItemEditHeaderBinding
 import org.oxycblt.auxio.databinding.ItemEditableSongBinding
 import org.oxycblt.auxio.list.EditableListListener
@@ -105,8 +107,11 @@ class PlaylistDetailListAdapter(private val listener: Listener) :
 
     /** An extended [DetailListAdapter.Listener] for [PlaylistDetailListAdapter]. */
     interface Listener : DetailListAdapter.Listener<Song>, EditableListListener {
-        /** Called when the "edit" option is selected in the edit header. */
-        fun onStartEdit()
+        /** What the songs are filtered by, empty if they are not. */
+        val playlistQuery: String
+
+        /** Called when the text in the search field of the header changes. */
+        fun onSearchPlaylist(query: String)
     }
 
     /**
@@ -159,6 +164,19 @@ data class EditHeader(@StringRes override val titleRes: Int) : PlainHeader
  */
 private class EditHeaderViewHolder private constructor(private val binding: ItemEditHeaderBinding) :
     RecyclerView.ViewHolder(binding.root), PlaylistDetailListAdapter.ViewHolder {
+    private var listener: PlaylistDetailListAdapter.Listener? = null
+
+    init {
+        binding.headerSearchInput.doAfterTextChanged {
+            val query = it?.toString().orEmpty()
+            // Setting the text from the saved query in bind ends up here too, do not echo it.
+            val current = listener ?: return@doAfterTextChanged
+            if (query != current.playlistQuery) {
+                current.onSearchPlaylist(query)
+            }
+        }
+    }
+
     /**
      * Bind new data to this instance.
      *
@@ -166,31 +184,49 @@ private class EditHeaderViewHolder private constructor(private val binding: Item
      * @param listener An [PlaylistDetailListAdapter.Listener] to bind interactions to.
      */
     fun bind(editHeader: EditHeader, listener: PlaylistDetailListAdapter.Listener) {
+        this.listener = listener
         binding.headerTitle.text = binding.context.getString(editHeader.titleRes)
-        // Add a Tooltip based on the content description so that the purpose of this
-        // button can be clear.
-        binding.headerEdit.apply {
-            TooltipCompat.setTooltipText(this, contentDescription)
-            setOnClickListener { listener.onStartEdit() }
-        }
+        // Add a Tooltip based on the content description so that the purpose of these
+        // buttons can be clear.
         binding.headerSort.apply {
             TooltipCompat.setTooltipText(this, contentDescription)
             setOnClickListener { listener.onOpenSortMenu() }
         }
+        binding.headerSearch.apply {
+            TooltipCompat.setTooltipText(this, contentDescription)
+            setOnClickListener { showSearch(true) }
+        }
+        // A query that is still active (the header was scrolled away and came back) is shown again.
+        val query = listener.playlistQuery
+        binding.headerSearchInput.setText(query)
+        showSearch(query.isNotEmpty())
+    }
+
+    private fun showSearch(searching: Boolean) {
+        binding.headerTitle.isVisible = !searching
+        binding.headerSearchInput.isVisible = searching
+        if (searching) {
+            binding.headerSearchInput.requestFocus()
+        } else if (binding.headerSearchInput.text.isNotEmpty()) {
+            binding.headerSearchInput.setText("")
+        }
+        // While searching, the button closes the search instead.
+        binding.headerSearch.setIconResource(
+            if (searching) R.drawable.ic_close_24 else R.drawable.ic_search_20
+        )
+        binding.headerSearch.setOnClickListener { showSearch(!searching) }
     }
 
     override fun updateEditing(editing: Boolean) {
-        binding.headerEdit.apply {
+        // A filtered list cannot be reordered, so searching is only possible outside of editing.
+        binding.headerSearch.apply {
             isVisible = !editing
             isClickable = !editing
             isFocusable = !editing
-            jumpDrawablesToCurrentState()
         }
-        binding.headerSort.apply {
-            isVisible = editing
-            isClickable = editing
-            isFocusable = editing
-            jumpDrawablesToCurrentState()
+        if (editing) {
+            binding.headerSearchInput.isVisible = false
+            binding.headerTitle.isVisible = true
         }
     }
 
@@ -249,8 +285,6 @@ private constructor(private val binding: ItemEditableSongBinding) :
 
     init {
         binding.body.background = LayerDrawable(arrayOf(roundableBackground, liftableBackground))
-        // Holding the handle to drag would otherwise pop up its content description as a tooltip.
-        TooltipCompat.setTooltipText(binding.songDragHandle, null)
     }
 
     /**

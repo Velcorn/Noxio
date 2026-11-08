@@ -186,7 +186,7 @@ class MainFragment :
                                     MR.style.ShapeAppearanceOverlay_Material3_Corner_Top,
                                 )
                                 .build()
-                        fillColor = context.getAttrColorCompat(MR.attr.colorSurfaceContainerHigh)
+                        fillColor = context.getAttrColorCompat(MR.attr.colorSurface)
                     }
             }
         }

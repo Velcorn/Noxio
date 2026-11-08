@@ -51,7 +51,6 @@
     <string name="lbl_rename">नाम परिवर्तन गर्नुहोस्</string>
     <string name="lbl_delete">हटाउनुहोस्</string>
     <string name="lbl_confirm_delete_playlist">साँचै प्लेलिस्ट हटाउने?</string>
-    <string name="lbl_edit">सम्पादन गर्नुहोस्</string>
     <string name="lbl_search">खोज्नुहोस्</string>
     <string name="lbl_duration">अवधि</string>
     <string name="lbl_song_count">गीतको सङ्ख्या</string>
