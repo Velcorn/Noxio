@@ -15,7 +15,9 @@ android {
     namespace "org.oxycblt.auxio"
 
     defaultConfig {
-        applicationId namespace
+        // Noxio installs alongside upstream Auxio; the code namespace stays org.oxycblt.auxio
+        // to keep merging upstream changes painless.
+        applicationId "eu.willruth.noxio"
         versionName "4.1.5"
         versionCode 75
 

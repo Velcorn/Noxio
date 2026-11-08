@@ -101,7 +101,7 @@
         </service>
 
         <!--
-        Expose Auxio's cover data to the android system
+        Expose Noxio's cover data to the android system
         -->
         <provider
             android:name=".image.CoverProvider"
