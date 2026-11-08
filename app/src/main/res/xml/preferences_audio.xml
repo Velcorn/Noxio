@@ -27,6 +27,17 @@
             app:summary="@string/set_remember_pause_desc"
             app:title="@string/set_remember_pause" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="@string/set_key_sleep_shake"
+            app:summary="@string/set_sleep_shake_desc"
+            app:title="@string/set_sleep_shake" />
+
+        <Preference
+            app:key="@string/set_key_equalizer"
+            app:summary="@string/set_equalizer_desc"
+            app:title="@string/lbl_equalizer" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/set_replay_gain">

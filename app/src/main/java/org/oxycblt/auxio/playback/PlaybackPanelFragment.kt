@@ -19,22 +19,20 @@
 package org.oxycblt.auxio.playback
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.media.audiofx.AudioEffect
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.updatePadding
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.android.material.color.MaterialColors
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.abs
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentPlaybackPanelBinding
@@ -44,6 +42,9 @@ import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.playback.queue.QueueViewModel
 import org.oxycblt.auxio.playback.state.RepeatMode
+import org.oxycblt.auxio.playback.timer.SleepTimer
+import org.oxycblt.auxio.playback.timer.SleepTimerDialog
+import org.oxycblt.auxio.playback.timer.SleepTimerState
 import org.oxycblt.auxio.playback.ui.StyledSeekBar
 import org.oxycblt.auxio.playback.ui.stepper.Direction
 import org.oxycblt.auxio.playback.ui.stepper.StepperOverlay
@@ -54,7 +55,6 @@ import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.dampen
 import org.oxycblt.auxio.util.recycler
-import org.oxycblt.auxio.util.showToast
 import org.oxycblt.auxio.util.smoothScrollByPageTo
 import org.oxycblt.auxio.util.systemBarInsetsCompat
 import org.oxycblt.musikr.MusicParent
@@ -80,7 +80,7 @@ class PlaybackPanelFragment :
     private val detailModel: DetailViewModel by activityViewModels()
     private val listModel: ListViewModel by activityViewModels()
     private val queueModel: QueueViewModel by viewModels()
-    private var equalizerLauncher: ActivityResultLauncher<Intent>? = null
+    @Inject lateinit var sleepTimer: SleepTimer
     private var userAwarePagerCallback: UserAwarePagerCallback? = null
 
     override fun onCreateBinding(inflater: LayoutInflater) =
@@ -91,13 +91,6 @@ class PlaybackPanelFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onBindingCreated(binding, savedInstanceState)
-
-        // AudioEffect expects you to use startActivityForResult with the panel intent. There is no
-        // contract analogue for this intent, so the generic contract is used instead.
-        equalizerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                // Nothing to do
-            }
 
         // --- UI SETUP ---
         binding.root.setOnApplyWindowInsetsListener { view, insets ->
@@ -181,6 +174,7 @@ class PlaybackPanelFragment :
         collectImmediately(playbackModel.isPlaying, ::updatePlaying)
         collectImmediately(playbackModel.isShuffled, ::updateShuffled)
         collectImmediately(playbackModel.pagerQueue, ::updatePager)
+        collectImmediately(sleepTimer.state, ::updateSleepTimer)
     }
 
     // FIXME: Old code!! Maybe not necessary anymore?
@@ -219,7 +213,6 @@ class PlaybackPanelFragment :
     //    }
 
     override fun onDestroyBinding(binding: FragmentPlaybackPanelBinding) {
-        equalizerLauncher = null
         binding.playbackRepeat.clearPendingIcon()
         binding.playbackSong.isSelected = false
         binding.playbackArtist.isSelected = false
@@ -230,23 +223,9 @@ class PlaybackPanelFragment :
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_open_equalizer) {
-            // Launch the system equalizer app, if possible.
-            L.d("Launching equalizer")
-            val equalizerIntent =
-                Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
-                    // Provide audio session ID so the equalizer can show options for this app
-                    // in particular.
-                    .putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playbackModel.currentAudioSessionId)
-                    // Signal music type so that the equalizer settings are appropriate for
-                    // music playback.
-                    .putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
-            try {
-                requireNotNull(equalizerLauncher) { "Equalizer panel launcher was not available" }
-                    .launch(equalizerIntent)
-            } catch (e: ActivityNotFoundException) {
-                requireContext().showToast(R.string.err_no_app)
-            }
+        if (item.itemId == R.id.action_sleep_timer) {
+            L.d("Opening sleep timer")
+            SleepTimerDialog().show(childFragmentManager, SleepTimerDialog.TAG)
             return true
         }
 
@@ -255,6 +234,22 @@ class PlaybackPanelFragment :
 
     override fun onSeekConfirmed(positionDs: Long) {
         playbackModel.seekTo(positionDs)
+    }
+
+    private fun updateSleepTimer(state: SleepTimerState) {
+        // Tint the toolbar button while a timer is running so it is visible at a glance.
+        val button =
+            requireBinding().playbackToolbar.getMenuButton(R.id.action_sleep_timer) ?: return
+        val color =
+            if (state is SleepTimerState.Active) {
+                MaterialColors.getColor(button, androidx.appcompat.R.attr.colorPrimary)
+            } else {
+                MaterialColors.getColor(
+                    button,
+                    com.google.android.material.R.attr.colorOnSurfaceVariant,
+                )
+            }
+        button.iconTint = ColorStateList.valueOf(color)
     }
 
     private fun updateSong(song: Song?) {

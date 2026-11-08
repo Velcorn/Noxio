@@ -25,6 +25,8 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.state.PlaybackStateManagerImpl
+import org.oxycblt.auxio.playback.timer.SleepTimer
+import org.oxycblt.auxio.playback.timer.SleepTimerImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,6 +34,8 @@ interface PlaybackModule {
     @Singleton
     @Binds
     fun stateManager(playbackManager: PlaybackStateManagerImpl): PlaybackStateManager
+
+    @Singleton @Binds fun sleepTimer(sleepTimer: SleepTimerImpl): SleepTimer
 
     @Binds fun settings(playbackSettings: PlaybackSettingsImpl): PlaybackSettings
 }

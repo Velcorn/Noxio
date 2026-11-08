@@ -62,6 +62,7 @@ import org.oxycblt.auxio.playback.state.RawQueue
 import org.oxycblt.auxio.playback.state.RepeatMode
 import org.oxycblt.auxio.playback.state.ShuffleMode
 import org.oxycblt.auxio.playback.state.StateAck
+import org.oxycblt.auxio.playback.timer.SleepTimer
 import org.oxycblt.musikr.MusicParent
 import org.oxycblt.musikr.Song
 import timber.log.Timber as L
@@ -77,6 +78,7 @@ class ExoPlaybackStateHolder(
     private val replayGainProcessor: ReplayGainAudioProcessor,
     private val musicRepository: MusicRepository,
     private val imageSettings: ImageSettings,
+    sleepTimer: SleepTimer,
 ) :
     PlaybackStateHolder,
     Player.Listener,
@@ -88,6 +90,12 @@ class ExoPlaybackStateHolder(
     private val restoreScope = CoroutineScope(Dispatchers.IO + saveJob)
     private var currentSaveJob: Job? = null
     private var openAudioEffectSession = false
+    private var sleepPauseAtEnd = false
+    private val sleepTimerController =
+        SleepTimerController(context, player, playbackManager, sleepTimer) {
+            sleepPauseAtEnd = it
+            updatePauseOnRepeat()
+        }
 
     var sessionOngoing = false
         private set
@@ -99,10 +107,12 @@ class ExoPlaybackStateHolder(
         replayGainProcessor.attach()
         playbackSettings.registerListener(this)
         imageSettings.registerListener(this)
+        sleepTimerController.attach()
     }
 
     fun release() {
         saveJob.cancel()
+        sleepTimerController.release()
         playbackManager.unregisterStateHolder(this)
         musicRepository.removeUpdateListener(this)
         player.removeListener(this)
@@ -468,6 +478,10 @@ class ExoPlaybackStateHolder(
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
         super.onPlayWhenReadyChanged(playWhenReady, reason)
 
+        if (reason == Player.PLAY_WHEN_READY_CHANGE_REASON_END_OF_MEDIA_ITEM) {
+            sleepTimerController.onTrackEnded()
+        }
+
         if (player.playWhenReady) {
             // Mark that we have started playing so that the notification can now be posted.
             L.d("Player has started playing")
@@ -560,7 +574,8 @@ class ExoPlaybackStateHolder(
 
     private fun updatePauseOnRepeat() {
         player.pauseAtEndOfMediaItems =
-            player.repeatMode == Player.REPEAT_MODE_ONE && playbackSettings.pauseOnRepeat
+            sleepPauseAtEnd ||
+                (player.repeatMode == Player.REPEAT_MODE_ONE && playbackSettings.pauseOnRepeat)
     }
 
     private fun save(cb: () -> Unit) {
@@ -654,6 +669,7 @@ class ExoPlaybackStateHolder(
         private val replayGainProcessor: ReplayGainAudioProcessor,
         private val musicRepository: MusicRepository,
         private val imageSettings: ImageSettings,
+        private val sleepTimer: SleepTimer,
     ) {
         fun create(): ExoPlaybackStateHolder {
             // Since Auxio is a music player, only specify an audio renderer to save
@@ -698,6 +714,7 @@ class ExoPlaybackStateHolder(
                 replayGainProcessor,
                 musicRepository,
                 imageSettings,
+                sleepTimer,
             )
         }
     }

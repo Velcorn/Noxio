@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import javax.inject.Inject
 import org.oxycblt.auxio.playback.PlaybackSettings
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
+import org.oxycblt.auxio.playback.timer.SleepTimer
 import org.oxycblt.auxio.widgets.WidgetComponent
 import org.oxycblt.auxio.widgets.WidgetProvider
 import timber.log.Timber as L
@@ -40,6 +41,7 @@ private constructor(
     private val context: Context,
     private val playbackManager: PlaybackStateManager,
     private val playbackSettings: PlaybackSettings,
+    private val sleepTimer: SleepTimer,
     private val widgetComponent: WidgetComponent,
     private val onExitRequested: () -> Unit,
 ) : BroadcastReceiver() {
@@ -50,6 +52,7 @@ private constructor(
     constructor(
         private val playbackManager: PlaybackStateManager,
         private val playbackSettings: PlaybackSettings,
+        private val sleepTimer: SleepTimer,
     ) {
         fun create(
             context: Context,
@@ -60,6 +63,7 @@ private constructor(
                 context,
                 playbackManager,
                 playbackSettings,
+                sleepTimer,
                 widgetComponent,
                 onExitRequested,
             )
@@ -129,6 +133,10 @@ private constructor(
                 L.d("Received exit event")
                 onExitRequested()
             }
+            PlaybackActions.ACTION_RESET_SLEEP_TIMER -> {
+                L.d("Received sleep timer reset event")
+                sleepTimer.reset()
+            }
             WidgetProvider.ACTION_WIDGET_UPDATE -> {
                 L.d("Received widget update event")
                 widgetComponent.update()
@@ -168,6 +176,7 @@ private constructor(
                 addAction(PlaybackActions.ACTION_PLAY_PAUSE)
                 addAction(PlaybackActions.ACTION_SKIP_NEXT)
                 addAction(PlaybackActions.ACTION_EXIT)
+                addAction(PlaybackActions.ACTION_RESET_SLEEP_TIMER)
                 addAction(WidgetProvider.ACTION_WIDGET_UPDATE)
             }
     }
