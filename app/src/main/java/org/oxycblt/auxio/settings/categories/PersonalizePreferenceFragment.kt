@@ -19,9 +19,11 @@
 package org.oxycblt.auxio.settings.categories
 
 import androidx.navigation.fragment.findNavController
+import androidx.preference.Preference
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.settings.BasePreferenceFragment
 import org.oxycblt.auxio.settings.ui.WrappedDialogPreference
+import org.oxycblt.auxio.ui.LauncherIcon
 import org.oxycblt.auxio.util.navigateSafe
 import timber.log.Timber as L
 
@@ -35,6 +37,20 @@ class PersonalizePreferenceFragment : BasePreferenceFragment(R.xml.preferences_p
         if (preference.key == getString(R.string.set_key_home_tabs)) {
             L.d("Navigating to home tab dialog")
             findNavController().navigateSafe(PersonalizePreferenceFragmentDirections.tabSettings())
+        }
+    }
+
+    override fun onSetupPreference(preference: Preference) {
+        if (preference.key == getString(R.string.set_key_launcher_icon)) {
+            L.d("Configuring launcher icon setting")
+            preference.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, value ->
+                    LauncherIcon.fromIntCode(value as Int)?.let {
+                        L.d("Switching launcher icon to $it")
+                        LauncherIcon.apply(requireContext(), it)
+                    }
+                    true
+                }
         }
     }
 }

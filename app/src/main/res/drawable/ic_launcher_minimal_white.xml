@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Minimal icon artwork: a flat white silhouette of the crescent, the play button and a star. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M47 41L47 67L68 54Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M75 32Q77.1 35.9 81 38Q77.1 40.1 75 44Q72.9 40.1 69 38Q72.9 35.9 75 32Z" />
+</vector>

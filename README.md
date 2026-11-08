@@ -30,6 +30,7 @@ upstream issues should not be reported against it.
 | Sleep timer | none | Moon icon above the seek bar. End of track, 30 min, custom minutes or 60 min, with fade-out. Remembers your last choice. Restart it from the notification or by shaking the device. |
 | Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month or year. Colorful cards you can share as an image, CSV export and import (Musicolet compatible) with an optional weekly backup to a folder. Stored on the device only. |
 | Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use |
+| App icon | One icon | Default, or a minimal white-on-black or black-on-white one, chosen in the settings |
 | Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Audio |
 | Package name | `org.oxycblt.auxio` | `de.devfin.noxio`, so it installs next to Auxio |
 
@@ -52,15 +53,12 @@ Clickable mockups of the added features, with the same behavior as the app. They
 
 Screenshots from a real device will be added here once the features have been tested on one.
 
-## Minimal icon for launchers
+## Minimal icon
 
-Noxio doubles as a tiny icon pack, so launchers that support icon packs (like Kvaesitso, or Nova) can show a flat,
-minimal version of the icon: a crescent, the play button and a star, in plain white or plain black. It only contains
-that one icon, and your other icons are left alone.
-
-In Kvaesitso, pick a custom icon for Noxio (long-press the app and edit its icon) and choose "Noxio" from the list of
-icon packs. The exact menu names depend on the launcher version. The pack data is in `res/xml/appfilter.xml` and
-`res/xml/drawable.xml`, the artwork in `res/drawable/noxio_minimal*.xml`.
+Besides the default icon, Noxio has two minimal versions: a flat white crescent, play button and star on black, and the
+same in black on white. Switch between them in Settings > Personalize > App icon. Any launcher shows the choice, since
+it is the app's own launcher icon, and launchers that support themed icons (like Kvaesitso) tint the single-color layer
+with your theme colors.
 
 ## Branches
 

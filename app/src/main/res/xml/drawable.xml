@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- The icons that can be picked by hand in a launcher. -->
-<resources>
-    <item drawable="noxio_minimal" />
-    <item drawable="noxio_minimal_dark" />
-</resources>

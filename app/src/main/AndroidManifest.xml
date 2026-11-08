@@ -54,16 +54,6 @@
             android:windowSoftInputMode="adjustNothing">
 
             <intent-filter>
-                <!-- Expose that we are a music player. -->
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.MUSIC_PLAYER" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.APP_MUSIC" />
-            </intent-filter>
-
-            <intent-filter>
                 <!--
                 Signal that we can take audio of *any* format, file or content. This is important,
                 as some apps use this to determine if Auxio is eligible to be a default music
@@ -85,6 +75,67 @@
             </intent-filter>
         </activity>
 
+        <!--
+        The launcher entries. Exactly one of these is enabled, the user picks which one in the
+        settings (see LauncherIcon), and each has its own icon.
+        -->
+        <activity-alias
+            android:name=".MainActivityDefault"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/info_app_name"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <!-- Expose that we are a music player. -->
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MUSIC_PLAYER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.APP_MUSIC" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityMinimalDark"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_minimal_dark"
+            android:label="@string/info_app_name"
+            android:roundIcon="@mipmap/ic_launcher_minimal_dark"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <!-- Expose that we are a music player. -->
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MUSIC_PLAYER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.APP_MUSIC" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityMinimalLight"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_minimal_light"
+            android:label="@string/info_app_name"
+            android:roundIcon="@mipmap/ic_launcher_minimal_light"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <!-- Expose that we are a music player. -->
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MUSIC_PLAYER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.APP_MUSIC" />
+            </intent-filter>
+        </activity-alias>
+
 
         <!--
         Service handling music playback, system components, and state saving.
@@ -104,23 +155,6 @@
         <!--
         Expose Noxio's cover data to the android system
         -->
-        <!--
-        Lets launchers that support icon packs (like Kvaesitso) offer the minimal Noxio icon, see
-        res/xml/appfilter.xml and res/xml/drawable.xml
-        -->
-        <activity
-            android:name=".IconPackActivity"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:theme="@android:style/Theme.NoDisplay">
-            <intent-filter>
-                <action android:name="org.adw.ActivityStarter.THEMES" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.novalauncher.THEME" />
-            </intent-filter>
-        </activity>
-
         <!-- Hands shared stats images to other apps -->
         <provider
             android:name="androidx.core.content.FileProvider"

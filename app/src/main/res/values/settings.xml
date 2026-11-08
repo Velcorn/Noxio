@@ -43,6 +43,7 @@
     <string name="set_key_remember_pause" translatable="false">auxio_remember_pause</string>
     <string name="set_key_stats_backup" translatable="false">noxio_stats_backup</string>
     <string name="set_key_stats_backup_folder" translatable="false">noxio_stats_backup_folder</string>
+    <string name="set_key_launcher_icon" translatable="false">noxio_launcher_icon</string>
     <string name="set_key_sleep_shake" translatable="false">noxio_sleep_shake</string>
     <string name="set_key_equalizer" translatable="false">noxio_equalizer</string>
 
@@ -85,6 +86,18 @@
         <item>@integer/theme_auto</item>
         <item>@integer/theme_light</item>
         <item>@integer/theme_dark</item>
+    </integer-array>
+
+    <string-array name="entries_launcher_icon">
+        <item>@string/set_launcher_icon_default</item>
+        <item>@string/set_launcher_icon_minimal_dark</item>
+        <item>@string/set_launcher_icon_minimal_light</item>
+    </string-array>
+
+    <integer-array name="values_launcher_icon">
+        <item>@integer/launcher_icon_default</item>
+        <item>@integer/launcher_icon_minimal_dark</item>
+        <item>@integer/launcher_icon_minimal_light</item>
     </integer-array>
 
     <string-array name="entries_cover_mode">
@@ -183,6 +196,9 @@
     <integer name="action_mode_repeat">0xA11A</integer>
     <integer name="action_mode_shuffle">0xA11B</integer>
 
+    <integer name="launcher_icon_default">0xA400</integer>
+    <integer name="launcher_icon_minimal_dark">0xA401</integer>
+    <integer name="launcher_icon_minimal_light">0xA402</integer>
     <integer name="cover_mode_off">0xA11C</integer>
     <integer name="cover_mode_save_space">0xA125</integer>
     <integer name="cover_mode_balanced">0xA11D</integer>
