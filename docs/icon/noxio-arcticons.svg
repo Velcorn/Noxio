@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Noxio in the Arcticons style: 48 x 48, 1 px white strokes, round caps and joins, one 1.5 px dot,
+     fits inside the 43 px circle of the Arcticons template. Draft for a pull request to Arcticons-Team/Arcticons. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <g fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M34.28 7.43A19.5 19.5 0 1 0 34.28 40.57A17.875 17.875 0 1 1 34.28 7.43Z"/>
+    <path d="M19.45 15.55V32.45L33.1 24Z"/>
+  </g>
+  <circle cx="37.65" cy="13.6" r="0.75" fill="#ffffff"/>
+</svg>
