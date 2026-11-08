@@ -55,7 +55,7 @@ Screenshots from a real device will be added here once the features have been te
 ## Minimal icon for launchers
 
 Noxio doubles as a tiny icon pack, so launchers that support icon packs (like Kvaesitso, or Nova) can show a flat,
-minimal version of the icon: a crescent, the play button and a star, in a light and a dark color. It only contains
+minimal version of the icon: a crescent, the play button and a star, in plain white or plain black. It only contains
 that one icon, and your other icons are left alone.
 
 In Kvaesitso, pick a custom icon for Noxio (long-press the app and edit its icon) and choose "Noxio" from the list of
