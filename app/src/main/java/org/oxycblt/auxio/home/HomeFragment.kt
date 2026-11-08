@@ -198,6 +198,11 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
                 homeModel.showSettings()
                 true
             }
+            R.id.action_stats -> {
+                L.d("Navigating to listening stats")
+                homeModel.showStats()
+                true
+            }
             R.id.action_about -> {
                 L.d("Navigating to about")
                 homeModel.showAbout()

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/about"
             app:destination="@id/about_fragment" />
+        <action
+            android:id="@+id/stats"
+            app:destination="@id/stats_fragment" />
     </fragment>
     <fragment
         android:id="@+id/root_preferences_fragment"
@@ -105,4 +108,9 @@
         android:name="org.oxycblt.auxio.settings.AboutFragment"
         android:label="dialog_about"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/stats_fragment"
+        android:name="org.oxycblt.auxio.stats.StatsFragment"
+        android:label="stats_fragment"
+        tools:layout="@layout/fragment_stats" />
 </navigation>

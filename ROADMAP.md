@@ -6,7 +6,7 @@
 - [ ] Rebrand: icon, fastlane metadata, about screen
 
 ## Later
-- [ ] Listening stats (own Room database; week / month / year; top songs, artists, albums, total time)
+- [ ] Listening stats: implemented, needs a build and on-device testing (Room database, week / month / year, top songs, artists, albums, total time; open it from the home overflow menu)
 - [ ] Shareable "Wrapped" cards
 
 ## Ideas

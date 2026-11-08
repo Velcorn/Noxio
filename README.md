@@ -27,7 +27,7 @@ upstream issues should not be reported against it.
 Planned and in progress, tracked in [ROADMAP.md](/ROADMAP.md):
 
 - [ ] Sleep timer, reachable from the now playing screen
-- [ ] Listening stats: weekly, monthly and yearly top songs, artists and albums, a barebones "Wrapped"
+- [ ] Listening stats: weekly, monthly and yearly top songs, artists and albums, a barebones "Wrapped" (implemented, untested; Home menu > Listening stats)
 - [ ] Assorted smaller tweaks
 
 Everything else is inherited from Auxio: Media3 playback, gapless playback, ReplayGain, rich tag support (multiple

@@ -120,6 +120,22 @@
     <string name="lbl_playback">Now playing</string>
     <string name="lbl_equalizer">Equalizer</string>
     <string name="lbl_sleep_timer">Sleep timer</string>
+    <string name="lbl_stats">Listening stats</string>
+    <string name="lbl_stats_week">Week</string>
+    <string name="lbl_stats_month">Month</string>
+    <string name="lbl_stats_year">Year</string>
+    <string name="lbl_stats_previous">Previous period</string>
+    <string name="lbl_stats_next">Next period</string>
+    <string name="lbl_stats_top_songs">Top songs</string>
+    <string name="lbl_stats_top_artists">Top artists</string>
+    <string name="lbl_stats_top_albums">Top albums</string>
+    <string name="lbl_stats_empty">Nothing played in this period yet. A song counts after 30 seconds of listening.</string>
+    <string name="fmt_stats_time_hm">%1$d h %2$d min</string>
+    <string name="fmt_stats_time_m">%1$d min</string>
+    <plurals name="fmt_stats_plays">
+        <item quantity="one">%d play</item>
+        <item quantity="other">%d plays</item>
+    </plurals>
     <string name="lbl_sleep_end_of_track">End of track</string>
     <string name="lbl_sleep_custom">Custom</string>
     <string name="lbl_sleep_minutes">Minutes</string>

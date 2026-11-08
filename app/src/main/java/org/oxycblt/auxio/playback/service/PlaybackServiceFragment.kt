@@ -39,6 +39,7 @@ import org.oxycblt.auxio.playback.state.Progression
 import org.oxycblt.auxio.playback.timer.SleepTimer
 import org.oxycblt.auxio.playback.timer.SleepTimerMode
 import org.oxycblt.auxio.playback.timer.SleepTimerState
+import org.oxycblt.auxio.stats.PlayRecorder
 import org.oxycblt.auxio.widgets.WidgetComponent
 import org.oxycblt.musikr.MusicParent
 import org.oxycblt.musikr.Song
@@ -55,6 +56,7 @@ private constructor(
     sessionHolderFactory: MediaSessionHolder.Factory,
     widgetComponentFactory: WidgetComponent.Factory,
     systemReceiverFactory: SystemPlaybackReceiver.Factory,
+    playRecorderFactory: PlayRecorder.Factory,
 ) : PlaybackStateManager.Listener {
     class Factory
     @Inject
@@ -66,6 +68,7 @@ private constructor(
         private val sessionHolderFactory: MediaSessionHolder.Factory,
         private val widgetComponentFactory: WidgetComponent.Factory,
         private val systemReceiverFactory: SystemPlaybackReceiver.Factory,
+        private val playRecorderFactory: PlayRecorder.Factory,
     ) {
         fun create(context: Context, foregroundListener: ForegroundListener) =
             PlaybackServiceFragment(
@@ -78,6 +81,7 @@ private constructor(
                 sessionHolderFactory,
                 widgetComponentFactory,
                 systemReceiverFactory,
+                playRecorderFactory,
             )
     }
 
@@ -93,6 +97,8 @@ private constructor(
             widgetComponent,
             onExitRequested = { playbackManager.endSession() },
         )
+
+    private val playRecorder = playRecorderFactory.create()
 
     private fun scheduleAutoStop() {
         autoStopJob?.cancel()
@@ -123,6 +129,7 @@ private constructor(
         sessionHolder.attach()
         widgetComponent.attach()
         systemReceiver.attach()
+        playRecorder.attach()
         playbackManager.addListener(this)
         scope.launch {
             sleepTimer.state.collect { state ->
@@ -187,6 +194,7 @@ private constructor(
         autoStopJob?.cancel()
         waitJob.cancel()
         playbackManager.removeListener(this)
+        playRecorder.release()
         systemReceiver.release()
         widgetComponent.release()
         sessionHolder.release()
