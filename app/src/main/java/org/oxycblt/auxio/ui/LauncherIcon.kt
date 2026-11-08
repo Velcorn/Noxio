@@ -32,10 +32,8 @@ import android.content.pm.PackageManager
 enum class LauncherIcon(val intCode: Int, private val aliasName: String) {
     /** The full color icon. */
     DEFAULT(0xA400, "MainActivityDefault"),
-    /** A flat white silhouette on black. */
-    MINIMAL_BLACK(0xA401, "MainActivityMinimalBlack"),
     /** A flat white silhouette without a background. */
-    MINIMAL_TRANSPARENT(0xA402, "MainActivityMinimalTransparent");
+    MINIMAL(0xA401, "MainActivityMinimal");
 
     private fun component(context: Context) =
         ComponentName(context.packageName, "org.oxycblt.auxio.$aliasName")

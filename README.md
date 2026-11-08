@@ -30,7 +30,7 @@ upstream issues should not be reported against it.
 | Sleep timer | none | Moon icon above the seek bar. End of track, 30 min, custom minutes or 60 min, with fade-out. Remembers your last choice. Restart it from the notification or by shaking the device. |
 | Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month or year. Colorful cards you can share as an image, CSV export and import (Musicolet compatible) with an optional weekly backup to a folder. Stored on the device only. |
 | Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use |
-| App icon | One icon | Default, or a minimal white silhouette on black or with no background, chosen in the settings |
+| App icon | One icon | Default, or a minimal white silhouette with no background, chosen in the settings |
 | Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Audio |
 | Package name | `org.oxycblt.auxio` | `de.devfin.noxio`, so it installs next to Auxio |
 
@@ -55,10 +55,10 @@ Screenshots from a real device will be added here once the features have been te
 
 ## Minimal icon
 
-Besides the default icon, Noxio has two minimal versions: a flat white crescent, play button and star on black, and the
-same in white with no background at all. Switch between them in Settings > Personalize > App icon. Any launcher shows the
-choice, since it is the app's own launcher icon, and launchers that support themed icons (like Kvaesitso) tint the
-single-color layer with your theme colors.
+Besides the default icon, Noxio has a minimal version: a flat white crescent, play button and star with no
+background at all, so it sits straight on your wallpaper. Switch to it in Settings > Personalize > App icon. Any
+launcher shows the choice, since it is the app's own launcher icon, and launchers that support themed icons (like
+Kvaesitso) tint the single-color layer with your theme colors.
 
 ## Branches
 

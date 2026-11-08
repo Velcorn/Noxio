@@ -104,10 +104,10 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
       '<section class="card"><h2>App icon</h2><p>Full color on pure black, as the adaptive icon looks with the launcher mask you chose above.</p><div class="stage">' + icon(180, '#000', 'color') + '</div>' +
       '<div class="row">' + [96, 64, 48, 36].map(function (s) { return '<div class="tile">' + icon(s, '#000', 'color') + '<div class="cap">' + s + ' px</div></div>'; }).join('') + '</div></section>' +
 
-      '<section class="card"><h2>App icon choices</h2><p>Settings > Personalize > App icon. Default, or one of two flat white minimal versions: on black, or with no background so it sits straight on your wallpaper. Launchers with themed icons tint the single-color layer instead.</p><div class="row">' +
+      '<section class="card"><h2>App icon choices</h2><p>Settings > Personalize > App icon. The default icon, or a flat white minimal version with no background, so it sits straight on your wallpaper. Launchers with themed icons tint the single-color layer instead.</p><div class="row">' +
       '<div class="tile">' + icon(88, '#000', 'color') + '<div class="cap">Default</div></div>' +
-      '<div class="tile">' + icon(88, '#000', 'mono', '#fff') + '<div class="cap">Minimal, white on black</div></div>' +
-      '<div class="tile"><div class="checker" style="border-radius:50%;padding:0;overflow:hidden;width:88px;height:88px">' + icon(88, null, 'mono', '#fff') + '</div><div class="cap">Minimal, no background</div></div></div></section>' +
+      '<div class="tile"><div style="width:88px;height:88px;border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#3b3a68,#1c2a44 55%,#2d1f3a);display:grid;place-items:center">' + icon(88, null, 'mono', '#fff', 'noclip') + '</div><div class="cap">Minimal, on a wallpaper</div></div>' +
+      '<div class="tile"><div style="width:88px;height:88px;border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#ffd9a8,#f7a1b5 55%,#a99cff);display:grid;place-items:center">' + icon(88, null, 'mono', '#fff', 'noclip') + '</div><div class="cap">Minimal, on a light wallpaper</div></div></div></section>' +
 
       '<section class="card"><h2>Adaptive layers</h2><p>Android draws the icon from layers, so the launcher can mask, move and tint them.</p><div class="row">' +
       '<div class="tile">' + layer(96, 'bg') + '<div class="cap">Background</div></div>' +

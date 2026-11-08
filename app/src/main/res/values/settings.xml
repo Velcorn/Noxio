@@ -90,14 +90,12 @@
 
     <string-array name="entries_launcher_icon">
         <item>@string/set_launcher_icon_default</item>
-        <item>@string/set_launcher_icon_minimal_black</item>
-        <item>@string/set_launcher_icon_minimal_transparent</item>
+        <item>@string/set_launcher_icon_minimal</item>
     </string-array>
 
     <integer-array name="values_launcher_icon">
         <item>@integer/launcher_icon_default</item>
-        <item>@integer/launcher_icon_minimal_black</item>
-        <item>@integer/launcher_icon_minimal_transparent</item>
+        <item>@integer/launcher_icon_minimal</item>
     </integer-array>
 
     <string-array name="entries_cover_mode">
@@ -197,8 +195,7 @@
     <integer name="action_mode_shuffle">0xA11B</integer>
 
     <integer name="launcher_icon_default">0xA400</integer>
-    <integer name="launcher_icon_minimal_black">0xA401</integer>
-    <integer name="launcher_icon_minimal_transparent">0xA402</integer>
+    <integer name="launcher_icon_minimal">0xA401</integer>
     <integer name="cover_mode_off">0xA11C</integer>
     <integer name="cover_mode_save_space">0xA125</integer>
     <integer name="cover_mode_balanced">0xA11D</integer>
