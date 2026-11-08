@@ -51,10 +51,15 @@ object StatsCsv {
         writer.write(HISTORY_HEADER)
         writer.write("\n")
         for (event in events) {
+            // Plays from before Noxio have no date, which stays empty so a restore keeps them so.
             val time =
-                DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
-                    Instant.ofEpochMilli(event.startedAt).atZone(zone).withNano(0)
-                )
+                if (event.startedAt == PlayEvent.BASELINE_TIME) {
+                    ""
+                } else {
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
+                        Instant.ofEpochMilli(event.startedAt).atZone(zone).withNano(0)
+                    )
+                }
             writer.write(row(songColumns(event, plays = 1) + listOf(time, "${event.listenedMs}")))
         }
         writer.flush()

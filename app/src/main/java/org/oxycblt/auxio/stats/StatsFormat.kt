@@ -64,6 +64,7 @@ object StatsFormat {
                         DateUtils.FORMAT_NO_MONTH_DAY or
                         DateUtils.FORMAT_SHOW_YEAR,
                 )
+            StatsPeriod.ALL -> context.getString(R.string.lbl_stats_all)
             StatsPeriod.YEAR ->
                 Calendar.getInstance()
                     .apply { timeInMillis = range.first }

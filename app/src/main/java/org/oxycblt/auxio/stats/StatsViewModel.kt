@@ -114,9 +114,9 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
     suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream) =
         repository.exportMostPlayedCsv(range, out)
 
-    /** Add the plays of an imported file. Must be called off the main thread. */
-    suspend fun importCsv(parsed: StatsCsvImport.Parsed, month: LongRange?): Int {
-        val added = repository.importCsv(parsed, month)
+    /** Add the plays of imported files. Must be called off the main thread. */
+    suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
+        val added = repository.importCsv(files)
         refresh.value += 1
         return added
     }

@@ -19,7 +19,6 @@
 package org.oxycblt.auxio.stats
 
 import java.time.OffsetDateTime
-import java.util.Calendar
 
 /** Reads the CSV files written by [StatsCsv], and Musicolet's "Most played songs" exports. */
 object StatsCsvImport {
@@ -61,16 +60,23 @@ object StatsCsvImport {
         return if ("PLAYED_AT" in columns) {
             Parsed.History(
                 body.mapNotNull { row ->
+                    // An empty time is a play from before Noxio (see PlayEvent.BASELINE_TIME).
                     val playedAt =
-                        runCatching { OffsetDateTime.parse(cell(row, "PLAYED_AT")).toInstant() }
-                            .getOrNull() ?: return@mapNotNull null
+                        cell(row, "PLAYED_AT").let { raw ->
+                            if (raw.isEmpty()) {
+                                PlayEvent.BASELINE_TIME
+                            } else {
+                                runCatching { OffsetDateTime.parse(raw).toInstant().toEpochMilli() }
+                                    .getOrNull() ?: return@mapNotNull null
+                            }
+                        }
                     val duration = cell(row, "DURATION_MS").toLongOrNull() ?: 0L
                     PlayEvent(
                         songUid = HISTORY_PREFIX + identity(row, ::cell),
                         title = cell(row, "TITLE"),
                         artists = splitArtists(cell(row, "ARTIST")),
                         album = cell(row, "ALBUM"),
-                        startedAt = playedAt.toEpochMilli(),
+                        startedAt = playedAt,
                         listenedMs = cell(row, "LISTENED_MS").toLongOrNull() ?: duration,
                         durationMs = duration,
                         filePath = cell(row, "FILE_PATH"),
@@ -105,47 +111,30 @@ object StatsCsvImport {
     }
 
     /**
-     * Turn play counts into individual plays, spread evenly over [range]. A list from Musicolet
-     * says how often a song was played, but not when, so this is the least distorting choice for
-     * the week and month views.
+     * Turn play counts into individual plays from before Noxio. A list from Musicolet says how
+     * often a song was played, but not when, so these plays get no date ([PlayEvent.BASELINE_TIME])
+     * and only show up in the all time stats.
      */
-    fun spreadOver(rows: List<MostPlayedRow>, range: LongRange): List<PlayEvent> {
-        val length = (range.last + 1 - range.first).coerceAtLeast(1)
-        return rows.flatMap { row ->
-            (0 until row.plays).map { i ->
-                PlayEvent(
-                    songUid = IMPORT_PREFIX + row.filePath.ifEmpty { row.title + row.artist },
-                    title = row.title,
-                    artists = splitArtists(row.artist),
-                    album = row.album,
-                    startedAt = range.first + ((i + 0.5) / row.plays * length).toLong(),
-                    listenedMs = row.durationMs,
-                    durationMs = row.durationMs,
-                    filePath = row.filePath,
-                    albumArtist = splitArtists(row.albumArtist),
-                    genre = row.genre,
-                    year = row.year,
-                )
-            }
+    fun baselineEvents(rows: List<MostPlayedRow>): List<PlayEvent> = rows.flatMap { row ->
+        (0 until row.plays).map {
+            PlayEvent(
+                songUid = IMPORT_PREFIX + row.filePath.ifEmpty { row.title + row.artist },
+                title = row.title,
+                artists = splitArtists(row.artist),
+                album = row.album,
+                startedAt = PlayEvent.BASELINE_TIME,
+                listenedMs = row.durationMs,
+                durationMs = row.durationMs,
+                filePath = row.filePath,
+                albumArtist = splitArtists(row.albumArtist),
+                genre = row.genre,
+                year = row.year,
+            )
         }
     }
 
     /** What makes two plays the same one: the second it started in, and the song. */
     fun historyKey(event: PlayEvent) = "${event.startedAt / 1000}|${event.title}|${event.album}"
-
-    /**
-     * The time range of a month, for the plays of a most-played list. The range of the current
-     * month ends now, so nothing is placed in the future.
-     */
-    fun monthRange(year: Int, month: Int, nowMs: Long = System.currentTimeMillis()): LongRange {
-        val calendar = Calendar.getInstance()
-        calendar.clear()
-        calendar.set(year, month, 1)
-        val start = calendar.timeInMillis
-        calendar.add(Calendar.MONTH, 1)
-        val end = minOf(calendar.timeInMillis, nowMs).coerceAtLeast(start + 1)
-        return start until end
-    }
 
     private fun identity(row: List<String>, cell: (List<String>, String) -> String) =
         cell(row, "FILE_PATH").ifEmpty { cell(row, "TITLE") + cell(row, "ARTIST") }
@@ -200,7 +189,7 @@ object StatsCsvImport {
         return rows.filter { cells -> cells.any { it.isNotEmpty() } }
     }
 
-    /** Marks plays made up from a most-played list, so a re-import of that month replaces them. */
+    /** Marks plays made up from a most-played list. */
     const val IMPORT_PREFIX = "import:"
     private const val HISTORY_PREFIX = "csv:"
     private const val MAX_PLAYS_PER_SONG = 10_000

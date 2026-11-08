@@ -48,6 +48,8 @@ enum class StatsPeriod(val calendarField: Int) {
     WEEK(Calendar.WEEK_OF_YEAR),
     MONTH(Calendar.MONTH),
     YEAR(Calendar.YEAR),
+    /** Everything, including the undated plays imported from before Noxio. */
+    ALL(Calendar.ERA),
 }
 
 /**
@@ -62,6 +64,9 @@ fun statsRange(
     nowMs: Long = System.currentTimeMillis(),
     calendar: Calendar = Calendar.getInstance(),
 ): LongRange {
+    if (period == StatsPeriod.ALL) {
+        return PlayEvent.BASELINE_TIME until Long.MAX_VALUE
+    }
     calendar.timeInMillis = nowMs
     calendar.set(Calendar.HOUR_OF_DAY, 0)
     calendar.set(Calendar.MINUTE, 0)
@@ -71,6 +76,7 @@ fun statsRange(
         StatsPeriod.WEEK -> calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
         StatsPeriod.MONTH -> calendar.set(Calendar.DAY_OF_MONTH, 1)
         StatsPeriod.YEAR -> calendar.set(Calendar.DAY_OF_YEAR, 1)
+        StatsPeriod.ALL -> {}
     }
     calendar.add(period.calendarField, offset)
     val start = calendar.timeInMillis
@@ -146,12 +152,13 @@ interface StatsRepository {
     suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream)
 
     /**
-     * Add the plays of an imported file to the history.
+     * Add the plays of imported files to the history. Most-played lists have no dates, so they
+     * become the undated "before Noxio" plays that only count towards [StatsPeriod.ALL], and they
+     * replace the ones of an earlier import. Several lists given together are added up.
      *
-     * @param month The time the plays of a most-played list happened in. Not used for a history.
      * @return How many plays were added.
      */
-    suspend fun importCsv(parsed: StatsCsvImport.Parsed, month: LongRange?): Int
+    suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int
 }
 
 class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : StatsRepository {
@@ -165,22 +172,29 @@ class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : S
     override suspend fun exportMostPlayedCsv(range: LongRange, out: OutputStream) =
         StatsCsv.writeMostPlayed(dao.between(range.first, range.last + 1), out)
 
-    override suspend fun importCsv(parsed: StatsCsvImport.Parsed, month: LongRange?): Int =
-        when (parsed) {
-            is StatsCsvImport.Parsed.History -> {
-                // Skip plays that are already there, so importing a backup twice is harmless.
-                val known = dao.all().map { StatsCsvImport.historyKey(it) }.toHashSet()
-                val added = parsed.events.filter { known.add(StatsCsvImport.historyKey(it)) }
-                dao.insertAll(added)
-                added.size
-            }
-            is StatsCsvImport.Parsed.MostPlayed -> {
-                val range = requireNotNull(month) { "A most-played list needs a month" }
-                val events = StatsCsvImport.spreadOver(parsed.rows, range)
-                // Importing the same month again replaces the earlier import.
-                dao.deleteImported(range.first, range.last + 1)
-                dao.insertAll(events)
-                events.size
+    override suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
+        // Skip dated plays that are already there, so importing a backup twice is harmless.
+        val known = dao.all().map { StatsCsvImport.historyKey(it) }.toHashSet()
+        val dated = mutableListOf<PlayEvent>()
+        val baseline = mutableListOf<PlayEvent>()
+        for (file in files) {
+            when (file) {
+                is StatsCsvImport.Parsed.History ->
+                    for (event in file.events) {
+                        if (event.startedAt == PlayEvent.BASELINE_TIME) {
+                            baseline += event
+                        } else if (known.add(StatsCsvImport.historyKey(event))) {
+                            dated += event
+                        }
+                    }
+                is StatsCsvImport.Parsed.MostPlayed ->
+                    baseline += StatsCsvImport.baselineEvents(file.rows)
             }
         }
+        if (baseline.isNotEmpty()) {
+            dao.deleteBaseline()
+        }
+        dao.insertAll(dated + baseline)
+        return dated.size + baseline.size
+    }
 }

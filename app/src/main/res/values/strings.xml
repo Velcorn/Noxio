@@ -141,7 +141,9 @@
     <string name="lbl_stats_export">Export history as CSV</string>
     <string name="lbl_stats_export_most_played">Export most played songs (Musicolet format)</string>
     <string name="lbl_stats_import">Import CSV (Noxio or Musicolet)</string>
-    <string name="lbl_stats_import_month">Which month is this list from?</string>
+    <string name="lbl_stats_all">All time</string>
+    <string name="lbl_stats_import_baseline">Import as your history before Noxio?</string>
+    <string name="lbl_stats_import_baseline_desc">Play counts without dates are added to All time only, not to any week, month or year. They replace the ones of an earlier import. Several files are added together.</string>
     <plurals name="fmt_stats_imported">
         <item quantity="one">Imported %d play</item>
         <item quantity="other">Imported %d plays</item>

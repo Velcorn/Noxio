@@ -23,9 +23,8 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
-import android.text.format.DateUtils
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
@@ -40,10 +39,6 @@ import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.time.LocalDate
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.Calendar
-import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -78,9 +73,9 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             }
         }
     private val importLauncher =
-        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            if (uri != null) {
-                import(uri)
+        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
+            if (uris.isNotEmpty()) {
+                import(uris)
             }
         }
 
@@ -136,6 +131,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 StatsPeriod.WEEK -> R.id.stats_week
                 StatsPeriod.MONTH -> R.id.stats_month
                 StatsPeriod.YEAR -> R.id.stats_year
+                StatsPeriod.ALL -> R.id.stats_all
             }
         )
         binding.statsPeriodGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -144,6 +140,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                     when (checkedId) {
                         R.id.stats_month -> StatsPeriod.MONTH
                         R.id.stats_year -> StatsPeriod.YEAR
+                        R.id.stats_all -> StatsPeriod.ALL
                         else -> StatsPeriod.WEEK
                     }
                 )
@@ -183,6 +180,10 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
 
         binding.statsRange.text = StatsFormat.range(context, ui.query.period, ui.range)
         binding.statsNext.isEnabled = ui.query.offset < 0
+        // All time has nothing before or after it.
+        val navVisibility = if (ui.query.period == StatsPeriod.ALL) View.INVISIBLE else View.VISIBLE
+        binding.statsPrev.visibility = navVisibility
+        binding.statsNext.visibility = navVisibility
         updatePill(category)
 
         val hasPlays = !stats.isEmpty
@@ -282,69 +283,37 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         }
     }
 
-    private fun import(uri: Uri) {
+    private fun import(uris: List<Uri>) {
         val context = requireContext()
         viewLifecycleOwner.lifecycleScope.launch {
-            val (parsed, name) =
+            val parsed =
                 withContext(Dispatchers.IO) {
-                    readText(context, uri)?.let(StatsCsvImport::parse) to displayName(context, uri)
+                    uris.map { readText(context, it)?.let(StatsCsvImport::parse) }
                 }
-            when (parsed) {
-                null -> context.showToast(R.string.err_stats_import)
-                is StatsCsvImport.Parsed.History -> finishImport(parsed, null)
-                is StatsCsvImport.Parsed.MostPlayed -> askMonth(parsed, name)
+            val files = parsed.filterNotNull()
+            when {
+                files.isEmpty() || files.size != parsed.size ->
+                    context.showToast(R.string.err_stats_import)
+                // A most-played list has no dates, so it can only count towards all time.
+                files.any { it is StatsCsvImport.Parsed.MostPlayed } -> confirmBaseline(files)
+                else -> finishImport(files)
             }
         }
     }
 
-    /** A most-played list has no dates, so ask which month it is from. */
-    private fun askMonth(parsed: StatsCsvImport.Parsed.MostPlayed, fileName: String?) {
-        val context = requireContext()
-        val months =
-            (0 until MONTH_CHOICES).map {
-                Calendar.getInstance().apply {
-                    set(Calendar.DAY_OF_MONTH, 1)
-                    add(Calendar.MONTH, -it)
-                }
-            }
-        val labels = months.map {
-            DateUtils.formatDateTime(
-                context,
-                it.timeInMillis,
-                DateUtils.FORMAT_SHOW_DATE or
-                    DateUtils.FORMAT_NO_MONTH_DAY or
-                    DateUtils.FORMAT_SHOW_YEAR,
-            )
-        }
-        // Musicolet puts the month in the name of the file, like "Most played Songs - October
-        // 2026". Without it, the last month is the most likely one.
-        val named = fileName?.let { monthInName(it) }
-        var selected =
-            months
-                .indexOfFirst {
-                    named != null &&
-                        it.get(Calendar.YEAR) == named.first &&
-                        it.get(Calendar.MONTH) == named.second
-                }
-                .takeIf { it >= 0 } ?: 1
-        MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.lbl_stats_import_month)
-            .setSingleChoiceItems(labels.toTypedArray(), selected) { _, which -> selected = which }
-            .setPositiveButton(R.string.lbl_ok) { _, _ ->
-                val month = months[selected]
-                finishImport(
-                    parsed,
-                    StatsCsvImport.monthRange(month.get(Calendar.YEAR), month.get(Calendar.MONTH)),
-                )
-            }
+    private fun confirmBaseline(files: List<StatsCsvImport.Parsed>) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.lbl_stats_import_baseline)
+            .setMessage(R.string.lbl_stats_import_baseline_desc)
+            .setPositiveButton(R.string.lbl_ok) { _, _ -> finishImport(files) }
             .setNegativeButton(R.string.lbl_cancel, null)
             .show()
     }
 
-    private fun finishImport(parsed: StatsCsvImport.Parsed, month: LongRange?) {
+    private fun finishImport(files: List<StatsCsvImport.Parsed>) {
         val context = requireContext()
         viewLifecycleOwner.lifecycleScope.launch {
-            val added = withContext(Dispatchers.IO) { statsModel.importCsv(parsed, month) }
+            val added = withContext(Dispatchers.IO) { statsModel.importCsv(files) }
             Toast.makeText(
                     context,
                     context.resources.getQuantityString(R.plurals.fmt_stats_imported, added, added),
@@ -360,20 +329,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         } catch (e: IOException) {
             null
         }
-
-    private fun displayName(context: Context, uri: Uri): String? =
-        context.contentResolver
-            .query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
-            ?.use { if (it.moveToFirst()) it.getString(0) else null }
-
-    /** Finds "October 2026" (in English) in a file name, as year and zero-based month. */
-    private fun monthInName(name: String): Pair<Int, Int>? {
-        fun english(month: Month) = month.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
-        val names = Month.values().joinToString("|") { english(it) }
-        val match = Regex("($names)\\W+(\\d{4})", RegexOption.IGNORE_CASE).find(name) ?: return null
-        val month = Month.values().first { english(it).equals(match.groupValues[1], true) }
-        return match.groupValues[2].toInt() to month.ordinal
-    }
 
     private fun export(uri: Uri) {
         val context = requireContext()
@@ -395,7 +350,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     }
 
     private companion object {
-        const val MONTH_CHOICES = 36
         const val COLLAPSED_ROWS = 5
         const val EXPANDED_ROWS = 10
     }

@@ -28,7 +28,7 @@ upstream issues should not be reported against it.
 | | Auxio | Noxio |
 | --- | --- | --- |
 | Sleep timer | none | Moon icon above the seek bar. End of track, 30 min, custom minutes or 60 min, with fade-out. Remembers your last choice. Restart it from the notification or by shaking the device. |
-| Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month or year. Colorful cards you can share as an image, CSV export and import (Musicolet compatible) with an optional weekly backup to a folder. Stored on the device only. |
+| Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. Colorful cards you can share as an image, CSV export and import with an optional weekly backup to a folder. Musicolet's "Most played songs" lists import as your history from before Noxio, counted in All time only. Stored on the device only. |
 | Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use |
 | App icon | One icon | Default, or a minimal white silhouette with no background, chosen in the settings |
 | Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Audio |

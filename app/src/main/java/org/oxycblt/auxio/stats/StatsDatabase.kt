@@ -64,6 +64,12 @@ data class PlayEvent(
     companion object {
         /** Unit separator control character, which does not show up in artist names. */
         const val ARTIST_SEPARATOR = "\u001F"
+
+        /**
+         * The [startedAt] of plays from before Noxio, imported without a date. No week, month or
+         * year contains it, so they only count towards "All time".
+         */
+        const val BASELINE_TIME = 0L
     }
 }
 
@@ -90,12 +96,8 @@ interface PlayEventDao {
 
     @Insert suspend fun insertAll(events: List<PlayEvent>)
 
-    /** Remove plays that came from an import of a most-played list, inside a time range. */
-    @Query(
-        "DELETE FROM PlayEvent WHERE songUid LIKE 'import:%' AND startedAt >= :fromMs " +
-            "AND startedAt < :toMs"
-    )
-    suspend fun deleteImported(fromMs: Long, toMs: Long)
+    /** Remove the undated plays from before Noxio, so a new import can replace them. */
+    @Query("DELETE FROM PlayEvent WHERE startedAt = 0") suspend fun deleteBaseline()
 
     @Query("SELECT * FROM PlayEvent WHERE startedAt >= :fromMs AND startedAt < :toMs")
     suspend fun between(fromMs: Long, toMs: Long): List<PlayEvent>
