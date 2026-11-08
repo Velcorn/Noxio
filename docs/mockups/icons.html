@@ -62,6 +62,24 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
   var DARK = '#17142a';
   var ring = function (cx, cy, r, w, stroke, o) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + stroke + '" stroke-width="' + w + '" opacity="' + o + '"/>'; };
 
+  var polar = function (deg, r) { var a = deg * Math.PI / 180; return [54 + r * Math.cos(a), 54 + r * Math.sin(a)]; };
+  // The ring as a moon: an annulus with crater bites in its edge and craters on its face.
+  function ringMoon(mode, fg, id, shaded) {
+    var fill = mode === 'mono' ? fg : 'url(#g' + id + ')';
+    var tri = mode === 'mono' ? fg : '#ffffff';
+    var holes = '';
+    [[20, 2.4], [78, 3], [142, 2.2], [198, 2.9], [262, 2.3], [322, 3]].forEach(function (c) { var p = polar(c[0], 26.8); holes += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="' + c[1] + '" fill="#000"/>'; });
+    [40, 112, 170, 232, 292, 352].forEach(function (deg) { var p = polar(deg, 31.2); holes += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="2" fill="#000"/>'; });
+    var g = shaded
+      ? '<linearGradient id="g' + id + '" x1="0.1" y1="0.1" x2="0.9" y2="0.9"><stop offset="0" stop-color="#f6f0ff"/><stop offset="0.55" stop-color="#a99cff"/><stop offset="1" stop-color="#4a4194"/></linearGradient>'
+      : '<linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9e1ff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>';
+    var stars = shaded && mode !== 'mono' ? star(22, 26, 2.2, '#fff') + star(90, 30, 1.6, '#fff') + star(86, 88, 2, '#fff') : (shaded ? star(22, 26, 2.2, fg) + star(90, 30, 1.6, fg) + star(86, 88, 2, fg) : '');
+    return '<defs>' + g + '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="54" cy="54" r="22" fill="#000"/>' + holes + '</mask></defs>' +
+      (mode === 'mono' ? '' : '<circle cx="54" cy="54" r="22.5" fill="#14121f"/>') +
+      '<circle cx="54" cy="54" r="31.5" fill="' + fill + '" mask="url(#m' + id + ')"/>' + stars +
+      '<path d="M47 41L47 67L68 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
+  }
+
   var concepts = [
     { name: 'Eclipse Play (current)',
       text: 'The version you liked: a dark disc with a glowing rim and a play button. The uniform ring is why it can read as a sun eclipse instead of a moon.',
@@ -73,43 +91,38 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
           ring(54, 54, 31, 3.2, rim, .35) + ring(54, 54, 27.5, 3.6, rim, 1) + body +
           '<path d="M47 41L47 67L68 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
       } },
-    { name: 'Earthshine Moon',
-      text: 'A dark moon lit only along one edge, with a faint ring for the rest of it and craters on the dark side. A lit crescent is the one thing nothing else looks like.',
+    { name: 'Cratered Ring',
+      text: 'The ring becomes the moon itself: a bright band with crater bites in its rim and craters across its face, around the dark center that holds the play button. The bumpy edge is what makes it read as a moon.',
+      art: function (mode, fg, id) { return ringMoon(mode, fg, id, false); } },
+    { name: 'Lit From One Side',
+      text: 'The same cratered ring, shaded from bright at the top left to dim at the bottom right. Lighting is what makes a flat circle look like a sphere, so it reads as a moon in space.',
+      art: function (mode, fg, id) { return ringMoon(mode, fg, id, true); } },
+    { name: 'Textured Eclipse',
+      text: 'Closest to the current icon: the thin glowing ring stays, but the dark disc inside now has moon surface: darker seas and crater outlines.',
       art: function (mode, fg, id) {
-        var lit = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var rim = mode === 'mono' ? fg : 'url(#g' + id + ')';
         var tri = mode === 'mono' ? fg : '#ffffff';
-        var crater = mode === 'mono' ? fg : '#c9bfff';
-        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="30" fill="' + DARK + '"/>';
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ecff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
-          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="61" cy="57" r="27" fill="#000"/></mask></defs>' +
-          body + '<circle cx="54" cy="54" r="30" fill="' + lit + '" mask="url(#m' + id + ')"/>' + ring(54, 54, 29.2, 1.4, lit, .4) +
-          ring(72, 40, 3.2, 1.3, crater, .5) + ring(74, 68, 2.6, 1.3, crater, .5) + ring(50, 74, 2.2, 1.3, crater, .5) +
-          '<path d="M55 43L55 67L74 55Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
+        var line = mode === 'mono' ? fg : '#5b4fa6';
+        var seas = mode === 'mono' ? '' : '<ellipse cx="42" cy="44" rx="7" ry="5" fill="#241e42" transform="rotate(-25 42 44)"/><ellipse cx="65" cy="66" rx="6" ry="4" fill="#241e42" transform="rotate(20 65 66)"/><ellipse cx="66" cy="43" rx="4" ry="3" fill="#241e42"/>';
+        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="26" fill="#14121f"/>';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0c7ff"/><stop offset="1" stop-color="#8f7dff"/></linearGradient></defs>' +
+          ring(54, 54, 31, 3.2, rim, .3) + ring(54, 54, 27.5, 3.6, rim, 1) + body + seas +
+          ring(41, 63, 3.4, 1.3, line, .8) + ring(67, 42, 2.8, 1.3, line, .8) + ring(66, 68, 2.4, 1.3, line, .8) + ring(44, 40, 2.2, 1.2, line, .7) +
+          '<path d="M47 41L47 67L68 54Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
       } },
-    { name: 'Gibbous Play',
-      text: 'A bright moon disc with an offset dark circle holding the play button. The lit edge is thick on the left and thin on the right, and the craters sit on the lit part.',
+    { name: 'Rim Light Eclipse',
+      text: 'The thin ring stays, with a thick bright crescent along the top left like sunlight catching the edge, over the textured dark disc.',
       art: function (mode, fg, id) {
         var lit = mode === 'mono' ? fg : 'url(#g' + id + ')';
         var tri = mode === 'mono' ? fg : '#ffffff';
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ecff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
-          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="59.5" cy="55" r="23.5" fill="#000"/>' +
-          '<circle cx="30" cy="50" r="2.6" fill="#000"/><circle cx="33" cy="65" r="2.2" fill="#000"/><circle cx="41" cy="36" r="2.4" fill="#000"/></mask></defs>' +
-          (mode === 'mono' ? '' : '<circle cx="59.5" cy="55" r="23.5" fill="' + DARK + '"/>') +
-          '<circle cx="54" cy="54" r="30" fill="' + lit + '" mask="url(#m' + id + ')"/>' +
-          '<path d="M53 43L53 67L72 55Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
-      } },
-    { name: 'Moonlit Night Play',
-      text: 'The Earthshine moon with a soft halo and a few stars, so the night sky does the explaining. The busiest of the three, but it is clearly the moon.',
-      art: function (mode, fg, id) {
-        var lit = mode === 'mono' ? fg : 'url(#g' + id + ')';
-        var tri = mode === 'mono' ? fg : '#ffffff';
-        var dots = mode === 'mono' ? fg : '#ffffff';
-        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="28" fill="' + DARK + '"/>';
-        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ecff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
-          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="60" cy="56" r="25" fill="#000"/></mask></defs>' +
-          ring(54, 54, 33, 1.4, lit, .22) + body + '<circle cx="54" cy="54" r="28" fill="' + lit + '" mask="url(#m' + id + ')"/>' + ring(54, 54, 27.3, 1.3, lit, .4) +
-          '<path d="M54 44L54 66L72 55Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>' +
-          star(24, 28, 2.4, dots) + star(88, 26, 1.8, dots) + star(84, 86, 2.2, dots) + star(22, 80, 1.5, dots, .8);
+        var line = mode === 'mono' ? fg : '#5b4fa6';
+        var seas = mode === 'mono' ? '' : '<ellipse cx="62" cy="68" rx="6" ry="4" fill="#241e42" transform="rotate(20 62 68)"/><ellipse cx="70" cy="46" rx="4" ry="3" fill="#241e42"/>';
+        var body = mode === 'mono' ? '' : '<circle cx="54" cy="54" r="28" fill="#14121f"/>';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f0ff"/><stop offset="1" stop-color="#9d8cff"/></linearGradient>' +
+          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="58.5" cy="58.5" r="27" fill="#000"/></mask></defs>' +
+          body + seas + ring(54, 54, 28.7, 1.5, lit, .4) + '<circle cx="54" cy="54" r="30" fill="' + lit + '" mask="url(#m' + id + ')"/>' +
+          ring(68, 40, 2.6, 1.2, line, .8) + ring(66, 70, 2.3, 1.2, line, .8) + ring(48, 70, 2, 1.2, line, .7) +
+          '<path d="M52 43L52 67L71 55Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="5" stroke-linejoin="round"/>';
       } }
   ];
 
