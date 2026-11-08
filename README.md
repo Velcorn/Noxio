@@ -48,6 +48,8 @@ Clickable mockups of the added features, with the same behavior as the app. They
   reset, the notification action, a thumb-zone overlay, and a theme switcher with AMOLED black and Material You colors
 - [Listening stats](docs/mockups/stats.html): week, month and year views with example data, the category pill, sharing
   a card as an image, the CSV export and import menu, and the same theme switcher
+- [Navigation](docs/mockups/navigation.html): three proposals for the bottom navigation with a search bar, two for
+  the playlist screen (search, sort, M3U export, ReplayGain) and the About page
 - [App icon](docs/mockups/icons.html): the icon with its adaptive layers, the themed (Material You) versions, the
   splash screen, the notification glyph and a home screen preview
 

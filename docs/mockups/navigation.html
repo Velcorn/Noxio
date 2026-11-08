@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noxio Navigation Mockup</title>
+<style>
+/* Mockups of the bottom navigation, the search bar and the playlist actions. Example data only.
+   Everything is clickable: tabs switch, the search field takes focus, menus open. */
+:root {
+  --bg: #f1f1f6; --surface: #ffffff; --surface-2: #ececf5; --surface-3: #e0e0ee; --fg: #16162b; --muted: #5d5d7a;
+  --line: #d6d6e4; --accent: #6a4fd8; --on-accent: #ffffff; --accent-soft: #e4dcff;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0b14; --surface: #000000; --surface-2: #16141f; --surface-3: #221f30; --fg: #ececf8; --muted: #9b98b8;
+    --line: #2a2740; --accent: #c3a6ff; --on-accent: #26124f; --accent-soft: #3a2d66;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c0b14; --surface: #000000; --surface-2: #16141f; --surface-3: #221f30; --fg: #ececf8; --muted: #9b98b8;
+  --line: #2a2740; --accent: #c3a6ff; --on-accent: #26124f; --accent-soft: #3a2d66;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font); padding: 32px 16px 64px; }
+.page { max-width: 1180px; margin: 0 auto; }
+h1 { font-size: 32px; line-height: 1.1; margin: 0 0 8px; }
+h2 { font-size: 22px; margin: 56px 0 4px; }
+.lead, .sub { color: var(--muted); max-width: 70ch; margin: 0 0 18px; }
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.theme { border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); border-radius: 20px; padding: 6px 14px; font: 600 13px var(--font); cursor: pointer; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 32px 28px; align-items: start; }
+figure { margin: 0; }
+figcaption { margin-top: 12px; max-width: 36ch; }
+figcaption b { display: block; font-size: 16px; margin-bottom: 2px; }
+figcaption span { color: var(--muted); font-size: 14px; }
+ul.pros { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 13.5px; }
+ul.pros b { display: inline; font-size: inherit; color: var(--fg); font-weight: 600; }
+
+.phone { position: relative; width: 310px; height: 640px; background: var(--surface); border: 1px solid var(--line); border-radius: 34px; overflow: hidden; display: flex; flex-direction: column; margin: 0 auto 0 0; }
+button { font-family: inherit; color: inherit; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ib { border: 0; background: none; width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center; cursor: pointer; flex: none; }
+.ib:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+svg.i { width: 24px; height: 24px; fill: currentColor; }
+.status { height: 30px; flex: none; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; font-size: 12px; color: var(--muted); }
+
+/* top app bars */
+.titlebar { display: flex; align-items: center; padding: 4px 6px 4px 18px; height: 52px; flex: none; }
+.titlebar b { font-size: 22px; flex: 1; }
+.tabs-top { display: flex; gap: 20px; padding: 0 18px; overflow: hidden; border-bottom: 1px solid var(--line); height: 40px; align-items: center; color: var(--muted); font-weight: 600; font-size: 14px; flex: none; }
+.tabs-top .on { color: var(--accent); }
+.searchbar { display: flex; align-items: center; gap: 2px; height: 48px; margin: 6px 12px; padding: 0 4px 0 6px; border-radius: 24px; background: var(--surface-2); flex: none; }
+.searchbar input { flex: 1; min-width: 0; border: 0; background: none; color: var(--fg); font: 15px var(--font); height: 44px; }
+.searchbar input::placeholder { color: var(--muted); }
+.searchbar .ib { width: 38px; height: 38px; }
+.searchbar .lead-i { width: 38px; display: grid; place-items: center; color: var(--muted); }
+
+/* list */
+.list { flex: 1; overflow-y: auto; padding: 2px 0 8px; min-height: 0; }
+.song { display: flex; align-items: center; gap: 12px; padding: 7px 8px 7px 16px; }
+.cover { width: 46px; height: 46px; border-radius: 8px; flex: none; }
+.song div.t { flex: 1; min-width: 0; }
+.song b { display: block; font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.song small { color: var(--muted); font-size: 13px; }
+.song .ib { color: var(--muted); }
+.hdr { padding: 10px 16px 2px; color: var(--accent); font-weight: 700; font-size: 13px; }
+
+/* bottom things */
+.fab { position: absolute; right: 16px; width: 52px; height: 52px; border-radius: 16px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; border: 0; cursor: pointer; box-shadow: 0 2px 8px #0005; }
+.mini { display: flex; align-items: center; gap: 10px; margin: 0 8px 6px; padding: 6px 8px 6px 6px; border-radius: 16px; background: var(--surface-3); flex: none; position: relative; }
+.mini .cover { width: 40px; height: 40px; border-radius: 10px; }
+.mini .t { flex: 1; min-width: 0; }
+.mini b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini small { color: var(--muted); font-size: 12px; }
+.mini .bar { position: absolute; left: 14px; right: 14px; bottom: 0; height: 2px; background: color-mix(in srgb, var(--fg) 15%, transparent); border-radius: 2px; }
+.mini .bar i { display: block; width: 38%; height: 100%; background: var(--accent); border-radius: 2px; }
+.nav { display: flex; flex: none; height: 76px; padding: 8px 4px 0; background: var(--surface-2); }
+.nav button { flex: 1 1 0; min-width: 0; border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); font-size: 11.5px; font-weight: 600; cursor: pointer; }
+.nav button .pill { width: 52px; max-width: 100%; height: 30px; border-radius: 15px; display: grid; place-items: center; transition: background .15s; }
+.nav button.on { color: var(--fg); }
+.nav button.on .pill { background: var(--accent-soft); color: var(--accent); }
+.nav-compact { height: 64px; }
+.nav-compact button { flex-direction: row; justify-content: center; }
+.float-nav { display: flex; gap: 2px; align-self: center; margin: 0 0 12px; padding: 6px; border-radius: 30px; background: var(--surface-3); box-shadow: 0 4px 14px #0006; flex: none; }
+.float-nav button { border: 0; background: none; color: var(--muted); height: 44px; min-width: 44px; padding: 0 12px; border-radius: 22px; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13.5px; cursor: pointer; }
+.float-nav button span { display: none; }
+.float-nav button.on { background: var(--accent-soft); color: var(--accent); }
+.float-nav button.on span { display: inline; }
+.grip { height: 4px; width: 110px; border-radius: 2px; background: var(--fg); opacity: .5; align-self: center; margin: 6px 0 8px; flex: none; }
+
+/* menus */
+.menu { position: absolute; right: 12px; background: var(--surface-3); border-radius: 14px; padding: 6px 0; min-width: 210px; box-shadow: 0 6px 22px #000a; display: none; z-index: 5; }
+.menu.open { display: block; }
+.menu button { display: flex; align-items: center; gap: 12px; width: 100%; border: 0; background: none; padding: 11px 16px; font-size: 14.5px; text-align: left; cursor: pointer; }
+.menu button:hover { background: color-mix(in srgb, var(--fg) 10%, transparent); }
+.menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+.menu svg.i { width: 20px; height: 20px; color: var(--muted); }
+.toast { position: absolute; left: 16px; right: 16px; bottom: 90px; background: var(--fg); color: var(--bg); border-radius: 12px; padding: 12px 16px; font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 6; }
+.toast.show { opacity: 1; }
+.sheet { position: absolute; inset: 0; background: #000a; display: none; align-items: flex-end; z-index: 7; }
+.sheet.open { display: flex; }
+.sheet > div { background: var(--surface-3); width: 100%; border-radius: 26px 26px 0 0; padding: 20px 20px 24px; }
+.sheet h4 { margin: 0 0 4px; font-size: 18px; }
+.sheet p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+.sheet .opt { display: flex; align-items: center; gap: 12px; padding: 10px 0; font-size: 15px; }
+.sheet input[type=radio] { accent-color: var(--accent); width: 18px; height: 18px; }
+.sheet .acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.btn { border: 0; background: none; color: var(--accent); font-weight: 700; font-size: 14px; padding: 10px 14px; border-radius: 20px; cursor: pointer; }
+.btn.fill { background: var(--accent); color: var(--on-accent); }
+.prog { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; margin: 6px 0 4px; }
+.prog i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s linear; }
+
+/* playlist detail */
+.pl-head { display: flex; gap: 14px; padding: 4px 16px 10px; align-items: center; flex: none; }
+.pl-head .cover { width: 84px; height: 84px; border-radius: 14px; background: linear-gradient(145deg, #7b4dff, #d24dd8); display: grid; place-items: center; color: #fff; }
+.pl-head h3 { margin: 0; font-size: 20px; }
+.pl-head small { color: var(--muted); }
+.chips { display: flex; gap: 8px; padding: 4px 16px 8px; flex: none; }
+.chip { border: 1px solid var(--line); background: none; border-radius: 10px; height: 34px; padding: 0 12px; display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.chip.on { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.chip svg.i { width: 18px; height: 18px; }
+.actions { display: flex; gap: 8px; padding: 0 16px 8px; flex: none; }
+.actions .btn { flex: 1; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; gap: 6px; height: 40px; }
+.actions .btn.alt { flex: none; width: 48px; padding: 0; }
+.toolbar2 { display: flex; align-items: center; padding: 4px 6px; height: 52px; flex: none; }
+.toolbar2 b { flex: 1; font-size: 18px; padding-left: 6px; }
+
+/* about */
+.about { padding: 8px 20px 20px; overflow-y: auto; flex: 1; }
+.about .logo { width: 84px; height: 84px; border-radius: 22px; background: #000; display: grid; place-items: center; margin: 12px auto 10px; border: 1px solid var(--line); }
+.about h3 { text-align: center; margin: 0; font-size: 24px; }
+.about .ver { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+.about .links { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 14px; }
+.about .links .btn { background: var(--accent-soft); text-align: center; }
+.about p { color: var(--muted); font-size: 13.5px; margin: 0 0 10px; }
+.about .card { background: var(--surface-2); border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+.about .card b { font-size: 14px; display: block; margin-bottom: 2px; }
+.about .card span { color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <div>
+      <h1>Noxio navigation mockups</h1>
+      <p class="lead">Everything in the main screen moves to the bottom or into one search bar. Three proposals for the home screen, two for playlists, and the About page. Tabs, menus and fields are clickable. Example data only.</p>
+    </div>
+    <button class="theme" id="theme">Theme: auto</button>
+  </div>
+
+  <h2>1. Home screen</h2>
+  <p class="sub">Common to all three: the app name is gone. The top is a search bar with the sort and overflow buttons inside it. The overflow menu holds Listening stats, Settings and About. Songs, Albums, Artists, Genres and Playlists become bottom navigation. The mini player stays just above it.</p>
+  <div class="row">
+    <figure>
+      <div class="phone" data-home="A">
+        <div class="status"><span>23:01</span><span>75%</span></div>
+        <div class="searchbar"><span class="lead-i"><svg class="i" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></span><input placeholder="Search your music" aria-label="Search"><button class="ib" data-sort title="Sort"><svg class="i" viewBox="0 0 24 24"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg></button><button class="ib" data-more title="More"><svg class="i" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button></div>
+        <div class="list" data-list></div>
+        <button class="fab" style="bottom:156px" title="Shuffle all"><svg class="i" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
+        <div class="mini"><div class="cover" style="background:#e8365d"></div><div class="t"><b>Midnight Drive</b><small>Nova Lane</small></div><button class="ib"><svg class="i" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button><div class="bar"><i></i></div></div>
+        <div class="nav" data-nav></div>
+        <div class="menu" style="top:76px" data-menu></div>
+        <div class="toast" data-toast></div>
+      </div>
+      <figcaption><b>A. Standard bottom bar</b><span>The familiar Material 3 navigation bar with icon and label. Search bar at the top.</span>
+        <ul class="pros"><li><b>Pro:</b> clearest, labels always visible, easy to hit</li><li><b>Con:</b> tallest bottom area; the search bar is still in the top, out of thumb reach</li></ul></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" data-home="B">
+        <div class="status"><span>23:01</span><span>75%</span></div>
+        <div class="searchbar"><span class="lead-i"><svg class="i" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></span><input placeholder="Search your music" aria-label="Search"><button class="ib" data-sort title="Sort"><svg class="i" viewBox="0 0 24 24"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg></button><button class="ib" data-more title="More"><svg class="i" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button></div>
+        <div class="list" data-list></div>
+        <button class="fab" style="bottom:150px" title="Shuffle all"><svg class="i" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
+        <div class="mini"><div class="cover" style="background:#e8365d"></div><div class="t"><b>Midnight Drive</b><small>Nova Lane</small></div><button class="ib"><svg class="i" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button><div class="bar"><i></i></div></div>
+        <div class="float-nav" data-float></div>
+        <div class="grip"></div>
+        <div class="menu" style="top:76px" data-menu></div>
+        <div class="toast" data-toast></div>
+      </div>
+      <figcaption><b>B. Floating pill</b><span>Five icons in a compact pill. Only the active tab shows its name. Frees the most list space.</span>
+        <ul class="pros"><li><b>Pro:</b> smallest footprint, modern, centered under the thumb</li><li><b>Con:</b> inactive tabs are icon-only, so Genres vs Albums needs learning</li></ul></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" data-home="C">
+        <div class="status"><span>23:01</span><span>75%</span></div>
+        <div class="titlebar" style="height:44px"><b style="font-size:18px" data-title>Songs</b><span style="color:var(--muted);font-size:13px;padding-right:14px">1,284 songs</span></div>
+        <div class="list" data-list></div>
+        <button class="fab" style="bottom:218px" title="Shuffle all"><svg class="i" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button>
+        <div class="mini"><div class="cover" style="background:#e8365d"></div><div class="t"><b>Midnight Drive</b><small>Nova Lane</small></div><button class="ib"><svg class="i" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button><div class="bar"><i></i></div></div>
+        <div class="searchbar" style="margin:0 12px 6px"><span class="lead-i"><svg class="i" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></span><input placeholder="Search your music" aria-label="Search"><button class="ib" data-sort title="Sort"><svg class="i" viewBox="0 0 24 24"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg></button><button class="ib" data-more data-up title="More"><svg class="i" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button></div>
+        <div class="nav nav-compact" data-nav></div>
+        <div class="menu" style="bottom:140px" data-menu></div>
+        <div class="toast" data-toast></div>
+      </div>
+      <figcaption><b>C. Everything at the bottom</b><span>The search bar moves down too, between the mini player and the navigation. Only a slim title is left on top.</span>
+        <ul class="pros"><li><b>Pro:</b> every control is in the thumb zone, true one-handed use</li><li><b>Con:</b> four stacked rows at the bottom (about 200 dp), so the list is shorter</li></ul></figcaption>
+    </figure>
+  </div>
+
+  <h2>2. Playlists</h2>
+  <p class="sub">A playlist can be searched and sorted, and exported as an M3U file. Sorting by title, artist, album, duration, date added, or "playlist order" (the default, and the only one that allows drag to reorder). The overflow menu also offers a ReplayGain scan for the songs of the playlist.</p>
+  <div class="row">
+    <figure>
+      <div class="phone" data-pl="A">
+        <div class="status"><span>23:01</span><span>75%</span></div>
+        <div class="toolbar2"><button class="ib"><svg class="i" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><b>Night drive</b><button class="ib" data-sort title="Sort"><svg class="i" viewBox="0 0 24 24"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg></button><button class="ib" data-more title="More"><svg class="i" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button></div>
+        <div class="pl-head"><div class="cover"><svg class="i" style="width:36px;height:36px" viewBox="0 0 24 24"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/></svg></div><div><h3>Night drive</h3><small>12 songs · 48 min</small></div></div>
+        <div class="searchbar" style="margin:0 12px 6px"><span class="lead-i"><svg class="i" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></span><input placeholder="Search this playlist" aria-label="Search playlist"></div>
+        <div class="actions"><button class="btn"><svg class="i" style="width:20px;height:20px" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Play</button><button class="btn"><svg class="i" style="width:20px;height:20px" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>Shuffle</button></div>
+        <div class="list" data-list></div>
+        <div class="menu" style="top:76px" data-menu></div>
+        <div class="toast" data-toast></div>
+      </div>
+      <figcaption><b>A. Search field always visible</b><span>The search sits under the header, sort and the menu are in the toolbar. Export and ReplayGain are in the menu.</span>
+        <ul class="pros"><li><b>Pro:</b> search is one tap away, no hidden state</li><li><b>Con:</b> the header gets taller on small screens</li></ul></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone" data-pl="B">
+        <div class="status"><span>23:01</span><span>75%</span></div>
+        <div class="toolbar2"><button class="ib"><svg class="i" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><b>Night drive</b><button class="ib" data-more title="More"><svg class="i" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button></div>
+        <div class="pl-head"><div class="cover"><svg class="i" style="width:36px;height:36px" viewBox="0 0 24 24"><path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/></svg></div><div><h3>Night drive</h3><small>12 songs · 48 min</small></div></div>
+        <div class="actions"><button class="btn"><svg class="i" style="width:20px;height:20px" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Play</button><button class="btn alt" title="Shuffle"><svg class="i" style="width:20px;height:20px" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg></button><button class="btn alt" data-export title="Export as M3U"><svg class="i" style="width:20px;height:20px" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg></button></div>
+        <div class="chips"><button class="chip" data-searchchip><svg class="i" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Search</button><button class="chip on" data-sort><svg class="i" viewBox="0 0 24 24"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg><span data-sortlabel>Playlist order</span></button></div>
+        <div class="list" data-list></div>
+        <div class="menu" style="top:76px" data-menu></div>
+        <div class="toast" data-toast></div>
+      </div>
+      <figcaption><b>B. Action row and chips</b><span>Play, shuffle and export are buttons in a row. Search and sort are chips that open the field or the sort sheet.</span>
+        <ul class="pros"><li><b>Pro:</b> export is visible, not hidden in a menu</li><li><b>Con:</b> more buttons on the screen; the chips are small</li></ul></figcaption>
+    </figure>
+  </div>
+
+  <h2>3. About page</h2>
+  <p class="sub">The page is renamed to Noxio. The Auxio credit stays, as the license requires, and it makes clear that Noxio is a fork and that upstream is not responsible for it. Links point to the Noxio repository.</p>
+  <div class="row">
+    <figure>
+      <div class="phone">
+        <div class="status"><span>23:01</span><span>75%</span></div>
+        <div class="toolbar2"><button class="ib"><svg class="i" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button><b>About</b></div>
+        <div class="about">
+          <div class="logo"><svg viewBox="18 18 72 72" width="64" height="64"><g fill="#fff"><path d="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z"/><path d="M47 41L47 67L68 54Z" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M75 32Q77.1 35.9 81 38Q77.1 40.1 75 44Q72.9 40.1 69 38Q72.9 35.9 75 32Z"/></g></svg></div>
+          <h3>Noxio</h3>
+          <div class="ver">Version 1.0.0-dev</div>
+          <div class="links"><button class="btn">Source code</button><button class="btn">Report an issue</button><button class="btn">Licenses</button><button class="btn">Auxio</button></div>
+          <div class="card"><b>A simple, rational music player for Android</b><span>Built for listening through the night, with a sleep timer and listening stats.</span></div>
+          <div class="card"><b>Based on Auxio</b><span>Noxio is a fork of Auxio by Alexander Capehart. It is not affiliated with the Auxio project, so please do not report Noxio problems upstream.</span></div>
+          <p>Free software under the GNU General Public License v3.0 or later.</p>
+        </div>
+      </div>
+      <figcaption><b>Single proposal</b><span>Same layout as today with Noxio branding, plus the fork notice. Update checks and the donate link to upstream are removed.</span></figcaption>
+    </figure>
+  </div>
+
+  <h2>Open question: ReplayGain</h2>
+  <p class="sub">Calculating ReplayGain means decoding every song and measuring its loudness (EBU R128). Android has no built-in way to do that, so it needs a loudness library. It would run as a background job with a progress notification and write the values into Noxio's own database, not into your files. It works, but it is the largest item on this list, so I would do it last and as its own step. Try the menu item in the mockups to see where it would live.</p>
+</div>
+
+<script>
+const ICON = {
+  songs: 'M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z',
+  albums: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z',
+  artists: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z',
+  genres: 'M12 2l-5.5 9h11L12 2zm5.5 11c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zM3 21.5h8v-8H3v8z',
+  playlists: 'M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z',
+  stats: 'M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z',
+  settings: 'M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z',
+  about: 'M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+  export: 'M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z',
+  eq: 'M7 18h2V6H7v12zm4 4h2V2h-2v20zm-8-8h2v-4H3v4zm12 4h2V6h-2v12zm4-8v4h2v-4h-2z',
+  more: 'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z'
+};
+const svg = (p) => `<svg class="i" viewBox="0 0 24 24"><path d="${p}"/></svg>`;
+const TABS = ['songs', 'albums', 'artists', 'genres', 'playlists'];
+const LABEL = { songs: 'Songs', albums: 'Albums', artists: 'Artists', genres: 'Genres', playlists: 'Playlists' };
+const COVERS = ['#7b4dff', '#0fa3b1', '#ff8a3d', '#e8365d', '#3b6cf0', '#2a9d6a', '#d24dd8', '#c9a227'];
+const DATA = {
+  songs: [['Afterglow', 'Nova Lane'], ['Blue Hour', 'Static Bloom'], ['Clementine', 'Pale Harbor'], ['Dust & Neon', 'Nova Lane'], ['Easy Tide', 'Moss Circuit'], ['Fading Signal', 'Static Bloom'], ['Glass Garden', 'Pale Harbor'], ['Half Moon Rd', 'Wren & Co.'], ['Infinite Lull', 'Moss Circuit'], ['Juniper', 'Wren & Co.']],
+  albums: [['Afterlight', 'Nova Lane'], ['Blue Static', 'Static Bloom'], ['Coastline', 'Pale Harbor'], ['Dim Rooms', 'Moss Circuit'], ['Evergreen', 'Wren & Co.'], ['Far Lights', 'Nova Lane']],
+  artists: [['Moss Circuit', '14 songs'], ['Nova Lane', '32 songs'], ['Pale Harbor', '21 songs'], ['Static Bloom', '18 songs'], ['Wren & Co.', '9 songs']],
+  genres: [['Ambient', '212 songs'], ['Electronic', '340 songs'], ['Indie', '189 songs'], ['Lo-fi', '96 songs'], ['Synthwave', '144 songs']],
+  playlists: [['Night drive', '12 songs'], ['Sleep', '40 songs'], ['Focus', '25 songs'], ['Workout', '31 songs'], ['Favorites', '88 songs']]
+};
+const PLAYLIST = [['Afterglow', 'Nova Lane', 'Blue Static'], ['Blue Hour', 'Static Bloom', 'Blue Static'], ['Clementine', 'Pale Harbor', 'Coastline'], ['Dust & Neon', 'Nova Lane', 'Afterlight'], ['Easy Tide', 'Moss Circuit', 'Dim Rooms'], ['Glass Garden', 'Pale Harbor', 'Coastline'], ['Juniper', 'Wren & Co.', 'Evergreen']];
+const SORTS = ['Playlist order', 'Title', 'Artist', 'Album', 'Duration', 'Date added'];
+const dots = svg(ICON.more);
+
+function rows(tab) {
+  const items = DATA[tab];
+  return items.map((r, i) => `<div class="song"><div class="cover" style="background:${COVERS[i % COVERS.length]};${tab === 'artists' ? 'border-radius:50%' : ''}"></div><div class="t"><b>${r[0]}</b><small>${r[1]}</small></div><button class="ib">${dots}</button></div>`).join('');
+}
+function toast(phone, text) {
+  const t = phone.querySelector('[data-toast]');
+  t.textContent = text; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 1800);
+}
+function openSheet(phone, html) {
+  const s = document.createElement('div');
+  s.className = 'sheet open'; s.innerHTML = `<div>${html}</div>`;
+  phone.appendChild(s);
+  s.addEventListener('click', (e) => { if (e.target === s || e.target.closest('[data-close]')) s.remove(); });
+  return s;
+}
+function sortSheet(phone, playlist) {
+  const names = playlist ? SORTS : ['Name', 'Artist', 'Album', 'Duration', 'Date added'];
+  const s = openSheet(phone, `<h4>Sort by</h4><p>${playlist ? 'Playlist order is the only one where you can drag songs.' : 'Tap Ascending or Descending at the bottom.'}</p>` +
+    names.map((n, i) => `<label class="opt"><input type="radio" name="s" ${i === 0 ? 'checked' : ''}> ${n}</label>`).join('') +
+    `<div class="acts"><button class="btn" data-close>Ascending</button><button class="btn fill" data-close>Apply</button></div>`);
+  s.querySelector('.fill').addEventListener('click', () => {
+    const picked = s.querySelector('input:checked').parentNode.textContent.trim();
+    const lbl = phone.querySelector('[data-sortlabel]'); if (lbl) lbl.textContent = picked;
+    toast(phone, 'Sorted by ' + picked);
+  });
+}
+function exportSheet(phone) {
+  openSheet(phone, `<h4>Export "Night drive"</h4><p>Saves an .m3u8 file with the paths of the 12 songs, relative to the file so it works in other players.</p>
+    <label class="opt"><input type="radio" name="e" checked> Relative paths (recommended)</label>
+    <label class="opt"><input type="radio" name="e"> Absolute paths</label>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn fill" data-close data-go>Save file…</button></div>`)
+    .querySelector('[data-go]').addEventListener('click', () => toast(phone, 'Saved Night drive.m3u8'));
+}
+function gainSheet(phone, what) {
+  const s = openSheet(phone, `<h4>Calculate ReplayGain</h4><p>Scans ${what} for loudness so quiet and loud songs play at the same level. Runs in the background, values are stored in Noxio, your files are not changed.</p>
+    <div class="prog"><i></i></div><p data-p style="margin:0">Not started</p>
+    <div class="acts"><button class="btn" data-close>Close</button><button class="btn fill" data-run>Start</button></div>`);
+  s.querySelector('[data-run]').addEventListener('click', (e) => {
+    const bar = s.querySelector('.prog i'), p = s.querySelector('[data-p]'); let n = 0;
+    e.target.disabled = true;
+    const h = setInterval(() => { n += 8; bar.style.width = Math.min(n, 100) + '%'; p.textContent = n >= 100 ? 'Done: 12 songs analyzed' : `Analyzing… ${Math.round(n * 0.12)} of 12`; if (n >= 100) clearInterval(h); }, 300);
+  });
+}
+function buildMenu(menu, phone, playlist) {
+  const items = playlist
+    ? [['Export as M3U…', ICON.export, () => exportSheet(phone)], ['Calculate ReplayGain…', ICON.eq, () => gainSheet(phone, 'this playlist')], null, ['Rename', ICON.settings, () => toast(phone, 'Rename dialog')], ['Delete', ICON.about, () => toast(phone, 'Delete dialog')]]
+    : [['Listening stats', ICON.stats, () => toast(phone, 'Opens Listening stats')], ['Calculate ReplayGain…', ICON.eq, () => gainSheet(phone, 'your whole library')], ['Settings', ICON.settings, () => toast(phone, 'Opens Settings')], ['About', ICON.about, () => toast(phone, 'Opens About')]];
+  menu.innerHTML = items.map((it, i) => it ? `<button data-i="${i}">${svg(it[1])}${it[0]}</button>` : '<hr>').join('');
+  menu.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => { menu.classList.remove('open'); items[b.dataset.i][2](); }));
+}
+
+document.querySelectorAll('[data-home]').forEach((phone) => {
+  const list = phone.querySelector('[data-list]');
+  let tab = 'songs';
+  const show = () => {
+    list.innerHTML = rows(tab);
+    const title = phone.querySelector('[data-title]'); if (title) title.textContent = LABEL[tab];
+    phone.querySelectorAll('[data-nav] button, [data-float] button').forEach((b) => b.classList.toggle('on', b.dataset.t === tab));
+    const input = phone.querySelector('input'); if (input) input.placeholder = tab === 'songs' ? 'Search your music' : 'Search ' + LABEL[tab].toLowerCase();
+  };
+  const nav = phone.querySelector('[data-nav]');
+  if (nav) nav.innerHTML = TABS.map((t) => `<button data-t="${t}"><span class="pill">${svg(ICON[t])}</span>${phone.dataset.home === 'C' ? '' : LABEL[t]}</button>`).join('');
+  if (nav && phone.dataset.home === 'C') nav.querySelectorAll('button').forEach((b) => { b.style.flexDirection = 'column'; b.style.fontSize = '0'; });
+  const fl = phone.querySelector('[data-float]');
+  if (fl) fl.innerHTML = TABS.map((t) => `<button data-t="${t}">${svg(ICON[t])}<span>${LABEL[t]}</span></button>`).join('');
+  phone.querySelectorAll('[data-nav] button, [data-float] button').forEach((b) => b.addEventListener('click', () => { tab = b.dataset.t; show(); }));
+  phone.querySelector('[data-sort]')?.addEventListener('click', () => sortSheet(phone, false));
+  const menu = phone.querySelector('[data-menu]'); buildMenu(menu, phone, false);
+  phone.querySelector('[data-more]').addEventListener('click', (e) => { e.stopPropagation(); menu.classList.toggle('open'); });
+  phone.addEventListener('click', () => menu.classList.remove('open'));
+  show();
+});
+
+document.querySelectorAll('[data-pl]').forEach((phone) => {
+  const list = phone.querySelector('[data-list]');
+  const input = phone.querySelector('input');
+  const draw = (q) => { list.innerHTML = PLAYLIST.filter((r) => !q || (r[0] + r[1] + r[2]).toLowerCase().includes(q.toLowerCase())).map((r, i) => `<div class="song"><div class="cover" style="background:${COVERS[i % COVERS.length]}"></div><div class="t"><b>${r[0]}</b><small>${r[1]} · ${r[2]}</small></div><button class="ib">${dots}</button></div>`).join('') || '<p style="color:var(--muted);padding:16px">No matches in this playlist.</p>'; };
+  draw('');
+  input?.addEventListener('input', () => draw(input.value));
+  phone.querySelector('[data-sort]')?.addEventListener('click', () => sortSheet(phone, true));
+  phone.querySelector('[data-export]')?.addEventListener('click', () => exportSheet(phone));
+  phone.querySelector('[data-searchchip]')?.addEventListener('click', (e) => {
+    if (phone.querySelector('.chips input')) return;
+    const f = document.createElement('input'); f.placeholder = 'Search this playlist'; f.style.cssText = 'flex:1;min-width:0;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);border-radius:10px;height:34px;padding:0 12px;font:14px var(--font)';
+    f.addEventListener('input', () => draw(f.value));
+    e.currentTarget.replaceWith(f); f.focus();
+  });
+  const menu = phone.querySelector('[data-menu]'); buildMenu(menu, phone, true);
+  phone.querySelector('[data-more]').addEventListener('click', (e) => { e.stopPropagation(); menu.classList.toggle('open'); });
+  phone.addEventListener('click', () => menu.classList.remove('open'));
+});
+
+const themeBtn = document.getElementById('theme'), modes = ['auto', 'dark', 'light'];
+let mode = 0;
+themeBtn.addEventListener('click', () => {
+  mode = (mode + 1) % 3;
+  if (modes[mode] === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', modes[mode]);
+  themeBtn.textContent = 'Theme: ' + modes[mode];
+});
+</script>
+</body>
+</html>
