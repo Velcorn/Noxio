@@ -104,6 +104,11 @@ h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
       '<section class="card"><h2>App icon</h2><p>Full color on pure black, as the adaptive icon looks with the launcher mask you chose above.</p><div class="stage">' + icon(180, '#000', 'color') + '</div>' +
       '<div class="row">' + [96, 64, 48, 36].map(function (s) { return '<div class="tile">' + icon(s, '#000', 'color') + '<div class="cap">' + s + ' px</div></div>'; }).join('') + '</div></section>' +
 
+      '<section class="card"><h2>App icon choices</h2><p>Settings > Personalize > App icon. Default, or one of two flat minimal versions. Launchers with themed icons tint the single-color layer instead.</p><div class="row">' +
+      '<div class="tile">' + icon(88, '#000', 'color') + '<div class="cap">Default</div></div>' +
+      '<div class="tile">' + icon(88, '#000', 'mono', '#fff') + '<div class="cap">Minimal, white on black</div></div>' +
+      '<div class="tile"><div style="background:#fff;border-radius:50%;padding:0">' + icon(88, '#fff', 'mono', '#000') + '</div><div class="cap">Minimal, black on white</div></div></div></section>' +
+
       '<section class="card"><h2>Adaptive layers</h2><p>Android draws the icon from layers, so the launcher can mask, move and tint them.</p><div class="row">' +
       '<div class="tile">' + layer(96, 'bg') + '<div class="cap">Background</div></div>' +
       '<div class="tile">' + layer(96, 'fg') + '<div class="cap">Foreground</div></div>' +
