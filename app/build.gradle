@@ -18,8 +18,9 @@ android {
         // Noxio installs alongside upstream Auxio; the code namespace stays org.oxycblt.auxio
         // to keep merging upstream changes painless.
         applicationId "de.devfin.noxio"
-        versionName "4.1.5"
-        versionCode 75
+        // CI passes -PbuildNumber=<run number> so each tagged build can update the previous one
+        versionName "1.0.0-dev"
+        versionCode((project.findProperty("buildNumber") ?: "1").toString().toInteger())
 
         minSdk min_sdk
         // randomly flickers between deprecated and required depending on what mood my gradle is in
@@ -42,6 +43,17 @@ android {
         }
     }
 
+    signingConfigs {
+        // Throwaway key committed on purpose so dev builds from any machine or CI run can update
+        // each other. It is NOT secure. Replace with a secret-backed key for real releases.
+        dev {
+            storeFile rootProject.file("keystore/dev.jks")
+            storePassword "noxio-dev"
+            keyAlias "noxio-dev"
+            keyPassword "noxio-dev"
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -49,6 +61,7 @@ android {
         }
 
         release {
+            signingConfig signingConfigs.dev
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
