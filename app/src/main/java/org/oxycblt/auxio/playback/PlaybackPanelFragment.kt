@@ -22,16 +22,22 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.updatePadding
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentPlaybackPanelBinding
 import org.oxycblt.auxio.detail.DetailViewModel
@@ -42,6 +48,7 @@ import org.oxycblt.auxio.playback.queue.QueueViewModel
 import org.oxycblt.auxio.playback.state.RepeatMode
 import org.oxycblt.auxio.playback.timer.SleepTimer
 import org.oxycblt.auxio.playback.timer.SleepTimerDialog
+import org.oxycblt.auxio.playback.timer.SleepTimerMode
 import org.oxycblt.auxio.playback.timer.SleepTimerState
 import org.oxycblt.auxio.playback.ui.StyledSeekBar
 import org.oxycblt.auxio.playback.ui.stepper.Direction
@@ -78,6 +85,7 @@ class PlaybackPanelFragment :
     private val listModel: ListViewModel by activityViewModels()
     private val queueModel: QueueViewModel by viewModels()
     @Inject lateinit var sleepTimer: SleepTimer
+    private var countdownJob: Job? = null
     private var userAwarePagerCallback: UserAwarePagerCallback? = null
 
     override fun onCreateBinding(inflater: LayoutInflater) =
@@ -213,6 +221,8 @@ class PlaybackPanelFragment :
     //    }
 
     override fun onDestroyBinding(binding: FragmentPlaybackPanelBinding) {
+        countdownJob?.cancel()
+        countdownJob = null
         binding.playbackRepeat.clearPendingIcon()
         binding.playbackSong.isSelected = false
         binding.playbackArtist.isSelected = false
@@ -226,18 +236,44 @@ class PlaybackPanelFragment :
     }
 
     private fun updateSleepTimer(state: SleepTimerState) {
-        // Tint the button while a timer is running so it is visible at a glance.
         val button = requireBinding().playbackSleepTimer
-        val color =
-            if (state is SleepTimerState.Active) {
+        countdownJob?.cancel()
+        if (state is SleepTimerState.Active) {
+            // While a timer is running, the moon makes way for the time that is left.
+            button.icon = null
+            button.setTextColor(
                 MaterialColors.getColor(button, androidx.appcompat.R.attr.colorPrimary)
-            } else {
-                MaterialColors.getColor(
-                    button,
-                    com.google.android.material.R.attr.colorOnSurfaceVariant,
+            )
+            countdownJob =
+                viewLifecycleOwner.lifecycleScope.launch {
+                    while (true) {
+                        button.text = remainingText(state)
+                        delay(COUNTDOWN_TICK_MS)
+                    }
+                }
+        } else {
+            button.text = ""
+            button.setIconResource(R.drawable.ic_sleep_timer_24)
+            button.iconTint =
+                ColorStateList.valueOf(
+                    MaterialColors.getColor(
+                        button,
+                        com.google.android.material.R.attr.colorOnSurfaceVariant,
+                    )
                 )
+        }
+    }
+
+    /** The time left of a running timer: the set time, or what is left of the current track. */
+    private fun remainingText(state: SleepTimerState.Active): String {
+        val remainingMs =
+            when (state.mode) {
+                is SleepTimerMode.Minutes -> state.endsAt - SystemClock.elapsedRealtime()
+                SleepTimerMode.EndOfTrack ->
+                    (playbackModel.song.value?.durationMs ?: 0L) -
+                        playbackModel.positionDs.value * 100
             }
-        button.iconTint = ColorStateList.valueOf(color)
+        return DateUtils.formatElapsedTime(maxOf(0L, remainingMs) / 1000)
     }
 
     private fun updateSong(song: Song?) {
@@ -379,5 +415,10 @@ class PlaybackPanelFragment :
             Direction.FORWARDS -> playbackModel.stepForward()
             Direction.BACKWARDS -> playbackModel.stepBackwards()
         }
+    }
+
+    private companion object {
+        /** How often the sleep timer countdown is refreshed. */
+        const val COUNTDOWN_TICK_MS = 1000L
     }
 }

@@ -95,8 +95,6 @@ private constructor(
     val token: MediaSessionCompat.Token
         get() = mediaSession.sessionToken
 
-    private var sleepTimerMinutes: Int? = null
-
     val notification: ForegroundServiceNotification
         field = PlaybackNotification(context, mediaSession.sessionToken)
 
@@ -349,45 +347,21 @@ private constructor(
                 .build()
         state.addCustomAction(repeatAction)
 
-        // Add shuffle action, or the sleep timer reset action if a timer is running
-        val sleepMinutes = sleepTimerMinutes
+        // Add shuffle action
         val shuffleAction =
-            if (sleepMinutes != null) {
-                PlaybackStateCompat.CustomAction.Builder(
-                        PlaybackActions.ACTION_RESET_SLEEP_TIMER,
-                        context.getString(R.string.fmt_sleep_timer_reset, sleepMinutes),
-                        R.drawable.ic_sleep_timer_24,
-                    )
-                    .build()
-            } else {
-                PlaybackStateCompat.CustomAction.Builder(
-                        PlaybackActions.ACTION_INVERT_SHUFFLE,
-                        context.getString(R.string.desc_shuffle),
-                        if (playbackManager.isShuffled) {
-                            R.drawable.ic_shuffle_on_24
-                        } else {
-                            R.drawable.ic_shuffle_off_24
-                        },
-                    )
-                    .build()
-            }
+            PlaybackStateCompat.CustomAction.Builder(
+                    PlaybackActions.ACTION_INVERT_SHUFFLE,
+                    context.getString(R.string.desc_shuffle),
+                    if (playbackManager.isShuffled) {
+                        R.drawable.ic_shuffle_on_24
+                    } else {
+                        R.drawable.ic_shuffle_off_24
+                    },
+                )
+                .build()
         state.addCustomAction(shuffleAction)
 
         mediaSession.setPlaybackState(state.build())
-    }
-
-    /**
-     * Show or hide the sleep timer reset action. It takes the place of the shuffle action while a
-     * timer runs, since the notification and the Android 13+ media controls have no room for more.
-     *
-     * @param minutes The duration of the running minutes timer, or null if there is none.
-     */
-    fun updateSleepTimer(minutes: Int?) {
-        if (sleepTimerMinutes == minutes) {
-            return
-        }
-        sleepTimerMinutes = minutes
-        invalidateNotificationActions()
     }
 
     /** Invalidate both repeat and shuffle notification actions. */
@@ -396,7 +370,7 @@ private constructor(
         invalidateSessionState()
 
         notification.updateRepeatMode(playbackManager.repeatMode)
-        notification.updateShuffled(playbackManager.isShuffled, sleepTimerMinutes)
+        notification.updateShuffled(playbackManager.isShuffled)
 
         if (!bitmapProvider.isBusy) {
             L.d("Not loading a bitmap, post the notification")
@@ -489,20 +463,13 @@ private class PlaybackNotification(
     }
 
     /**
-     * Update the secondary action in this notification to show the current shuffle state, or the
-     * sleep timer reset action if a minutes timer is running.
+     * Update the secondary action in this notification to show the current shuffle state.
      *
      * @param isShuffled Whether the queue is currently shuffled or not.
-     * @param sleepTimerMinutes The duration of the running minutes timer, or null if none.
      */
-    fun updateShuffled(isShuffled: Boolean, sleepTimerMinutes: Int?) {
-        L.d("Applying shuffle action: $isShuffled, sleep timer: $sleepTimerMinutes")
-        mActions[4] =
-            if (sleepTimerMinutes != null) {
-                buildSleepTimerAction(context, sleepTimerMinutes)
-            } else {
-                buildShuffleAction(context, isShuffled)
-            }
+    fun updateShuffled(isShuffled: Boolean) {
+        L.d("Applying shuffle action: $isShuffled")
+        mActions[4] = buildShuffleAction(context, isShuffled)
     }
 
     // --- NOTIFICATION ACTION BUILDERS ---
@@ -539,14 +506,6 @@ private class PlaybackNotification(
             }
         return buildAction(context, PlaybackActions.ACTION_INVERT_SHUFFLE, drawableRes)
     }
-
-    private fun buildSleepTimerAction(context: Context, minutes: Int) =
-        NotificationCompat.Action.Builder(
-                R.drawable.ic_sleep_timer_24,
-                context.getString(R.string.fmt_sleep_timer_reset, minutes),
-                context.newBroadcastPendingIntent(PlaybackActions.ACTION_RESET_SLEEP_TIMER),
-            )
-            .build()
 
     private fun buildAction(context: Context, actionName: String, @DrawableRes iconRes: Int) =
         NotificationCompat.Action.Builder(

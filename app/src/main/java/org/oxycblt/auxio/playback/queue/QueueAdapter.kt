@@ -22,6 +22,7 @@ import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.view.ViewGroup
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R as MR
@@ -157,6 +158,8 @@ class QueueSongViewHolder private constructor(private val binding: ItemEditableS
 
     init {
         binding.body.background = LayerDrawable(arrayOf(roundableBackground, liftableBackground))
+        // Holding the handle to drag would otherwise pop up its content description as a tooltip.
+        TooltipCompat.setTooltipText(binding.songDragHandle, null)
     }
 
     /**

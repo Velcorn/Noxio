@@ -249,6 +249,8 @@ private constructor(private val binding: ItemEditableSongBinding) :
 
     init {
         binding.body.background = LayerDrawable(arrayOf(roundableBackground, liftableBackground))
+        // Holding the handle to drag would otherwise pop up its content description as a tooltip.
+        TooltipCompat.setTooltipText(binding.songDragHandle, null)
     }
 
     /**

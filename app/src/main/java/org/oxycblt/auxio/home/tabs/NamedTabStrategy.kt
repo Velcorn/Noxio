@@ -20,10 +20,21 @@ package org.oxycblt.auxio.home.tabs
 
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
+import org.oxycblt.auxio.R
 import org.oxycblt.auxio.music.MusicType
 
 class NamedTabStrategy(private val homeTabs: List<MusicType>) : TabConfigurationStrategy {
     override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-        tab.setText(homeTabs[position].nameRes)
+        val type = homeTabs[position]
+        tab.setText(type.nameRes)
+        tab.setIcon(
+            when (type) {
+                MusicType.SONGS -> R.drawable.ic_song_20
+                MusicType.ALBUMS -> R.drawable.ic_album_20
+                MusicType.ARTISTS -> R.drawable.ic_artist_20
+                MusicType.GENRES -> R.drawable.ic_genre_20
+                MusicType.PLAYLISTS -> R.drawable.ic_playlist_20
+            }
+        )
     }
 }

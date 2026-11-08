@@ -9,9 +9,11 @@
     android:transitionGroup="true">
 
 
+    <!-- Only shown while selecting songs: the normal controls live at the bottom (home_bottom). -->
     <org.oxycblt.auxio.ui.CoordinatorAppBarLayout
         android:id="@+id/home_appbar"
-        style="@style/Widget.Auxio.AppBarLayout">
+        style="@style/Widget.Auxio.AppBarLayout"
+        android:visibility="gone">
 
         <org.oxycblt.auxio.ui.MultiToolbar
             android:id="@+id/home_toolbar"
@@ -22,9 +24,7 @@
                 android:id="@+id/home_normal_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:menu="@menu/toolbar_home"
-                app:title="@string/info_app_name" />
+                app:layout_scrollFlags="scroll|enterAlways" />
 
             <org.oxycblt.auxio.ui.AuxioToolbar
                 android:id="@+id/home_selection_toolbar"
@@ -36,15 +36,6 @@
                 app:navigationIcon="@drawable/ic_close_24" />
 
         </org.oxycblt.auxio.ui.MultiToolbar>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/home_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:tabContentStart="@dimen/spacing_medium"
-            app:tabGravity="start"
-            app:tabMode="scrollable" />
 
     </org.oxycblt.auxio.ui.CoordinatorAppBarLayout>
 
@@ -96,5 +87,71 @@
 
     </FrameLayout>
 
+    <!-- Everything on plain surface: the search row (search, sort, more) above the tabs. The
+         bottom padding is set in code so this sits above the playback bar. -->
+    <LinearLayout
+        android:id="@+id/home_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/home_search_row"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="@dimen/spacing_tiny">
+
+            <TextView
+                android:id="@+id/home_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/lbl_search"
+                android:drawablePadding="@dimen/spacing_mid_medium"
+                android:drawableStart="@drawable/ic_search_20"
+                android:gravity="center_vertical"
+                android:text="@string/hint_search_music"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?android:attr/textColorSecondary" />
+
+            <ImageButton
+                android:id="@+id/home_sort"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lbl_sort"
+                android:src="@drawable/ic_sort_20"
+                app:tint="?android:attr/textColorSecondary" />
+
+            <ImageButton
+                android:id="@+id/home_more"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lbl_more"
+                android:src="@drawable/ic_more_vert_20"
+                app:tint="?android:attr/textColorSecondary" />
+
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/home_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="0dp"
+            app:tabInlineLabel="false"
+            app:tabMode="fixed"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabTextAppearance="?attr/textAppearanceLabelSmall" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

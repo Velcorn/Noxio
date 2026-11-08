@@ -37,8 +37,6 @@ import org.oxycblt.auxio.playback.state.DeferredPlayback
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.state.Progression
 import org.oxycblt.auxio.playback.timer.SleepTimer
-import org.oxycblt.auxio.playback.timer.SleepTimerMode
-import org.oxycblt.auxio.playback.timer.SleepTimerState
 import org.oxycblt.auxio.stats.PlayRecorder
 import org.oxycblt.auxio.widgets.WidgetComponent
 import org.oxycblt.musikr.MusicParent
@@ -131,13 +129,6 @@ private constructor(
         systemReceiver.attach()
         playRecorder.attach()
         playbackManager.addListener(this)
-        scope.launch {
-            sleepTimer.state.collect { state ->
-                // Only a running minutes timer can be reset from the notification.
-                val mode = (state as? SleepTimerState.Active)?.mode as? SleepTimerMode.Minutes
-                sessionHolder.updateSleepTimer(mode?.minutes)
-            }
-        }
         updateAutoStopTimer(playbackManager.progression.isPlaying)
         return sessionHolder.token
     }
