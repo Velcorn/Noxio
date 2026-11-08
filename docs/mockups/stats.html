@@ -31,6 +31,9 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--
 .wrap { max-width: 920px; margin: 0 auto; display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 48px; align-items: start; }
 h1 { font: 800 34px/1.1 var(--font-display); margin: 0 0 6px; text-wrap: balance; }
 h2 { font: 700 13px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.ctl { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; font-size: 13px; color: var(--muted); }
+.ctl label { display: flex; align-items: center; gap: 6px; }
+.ctl select { background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; font: 500 13px var(--font-body); }
 .notes { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 .notes p, .notes li { color: var(--muted); margin: 0; max-width: 60ch; }
 .notes ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
@@ -107,6 +110,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 <body>
 <div class="wrap">
   <div>
+    <div class="ctl">
+      <label>Theme <select id="selTheme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option><option value="amoled">AMOLED black</option></select></label>
+      <label>Colors <select id="selColors"><option value="default">Noxio default</option><option value="265">Material You: violet</option><option value="145">Material You: green</option><option value="25">Material You: peach</option><option value="205">Material You: blue</option></select></label>
+    </div>
     <div class="phone" id="phone">
       <div class="bar">
         <button class="icon-btn" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -180,6 +187,14 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       </ul>
     </div>
     <div>
+      <h2>Material You and AMOLED</h2>
+      <ul>
+        <li>Try the theme and color menus above the phone. <b>AMOLED black</b> uses true black surfaces, so the cards are the only color on screen.</li>
+        <li>With a <b>Material You</b> color, the three card gradients and the accent are derived from your wallpaper color instead of the fixed Noxio colors.</li>
+        <li>The app already has the black theme and dynamic colors in Settings > Personalize.</li>
+      </ul>
+    </div>
+    <div>
       <h2>CSV export and import</h2>
       <ul>
         <li><b>One file:</b> the columns follow Musicolet's "Most played Songs" export: FILE_PATH, TITLE, ARTIST, ALBUM, ALBUM_ARTIST, COMPOSER, GENRE, YEAR, DURATION_MS, PLAY_COUNT. Artist and album rankings can be derived from it.</li>
@@ -211,6 +226,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   };
   var titles = { artists: 'Top artists', albums: 'Top albums', songs: 'Top songs' };
   var grads = { artists: ['#7b4dff', '#d24dd8'], albums: ['#0fa3b1', '#3b6cf0'], songs: ['#ff8a3d', '#e8365d'] };
+  var defaultGrads = JSON.parse(JSON.stringify(grads));
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   var period = 'week', cat = 'artists', offset = 0, expanded = false;
 
@@ -339,6 +355,44 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   };
   $('monthCancel').onclick = function () { $('monthSheet').classList.remove('open'); };
   $('monthOk').onclick = function () { $('monthSheet').classList.remove('open'); toast('Imported 312 plays'); };
+
+  // --- theme and color simulation: AMOLED black, and gradients derived from a Material You wallpaper hue ---
+  var root = document.documentElement;
+  var themes = {
+    light: { '--bg': '#f1f1f6', '--surface': '#ffffff', '--surface-2': '#e8e8f1', '--fg': '#16162b', '--muted': '#5d5d7a', '--line': '#d6d6e4' },
+    dark: { '--bg': '#0d0d1c', '--surface': '#15152a', '--surface-2': '#23233f', '--fg': '#ececf8', '--muted': '#9b9bbd', '--line': '#2d2d4d' },
+    amoled: { '--bg': '#000000', '--surface': '#000000', '--surface-2': '#151515', '--fg': '#f2f2f7', '--muted': '#9a9aa8', '--line': '#262626' }
+  };
+  function hsl(h, s, l) { return 'hsl(' + ((h % 360) + 360) % 360 + ',' + s + '%,' + l + '%)'; }
+  function applyLook() {
+    var mode = $('selTheme').value, hue = $('selColors').value;
+    var dark = mode === 'dark' || mode === 'amoled' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+    ['--bg', '--surface', '--surface-2', '--fg', '--muted', '--line', '--accent', '--on-accent'].forEach(function (k) { root.style.removeProperty(k); });
+    if (mode !== 'system') { Object.keys(themes[mode]).forEach(function (k) { root.style.setProperty(k, themes[mode][k]); }); }
+    root.style.colorScheme = dark ? 'dark' : 'light';
+    if (hue === 'default') {
+      grads = JSON.parse(JSON.stringify(defaultGrads));
+      root.style.removeProperty('--g-artists'); root.style.removeProperty('--g-albums'); root.style.removeProperty('--g-songs'); root.style.removeProperty('--g-hero');
+      if (mode !== 'system') { root.style.setProperty('--accent', dark ? '#a79dff' : '#4b3fd1'); root.style.setProperty('--on-accent', dark ? '#12112b' : '#ffffff'); }
+    } else {
+      var h = +hue;
+      // Three hues around the wallpaper color, like Material You's primary, secondary and tertiary.
+      grads = {
+        artists: [hsl(h, 70, 42), hsl(h + 38, 72, 50)],
+        albums: [hsl(h + 70, 62, 38), hsl(h + 105, 66, 46)],
+        songs: [hsl(h - 55, 72, 46), hsl(h - 20, 74, 52)]
+      };
+      var g = function (p) { return 'linear-gradient(145deg, ' + p[0] + ' 0%, ' + p[1] + ' 100%)'; };
+      root.style.setProperty('--g-artists', g(grads.artists));
+      root.style.setProperty('--g-albums', g(grads.albums));
+      root.style.setProperty('--g-songs', g(grads.songs));
+      root.style.setProperty('--g-hero', g([hsl(h, 55, 22), hsl(h + 20, 60, 34)]));
+      root.style.setProperty('--accent', dark ? hsl(h, 90, 78) : hsl(h, 62, 40));
+      root.style.setProperty('--on-accent', dark ? hsl(h, 45, 14) : '#ffffff');
+    }
+  }
+  $('selTheme').onchange = applyLook; $('selColors').onchange = applyLook;
+  applyLook();
   render();
 })();
 </script>

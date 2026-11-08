@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noxio Icon Concepts</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: toolbar of shape choices, then three concept cards. Each card shows the full-color icon on AMOLED black,
+   the themed (Material You) versions, and small sizes. All icons are drawn in the 108 x 108 adaptive icon grid. */
+:root { --bg:#f1f1f6; --surface:#fff; --surface-2:#e8e8f1; --fg:#16162b; --muted:#5d5d7a; --line:#d6d6e4; --accent:#4b3fd1;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif; --font-body:"DM Sans",system-ui,sans-serif; color-scheme: light dark; }
+@media (prefers-color-scheme: dark) { :root { --bg:#000; --surface:#0c0c10; --surface-2:#1a1a22; --fg:#ececf8; --muted:#9b9bbd; --line:#25252f; --accent:#a79dff; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 var(--font-body); padding:32px 16px; }
+.wrap { max-width: 980px; margin: 0 auto; }
+h1 { font:800 34px/1.1 var(--font-display); margin:0 0 6px; }
+.lead { color:var(--muted); max-width:62ch; margin:0 0 20px; }
+.bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:24px; }
+.bar span { color:var(--muted); font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; margin-right:4px; }
+.bar button { border:1px solid var(--line); background:var(--surface); color:var(--fg); border-radius:18px; padding:7px 16px; font:600 14px var(--font-body); cursor:pointer; }
+.bar button[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
+.bar button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:20px; }
+.card { background:var(--surface); border:1px solid var(--line); border-radius:28px; padding:22px; display:flex; flex-direction:column; gap:16px; min-width:0; }
+.card h2 { font:800 22px/1.2 var(--font-display); margin:0; }
+.card p { margin:0; color:var(--muted); font-size:14px; }
+.hero { display:grid; place-items:center; background:#000; border-radius:22px; padding:22px; }
+.row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
+.cap { font-size:11.5px; color:var(--muted); text-align:center; margin-top:4px; }
+.tile { display:flex; flex-direction:column; align-items:center; }
+.ico { overflow:hidden; display:block; }
+.round { border-radius:50%; } .squircle { border-radius:34%; } .rsquare { border-radius:22%; }
+.pick { margin-top:auto; color:var(--muted); font-size:13px; }
+.notes { margin-top:28px; color:var(--muted); max-width:70ch; }
+.notes b { color:var(--fg); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Noxio icon concepts</h1>
+  <p class="lead">Dark and moody, a moon and a play button. All three have a pure black background for AMOLED screens, and a single-color version for Android's themed icons, which Material You tints with your wallpaper colors.</p>
+  <div class="bar" role="group" aria-label="Icon shape">
+    <span>Shape</span>
+    <button data-shape="round" aria-pressed="true">Circle</button>
+    <button data-shape="squircle" aria-pressed="false">Squircle</button>
+    <button data-shape="rsquare" aria-pressed="false">Rounded square</button>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="notes">
+    <p><b>How it maps to the app.</b> Android icons are two layers on a 108 dp grid: a background and a foreground, plus an optional monochrome layer that the launcher tints on Android 13 and later. Noxio already has all three slots, so a chosen concept is just new artwork in those files. The launcher mask (circle, squircle, and so on) is the user's choice, hence the shape buttons.</p>
+  </div>
+</div>
+<script>
+(function () {
+  var uid = 0;
+  var circleD = function (cx, cy, r) { return 'M' + (cx - r) + ' ' + cy + 'a' + r + ' ' + r + ' 0 1 0 ' + 2 * r + ' 0a' + r + ' ' + r + ' 0 1 0 ' + (-2 * r) + ' 0z'; };
+
+  // Each concept returns the foreground artwork. In 'mono' mode everything uses one color, in 'color' mode gradients.
+  var concepts = [
+    { name: 'Crescent Play',
+      text: 'A crescent moon that holds a play triangle in its notch. Calm and recognizable, and the triangle reads even at 32 px.',
+      art: function (mode, fg, id) {
+        var moon = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        var tri = mode === 'mono' ? fg : '#ffffff';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfc6ff"/><stop offset="1" stop-color="#8f7dff"/></linearGradient>' +
+          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="65" cy="45" r="23" fill="#000"/></mask></defs>' +
+          '<circle cx="52" cy="56" r="29" fill="' + moon + '" mask="url(#m' + id + ')"/>' +
+          '<path d="M59 36L59 56L76 46Z" fill="' + tri + '" stroke="' + tri + '" stroke-width="4" stroke-linejoin="round"/>';
+      } },
+    { name: 'Full Moon Play',
+      text: 'A bold moon disc with the play button cut out of it, and two small stars. The simplest shape, and it stays crisp when tinted.',
+      art: function (mode, fg, id) {
+        var disc = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3dcff"/><stop offset="1" stop-color="#a79dff"/></linearGradient>' +
+          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><path d="M47 40L47 68L71 54Z" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/></mask></defs>' +
+          '<circle cx="54" cy="54" r="30" fill="' + disc + '" mask="url(#m' + id + ')"/>' +
+          '<circle cx="24" cy="26" r="2.6" fill="' + (mode === 'mono' ? fg : '#ffffff') + '"/><circle cx="86" cy="84" r="2" fill="' + (mode === 'mono' ? fg : '#ffffff') + '"/><circle cx="84" cy="24" r="1.6" fill="' + (mode === 'mono' ? fg : '#ffffff') + '"/>';
+      } },
+    { name: 'Eclipsed Play',
+      text: 'A rounded play triangle with a bite taken out by a shadow, so it also looks like a moon phase. The most distinctive of the three.',
+      art: function (mode, fg, id) {
+        var fill = mode === 'mono' ? fg : 'url(#g' + id + ')';
+        return '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9a8ff"/><stop offset="1" stop-color="#e04fd0"/></linearGradient>' +
+          '<mask id="m' + id + '"><rect width="108" height="108" fill="#fff"/><circle cx="34" cy="48" r="26" fill="#000"/></mask></defs>' +
+          '<path d="M42 30L42 78L82 54Z" fill="' + fill + '" stroke="' + fill + '" stroke-width="8" stroke-linejoin="round" mask="url(#m' + id + ')"/>';
+      } }
+  ];
+
+  var themed = [
+    { name: 'Lavender', bg: '#e6deff', fg: '#3b2e7e' },
+    { name: 'Moss', bg: '#cdebcf', fg: '#1d4b25' },
+    { name: 'Peach', bg: '#ffdcc7', fg: '#6a3112' },
+    { name: 'Dark', bg: '#2f2b45', fg: '#e3dbff' }
+  ];
+
+  function icon(concept, mode, size, bg, fg) {
+    var id = ++uid;
+    var background = mode === 'mono' ? bg : '#000';
+    return '<svg class="ico shape" width="' + size + '" height="' + size + '" viewBox="0 0 108 108" role="img" aria-label="' + concept.name + '">' +
+      '<rect width="108" height="108" fill="' + background + '"/>' + concept.art(mode, fg, id) + '</svg>';
+  }
+  var shape = 'round';
+  function render() {
+    var html = concepts.map(function (c, i) {
+      return '<section class="card"><h2>' + (i + 1) + '. ' + c.name + '</h2><p>' + c.text + '</p>' +
+        '<div class="hero">' + icon(c, 'color', 132) + '</div>' +
+        '<div><div class="cap" style="text-align:left;margin-bottom:6px">Themed icon, tinted by Material You</div><div class="row">' +
+        themed.map(function (t) { return '<div class="tile">' + icon(c, 'mono', 56, t.bg, t.fg) + '<div class="cap">' + t.name + '</div></div>'; }).join('') +
+        '</div></div>' +
+        '<div><div class="cap" style="text-align:left;margin-bottom:6px">Small sizes on black</div><div class="row">' +
+        [48, 36, 28].map(function (s) { return '<div class="tile">' + icon(c, 'color', s) + '<div class="cap">' + s + ' px</div></div>'; }).join('') +
+        '</div></div></section>';
+    }).join('');
+    document.getElementById('grid').innerHTML = html;
+    document.querySelectorAll('.shape').forEach(function (el) { el.setAttribute('class', 'ico shape ' + shape); });
+  }
+  document.querySelectorAll('.bar button').forEach(function (b) {
+    b.onclick = function () {
+      shape = b.dataset.shape;
+      document.querySelectorAll('.bar button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      document.querySelectorAll('.shape').forEach(function (el) { el.setAttribute('class', 'ico shape ' + shape); });
+    };
+  });
+  render();
+})();
+</script>
+</body>
+</html>
