@@ -53,10 +53,10 @@ object StatsCsvImport {
             return null
         }
         val body = rows.drop(1)
-        fun cell(row: List<String>, name: String) =
-            columns[name]?.let { row.getOrNull(it) }?.trim().orEmpty().let {
-                if (it == StatsCsv.UNKNOWN) "" else it
-            }
+        fun cell(row: List<String>, name: String): String {
+            val value = columns[name]?.let { row.getOrNull(it) }?.trim().orEmpty()
+            return if (value == StatsCsv.UNKNOWN) "" else value
+        }
 
         return if ("PLAYED_AT" in columns) {
             Parsed.History(
@@ -151,10 +151,7 @@ object StatsCsvImport {
         cell(row, "FILE_PATH").ifEmpty { cell(row, "TITLE") + cell(row, "ARTIST") }
 
     private fun splitArtists(joined: String) =
-        joined
-            .split("; ")
-            .filter { it.isNotBlank() }
-            .joinToString(PlayEvent.ARTIST_SEPARATOR)
+        joined.split("; ").filter { it.isNotBlank() }.joinToString(PlayEvent.ARTIST_SEPARATOR)
 
     /** A CSV reader for RFC 4180 files: quoted fields, doubled quotes, line breaks in quotes. */
     fun readRows(text: String): List<List<String>> {

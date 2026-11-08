@@ -18,8 +18,8 @@
  
 package org.oxycblt.auxio.stats
 
-import android.content.res.ColorStateList
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -287,16 +287,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         viewLifecycleOwner.lifecycleScope.launch {
             val (parsed, name) =
                 withContext(Dispatchers.IO) {
-                    val text =
-                        try {
-                            context.contentResolver
-                                .openInputStream(uri)
-                                ?.bufferedReader()
-                                ?.use { it.readText() }
-                        } catch (e: IOException) {
-                            null
-                        }
-                    text?.let(StatsCsvImport::parse) to displayName(context, uri)
+                    readText(context, uri)?.let(StatsCsvImport::parse) to displayName(context, uri)
                 }
             when (parsed) {
                 null -> context.showToast(R.string.err_stats_import)
@@ -363,6 +354,13 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 .show()
         }
     }
+
+    private fun readText(context: Context, uri: Uri): String? =
+        try {
+            context.contentResolver.openInputStream(uri)?.use { it.bufferedReader().readText() }
+        } catch (e: IOException) {
+            null
+        }
 
     private fun displayName(context: Context, uri: Uri): String? =
         context.contentResolver
