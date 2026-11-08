@@ -104,6 +104,23 @@
         <!--
         Expose Noxio's cover data to the android system
         -->
+        <!--
+        Lets launchers that support icon packs (like Kvaesitso) offer the minimal Noxio icon, see
+        res/xml/appfilter.xml and res/xml/drawable.xml
+        -->
+        <activity
+            android:name=".IconPackActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="org.adw.ActivityStarter.THEMES" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.novalauncher.THEME" />
+            </intent-filter>
+        </activity>
+
         <!-- Hands shared stats images to other apps -->
         <provider
             android:name="androidx.core.content.FileProvider"

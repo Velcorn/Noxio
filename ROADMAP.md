@@ -4,6 +4,7 @@
 - [ ] Sleep timer: implemented, needs a build and on-device testing (icon above the seek bar, 30 / custom / 60 min, end of track, fade-out, shake to reset, notification reset action)
 - [x] Equalizer moved from the now playing toolbar to Settings > Audio
 - [x] Icon: Crescent and Sparkle (adaptive icon on pure black, themed icon layer, splash, notification glyph)
+- [x] Minimal icon bundled as an icon pack for launchers (Kvaesitso, Nova), needs a check on a device
 - [ ] Rebrand: fastlane metadata, about screen
 
 ## Later

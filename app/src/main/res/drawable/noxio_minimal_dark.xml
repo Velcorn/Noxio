@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Minimal Noxio icon, dark version for light wallpapers. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+    <!-- Crop the 108 unit icon grid to the artwork -->
+    <group
+        android:translateX="-18"
+        android:translateY="-18">
+        <path
+            android:fillColor="#2A2450"
+            android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z" />
+        <path
+            android:fillColor="#2A2450"
+            android:pathData="M47 41L47 67L68 54Z"
+            android:strokeColor="#2A2450"
+            android:strokeLineJoin="round"
+            android:strokeWidth="5" />
+        <path
+            android:fillColor="#2A2450"
+            android:pathData="M75 32Q77.1 35.9 81 38Q77.1 40.1 75 44Q72.9 40.1 69 38Q72.9 35.9 75 32Z" />
+    </group>
+</vector>
