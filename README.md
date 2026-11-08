@@ -5,6 +5,14 @@
     <img alt="Minimum SDK Version" src="https://img.shields.io/badge/API-24%2B-1450A8?style=flat">
 </p>
 
+> [!WARNING]
+> **I'm not an Android developer.** Noxio is a personal project, and most of its changes are vibe-coded with
+> an AI assistant for my own use. Expect rough edges, and review anything you rely on.
+>
+> The main reason this fork exists is the **sleep timer**. **Listening stats** (a barebones, Spotify
+> Wrapped-style summary) are a nice to have. Anything else is a small tweak I wanted for myself.
+> It is shared as is, with no promise of support or stability.
+
 ## About
 
 Noxio is a fork of [Auxio](https://github.com/OxygenCobalt/Auxio) by Alexander Capehart. Auxio is a great local music
