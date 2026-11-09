@@ -26,4 +26,5 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 - Settings keys and defaults live in `values/settings.xml`, UI in `xml/preferences_*.xml`.
 - Keep `README.md` (the "What's different" table) and `ROADMAP.md` in sync when a feature changes or is finished.
 - Show UI changes as mockups first, ideally two or three proposals, before implementing them. Mockups are single HTML files in `docs/mockups/`; icon sources are in `docs/icon/`.
+- Nothing that changes how the app looks is committed before the user has reviewed it. Show a mockup or a screenshot of the result and wait for approval, then commit. Tests, lint and the build can run in the meantime, but the commit and any release tag wait. This also holds for small tweaks and for fixes of a visual bug.
 - Branches: `dev` is day-to-day work, `main` is releasable. Do not push to `main`.
