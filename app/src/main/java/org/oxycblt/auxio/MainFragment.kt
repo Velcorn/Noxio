@@ -209,19 +209,9 @@ class MainFragment :
         binding.sheetScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
         binding.homeShuffleFab.setOnClickListener {
             if (currentNavMode(binding) == NavMode.ARTIST) {
-                // On an artist page the button plays, and a long press shuffles.
-                detailModel.currentArtist.value?.let(playbackModel::play)
+                detailModel.currentArtist.value?.let(playbackModel::shuffle)
             } else {
                 playbackModel.shuffleAll()
-            }
-        }
-        binding.homeShuffleFab.setOnLongClickListener {
-            val artist = detailModel.currentArtist.value
-            if (currentNavMode(binding) == NavMode.ARTIST && artist != null) {
-                playbackModel.shuffle(artist)
-                true
-            } else {
-                false
             }
         }
         binding.homeNewPlaylistFab.apply {
@@ -409,11 +399,6 @@ class MainFragment :
             binding.mainSearchInput.setText(detailModel.artistQuery)
             updateSearchHint(binding)
         }
-        binding.homeShuffleFab.setImageResource(
-            if (artist) R.drawable.ic_play_24 else R.drawable.ic_shuffle_off_24
-        )
-        binding.homeShuffleFab.contentDescription =
-            getString(if (artist) R.string.lbl_play else R.string.lbl_shuffle)
         rebuildTabs(binding)
     }
 

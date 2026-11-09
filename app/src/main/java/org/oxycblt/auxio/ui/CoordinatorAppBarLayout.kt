@@ -29,8 +29,10 @@ import android.view.animation.AnimationUtils
 import androidx.annotation.AttrRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.color.MaterialColors
 import org.oxycblt.auxio.util.coordinatorLayoutBehavior
 import timber.log.Timber as L
@@ -76,14 +78,24 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
     init {
         fitsSystemWindows = true
         viewTreeObserver.addOnPreDrawListener(onPreDraw)
+    }
 
-        // The lifted bar, status bar included, is tinted with a container colour. With the black
-        // theme it has to stay black.
-        if (
-            MaterialColors.getColor(this, com.google.android.material.R.attr.colorSurface) ==
-                Color.BLACK
-        ) {
-            setLiftOnScrollColor(ColorStateList.valueOf(Color.BLACK))
+    /**
+     * With the black theme the bar must stay black when it is lifted or collapsed, and so must the
+     * status bar above it. Otherwise they are tinted with a container colour.
+     */
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        val surface = MaterialColors.getColor(this, com.google.android.material.R.attr.colorSurface)
+        if (surface != Color.BLACK) return
+        val black = Color.BLACK.toDrawable()
+        setLiftOnScrollColor(ColorStateList.valueOf(Color.BLACK))
+        setStatusBarForeground(black)
+        for (i in 0 until childCount) {
+            (getChildAt(i) as? CollapsingToolbarLayout)?.apply {
+                setContentScrim(black)
+                setStatusBarScrim(black)
+            }
         }
     }
 

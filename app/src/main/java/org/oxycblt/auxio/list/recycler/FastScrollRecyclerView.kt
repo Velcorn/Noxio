@@ -40,6 +40,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
@@ -315,20 +316,30 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
 
     /**
      * When all the items fit in the view, push them down by the space that is left. A list that
-     * does not fit, or that is a grid, is left alone.
+     * does not fit, or that has more than one column, is left alone.
      */
     private fun updateBottomAlignment() {
         val lm = layoutManager as? LinearLayoutManager
         val count = adapter?.itemCount ?: 0
         var gap = 0
-        if (lm != null && lm !is GridLayoutManager && count > 0 && height > 0) {
+        if (
+            lm != null && (lm !is GridLayoutManager || lm.spanCount == 1) && count > 0 && height > 0
+        ) {
             val first = lm.findViewByPosition(0)
             val last = lm.findViewByPosition(count - 1)
             if (first != null && last != null) {
                 // The decorated top of the first item includes the gap that is there now.
                 val content =
                     lm.getDecoratedBottom(last) - lm.getDecoratedTop(first) - bottomAlignGap
-                gap = (height - paddingTop - paddingBottom - content).coerceAtLeast(0)
+                // Under a collapsing app bar the view is taller than what is on screen, as it
+                // also covers what the bar gives up when it collapses. Count only what is shown.
+                val room =
+                    (parent as? View)?.let {
+                        val margin = (layoutParams as? ViewGroup.MarginLayoutParams)?.bottomMargin
+                        it.height - top - (margin ?: 0)
+                    } ?: height
+                val available = minOf(height, room) - paddingTop - paddingBottom
+                gap = (available - content).coerceAtLeast(0)
             }
         }
         if (gap != bottomAlignGap) {

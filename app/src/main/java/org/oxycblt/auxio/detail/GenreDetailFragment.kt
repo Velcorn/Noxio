@@ -56,6 +56,7 @@ class GenreDetailFragment : DetailFragment<Genre, Music>() {
     // as a UID, as that is the only safe way to parcel an genre.
     private val args: GenreDetailFragmentArgs by navArgs()
     private val genreListAdapter = GenreDetailListAdapter(this)
+    private var bottomBar: DetailBottomBar? = null
 
     override fun getDetailListAdapter() = genreListAdapter
 
@@ -63,6 +64,17 @@ class GenreDetailFragment : DetailFragment<Genre, Music>() {
 
     override fun onBindingCreated(binding: FragmentDetailBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
+
+        // The controls are along the bottom: back, the name, sort, play, shuffle and more.
+        bottomBar =
+            DetailBottomBar.attach(binding)?.apply {
+                onBack = { findNavController().navigateUp() }
+                onPlay = { getToolbarParent()?.let(::onPlayParent) }
+                onShuffle = { getToolbarParent()?.let(::onShuffleParent) }
+                onMore = { onOpenParentMenu() }
+                onSort = { onOpenSortMenu() }
+                setSortAvailable(true)
+            }
 
         // --- VIEWMODEL SETUP ---
         // DetailViewModel handles most initialization from the navigation argument.
@@ -85,6 +97,7 @@ class GenreDetailFragment : DetailFragment<Genre, Music>() {
 
     override fun onDestroyBinding(binding: FragmentDetailBinding) {
         super.onDestroyBinding(binding)
+        bottomBar = null
         // Avoid possible race conditions that could cause a bad replace instruction to be consumed
         // during list initialization and crash the app. Could happen if the user is fast enough.
         detailModel.genreSongInstructions.consume()
@@ -133,6 +146,7 @@ class GenreDetailFragment : DetailFragment<Genre, Music>() {
         val context = requireContext()
         val name = genre.name.resolve(context)
         binding.detailNormalToolbar.title = name
+        bottomBar?.setTitle(name)
         binding.detailCover.bind(genre)
         binding.detailType.text = context.getString(R.string.lbl_genre)
         binding.detailName.text = genre.name.resolve(context)
@@ -148,6 +162,7 @@ class GenreDetailFragment : DetailFragment<Genre, Music>() {
         binding.detailPlayButton?.setOnClickListener { playbackModel.play(genre) }
         binding.detailShuffleButton?.setOnClickListener { playbackModel.shuffle(genre) }
         setToolbarPlaybackButtonsEnabled(true)
+        bottomBar?.setPlayable(true)
         updatePlayback(
             playbackModel.song.value,
             playbackModel.parent.value,
@@ -234,6 +249,8 @@ class GenreDetailFragment : DetailFragment<Genre, Music>() {
         } else {
             binding.detailToolbar.setVisible(R.id.detail_normal_toolbar)
         }
+        // The top toolbar is collapsed to nothing, except for the actions of selected songs.
+        bottomBar?.setTopToolbarShown(selected.isNotEmpty())
     }
 
     private fun handlePlaylistDecision(decision: PlaylistDecision?) {

@@ -53,6 +53,8 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
     private val play = root.findViewById<ImageButton>(R.id.bar_play)
     private val shuffle = root.findViewById<ImageButton>(R.id.bar_shuffle)
     private val more = root.findViewById<ImageButton>(R.id.bar_more)
+    private val sort = root.findViewById<ImageButton>(R.id.bar_sort)
+    private var sortAvailable = false
     private val cancel = root.findViewById<MaterialButton>(R.id.bar_cancel)
     private val spacer = root.findViewById<View>(R.id.bar_spacer)
     private val save = root.findViewById<MaterialButton>(R.id.bar_save)
@@ -61,6 +63,7 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
     var onPlay: () -> Unit = {}
     var onShuffle: () -> Unit = {}
     var onMore: () -> Unit = {}
+    var onSort: () -> Unit = {}
     var onCancel: () -> Unit = {}
     var onSave: () -> Unit = {}
 
@@ -87,6 +90,7 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
         play.setOnClickListener { onPlay() }
         shuffle.setOnClickListener { onShuffle() }
         more.setOnClickListener { onMore() }
+        sort.setOnClickListener { onSort() }
         cancel.setOnClickListener { onCancel() }
         save.setOnClickListener { onSave() }
     }
@@ -94,6 +98,12 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
     /** Show the name of what the screen is about. */
     fun setTitle(name: CharSequence) {
         title.text = name
+    }
+
+    /** Show the sort button, for screens whose list can be sorted. */
+    fun setSortAvailable(available: Boolean) {
+        sortAvailable = available
+        sort.isVisible = available
     }
 
     /** Whether there is anything to play. Playing is not possible while editing either. */
@@ -114,6 +124,7 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
         for (view in listOf(back, title, play, shuffle, more)) {
             view.isVisible = !editing
         }
+        sort.isVisible = sortAvailable && !editing
         cancel.isVisible = editing
         spacer.isVisible = editing
         save.isVisible = editing
