@@ -56,6 +56,7 @@ enum class StatsPeriod(val calendarField: Int) {
  * Compute the calendar range of a [period], shifted by [offset] periods (0 is the current one, -1
  * the one before).
  *
+ * @param firstDayOfWeek The day a week starts on, a [Calendar] day. Monday by default.
  * @return The start (inclusive) and end (exclusive) in milliseconds since the unix epoch.
  */
 fun statsRange(
@@ -63,12 +64,13 @@ fun statsRange(
     offset: Int,
     nowMs: Long = System.currentTimeMillis(),
     calendar: Calendar = Calendar.getInstance(),
+    firstDayOfWeek: Int = Calendar.MONDAY,
 ): LongRange {
     if (period == StatsPeriod.ALL) {
         return PlayEvent.BASELINE_TIME until Long.MAX_VALUE
     }
-    // A week starts on Monday everywhere, whatever the regional setting of the phone says.
-    calendar.firstDayOfWeek = Calendar.MONDAY
+    // The first day of the week is the setting of the user, not the regional one of the phone.
+    calendar.firstDayOfWeek = firstDayOfWeek
     calendar.timeInMillis = nowMs
     calendar.set(Calendar.HOUR_OF_DAY, 0)
     calendar.set(Calendar.MINUTE, 0)

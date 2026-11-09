@@ -152,6 +152,10 @@
     <string name="lbl_stats_exported">Exported</string>
     <string name="err_stats_export">Could not write the file</string>
     <string name="set_stats">Listening stats</string>
+    <string name="set_week_start">Week starts on</string>
+    <string name="set_week_start_monday">Monday</string>
+    <string name="set_week_start_sunday">Sunday</string>
+    <string name="set_week_start_saturday">Saturday</string>
     <string name="set_stats_backup">Weekly CSV backup</string>
     <string name="set_stats_backup_desc">Keeps a CSV copy of your listening history up to date in a folder you choose</string>
     <string name="set_stats_backup_folder">Backup folder</string>
@@ -411,6 +415,13 @@
     <string name="set_reindex_desc">Reload the music library, using cached tags when possible</string>
     <!-- Different from "Reload music" -->
     <string name="set_rescan">Rescan music</string>
+    <string name="lbl_rescan">Rescan</string>
+    <string name="lbl_rescan_confirm">Every file is read again from scratch. With a big library this can take several minutes, and the library can look incomplete until it is done. Use Refresh music if only a few files changed.</string>
+    <string name="lbl_scan_started_refresh">Refreshing your music…</string>
+    <string name="lbl_scan_started_rescan">Rescanning your music…</string>
+    <string name="lbl_scan_working">Working…</string>
+    <string name="fmt_scan_progress">Scanning songs: %1$d / %2$d</string>
+    <string name="lbl_scan_done">Your music is up to date</string>
     <string name="set_rescan_desc">Clear the tag cache and fully reload the music library (slower, but more complete)</string>
 
     <!-- Error Namespace | Error Labels -->

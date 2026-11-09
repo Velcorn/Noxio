@@ -47,6 +47,13 @@
 
     <PreferenceCategory app:title="@string/set_stats">
 
+        <org.oxycblt.auxio.settings.ui.IntListPreference
+            app:defaultValue="@integer/week_start_monday"
+            app:entries="@array/entries_week_start"
+            app:entryValues="@array/values_week_start"
+            app:key="@string/set_key_stats_week_start"
+            app:title="@string/set_week_start" />
+
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="@string/set_key_stats_backup"

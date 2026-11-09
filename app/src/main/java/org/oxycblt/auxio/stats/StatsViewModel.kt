@@ -42,7 +42,10 @@ enum class StatsCategory {
 }
 
 @HiltViewModel
-class StatsViewModel @Inject constructor(private val repository: StatsRepository) : ViewModel() {
+class StatsViewModel
+@Inject
+constructor(private val repository: StatsRepository, private val settings: StatsSettings) :
+    ViewModel() {
     /** Which period is shown. [offset] 0 is the current one, -1 the one before it. */
     data class Query(val period: StatsPeriod, val offset: Int)
 
@@ -66,7 +69,8 @@ class StatsViewModel @Inject constructor(private val repository: StatsRepository
     val ui: StateFlow<Ui?> =
         combine(mutableQuery, refresh) { query, _ -> query }
             .mapLatest {
-                val range = statsRange(it.period, it.offset)
+                val range =
+                    statsRange(it.period, it.offset, firstDayOfWeek = settings.firstDayOfWeek)
                 Ui(it, range, repository.summary(range))
             }
             .flowOn(Dispatchers.IO)

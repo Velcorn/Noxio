@@ -19,17 +19,23 @@
 package org.oxycblt.auxio.settings
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialFadeThrough
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.R
+import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.settings.ui.WrappedDialogPreference
+import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.navigateSafe
+import org.oxycblt.auxio.util.showToast
+import org.oxycblt.musikr.IndexingProgress
 import timber.log.Timber as L
 
 /**
@@ -41,6 +47,9 @@ import timber.log.Timber as L
 class RootPreferenceFragment : BasePreferenceFragment(R.xml.preferences_root) {
     private val musicModel: MusicViewModel by activityViewModels()
 
+    /** Set when the user started a scan here, so that the end of it is reported. */
+    private var reportScan = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,6 +57,11 @@ class RootPreferenceFragment : BasePreferenceFragment(R.xml.preferences_root) {
         returnTransition = MaterialFadeThrough()
         exitTransition = MaterialFadeThrough()
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        collectImmediately(musicModel.indexingState, ::updateIndexingState)
     }
 
     override fun onOpenDialogPreference(preference: WrappedDialogPreference) {
@@ -82,11 +96,66 @@ class RootPreferenceFragment : BasePreferenceFragment(R.xml.preferences_root) {
                 L.d("Navigating to audio preferences")
                 findNavController().navigateSafe(RootPreferenceFragmentDirections.audioPeferences())
             }
-            getString(R.string.set_key_reindex) -> musicModel.refresh()
-            getString(R.string.set_key_rescan) -> musicModel.rescan()
+            getString(R.string.set_key_reindex) -> {
+                reportScan = true
+                requireContext().showToast(R.string.lbl_scan_started_refresh)
+                musicModel.refresh()
+            }
+            getString(R.string.set_key_rescan) -> confirmRescan()
             else -> return super.onPreferenceTreeClick(preference)
         }
 
         return true
+    }
+
+    /** A rescan reads everything again and takes long, so it has to be confirmed. */
+    private fun confirmRescan() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.set_rescan)
+            .setMessage(R.string.lbl_rescan_confirm)
+            .setPositiveButton(R.string.lbl_rescan) { _, _ ->
+                reportScan = true
+                requireContext().showToast(R.string.lbl_scan_started_rescan)
+                musicModel.rescan()
+            }
+            .setNegativeButton(R.string.lbl_cancel, null)
+            .show()
+    }
+
+    /**
+     * While the library is loading both options show how far it is and cannot be started again.
+     * When a scan that was started here ends, say so.
+     */
+    private fun updateIndexingState(state: IndexingState?) {
+        val reindex = findPreference<Preference>(getString(R.string.set_key_reindex)) ?: return
+        val rescan = findPreference<Preference>(getString(R.string.set_key_rescan)) ?: return
+        when (state) {
+            is IndexingState.Indexing -> {
+                val progress =
+                    when (val p = state.progress) {
+                        is IndexingProgress.Songs ->
+                            getString(R.string.fmt_scan_progress, p.loaded, p.explored)
+                        is IndexingProgress.Indeterminate -> getString(R.string.lbl_scan_working)
+                    }
+                reindex.summary = progress
+                rescan.summary = progress
+                reindex.isEnabled = false
+                rescan.isEnabled = false
+            }
+            else -> {
+                reindex.setSummary(R.string.set_reindex_desc)
+                rescan.setSummary(R.string.set_rescan_desc)
+                reindex.isEnabled = true
+                rescan.isEnabled = true
+                if (reportScan && state is IndexingState.Completed) {
+                    reportScan = false
+                    requireContext()
+                        .showToast(
+                            if (state.error == null) R.string.lbl_scan_done
+                            else R.string.err_index_failed
+                        )
+                }
+            }
+        }
     }
 }

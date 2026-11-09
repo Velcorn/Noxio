@@ -65,6 +65,7 @@
     <string name="set_key_album_songs_sort" translatable="false">auxio_album_sort</string>
     <string name="set_key_artist_songs_sort" translatable="false">auxio_artist_sort</string>
     <string name="set_key_artist_albums_sort" translatable="false">noxio_artist_albums_sort</string>
+    <string name="set_key_stats_week_start" translatable="false">noxio_stats_week_start</string>
     <string name="set_key_genre_songs_sort" translatable="false">auxio_genre_sort</string>
 
     <string name="set_key_library_revision" translatable="false">auxio_library_revision</string>
@@ -97,6 +98,19 @@
     <integer-array name="values_launcher_icon">
         <item>@integer/launcher_icon_default</item>
         <item>@integer/launcher_icon_minimal</item>
+    </integer-array>
+
+    <string-array name="entries_week_start">
+        <item>@string/set_week_start_monday</item>
+        <item>@string/set_week_start_sunday</item>
+        <item>@string/set_week_start_saturday</item>
+    </string-array>
+
+    <!-- The values of Calendar.MONDAY, SUNDAY and SATURDAY. -->
+    <integer-array name="values_week_start">
+        <item>@integer/week_start_monday</item>
+        <item>@integer/week_start_sunday</item>
+        <item>@integer/week_start_saturday</item>
     </integer-array>
 
     <string-array name="entries_cover_mode">
@@ -200,6 +214,9 @@
     <integer name="cover_mode_off">0xA11C</integer>
     <integer name="cover_mode_save_space">0xA125</integer>
     <integer name="cover_mode_balanced">0xA11D</integer>
+    <integer name="week_start_monday">2</integer>
+    <integer name="week_start_sunday">1</integer>
+    <integer name="week_start_saturday">7</integer>
     <integer name="cover_mode_high_quality">0xA11E</integer>
     <integer name="cover_mode_as_is">0xA126</integer>
 </resources>
