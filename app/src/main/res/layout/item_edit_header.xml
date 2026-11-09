@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The "Songs" header of a playlist: the title, a button to sort it and the more button. Searching is
-     done in the field of the main navigation along the bottom. -->
+<!-- The "Songs" header of a playlist. Searching, sorting and the menu are in the main navigation
+     along the bottom. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,22 +18,5 @@
         android:layout_marginEnd="@dimen/spacing_mid_medium"
         android:layout_weight="1"
         tools:text="Songs" />
-
-    <org.oxycblt.auxio.ui.RippleFixMaterialButton
-        android:id="@+id/header_sort"
-        style="@style/Widget.Auxio.Button.Icon.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/lbl_sort"
-        app:icon="@drawable/ic_sort_24" />
-
-    <org.oxycblt.auxio.ui.RippleFixMaterialButton
-        android:id="@+id/header_more"
-        style="@style/Widget.Auxio.Button.Icon.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_mid_medium"
-        android:contentDescription="@string/lbl_more"
-        app:icon="@drawable/ic_more_vert_24" />
 
 </LinearLayout>

@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -167,24 +166,9 @@ private class EditHeaderViewHolder private constructor(private val binding: Item
     fun bind(editHeader: EditHeader, listener: PlaylistDetailListAdapter.Listener) {
         this.listener = listener
         binding.headerTitle.text = binding.context.getString(editHeader.titleRes)
-        // Add a Tooltip based on the content description so that the purpose of these
-        // buttons can be clear.
-        binding.headerSort.apply {
-            TooltipCompat.setTooltipText(this, contentDescription)
-            setOnClickListener { listener.onOpenSortMenu() }
-        }
-        binding.headerMore.apply {
-            TooltipCompat.setTooltipText(this, contentDescription)
-            setOnClickListener { listener.onOpenParentMenu() }
-        }
     }
 
-    override fun updateEditing(editing: Boolean) {
-        // The order is being changed by hand, so there is nothing to sort and the menu is not for
-        // now.
-        binding.headerSort.isVisible = !editing
-        binding.headerMore.isVisible = !editing
-    }
+    override fun updateEditing(editing: Boolean) {}
 
     companion object {
         /** A unique ID for this [RecyclerView.ViewHolder] type. */

@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Minimal icon artwork, white lines.
-     Drawn like the icons of Arcticons: a 48 unit grid, 1 unit lines with round ends, plain open
-     outlines and no gaps that are small enough to disappear. The group maps the 48 grid onto the
-     middle 60 of the 108 units of the adaptive icon, which is all that Kvaesitso shows. -->
+     Thin outlines with round ends in the style of Arcticons: an open crescent, the play button and
+     a small star. Kvaesitso shows only the middle 60 of the 108 units of an adaptive layer, so the
+     artwork is as large as that allows without being cut off. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
     <group
-        android:translateX="24"
-        android:translateY="24"
-        android:scaleX="1.25"
-        android:scaleY="1.25">
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.97"
+        android:scaleY="0.97">
         <path
             android:fillColor="#00000000"
-            android:pathData="M29 5C16 2 5 11 5 24C5 37 16 46 29 43C20 39 15 32 15 24C15 16 20 9 29 5Z"
+            android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A28.37 28.37 0 1 1 69.818 28.509Z"
             android:strokeColor="#FFFFFF"
             android:strokeLineCap="round"
             android:strokeLineJoin="round"
-            android:strokeWidth="1" />
+            android:strokeWidth="2" />
         <path
             android:fillColor="#00000000"
-            android:pathData="M22 16L22 32L34 24Z"
+            android:pathData="M47 41L47 67L68 54Z"
             android:strokeColor="#FFFFFF"
             android:strokeLineCap="round"
             android:strokeLineJoin="round"
-            android:strokeWidth="1" />
+            android:strokeWidth="2" />
         <path
-            android:fillColor="#00000000"
-            android:pathData="M37 7Q38 11 42 12Q38 13 37 17Q36 13 32 12Q36 11 37 7Z"
-            android:strokeColor="#FFFFFF"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round"
-            android:strokeWidth="1" />
+            android:fillColor="#FFFFFF"
+            android:pathData="M75 32Q77.1 35.9 81 38Q77.1 40.1 75 44Q72.9 40.1 69 38Q72.9 35.9 75 32Z" />
     </group>
 </vector>

@@ -54,6 +54,7 @@ import org.oxycblt.auxio.databinding.FragmentMainBinding
 import org.oxycblt.auxio.detail.ArtistDetailFragmentDirections
 import org.oxycblt.auxio.detail.ArtistTab
 import org.oxycblt.auxio.detail.DetailViewModel
+import org.oxycblt.auxio.detail.PlaylistDetailFragmentDirections
 import org.oxycblt.auxio.detail.Show
 import org.oxycblt.auxio.home.HomeFragmentDirections
 import org.oxycblt.auxio.home.HomeViewModel
@@ -79,6 +80,7 @@ import org.oxycblt.auxio.util.context
 import org.oxycblt.auxio.util.coordinatorLayoutBehavior
 import org.oxycblt.auxio.util.getAttrColorCompat
 import org.oxycblt.auxio.util.getDimen
+import org.oxycblt.auxio.util.getDimenPixels
 import org.oxycblt.auxio.util.lazyReflectedMethod
 import org.oxycblt.auxio.util.navigateSafe
 import org.oxycblt.auxio.util.systemBarInsetsCompat
@@ -117,6 +119,7 @@ class MainFragment :
     private var shownTabTypes: List<MusicType> = emptyList()
     private var settingTabs = false
     private var navMode = NavMode.NONE
+    private var navInsetBottom = 0
     @Inject lateinit var uiSettings: UISettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -360,6 +363,7 @@ class MainFragment :
                         } else {
                             ArtistDetailFragmentDirections.sortAlbums()
                         }
+                    NavMode.PLAYLIST -> PlaylistDetailFragmentDirections.sort()
                     else ->
                         when (homeModel.currentTabType.value) {
                             MusicType.SONGS -> HomeFragmentDirections.sortSongs()
@@ -377,12 +381,17 @@ class MainFragment :
                     detailModel.currentArtist.value?.let {
                         listModel.openMenu(R.menu.detail_parent, it)
                     }
+                NavMode.PLAYLIST ->
+                    detailModel.currentPlaylist.value?.let {
+                        listModel.openMenu(R.menu.detail_playlist, it)
+                    }
                 else -> showMoreMenu(it)
             }
         }
         binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
             // Keep the tabs clear of the system navigation.
-            view.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
+            navInsetBottom = insets.systemBarInsetsCompat.bottom
+            applyNavPadding(binding)
             insets
         }
         binding.mainTabs.addOnTabSelectedListener(
@@ -416,13 +425,12 @@ class MainFragment :
         val filter = mode == NavMode.ARTIST || mode == NavMode.PLAYLIST
         binding.mainSearch.isVisible = !filter
         binding.mainSearchInput.isVisible = filter
-        // Sort and more are in the header of the list on the pages of an album, a genre and a
-        // playlist, so the row only has the filter field there (and nothing at all on albums and
-        // genres).
-        val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE || mode == NavMode.PLAYLIST
+        // Sort and more are in the header of the list on the pages of an album and a genre, which
+        // have nothing to filter, so the row is not needed there at all.
+        val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
         binding.mainSort.isVisible = !ownHeader
         binding.mainMore.isVisible = !ownHeader
-        binding.mainRow.isVisible = mode != NavMode.ALBUM && mode != NavMode.GENRE
+        binding.mainRow.isVisible = !ownHeader
         if (filter) {
             binding.mainSearchInput.setText(
                 if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery
@@ -430,6 +438,20 @@ class MainFragment :
             updateSearchHint(binding)
         }
         rebuildTabs(binding)
+        applyNavPadding(binding)
+        // Showing or hiding the floating button depends on the mode: it is not there while the
+        // order of a playlist is edited, as it would cover Save.
+        updateFab(homeModel.songList.value, homeModel.isFastScrolling.value)
+    }
+
+    /**
+     * The row is lifted a little above the system navigation where there are no tabs below it, so
+     * that it does not sit lower than the tabs of the other screens.
+     */
+    private fun applyNavPadding(binding: FragmentMainBinding) {
+        val noTabs = !binding.mainTabs.isVisible
+        val extra = if (noTabs) requireContext().getDimenPixels(R.dimen.spacing_medium) else 0
+        binding.mainBottomNav.updatePadding(bottom = navInsetBottom + extra)
     }
 
     private fun updateSearchHint(binding: FragmentMainBinding) {
@@ -534,6 +556,7 @@ class MainFragment :
                 NavMode.PLAYLIST -> false
                 else -> true
             }
+        applyNavPadding(binding)
         nav.alpha = if (shown) fadeRatio else 0f
         nav.isInvisible = nav.alpha == 0f
 
