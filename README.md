@@ -4,7 +4,6 @@
 <p align="center">
     <a href="https://github.com/Velcorn/Noxio/actions/workflows/ci.yml"><img src="https://github.com/Velcorn/Noxio/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI"></a>
     <a href="#tests"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FVelcorn%2FNoxio%2Fbadges%2Fcoverage.json" alt="Coverage of Noxio code"></a>
-    <a href="#tests"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FVelcorn%2FNoxio%2Fbadges%2Fcoverage-all.json" alt="Coverage of all code"></a>
     <a href="https://github.com/Velcorn/Noxio/releases"><img src="https://img.shields.io/github/v/release/Velcorn/Noxio?include_prereleases&label=release" alt="Latest release"></a>
     <img src="https://img.shields.io/badge/code%20style-ktfmt-7F52FF?style=flat" alt="ktfmt">
     <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=flat" alt="GPL v3">
@@ -119,11 +118,12 @@ python3 scripts/noxio_coverage.py build/reports/jacoco/coverageReport/coverageRe
 
 The coverage report is in `build/reports/jacoco/coverageReport/index.html`.
 
-**There are two coverage badges.** "Noxio code" counts the files Noxio added that can reasonably be unit tested, which
-are listed in `noxio-code.txt`: the logic, helpers and views with behavior. Screens and dialogs that only wire views
-together are left out of it on purpose, and so is dependency injection. "All code" counts everything, Auxio and the
-music library included, and leaves out only generated code (view binding, Hilt, Room, resources); it is low on purpose,
-as most of that code has no tests. Everything visible, the screens included, still needs a look on a device.
+**The coverage badge counts only the code Noxio added that can reasonably be unit tested**, the files listed in
+`noxio-code.txt`: logic, helpers and views with behavior. Screens and dialogs that only wire views together are left out
+of it, and so is dependency injection. That is a temporary choice: the badge will switch to the number for all the code,
+Auxio and the music library included, once that is respectable. The all-code number is in the coverage report that CI
+uploads (and is also published as `coverage-all.json`), and it is rising as Auxio's logic gets tests. Everything
+visible, the screens included, still needs a look on a device.
 
 GitHub Actions runs the formatting check, Android lint and the tests on every push and pull request, and refreshes
 the badge from `dev`. Android lint knows the problems that came with Auxio (`app/lint-baseline.xml`), so only new

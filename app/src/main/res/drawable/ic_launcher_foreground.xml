@@ -11,8 +11,8 @@
     <group
         android:pivotX="54"
         android:pivotY="54"
-        android:scaleX="0.72"
-        android:scaleY="0.72">
+        android:scaleX="0.94"
+        android:scaleY="0.94">
         <!-- Slim crescent moon -->
         <path android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z"
             android:strokeLineCap="round"
