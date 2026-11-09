@@ -26,7 +26,10 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.view.ContextThemeWrapper
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.TooltipCompat
+import com.google.android.material.bottomsheet.BottomSheetDragHandleView
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.MaterialShapeDrawable
 import org.oxycblt.auxio.R
@@ -82,3 +85,19 @@ fun popupMenu(context: Context, anchor: View): PopupMenu =
 
 /** Make the window of a dialog black with a border once it is shown. */
 fun Dialog.blackenWindowOnShow() = setOnShowListener { blackenWindow() }
+
+/**
+ * Remove the tooltips of the drag handles of bottom sheets in this view. Holding a handle to drag
+ * the sheet makes the system show the description of the handle ("Drag handle") as a tooltip, which
+ * then stays on the screen while the sheet moves.
+ */
+fun View.removeDragHandleTooltips() {
+    if (this is BottomSheetDragHandleView) {
+        TooltipCompat.setTooltipText(this, null)
+    }
+    if (this is ViewGroup) {
+        for (i in 0 until childCount) {
+            getChildAt(i).removeDragHandleTooltips()
+        }
+    }
+}

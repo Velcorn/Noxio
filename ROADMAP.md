@@ -13,7 +13,6 @@
 - [x] Black theme: menus, dialogs, sheets, app bar and status bar pure black; grey shuffle and repeat in the notification; optional wavy seek bar
 - [x] Settings regrouped into five screens (Appearance, Home and player, Playback, Library, Listening stats)
 - [x] About page: Noxio links, Auxio credit and fork notice, upstream donate and supporters removed; needs a check on a device
-- [ ] ReplayGain scan (Settings > Playback > Calculate ReplayGain): loudness measurement is built and unit tested against the EBU reference signal; decoding, the background service and the notification need on-device testing, and measured values are only used for songs without a tag
 - [x] Unit tests for the stats and sleep timer logic, coverage badge, CI (format, Android lint, tests), tagged dev releases
 
 ## Later
@@ -22,8 +21,10 @@
 - [ ] Listening stats: implemented, needs a build and on-device testing (Room database, week / month / year, top songs, artists, albums, total time; open it from the home overflow menu)
 - [ ] Shareable "Wrapped" cards
 
+## Not planned
+- Editing or writing tags (including ReplayGain) in audio files: the player only reads tags
+
 ## Ideas
-- Write the measured ReplayGain values into the audio files as tags, so other players use them too (needs tag writing, which the bundled taglib wrapper does not have, and write access to the files)
 - More screenshots (settings, playlists, the share cards) and ones from a real device
 - Bottom bar on the now playing screen for jumping to Songs, Albums, Artists and Playlists (deferred)
 - Show the remaining time next to the toolbar icon (currently the icon is only tinted)

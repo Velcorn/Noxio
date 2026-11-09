@@ -30,11 +30,9 @@ import kotlin.math.pow
 import org.oxycblt.auxio.playback.PlaybackSettings
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.state.QueueChange
-import org.oxycblt.auxio.replaygain.ReplayGainStore
 import org.oxycblt.musikr.Album
 import org.oxycblt.musikr.MusicParent
 import org.oxycblt.musikr.Song
-import org.oxycblt.musikr.tag.ReplayGainAdjustment
 import timber.log.Timber as L
 
 /**
@@ -53,7 +51,6 @@ class ReplayGainAudioProcessor
 constructor(
     private val playbackManager: PlaybackStateManager,
     private val playbackSettings: PlaybackSettings,
-    private val measuredGains: ReplayGainStore,
 ) : BaseAudioProcessor(), PlaybackStateManager.Listener, PlaybackSettings.Listener {
     private var volume = 1f
         set(value) {
@@ -118,9 +115,7 @@ constructor(
 
         L.d("Applying ReplayGain adjustment for $song")
 
-        // Songs without a ReplayGain tag use the loudness Noxio measured, if there is one.
-        val tagged = song.replayGainAdjustment
-        val gain = ReplayGainAdjustment(tagged.track ?: measuredGains.gainFor(song), tagged.album)
+        val gain = song.replayGainAdjustment
         val preAmp = playbackSettings.replayGainPreAmp
 
         // ReplayGain is configurable, so determine what to do based off of the mode.

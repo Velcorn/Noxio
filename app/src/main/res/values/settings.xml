@@ -33,7 +33,6 @@
     <string name="set_key_headset_autoplay" translatable="false">auxio_headset_autoplay</string>
     <string name="set_key_replay_gain" translatable="false">auxio_replay_gain</string>
     <string name="set_key_pre_amp" translatable="false">auxio_pre_amp</string>
-    <string name="set_key_replay_gain_scan" translatable="false">noxio_replay_gain_scan</string>
     <string name="set_key_pre_amp_with" translatable="false">auxio_pre_amp_with</string>
     <string name="set_key_pre_amp_without" translatable="false">auxio_pre_amp_without</string>
 

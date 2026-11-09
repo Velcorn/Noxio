@@ -103,6 +103,7 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding> :
             (dialog as BackportBottomSheetDialog).behavior.killCorners()
         }
         (view.parent as? View)?.blackenSheet()
+        view.removeDragHandleTooltips()
         onBindingCreated(requireBinding(), savedInstanceState)
         L.d("Fragment created")
     }

@@ -42,7 +42,6 @@ upstream issues should not be reported against it.
 | Settings | One long list with Personalize and UI | Five screens by purpose: Appearance, Home and player, Playback, Library and Listening stats |
 | App icon | One icon | Default (crescent and sparkle on black), or a minimal white silhouette with no background, chosen in Settings > Appearance |
 | Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Playback |
-| ReplayGain | Uses ReplayGain tags only | Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs without a tag, in the background with a notification. Values are kept in Noxio, your files are not changed, and a scan can be stopped and continued |
 | About | Auxio author, donate and supporters, upstream links | Noxio's own source and issue links, with the Auxio credit and a notice that Noxio is a fork and not affiliated |
 | Library actions | Refresh and rescan without feedback | Rescan asks first and both show their progress and result |
 | Package name | `org.oxycblt.auxio` | `de.devfin.noxio`, so it installs next to Auxio |
@@ -52,6 +51,9 @@ only some of it has been tried on a device. Progress is tracked in
 [ROADMAP.md](/ROADMAP.md). Everything else is inherited from Auxio: Media3 playback, gapless playback, ReplayGain, rich
 tag support (multiple artists, release types, disc numbers, sort tags), playlists, playback persistence, Android Auto,
 widgets, and being completely private and offline.
+
+**Noxio only reads your files.** It never edits tags or writes to your audio files, and editing tags is not part
+of the project. Anything it works out, such as listening stats, stays in its own database or in files you export.
 
 ## Screenshots
 
@@ -102,7 +104,7 @@ minimal conflicts. Only the application ID and branding differ.
 
 ## Tests
 
-The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the loudness measurement for ReplayGain (against the EBU reference signal), the listening stats (play
+The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the listening stats (play
 counting including repeated songs, CSV export and import, ranking, the weekly, monthly, yearly and all time ranges,
 the undated "before Noxio" plays, the safe weekly backup) and the sleep timer (state, fade, shake detection). The
 music library (`musikr`) comes with its own tests. They run in WSL, Linux or macOS like the build:

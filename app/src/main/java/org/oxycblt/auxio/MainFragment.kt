@@ -71,6 +71,7 @@ import org.oxycblt.auxio.ui.DialogAwareNavigationListener
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.ui.popupMenu
+import org.oxycblt.auxio.ui.removeDragHandleTooltips
 import org.oxycblt.auxio.util.collect
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.context
@@ -127,6 +128,8 @@ class MainFragment :
     @SuppressLint("PrivateResource")
     override fun onBindingCreated(binding: FragmentMainBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
+        // Holding the handle of the player or queue sheet must not show a tooltip.
+        binding.root.removeDragHandleTooltips()
 
         val playbackSheetBehavior =
             binding.playbackSheet.coordinatorLayoutBehavior as PlaybackBottomSheetBehavior

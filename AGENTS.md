@@ -21,6 +21,7 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 
 ## Rules
 - The code stays in the `org.oxycblt.auxio` package on purpose, so upstream Auxio changes merge with few conflicts. Only the application ID (`de.devfin.noxio`) and branding differ. Keep Noxio changes small and self-contained (new files such as `stats/`, `ui/LauncherIcon.kt`) rather than rewriting upstream code.
+- Noxio only reads tags and audio files. Do not add anything that edits tags or writes to the user's music files (no tag editor, no writing ReplayGain), and do not propose it. Things Noxio works out are kept in its own database or in exported files.
 - `musikr/` and the vendored Media3/taglib trees are upstream code; do not edit them unless unavoidable.
 - New UI strings go in `values/strings.xml` (English). Do not hand-write the other `values-*` translations; they come from upstream.
 - Settings keys and defaults live in `values/settings.xml`, UI in `xml/preferences_*.xml`.
