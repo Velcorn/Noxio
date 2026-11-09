@@ -38,7 +38,7 @@ class ListSettingsTest {
     private val settings = ListSettingsImpl(context)
 
     private val byName = Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
-    private val byDateNewestFirst = Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
+    private val byDateOldestFirst = Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
     private val custom = Sort(Sort.Mode.ByDuration, Sort.Direction.DESCENDING)
 
     /** Every sort, with the setting key it is stored under and its default. */
@@ -97,14 +97,14 @@ class ListSettingsTest {
             Entry(
                 "artist songs",
                 R.string.set_key_artist_songs_sort,
-                byDateNewestFirst,
+                byDateOldestFirst,
                 { it.artistSongSort },
                 { s, v -> s.artistSongSort = v },
             ),
             Entry(
                 "artist albums",
                 R.string.set_key_artist_albums_sort,
-                byDateNewestFirst,
+                byDateOldestFirst,
                 { it.artistAlbumSort },
                 { s, v -> s.artistAlbumSort = v },
             ),

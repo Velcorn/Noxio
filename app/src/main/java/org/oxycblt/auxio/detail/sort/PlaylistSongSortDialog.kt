@@ -49,14 +49,8 @@ class PlaylistSongSortDialog : SortDialog() {
     override fun getInitialSort() = null
 
     override fun applyChosenSort(sort: Sort) {
-        // Sorting changes the order of the playlist, so it starts an editing session that has to be
-        // saved. "Custom order" is only that: the same session, to move the songs by hand.
-        if (detailModel.editedPlaylist.value == null) {
-            detailModel.startPlaylistEdit()
-        }
-        if (sort.mode != Sort.Mode.ByCustom) {
-            detailModel.applyPlaylistSongSort(sort)
-        }
+        // The dialog already asked for confirmation, so the new order is saved right away.
+        detailModel.sortPlaylist(sort)
     }
 
     override fun getModeChoices() =
@@ -66,7 +60,6 @@ class PlaylistSongSortDialog : SortDialog() {
             Sort.Mode.ByAlbum,
             Sort.Mode.ByDate,
             Sort.Mode.ByDuration,
-            Sort.Mode.ByCustom,
         )
 
     private fun updatePlaylist(genre: Playlist?) {

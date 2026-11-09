@@ -151,7 +151,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
                     getString(R.string.set_key_artist_songs_sort),
                     Int.MIN_VALUE,
                 )
-            ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
+            ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
                 putInt(getString(R.string.set_key_artist_songs_sort), value.intCode)
@@ -166,7 +166,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
                     getString(R.string.set_key_artist_albums_sort),
                     Int.MIN_VALUE,
                 )
-            ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
+            ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
                 putInt(getString(R.string.set_key_artist_albums_sort), value.intCode)

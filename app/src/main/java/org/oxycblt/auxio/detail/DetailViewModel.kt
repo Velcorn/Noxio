@@ -529,6 +529,23 @@ constructor(
     }
 
     /**
+     * Sort the songs of the playlist by [sort] and save the new order at once. The sort dialog is
+     * the confirmation, so no editing session with Save and Cancel is needed. Does nothing if a
+     * playlist is not being shown.
+     *
+     * @param sort The [Sort] to apply.
+     */
+    fun sortPlaylist(sort: Sort) {
+        val playlist = currentPlaylist.value ?: return
+        L.d("Sorting playlist by $sort")
+        val sorted = sort.songs(playlist.songs)
+        viewModelScope.launch(Dispatchers.IO) {
+            musicRepository.rewritePlaylist(playlist, sorted)
+            refreshPlaylist(playlist.uid, UpdateInstructions.Replace(1))
+        }
+    }
+
+    /**
      * End a playlist editing session and keep the prior state. Does nothing if there was no prior
      * editing session.
      *

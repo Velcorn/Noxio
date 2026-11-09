@@ -63,8 +63,9 @@ abstract class SortDialog :
         val initial = getInitialSort()
         if (initial != null) {
             modeAdapter.setSelected(initial.mode)
-            updateDirection(initial.direction)
         }
+        // Without a sort to start from, the direction is ascending, like the defaults everywhere.
+        updateDirection(initial?.direction ?: Sort.Direction.ASCENDING)
         updateButtons()
     }
 
