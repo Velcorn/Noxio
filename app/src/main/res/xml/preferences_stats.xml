@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:title="@string/set_stats">
+
+    <org.oxycblt.auxio.settings.ui.IntListPreference
+        app:defaultValue="@integer/week_start_monday"
+        app:entries="@array/entries_week_start"
+        app:entryValues="@array/values_week_start"
+        app:key="@string/set_key_stats_week_start"
+        app:title="@string/set_week_start"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
+        app:defaultValue="false"
+        app:key="@string/set_key_stats_backup"
+        app:summary="@string/set_stats_backup_desc"
+        app:title="@string/set_stats_backup" />
+
+    <Preference
+        app:key="@string/set_key_stats_backup_folder"
+        app:title="@string/set_stats_backup_folder" />
+
+</PreferenceScreen>

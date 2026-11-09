@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:title="@string/set_content">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:title="@string/set_library">
+
     <PreferenceCategory app:title="@string/set_music">
+
+        <org.oxycblt.auxio.settings.ui.WrappedDialogPreference
+            app:key="@string/set_key_music_dirs"
+            app:summary="@string/set_locations_desc"
+            app:title="@string/set_locations" />
+
+        <Preference
+            app:key="@string/set_key_reindex"
+            app:summary="@string/set_reindex_desc"
+            app:title="@string/set_reindex" />
+
+        <Preference
+            app:key="@string/set_key_rescan"
+            app:summary="@string/set_rescan_desc"
+            app:title="@string/set_rescan" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/set_content">
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
@@ -28,41 +49,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/set_images">
-
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/cover_mode_balanced"
-            app:entries="@array/entries_cover_mode"
-            app:entryValues="@array/values_cover_mode"
-            app:key="@string/set_key_cover_mode"
-            app:title="@string/set_cover_mode" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/set_key_square_covers"
-            app:summary="@string/set_square_covers_desc"
-            app:title="@string/set_square_covers" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/set_stats">
-
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/week_start_monday"
-            app:entries="@array/entries_week_start"
-            app:entryValues="@array/values_week_start"
-            app:key="@string/set_key_stats_week_start"
-            app:title="@string/set_week_start" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/set_key_stats_backup"
-            app:summary="@string/set_stats_backup_desc"
-            app:title="@string/set_stats_backup" />
-
-        <Preference
-            app:key="@string/set_key_stats_backup_folder"
-            app:title="@string/set_stats_backup_folder" />
-
-    </PreferenceCategory>
 </PreferenceScreen>

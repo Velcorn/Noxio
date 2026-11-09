@@ -4,6 +4,7 @@
     <string name="set_key_ui" translatable="false">auxio_ui</string>
     <string name="set_key_personalize" translatable="false">auxio_personalize</string>
     <string name="set_key_music" translatable="false">auxio_music</string>
+    <string name="set_key_stats_settings" translatable="false">noxio_stats_settings</string>
     <string name="set_key_audio" translatable="false">auxio_audio</string>
 
     <string name="set_key_theme" translatable="false">KEY_THEME2</string>

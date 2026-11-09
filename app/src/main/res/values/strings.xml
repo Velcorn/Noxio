@@ -152,6 +152,7 @@
     <string name="lbl_stats_exported">Exported</string>
     <string name="err_stats_export">Could not write the file</string>
     <string name="set_stats">Listening stats</string>
+    <string name="set_stats_summary">Week start and automatic backup</string>
     <string name="set_week_start">Week starts on</string>
     <string name="set_week_start_monday">Monday</string>
     <string name="set_week_start_sunday">Sunday</string>
@@ -294,8 +295,8 @@
 
     <string name="set_root_title">Settings</string>
 
-    <string name="set_ui">Look and feel</string>
-    <string name="set_ui_desc">Change the theme and colors of the app</string>
+    <string name="set_ui">Appearance</string>
+    <string name="set_ui_desc">Theme, colors, app icon and covers</string>
     <string name="set_theme">Theme</string>
     <string name="set_theme_auto">Automatic</string>
     <string name="set_theme_day">Light</string>
@@ -308,8 +309,8 @@
     <string name="set_wavy_seek_bar">Wavy seek bar</string>
     <string name="set_wavy_seek_bar_desc">Let the seek bar of the player wave while playing. Off shows a plain line</string>
 
-    <string name="set_personalize">Personalize</string>
-    <string name="set_personalize_desc">Customize UI controls and behavior</string>
+    <string name="set_personalize">Home and player</string>
+    <string name="set_personalize_desc">Library tabs and the playback bar</string>
     <string name="set_display">Display</string>
     <string name="set_lib_tabs">Library tabs</string>
     <string name="set_lib_tabs_desc">Change visibility and order of library tabs</string>
@@ -336,7 +337,7 @@
     <string name="set_task_exit_desc">Stop playback when removed from recents, even if playing</string>
 
     <string name="set_content">Content</string>
-    <string name="set_content_desc">Control how music and images are loaded</string>
+    <string name="set_content_desc">Music sources, scanning and tags</string>
     <string name="set_music">Music</string>
     <string name="set_observing">Automatic reloading</string>
     <string name="set_observing_desc">Reload the music library whenever it changes (requires persistent notification)</string>
@@ -368,8 +369,8 @@
     <string name="set_square_covers">Force square album covers</string>
     <string name="set_square_covers_desc">Crop all album covers to a 1:1 aspect ratio</string>
 
-    <string name="set_audio">Audio</string>
-    <string name="set_audio_desc">Configure sound and playback behavior</string>
+    <string name="set_audio">Playback</string>
+    <string name="set_audio_desc">Starting, skipping, equalizer and ReplayGain</string>
     <string name="set_playback">Playback</string>
     <string name="set_headset_autoplay">Headset autoplay</string>
     <string name="set_headset_autoplay_desc">Always start playing when a headset is connected (may not work on all devices)</string>

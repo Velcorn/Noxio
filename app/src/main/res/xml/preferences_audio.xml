@@ -2,12 +2,39 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:title="@string/set_audio">
-    <PreferenceCategory android:title="@string/set_playback">
+
+    <PreferenceCategory android:title="@string/set_behavior">
+
+        <org.oxycblt.auxio.settings.ui.IntListPreference
+            app:defaultValue="@integer/play_song_from_all"
+            app:entries="@array/entries_play_in_list_with"
+            app:entryValues="@array/values_play_in_list_with"
+            app:key="@string/set_key_play_in_list_with"
+            app:title="@string/set_play_in_list_with"
+            app:useSimpleSummaryProvider="true" />
+
+        <org.oxycblt.auxio.settings.ui.IntListPreference
+            app:defaultValue="@integer/play_song_none"
+            app:entries="@array/entries_play_in_parent_with"
+            app:entryValues="@array/values_play_in_parent_with"
+            app:key="@string/set_key_play_in_parent_with"
+            app:title="@string/set_play_in_parent_with"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="@string/set_key_keep_shuffle"
+            app:summary="@string/set_keep_shuffle_desc"
+            app:title="@string/set_keep_shuffle" />
 
         <SwitchPreferenceCompat
             app:key="@string/set_key_headset_autoplay"
             app:summary="@string/set_headset_autoplay_desc"
             app:title="@string/set_headset_autoplay" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/set_playback">
 
         <SwitchPreferenceCompat
             app:defaultValue="true"
@@ -33,6 +60,12 @@
             app:summary="@string/set_sleep_shake_desc"
             app:title="@string/set_sleep_shake" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="@string/set_key_task_exit"
+            app:summary="@string/set_task_exit_desc"
+            app:title="@string/set_task_exit" />
+
         <Preference
             app:key="@string/set_key_equalizer"
             app:summary="@string/set_equalizer_desc"
@@ -55,4 +88,5 @@
             app:title="@string/set_pre_amp" />
 
     </PreferenceCategory>
+
 </PreferenceScreen>

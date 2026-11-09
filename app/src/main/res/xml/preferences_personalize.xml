@@ -19,49 +19,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/set_launcher">
-
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/launcher_icon_default"
-            app:entries="@array/entries_launcher_icon"
-            app:entryValues="@array/values_launcher_icon"
-            app:key="@string/set_key_launcher_icon"
-            app:title="@string/set_launcher_icon"
-            app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/set_behavior">
-
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/play_song_from_all"
-            app:entries="@array/entries_play_in_list_with"
-            app:entryValues="@array/values_play_in_list_with"
-            app:key="@string/set_key_play_in_list_with"
-            app:title="@string/set_play_in_list_with"
-            app:useSimpleSummaryProvider="true" />
-
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/play_song_none"
-            app:entries="@array/entries_play_in_parent_with"
-            app:entryValues="@array/values_play_in_parent_with"
-            app:key="@string/set_key_play_in_parent_with"
-            app:title="@string/set_play_in_parent_with"
-            app:useSimpleSummaryProvider="true" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/set_key_keep_shuffle"
-            app:summary="@string/set_keep_shuffle_desc"
-            app:title="@string/set_keep_shuffle" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/set_key_task_exit"
-            app:summary="@string/set_task_exit_desc"
-            app:title="@string/set_task_exit" />
-
-    </PreferenceCategory>
-
-
 </PreferenceScreen>
