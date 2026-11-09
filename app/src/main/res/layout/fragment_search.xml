@@ -50,11 +50,33 @@
 
         </org.oxycblt.auxio.ui.MultiToolbar>
 
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
+    </org.oxycblt.auxio.ui.CoordinatorAppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/search_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:clipToPadding="false"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+    <org.oxycblt.auxio.list.recycler.AuxioRecyclerView
+        android:id="@+id/search_recycler"
+        style="@style/Widget.Auxio.RecyclerView.Grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:listitem="@layout/item_song" />
+
+    </FrameLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/search_filters_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSurface"
+        android:scrollbars="none">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/search_filters"
@@ -97,16 +119,6 @@
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Auxio.Chip.Filter"
-                    android:id="@+id/search_filter_genres"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:checkable="true"
-                    android:focusable="true"
-                    android:text="@string/lbl_genres" />
-
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.Auxio.Chip.Filter"
                     android:id="@+id/search_filter_playlists"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -118,24 +130,5 @@
             </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
-    </org.oxycblt.auxio.ui.CoordinatorAppBarLayout>
-
-    <FrameLayout
-        android:id="@+id/search_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:clipToPadding="false"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-    <org.oxycblt.auxio.list.recycler.AuxioRecyclerView
-        android:id="@+id/search_recycler"
-        style="@style/Widget.Auxio.RecyclerView.Grid"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:listitem="@layout/item_song" />
-
-    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

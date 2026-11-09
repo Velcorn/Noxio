@@ -32,37 +32,42 @@ upstream issues should not be reported against it.
 | | Auxio | Noxio |
 | --- | --- | --- |
 | Sleep timer | none | Moon icon above the seek bar. End of track, 30 min, custom minutes or 60 min, with fade-out. Remembers your last choice. Restart it from the notification or by shaking the device. |
-| Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. Colorful cards you can share as an image, CSV export and import with an optional weekly backup to a folder. Musicolet's "Most played songs" lists import as your history from before Noxio, counted in All time only. Stored on the device only. |
-| Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use |
-| App icon | One icon | Default, or a minimal white silhouette with no background, chosen in the settings |
-| Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Audio |
+| Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. The artists, albums and songs switch is at the top and you can also swipe between them, while the range and period controls are at the bottom, in reach of the thumb. Colorful cards you can share as an image, CSV export and import with an optional weekly backup to a folder. Musicolet's "Most played songs" lists import as your history from before Noxio, counted in All time only. Stored on the device only. |
+| Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use. Optional wavy seek bar (Settings > Appearance), off by default |
+| Navigation | Tabs and search at the top, five tabs including Genres | Search row and tabs at the bottom of the home screen (Artists, Albums, Songs, Playlists, no Genres tab), the player above the navigation, a floating shuffle button. Short lists sit at the bottom edge instead of the top |
+| Detail pages | Header with Play and Shuffle pills, sort in the list header | Album, genre, playlist and artist pages have a bottom bar (back, name, sort, play, shuffle, more). Artist pages have Albums and Songs tabs you can swipe between, each with its own sort, and the search filters the list shown. Playlists can be searched, sorted and kept in a custom order |
+| Search | Filter chips at the top, every type is searched | Filter chips at the bottom, above the keyboard. Only the types that have a tab on the home screen are shown and searched |
+| List rows | A button with three dots on every row, long press selects | No dots on the rows, a long press opens the menu of the item |
+| Black theme | Black background, tinted menus | Popup menus, dialogs, bottom sheets (including the sleep timer and item menus), the app bar and the status bar stay pure black. Shuffle and repeat in the notification are grey when off |
+| Settings | One long list with Personalize and UI | Five screens by purpose: Appearance, Home and player, Playback, Library and Listening stats |
+| App icon | One icon | Default (crescent and sparkle on black), or a minimal white silhouette with no background, chosen in Settings > Appearance |
+| Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Playback |
+| ReplayGain | Uses ReplayGain tags only | Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs without a tag, in the background with a notification. Values are kept in Noxio, your files are not changed, and a scan can be stopped and continued |
+| About | Auxio author, donate and supporters, upstream links | Noxio's own source and issue links, with the Auxio credit and a notice that Noxio is a fork and not affiliated |
+| Library actions | Refresh and rescan without feedback | Rescan asks first and both show their progress and result |
 | Package name | `org.oxycblt.auxio` | `de.devfin.noxio`, so it installs next to Auxio |
 
-Both features are implemented but have only been build-tested so far. Progress is tracked in
+Everything above is built and unit tested where there is logic, but screens have no automated tests and
+only some of it has been tried on a device. Progress is tracked in
 [ROADMAP.md](/ROADMAP.md). Everything else is inherited from Auxio: Media3 playback, gapless playback, ReplayGain, rich
 tag support (multiple artists, release types, disc numbers, sort tags), playlists, playback persistence, Android Auto,
 widgets, and being completely private and offline.
 
-## Mockups
+## Screenshots
 
-Clickable mockups of the added features, with the same behavior as the app. They are single HTML files: download them
-(or clone the repo) and open them in a browser.
+Black theme on a Pixel 9 sized emulator, with a made up library and listening history.
 
-- [Sleep timer](docs/mockups/sleep-timer.html): the timer button, the bottom sheet, the editable Custom tile, shake to
-  reset, the notification action, a thumb-zone overlay, and a theme switcher with AMOLED black and Material You colors
-- [Listening stats](docs/mockups/stats.html): week, month and year views with example data, the category pill, sharing
-  a card as an image, the CSV export and import menu, and the same theme switcher
-- [Navigation](docs/mockups/navigation.html): three proposals for the bottom navigation with a search bar, two for
-  the playlist screen (search, sort, M3U export, ReplayGain) and the About page
-- [App icon](docs/mockups/icons.html): the icon with its adaptive layers, the themed (Material You) versions, the
-  splash screen, the notification glyph and a home screen preview
+<table>
+<tr><td align="center"><img src="docs/screenshots/artists.png" width="200" alt="Artists"><br><sub>Artists</sub></td><td align="center"><img src="docs/screenshots/album.png" width="200" alt="Album"><br><sub>Album</sub></td><td align="center"><img src="docs/screenshots/player.png" width="200" alt="Now playing"><br><sub>Now playing</sub></td></tr>
+<tr><td align="center"><img src="docs/screenshots/sleep-timer.png" width="200" alt="Sleep timer"><br><sub>Sleep timer</sub></td><td align="center"><img src="docs/screenshots/stats.png" width="200" alt="Listening stats"><br><sub>Listening stats</sub></td><td align="center"><img src="docs/screenshots/search.png" width="200" alt="Search"><br><sub>Search</sub></td></tr>
+</table>
 
-Screenshots from a real device will be added here once the features have been tested on one.
+Also in [docs/screenshots](docs/screenshots): the albums list, an artist page and the About page.
 
 ## Minimal icon
 
 Besides the default icon, Noxio has a minimal version: a flat white crescent, play button and star with no
-background at all, so it sits straight on your wallpaper. Switch to it in Settings > Personalize > App icon. Any
+background at all, so it sits straight on your wallpaper. Switch to it in Settings > Appearance > App icon. Any
 launcher shows the choice, since it is the app's own launcher icon, and launchers that support themed icons (like
 Kvaesitso) tint the single-color layer with your theme colors.
 
@@ -97,7 +102,7 @@ minimal conflicts. Only the application ID and branding differ.
 
 ## Tests
 
-The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the listening stats (play
+The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the loudness measurement for ReplayGain (against the EBU reference signal), the listening stats (play
 counting including repeated songs, CSV export and import, ranking, the weekly, monthly, yearly and all time ranges,
 the undated "before Noxio" plays, the safe weekly backup) and the sleep timer (state, fade, shake detection). The
 music library (`musikr`) comes with its own tests. They run in WSL, Linux or macOS like the build:

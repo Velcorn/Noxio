@@ -52,6 +52,27 @@ class StatsRepositoryTest {
     // --- summarize ---
 
     @Test
+    fun `swiping goes through artists, albums and songs and stops at the ends`() {
+        assertEquals(StatsCategory.ALBUMS, neighbourCategory(StatsCategory.ARTISTS, forward = true))
+        assertEquals(StatsCategory.SONGS, neighbourCategory(StatsCategory.ALBUMS, forward = true))
+        assertEquals(null, neighbourCategory(StatsCategory.SONGS, forward = true))
+        assertEquals(StatsCategory.ALBUMS, neighbourCategory(StatsCategory.SONGS, forward = false))
+        assertEquals(null, neighbourCategory(StatsCategory.ARTISTS, forward = false))
+    }
+
+    @Test
+    fun `plays without an artist count for the unknown artist`() {
+        val stats =
+            summarize(
+                listOf(play("A", artists = ""), play("B", artists = ""), play("C", artists = "X")),
+                unknownArtist = "Unknown artist",
+            )
+        assertEquals(3, stats.plays)
+        assertEquals(stats.plays, stats.artists.sumOf { it.plays })
+        assertEquals(2, stats.artists.first { it.name == "Unknown artist" }.plays)
+    }
+
+    @Test
     fun summarizingNothingIsEmpty() {
         val stats = summarize(emptyList())
         assertTrue(stats.isEmpty)

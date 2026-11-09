@@ -29,6 +29,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import org.oxycblt.auxio.R
+import org.oxycblt.auxio.home.HomeSettings
+import org.oxycblt.auxio.home.tabs.Tab
 import org.oxycblt.auxio.list.BasicHeader
 import org.oxycblt.auxio.list.Item
 import org.oxycblt.auxio.list.PlainDivider
@@ -54,6 +56,7 @@ constructor(
     private val searchEngine: SearchEngine,
     private val searchSettings: SearchSettings,
     private val playbackSettings: PlaybackSettings,
+    private val homeSettings: HomeSettings,
 ) : ViewModel(), MusicRepository.UpdateListener {
     private var lastQuery: String? = null
     private var currentSearchJob: Job? = null
@@ -108,7 +111,7 @@ constructor(
     }
 
     private suspend fun searchImpl(library: Library, query: String): List<Item> {
-        val filters = searchSettings.filters
+        val filters = activeTypes()
 
         val items =
             if (!filters.isEmpty()) {
@@ -181,9 +184,16 @@ constructor(
         }
     }
 
-    /** The current filters used for search. */
+    /** The types of music that have a visible tab on the home screen. */
+    val visibleTypes: Set<MusicType>
+        get() = visibleSearchTypes(homeSettings.homeTabs)
+
+    /** The current filters used for search, without the ones whose tab is not shown. */
     val filters: Set<MusicType>
-        get() = searchSettings.filters
+        get() = searchSettings.filters.intersect(visibleTypes)
+
+    /** What is searched: the chosen filters, or all the types that are shown if none is chosen. */
+    private fun activeTypes() = filters.ifEmpty { visibleTypes }
 
     /**
      * Update the filters used by search. Will trigger a research.
@@ -199,3 +209,7 @@ constructor(
         val SORT = Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
     }
 }
+
+/** The types of music whose tab is visible on the home screen. */
+fun visibleSearchTypes(tabs: Array<Tab>): Set<MusicType> =
+    tabs.filterIsInstance<Tab.Visible>().mapTo(mutableSetOf()) { it.type }

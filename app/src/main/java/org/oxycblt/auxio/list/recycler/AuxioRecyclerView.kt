@@ -39,6 +39,27 @@ open class AuxioRecyclerView
 constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr: Int = 0) :
     RecyclerView(context, attrs, defStyleAttr) {
     private val initialPaddingBottom = paddingBottom
+    private var insetBottom = 0
+
+    /**
+     * Whether the space the layout asks for at the bottom (for example for a floating button) is
+     * kept. Released, the list can use it, and the system insets still apply.
+     */
+    var bottomSpaceReserved = true
+        set(value) {
+            if (field != value) {
+                field = value
+                updatePadding(bottom = bottomPadding())
+            }
+        }
+
+    /** The space the layout asks for at the bottom. */
+    protected val reservableBottomSpace: Int
+        get() = initialPaddingBottom
+
+    private fun bottomPadding() =
+        (if (bottomSpaceReserved) initialPaddingBottom else 0) + insetBottom
+
     private var savedState: Parcelable? = null
 
     init {
@@ -61,7 +82,8 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
     override fun onApplyWindowInsets(insets: WindowInsets): WindowInsets {
         // Update the RecyclerView's padding such that the bottom insets are applied
         // while still preserving bottom padding.
-        updatePadding(bottom = initialPaddingBottom + insets.systemBarInsetsCompat.bottom)
+        insetBottom = insets.systemBarInsetsCompat.bottom
+        updatePadding(bottom = bottomPadding())
         if (savedState != null) {
             // State restore happens before we get insets, so there will be scroll drift unless
             // we restore the state after the insets are applied.

@@ -37,7 +37,7 @@ class PlayWriteTest {
             rows[index] = rows[index].copy(listenedMs = listenedMs)
         }
 
-        override suspend fun summary(range: LongRange) = error("not used")
+        override suspend fun summary(range: LongRange, unknownArtist: String) = error("not used")
 
         override suspend fun exportCsv(out: OutputStream) = error("not used")
 

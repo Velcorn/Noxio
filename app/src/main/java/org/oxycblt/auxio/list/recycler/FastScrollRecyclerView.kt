@@ -44,6 +44,7 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.graphics.withScale
 import androidx.core.view.isEmpty
 import androidx.core.view.isInvisible
@@ -54,6 +55,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R as MR
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.textview.MaterialTextView
 import kotlin.math.abs
 import kotlin.math.hypot
@@ -258,9 +260,6 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      */
     private var bottomAlignGap = 0
 
-    /** The top of the view when the gap was last worked out. */
-    private var bottomAlignTop = Int.MIN_VALUE
-
     var popupProvider: PopupProvider? = null
     var listener: Listener? = null
 
@@ -322,10 +321,10 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      * does not fit, or that has more than one column, is left alone.
      */
     private fun updateBottomAlignment() {
-        bottomAlignTop = top
         val lm = layoutManager as? LinearLayoutManager
         val count = adapter?.itemCount ?: 0
         var gap = 0
+        var reserve = true
         if (
             lm != null && (lm !is GridLayoutManager || lm.spanCount == 1) && count > 0 && height > 0
         ) {
@@ -336,15 +335,27 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
                 val content =
                     lm.getDecoratedBottom(last) - lm.getDecoratedTop(first) - bottomAlignGap
                 // Under a collapsing app bar the view is taller than what is on screen, as it
-                // also covers what the bar gives up when it collapses. Count only what is shown.
+                // also covers what the bar gives up when it collapses. Count only what is shown
+                // while the bar is expanded.
+                val bar = appBar()
                 val room =
                     (parent as? View)?.let {
                         val margin = (layoutParams as? ViewGroup.MarginLayoutParams)?.bottomMargin
-                        it.height - top - (margin ?: 0)
+                        it.height - (bar?.height ?: top) - (margin ?: 0)
                     } ?: height
-                val available = minOf(height, room) - paddingTop - paddingBottom
+                // The space kept for a floating button is not counted: a short list goes all
+                // the way to the bottom, and the space is only kept when the list has to scroll.
+                val available =
+                    minOf(height, room) - paddingTop - (paddingBottom - bottomSpaceUsed())
                 gap = (available - content).coerceAtLeast(0)
+                reserve = gap == 0
             }
+        }
+        // A list that fits is not scrolled, so the bar stays expanded too. Letting it collapse
+        // would move the list up and away from the bottom, and it would jiggle as it does.
+        setAppBarLocked(gap > 0)
+        if (bottomSpaceReserved != reserve) {
+            bottomSpaceReserved = reserve
         }
         if (gap != bottomAlignGap) {
             bottomAlignGap = gap
@@ -352,14 +363,51 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
         }
     }
 
+    /** The scroll flags the children of the app bar had before it was locked. */
+    private val unlockedFlags = HashMap<View, Int>()
+
+    private fun appBar(): AppBarLayout? {
+        val coordinator = parent as? CoordinatorLayout ?: return null
+        for (i in 0 until coordinator.childCount) {
+            (coordinator.getChildAt(i) as? AppBarLayout)?.let {
+                return it
+            }
+        }
+        return null
+    }
+
+    private fun setAppBarLocked(locked: Boolean) {
+        val bar = appBar() ?: return
+        if (locked == unlockedFlags.isNotEmpty()) {
+            return
+        }
+        if (locked) {
+            for (i in 0 until bar.childCount) {
+                val child = bar.getChildAt(i)
+                val params = child.layoutParams as? AppBarLayout.LayoutParams ?: continue
+                if (params.scrollFlags != 0) {
+                    unlockedFlags[child] = params.scrollFlags
+                    params.scrollFlags = 0
+                    child.layoutParams = params
+                }
+            }
+            bar.setExpanded(true, false)
+        } else {
+            for ((child, flags) in unlockedFlags) {
+                (child.layoutParams as? AppBarLayout.LayoutParams)?.let {
+                    it.scrollFlags = flags
+                    child.layoutParams = it
+                }
+            }
+            unlockedFlags.clear()
+        }
+    }
+
+    private fun bottomSpaceUsed() = if (bottomSpaceReserved) reservableBottomSpace else 0
+
     // --- RECYCLERVIEW EVENT MANAGEMENT ---
 
     private fun onPreDraw() {
-        // A collapsing app bar moves the view without laying it out again, and the space it
-        // leaves for the list changes with it.
-        if (top != bottomAlignTop) {
-            updateBottomAlignment()
-        }
         updateThumbState()
 
         val thumbRange = thumbOffsetRange

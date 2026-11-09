@@ -237,7 +237,7 @@
     <string name="lbl_about">About</string>
     <string name="lbl_version">Version</string>
     <string name="lbl_code">Source code</string>
-    <string name="lbl_wiki">Wiki</string>
+    <string name="lbl_wiki" tools:ignore="UnusedResources">Wiki</string>
     <string name="lbl_licenses">Licenses</string>
     <string name="lbl_library_counts">Library statistics</string>
 
@@ -249,13 +249,16 @@
     <!-- As in to report an error -->
     <string name="lbl_report">Report</string>
 
-    <string name="lbl_author">Author</string>
-    <string name="lbl_author_name">Alexander Capehart</string>
+    <string name="lbl_author" tools:ignore="UnusedResources">Author</string>
+    <string name="lbl_author_name" tools:ignore="UnusedResources">Alexander Capehart</string>
+    <string name="lbl_based_on_auxio">Based on Auxio</string>
+    <string name="lng_based_on_auxio">Noxio is a fork of Auxio by Alexander Capehart. It is not affiliated with the Auxio project, so please do not report Noxio problems upstream.</string>
+    <string name="lbl_auxio_author">Auxio by Alexander Capehart</string>
     <string name="lbl_feedback">Feedback</string>
-    <string name="lbl_github">Make an issue on GitHub</string>
-    <string name="lbl_email">Send an email</string>
-    <string name="lbl_donate">Donate</string>
-    <string name="lbl_supporters">Supporters</string>
+    <string name="lbl_github">Report an issue on GitHub</string>
+    <string name="lbl_email" tools:ignore="UnusedResources">Send an email</string>
+    <string name="lbl_donate" tools:ignore="UnusedResources">Donate</string>
+    <string name="lbl_supporters" tools:ignore="UnusedResources">Supporters</string>
 
     <!-- Long Namespace | Longer Descriptions -->
     <eat-comment />
@@ -271,7 +274,7 @@
     <string name="lng_playlist_exported">Playlist exported</string>
     <string name="lng_playlist_deleted">Playlist deleted</string>
     <string name="lng_playlist_added">Added to playlist</string>
-    <string name="lng_supporters_promo">Donate to the project to get your name added here!</string>
+    <string name="lng_supporters_promo" tools:ignore="UnusedResources">Donate to the project to get your name added here!</string>
     <!-- As in music library -->
     <string name="lng_search_library">Search your library…</string>
     <string name="lng_tasker_start">
@@ -390,6 +393,14 @@
     <string name="set_replay_gain_mode_album">Prefer album</string>
     <string name="set_replay_gain_mode_dynamic">Prefer album if one is playing</string>
     <string name="set_pre_amp">ReplayGain pre-amp</string>
+    <string name="lbl_replay_gain_scan">Calculate ReplayGain</string>
+    <string name="set_replay_gain_scan_desc">Measures the loudness of songs that have no ReplayGain tag, so quiet and loud songs play at the same level. Your files are not changed.</string>
+    <string name="fmt_replay_gain_nothing">All songs are done or have ReplayGain tags</string>
+    <string name="fmt_replay_gain_progress" tools:ignore="PluralsCandidate">%1$d of %2$d songs</string>
+    <string name="fmt_replay_gain_running" tools:ignore="PluralsCandidate">Measuring: %1$d of %2$d songs. Tap to stop</string>
+    <string name="fmt_replay_gain_done" tools:ignore="PluralsCandidate">Done: %1$d songs measured, %2$d could not be read</string>
+    <string name="fmt_replay_gain_ask" tools:ignore="PluralsCandidate">Measure %1$d songs? This decodes every song and takes a while, and runs in the background with a notification.</string>
+    <string name="lbl_replay_gain_start">Start</string>
     <string name="set_pre_amp_desc">The pre-amp is applied to the existing adjustment during playback</string>
     <string name="set_pre_amp_with">Adjustment with tags</string>
     <string name="set_pre_amp_without">Adjustment without tags</string>

@@ -133,6 +133,12 @@
             </intent-filter>
         </service>
 
+        <!-- Measures the loudness of the songs for ReplayGain, with a progress notification -->
+        <service
+            android:name=".replaygain.ReplayGainService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false" />
+
         <!--
         Expose Noxio's cover data to the android system
         -->

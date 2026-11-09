@@ -141,9 +141,9 @@ interface SelectableListListener<in T> : ClickableListListener<T> {
         menuButton: View,
     ) {
         bind(item, viewHolder, bodyView)
-        // Map long clicks to the selection listener.
+        // A long press opens the menu of the item. The buttons with the three dots are hidden.
         bodyView.setOnLongClickListener {
-            onSelect(item)
+            onOpenMenu(item)
             true
         }
         // Map the menu button to the menu opening listener.

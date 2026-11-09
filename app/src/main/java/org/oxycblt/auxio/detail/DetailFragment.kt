@@ -151,7 +151,8 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
     override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
         val binding = requireBinding()
         val range = appBarLayout.totalScrollRange
-        val ratio = abs(verticalOffset.toFloat()) / range.toFloat()
+        // The bar cannot collapse at all while a short list is shown (range 0), which is expanded.
+        val ratio = if (range > 0) abs(verticalOffset.toFloat()) / range.toFloat() else 0f
 
         val outRatio = min(ratio * 2, 1f)
         val detailHeader = binding.detailHeader

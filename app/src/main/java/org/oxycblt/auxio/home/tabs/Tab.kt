@@ -62,9 +62,10 @@ sealed class Tab(open val type: MusicType) {
 
         /**
          * The default tab sequence, in integer form. This represents a set of four visible tabs
-         * ordered as "Artist", "Album", "Song", "Genre", and "Playlists"
+         * ordered as "Artist", "Album", "Song" and "Playlists". Noxio has no genre tab, so the
+         * fifth place of the sequence is left empty.
          */
-        const val SEQUENCE_DEFAULT = 0b1010_1001_1000_1011_1100
+        const val SEQUENCE_DEFAULT = 0b1010_1001_1000_1100_0000
 
         /** Maps between the integer code in the tab sequence and it's [MusicType]. */
         private val MODE_TABLE =
@@ -93,7 +94,7 @@ sealed class Tab(open val type: MusicType) {
 
             var sequence = 0
             var shift = MAX_SEQUENCE_IDX * 4
-            for (tab in distinct) {
+            for (tab in distinct.filter { it.type != MusicType.GENRES }) {
                 val bin =
                     when (tab) {
                         is Visible -> 1.shl(3) or MODE_TABLE.indexOf(tab.type)
@@ -121,6 +122,8 @@ sealed class Tab(open val type: MusicType) {
             for (shift in (0..MAX_SEQUENCE_IDX * 4).reversed() step 4) {
                 val chunk = intCode.shr(shift) and 0b1111
                 val mode = MODE_TABLE.getOrNull(chunk and 7) ?: continue
+                // Noxio has no genre tab. A saved sequence from before is read without it.
+                if (mode == MusicType.GENRES) continue
 
                 // Figure out the visibility
                 tabs +=

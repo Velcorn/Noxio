@@ -21,11 +21,16 @@ package org.oxycblt.auxio.search
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -33,6 +38,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.max
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentSearchBinding
 import org.oxycblt.auxio.detail.DetailViewModel
@@ -147,11 +153,18 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
             }
         }
 
+        // Types whose tab is hidden on the home screen are not offered and not searched.
+        val visible = searchModel.visibleTypes
+        binding.searchFilterSongs.isVisible = MusicType.SONGS in visible
+        binding.searchFilterAlbums.isVisible = MusicType.ALBUMS in visible
+        binding.searchFilterArtists.isVisible = MusicType.ARTISTS in visible
+        binding.searchFilterPlaylists.isVisible = MusicType.PLAYLISTS in visible
+        setupFilterBar(binding)
+
         val filters = searchModel.filters
         binding.searchFilterSongs.isChecked = MusicType.SONGS in filters
         binding.searchFilterAlbums.isChecked = MusicType.ALBUMS in filters
         binding.searchFilterArtists.isChecked = MusicType.ARTISTS in filters
-        binding.searchFilterGenres.isChecked = MusicType.GENRES in filters
         binding.searchFilterPlaylists.isChecked = MusicType.PLAYLISTS in filters
         binding.searchFilters.apply {
             setOnCheckedStateChangeListener { _, ids ->
@@ -161,7 +174,6 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
                             R.id.search_filter_songs -> MusicType.SONGS
                             R.id.search_filter_albums -> MusicType.ALBUMS
                             R.id.search_filter_artists -> MusicType.ARTISTS
-                            R.id.search_filter_genres -> MusicType.GENRES
                             R.id.search_filter_playlists -> MusicType.PLAYLISTS
                             else -> null
                         }
@@ -222,6 +234,36 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
             is Genre -> listModel.openMenu(R.menu.parent, item)
             is Playlist -> listModel.openMenu(R.menu.playlist, item)
         }
+    }
+
+    /**
+     * Keep the filter chips at the bottom, where the thumb is: above the navigation, or above the
+     * keyboard while it is open. The list ends where they begin.
+     */
+    private fun setupFilterBar(binding: FragmentSearchBinding) {
+        val bar = binding.searchFiltersBar
+        val root = binding.root
+        fun update() {
+            val insets = ViewCompat.getRootWindowInsets(root)
+            val keyboard = insets?.getInsets(WindowInsetsCompat.Type.ime())?.bottom ?: 0
+            val system = insets?.getInsets(WindowInsetsCompat.Type.systemBars())?.bottom ?: 0
+            val location = IntArray(2)
+            root.getLocationInWindow(location)
+            val below = root.rootView.height - (location[1] + root.height)
+            val wanted = if (keyboard > 0) max(0, keyboard - below) else system
+            bar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = wanted }
+            binding.searchContent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = if (bar.isVisible) bar.height + wanted else 0
+            }
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
+            update()
+            insets
+        }
+        bar.addOnLayoutChangeListener { _, _, top, _, bottom, _, oldTop, _, oldBottom ->
+            if (bottom - top != oldBottom - oldTop) update()
+        }
+        root.post { update() }
     }
 
     private fun updateSearchResults(results: List<Item>) {

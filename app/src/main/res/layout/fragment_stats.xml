@@ -1,119 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Everything is at the bottom, in the thumb zone: the totals and the card sit right above the
+     controls (range, period, category), and back is in the bar underneath. There is no top bar. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     android:orientation="vertical"
     android:transitionGroup="true"
+    tools:ignore="Overdraw"
     tools:context=".stats.StatsFragment">
 
-    <org.oxycblt.auxio.ui.CoordinatorAppBarLayout
-        android:id="@+id/stats_appbar"
-        style="@style/Widget.Auxio.AppBarLayout"
-        app:liftOnScroll="true">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/stats_pill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginBottom="@dimen/spacing_small"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp">
 
-        <org.oxycblt.auxio.ui.AuxioToolbar
-            android:id="@+id/stats_toolbar"
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/stats_category_group"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:menu="@menu/toolbar_stats"
-            app:navigationIcon="@drawable/ic_back_24"
-            app:title="@string/lbl_stats" />
+            android:padding="@dimen/spacing_tiny"
+            app:selectionRequired="true"
+            app:singleSelection="true">
 
-    </org.oxycblt.auxio.ui.CoordinatorAppBarLayout>
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/stats_artists"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_stats_artists" />
+
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/stats_albums"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_stats_albums" />
+
+            <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                android:id="@+id/stats_songs"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_stats_songs" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/stats_contents"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/spacing_medium"
-            android:paddingBottom="96dp">
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/stats_period_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                app:selectionRequired="true"
-                app:singleSelection="true">
-
-                <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                    android:id="@+id/stats_week"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_stats_week" />
-
-                <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                    android:id="@+id/stats_month"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_stats_month" />
-
-                <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                    android:id="@+id/stats_year"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_stats_year" />
-
-                <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                    android:id="@+id/stats_all"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_stats_all" />
-
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                    android:id="@+id/stats_prev"
-                    style="@style/Widget.Auxio.Button.Playback.More"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/lbl_stats_previous"
-                    app:icon="@drawable/ic_back_24"
-                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
-
-                <TextView
-                    android:id="@+id/stats_range"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
-                    tools:text="Nov 2 – Nov 8, 2026" />
-
-                <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                    android:id="@+id/stats_next"
-                    style="@style/Widget.Auxio.Button.Playback.More"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/lbl_stats_next"
-                    android:rotation="180"
-                    app:icon="@drawable/ic_back_24"
-                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
-
-            </LinearLayout>
+            android:paddingHorizontal="@dimen/spacing_medium">
 
             <TextView
                 android:id="@+id/stats_empty"
@@ -124,7 +80,6 @@
                 android:text="@string/lbl_stats_empty"
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:visibility="gone" />
-
             <LinearLayout
                 android:id="@+id/stats_hero"
                 android:layout_width="match_parent"
@@ -155,7 +110,6 @@
                     tools:text="112 plays" />
 
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/stats_card"
                 android:layout_width="match_parent"
@@ -204,7 +158,6 @@
                     android:orientation="vertical" />
 
             </LinearLayout>
-
             <org.oxycblt.auxio.ui.RippleFixMaterialButton
                 android:id="@+id/stats_more"
                 style="?attr/materialButtonStyle"
@@ -216,45 +169,128 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/stats_pill"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/stats_controls"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="@dimen/spacing_medium"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="6dp">
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/spacing_medium">
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/stats_category_group"
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                    android:id="@+id/stats_prev"
+                    style="@style/Widget.Auxio.Button.Playback.More"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/lbl_stats_previous"
+                    app:icon="@drawable/ic_back_24"
+                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
+
+                <TextView
+                    android:id="@+id/stats_range"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    tools:text="Nov 2 – Nov 8, 2026" />
+
+                <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                    android:id="@+id/stats_next"
+                    style="@style/Widget.Auxio.Button.Playback.More"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/lbl_stats_next"
+                    android:rotation="180"
+                    app:icon="@drawable/ic_back_24"
+                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
+
+            </LinearLayout>
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/stats_period_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                    android:id="@+id/stats_week"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/lbl_stats_week" />
+
+                <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                    android:id="@+id/stats_month"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/lbl_stats_month" />
+
+                <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                    android:id="@+id/stats_year"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/lbl_stats_year" />
+
+                <org.oxycblt.auxio.ui.RippleFixMaterialButton
+                    android:id="@+id/stats_all"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/lbl_stats_all" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/stats_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_detail_bottom_bar"
+        android:background="?attr/colorSurface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_tiny"
+        android:paddingEnd="@dimen/spacing_tiny">
+
+        <ImageButton
+            android:id="@+id/stats_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/desc_back"
+            android:src="@drawable/ic_back_24"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_tiny"
-            app:selectionRequired="true"
-            app:singleSelection="true">
+            android:layout_weight="1"
+            android:paddingHorizontal="@dimen/spacing_small"
+            android:text="@string/lbl_stats"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:textColor="?android:attr/textColorSecondary" />
 
-            <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                android:id="@+id/stats_artists"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_stats_artists" />
+        <ImageButton
+            android:id="@+id/stats_menu"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/lbl_more"
+            android:src="@drawable/ic_more_vert_24"
+            app:tint="?attr/colorOnSurface" />
 
-            <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                android:id="@+id/stats_albums"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_stats_albums" />
+    </LinearLayout>
 
-            <org.oxycblt.auxio.ui.RippleFixMaterialButton
-                android:id="@+id/stats_songs"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_stats_songs" />
-
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-    </com.google.android.material.card.MaterialCardView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

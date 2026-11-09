@@ -30,7 +30,8 @@ class FadingToolbarOffsetListener(private val toolbar: View, private val content
         // Fade out the toolbar as the AppBarLayout collapses. To prevent status bar overlap,
         // the alpha transition is shifted such that the Toolbar becomes fully transparent
         // when the AppBarLayout is only at half-collapsed.
-        toolbar.alpha = 1f - (abs(verticalOffset.toFloat()) / (range.toFloat() / 2))
+        toolbar.alpha =
+            if (range > 0) 1f - (abs(verticalOffset.toFloat()) / (range.toFloat() / 2)) else 1f
         content.updatePadding(bottom = range + verticalOffset)
     }
 }

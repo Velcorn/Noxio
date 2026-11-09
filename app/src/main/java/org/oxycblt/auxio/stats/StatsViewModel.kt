@@ -18,9 +18,11 @@
  
 package org.oxycblt.auxio.stats
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.OutputStream
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +35,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import org.oxycblt.auxio.R
 
 /** What the ranked list on the stats screen is about. */
 enum class StatsCategory {
@@ -41,11 +44,25 @@ enum class StatsCategory {
     SONGS,
 }
 
+/**
+ * The category next to [current] in the order artists, albums, songs, for swiping.
+ *
+ * @param forward Whether to go towards songs.
+ * @return The neighbour, or null at the end of the row.
+ */
+fun neighbourCategory(current: StatsCategory, forward: Boolean): StatsCategory? {
+    val all = StatsCategory.entries
+    return all.getOrNull(all.indexOf(current) + if (forward) 1 else -1)
+}
+
 @HiltViewModel
 class StatsViewModel
 @Inject
-constructor(private val repository: StatsRepository, private val settings: StatsSettings) :
-    ViewModel() {
+constructor(
+    private val repository: StatsRepository,
+    private val settings: StatsSettings,
+    @ApplicationContext private val context: Context,
+) : ViewModel() {
     /** Which period is shown. [offset] 0 is the current one, -1 the one before it. */
     data class Query(val period: StatsPeriod, val offset: Int)
 
@@ -71,7 +88,7 @@ constructor(private val repository: StatsRepository, private val settings: Stats
             .mapLatest {
                 val range =
                     statsRange(it.period, it.offset, firstDayOfWeek = settings.firstDayOfWeek)
-                Ui(it, range, repository.summary(range))
+                Ui(it, range, repository.summary(range, context.getString(R.string.def_artist)))
             }
             .flowOn(Dispatchers.IO)
             .stateIn(viewModelScope, SharingStarted.Lazily, null)

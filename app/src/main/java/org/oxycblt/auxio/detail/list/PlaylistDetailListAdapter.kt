@@ -317,7 +317,6 @@ private constructor(private val binding: ItemEditableSongBinding) :
 
     override fun updateEditing(editing: Boolean) {
         binding.songDragHandle.isInvisible = !editing
-        binding.songMenu.isInvisible = editing
         binding.interactBody.isEnabled = !editing
     }
 

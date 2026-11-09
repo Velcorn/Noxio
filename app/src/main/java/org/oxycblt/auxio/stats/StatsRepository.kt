@@ -88,8 +88,16 @@ fun statsRange(
     return start until calendar.timeInMillis
 }
 
-/** Collapse raw [PlayEvent]s into ranked lists. Each event counts as one play. */
-fun summarize(events: List<PlayEvent>, limit: Int = 10): ListeningStats {
+/**
+ * Collapse raw [PlayEvent]s into ranked lists. Each event counts as one play. Plays without an
+ * artist (imported ones are often untagged) are counted for [unknownArtist], so the artists add up
+ * to the total.
+ */
+fun summarize(
+    events: List<PlayEvent>,
+    limit: Int = 10,
+    unknownArtist: String = "Unknown artist",
+): ListeningStats {
     class Tally(val name: String, val subtitle: String?) {
         var plays = 0
         var listenedMs = 0L
@@ -124,7 +132,7 @@ fun summarize(events: List<PlayEvent>, limit: Int = 10): ListeningStats {
         // imported play still counts towards the same song.
         val songKey = event.title + PlayEvent.ARTIST_SEPARATOR + artistLine + event.album
         count(songs, songKey, event.title, artistLine, event)
-        for (artist in artistNames.distinct()) {
+        for (artist in artistNames.ifEmpty { listOf(unknownArtist) }.distinct()) {
             count(artists, artist, artist, null, event)
         }
         // Albums are keyed together with their artist, so two "Greatest Hits" stay separate.
@@ -154,7 +162,10 @@ interface StatsRepository {
     suspend fun updateListened(id: Long, listenedMs: Long)
 
     /** Summarize the plays inside [range]. */
-    suspend fun summary(range: LongRange): ListeningStats
+    suspend fun summary(
+        range: LongRange,
+        unknownArtist: String = "Unknown artist",
+    ): ListeningStats
 
     /** Write the whole play history as CSV into [out]. The stream is not closed. */
     suspend fun exportCsv(out: OutputStream)
@@ -175,8 +186,8 @@ class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : S
     override suspend fun updateListened(id: Long, listenedMs: Long) =
         dao.updateListened(id, listenedMs)
 
-    override suspend fun summary(range: LongRange) =
-        summarize(dao.between(range.first, range.last + 1))
+    override suspend fun summary(range: LongRange, unknownArtist: String) =
+        summarize(dao.between(range.first, range.last + 1), unknownArtist = unknownArtist)
 
     override suspend fun exportCsv(out: OutputStream) = StatsCsv.writeHistory(dao.all(), out)
 

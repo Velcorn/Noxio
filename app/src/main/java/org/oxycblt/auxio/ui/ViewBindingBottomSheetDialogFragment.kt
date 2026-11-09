@@ -107,6 +107,18 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding> :
         L.d("Fragment created")
     }
 
+    override fun onStart() {
+        super.onStart()
+        // The sheet gets its background when it is first laid out, which is after this, so it is
+        // made black again whenever it is laid out. This does nothing without the black theme.
+        val sheet =
+            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+                ?: (requireView().parent as? View)
+                ?: return
+        sheet.blackenSheet()
+        sheet.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ -> view.blackenSheet() }
+    }
+
     final override fun onDestroyView() {
         super.onDestroyView()
         onDestroyBinding(unlikelyToBeNull(_binding))

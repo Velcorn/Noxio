@@ -24,14 +24,13 @@ import org.oxycblt.auxio.music.MusicType
 
 class TabTest {
     @Test
-    fun theDefaultTabsAreArtistsAlbumsSongsGenresPlaylists() {
+    fun theDefaultTabsAreArtistsAlbumsSongsPlaylists() {
         val tabs = Tab.fromIntCode(Tab.SEQUENCE_DEFAULT)!!
         assertEquals(
             listOf(
                 MusicType.ARTISTS,
                 MusicType.ALBUMS,
                 MusicType.SONGS,
-                MusicType.GENRES,
                 MusicType.PLAYLISTS,
             ),
             tabs.map { it.type },
@@ -47,5 +46,39 @@ class TabTest {
     fun aTabSequenceSurvivesAConversionToACodeAndBack() {
         val tabs = Tab.fromIntCode(Tab.SEQUENCE_DEFAULT)!!
         assertEquals(Tab.SEQUENCE_DEFAULT, Tab.toIntCode(tabs))
+    }
+
+    @Test
+    fun aSavedSequenceWithAGenreTabIsReadWithoutIt() {
+        // The old default: artists, albums, songs, genres, playlists.
+        val old = 0b1010_1001_1000_1011_1100
+        assertEquals(
+            listOf(MusicType.ARTISTS, MusicType.ALBUMS, MusicType.SONGS, MusicType.PLAYLISTS),
+            Tab.fromIntCode(old)!!.map { it.type },
+        )
+    }
+
+    @Test
+    fun aGenreTabIsNotSaved() {
+        val tabs =
+            arrayOf<Tab>(
+                Tab.Visible(MusicType.ARTISTS),
+                Tab.Visible(MusicType.GENRES),
+                Tab.Visible(MusicType.ALBUMS),
+                Tab.Visible(MusicType.SONGS),
+                Tab.Invisible(MusicType.PLAYLISTS),
+            )
+        assertEquals(
+            listOf(MusicType.ARTISTS, MusicType.ALBUMS, MusicType.SONGS, MusicType.PLAYLISTS),
+            Tab.fromIntCode(Tab.toIntCode(tabs))!!.map { it.type },
+        )
+    }
+
+    @Test
+    fun hiddenTabsStayHidden() {
+        val tabs = Tab.fromIntCode(Tab.SEQUENCE_DEFAULT)!!.toMutableList()
+        tabs[2] = Tab.Invisible(tabs[2].type)
+        val back = Tab.fromIntCode(Tab.toIntCode(tabs.toTypedArray()))!!
+        assertEquals(listOf(true, true, false, true), back.map { it is Tab.Visible })
     }
 }
