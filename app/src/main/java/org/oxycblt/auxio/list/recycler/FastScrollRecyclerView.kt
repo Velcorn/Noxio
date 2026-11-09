@@ -38,6 +38,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowInsets
 import android.widget.FrameLayout
@@ -48,6 +49,8 @@ import androidx.core.view.isInvisible
 import androidx.core.view.updatePaddingRelative
 import androidx.core.widget.TextViewCompat
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R as MR
 import com.google.android.material.textview.MaterialTextView
@@ -248,12 +251,33 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
             listener?.onFastScrollingChanged(field)
         }
 
+    /**
+     * The space put above the first item so that a list that is shorter than the view sits at the
+     * bottom of it instead of at the top.
+     */
+    private var bottomAlignGap = 0
+
     var popupProvider: PopupProvider? = null
     var listener: Listener? = null
 
     init {
         overlay.add(thumbView)
         overlay.add(popupView)
+
+        addItemDecoration(
+            object : ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: State,
+                ) {
+                    if (parent.getChildAdapterPosition(view) == 0) {
+                        outRect.top = bottomAlignGap
+                    }
+                }
+            }
+        )
 
         addItemDecoration(
             object : ItemDecoration() {
@@ -283,8 +307,33 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
+        updateBottomAlignment()
         if (!showingThumb) {
             thumbView.translationX = if (isRtl) -thumbWidth.toFloat() else thumbWidth.toFloat()
+        }
+    }
+
+    /**
+     * When all the items fit in the view, push them down by the space that is left. A list that
+     * does not fit, or that is a grid, is left alone.
+     */
+    private fun updateBottomAlignment() {
+        val lm = layoutManager as? LinearLayoutManager
+        val count = adapter?.itemCount ?: 0
+        var gap = 0
+        if (lm != null && lm !is GridLayoutManager && count > 0 && height > 0) {
+            val first = lm.findViewByPosition(0)
+            val last = lm.findViewByPosition(count - 1)
+            if (first != null && last != null) {
+                // The decorated top of the first item includes the gap that is there now.
+                val content =
+                    lm.getDecoratedBottom(last) - lm.getDecoratedTop(first) - bottomAlignGap
+                gap = (height - paddingTop - paddingBottom - content).coerceAtLeast(0)
+            }
+        }
+        if (gap != bottomAlignGap) {
+            bottomAlignGap = gap
+            post { invalidateItemDecorations() }
         }
     }
 

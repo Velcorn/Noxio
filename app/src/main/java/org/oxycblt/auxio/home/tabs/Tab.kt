@@ -62,9 +62,9 @@ sealed class Tab(open val type: MusicType) {
 
         /**
          * The default tab sequence, in integer form. This represents a set of four visible tabs
-         * ordered as "Song", "Album", "Artist", "Genre", and "Playlists
+         * ordered as "Artist", "Album", "Song", "Genre", and "Playlists"
          */
-        const val SEQUENCE_DEFAULT = 0b1000_1001_1010_1011_1100
+        const val SEQUENCE_DEFAULT = 0b1010_1001_1000_1011_1100
 
         /** Maps between the integer code in the tab sequence and it's [MusicType]. */
         private val MODE_TABLE =

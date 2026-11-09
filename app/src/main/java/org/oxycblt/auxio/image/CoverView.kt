@@ -113,7 +113,6 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
     private val indicatorMatrixDst = RectF()
 
     private val squareishShapeAppearance: ShapeAppearanceModel
-    private val circularShapeAppearance: ShapeAppearanceModel
     private var currentShapeAppearance: ShapeAppearanceModel
 
     init {
@@ -129,12 +128,6 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
         squareishShapeAppearance =
             if (uiSettings.roundMode) {
                 ShapeAppearanceModel.builder(context, shapeAppearanceRes, -1).build()
-            } else {
-                ShapeAppearanceModel.builder().build()
-            }
-        circularShapeAppearance =
-            if (uiSettings.roundMode) {
-                ShapeAppearanceModel.builder().setAllCornerSizes(RelativeCornerSize(0.5f)).build()
             } else {
                 ShapeAppearanceModel.builder().build()
             }
@@ -382,7 +375,7 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      * @param artist The [Artist] to bind to the view.
      */
     fun bind(artist: Artist) {
-        // For artists we both engage in circle cropping but also arrange them
+        // For artists we arrange the images
         // in a "smattering" of random rotation/tilt to give the feeling of a messy
         // stack of vinyl.
         bindImpl(
@@ -396,7 +389,7 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
             },
             context.getString(R.string.desc_artist_image, artist.name),
             R.drawable.ic_artist_24,
-            circularShapeAppearance,
+            squareishShapeAppearance,
         )
     }
 

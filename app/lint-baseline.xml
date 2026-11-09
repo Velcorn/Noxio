@@ -30,7 +30,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/org/oxycblt/auxio/list/recycler/FastScrollRecyclerView.kt"
-            line="588"
+            line="637"
             column="29"/>
     </issue>
 
@@ -41,7 +41,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/org/oxycblt/auxio/list/recycler/FastScrollRecyclerView.kt"
-            line="588"
+            line="637"
             column="29"/>
     </issue>
 

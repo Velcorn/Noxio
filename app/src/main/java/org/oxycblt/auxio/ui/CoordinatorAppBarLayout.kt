@@ -19,6 +19,8 @@
 package org.oxycblt.auxio.ui
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +31,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.color.MaterialColors
 import org.oxycblt.auxio.util.coordinatorLayoutBehavior
 import timber.log.Timber as L
 
@@ -73,6 +76,15 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
     init {
         fitsSystemWindows = true
         viewTreeObserver.addOnPreDrawListener(onPreDraw)
+
+        // The lifted bar, status bar included, is tinted with a container colour. With the black
+        // theme it has to stay black.
+        if (
+            MaterialColors.getColor(this, com.google.android.material.R.attr.colorSurface) ==
+                Color.BLACK
+        ) {
+            setLiftOnScrollColor(ColorStateList.valueOf(Color.BLACK))
+        }
     }
 
     /**
