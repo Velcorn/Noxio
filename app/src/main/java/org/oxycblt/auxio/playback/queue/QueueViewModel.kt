@@ -24,6 +24,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
+import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.state.QueueChange
 import org.oxycblt.auxio.util.Event
@@ -49,6 +50,11 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
     val queueInstructions: Event<UpdateInstructions> = _queueInstructions
 
     /** Controls whether the queue should be force-scrolled to a particular location. */
+    private val _query = MutableStateFlow("")
+
+    /** What the queue is filtered by, empty if it is not. */
+    val query: StateFlow<String> = _query
+
     val scrollTo: Event<Int>
         field = MutableEvent<Int>()
 
@@ -111,12 +117,44 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
      * @param adapterIndex The index of the queue item to play. Does nothing if the index is out of
      *   range.
      */
+    /** Only show the songs of the queue that match [query] in the title, artist or album. */
+    fun setQuery(query: String) {
+        _query.value = query
+    }
+
+    /** The positions in the queue of the songs that are shown, all of them if not filtered. */
+    fun shownIndices() = QueueOrder.filter(queue.value, query.value)
+
+    /** The position in the queue of what is at [adapterIndex] in the list, -1 if there is none. */
+    private fun queueIndex(adapterIndex: Int) =
+        if (query.value.isBlank()) adapterIndex else shownIndices().getOrElse(adapterIndex) { -1 }
+
+    /** Put the whole queue in the order of [sort]. The current song keeps playing. */
+    fun sortQueue(sort: Sort) {
+        val queue = queue.value
+        L.d("Sorting the queue by $sort")
+        playbackManager.reorderQueue(QueueOrder.matching(queue, sort.songs(queue)))
+    }
+
+    /** Put the whole queue in a random order. The current song keeps playing. */
+    fun shuffleQueue() {
+        L.d("Putting the queue in a random order")
+        playbackManager.reorderQueue(QueueOrder.random(queue.value.size))
+    }
+
+    /** Turn the whole queue around. The current song keeps playing. */
+    fun reverseQueue() {
+        L.d("Reversing the queue")
+        playbackManager.reorderQueue(QueueOrder.reversed(queue.value.size))
+    }
+
     fun goto(adapterIndex: Int) {
-        if (adapterIndex !in queue.value.indices) {
+        val index = queueIndex(adapterIndex)
+        if (index !in queue.value.indices) {
             return
         }
-        L.d("Going to position $adapterIndex in queue")
-        playbackManager.goto(adapterIndex)
+        L.d("Going to position $index in queue")
+        playbackManager.goto(index)
     }
 
     /**
@@ -126,11 +164,12 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
      *   range.
      */
     fun removeQueueDataItem(adapterIndex: Int) {
-        if (adapterIndex !in queue.value.indices) {
+        val index = queueIndex(adapterIndex)
+        if (index !in queue.value.indices) {
             return
         }
-        L.d("Removing item $adapterIndex in queue")
-        playbackManager.removeQueueItem(adapterIndex)
+        L.d("Removing item $index in queue")
+        playbackManager.removeQueueItem(index)
     }
 
     /**
@@ -141,6 +180,10 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
      * @return true if the items were moved, false otherwise.
      */
     fun moveQueueDataItems(adapterFrom: Int, adapterTo: Int): Boolean {
+        // Songs cannot be moved around in a filtered list, there is no telling where they go.
+        if (query.value.isNotBlank()) {
+            return false
+        }
         if (adapterFrom !in queue.value.indices || adapterTo !in queue.value.indices) {
             return false
         }

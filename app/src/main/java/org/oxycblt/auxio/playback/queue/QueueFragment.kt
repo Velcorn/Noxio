@@ -22,7 +22,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.core.view.isInvisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.min
 import org.oxycblt.auxio.databinding.FragmentQueueBinding
 import org.oxycblt.auxio.list.EditClickListListener
+import org.oxycblt.auxio.list.adapter.UpdateInstructions
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.util.collectImmediately
@@ -43,10 +43,12 @@ import timber.log.Timber as L
  */
 @AndroidEntryPoint
 class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickListListener<Song> {
-    private val queueModel: QueueViewModel by viewModels()
+    // Shared with the search row of the main screen (see MainFragment).
+    private val queueModel: QueueViewModel by activityViewModels()
     private val playbackModel: PlaybackViewModel by activityViewModels()
     private val queueAdapter = QueueAdapter(this)
     private var touchHelper: ItemTouchHelper? = null
+    private var shownFiltered = false
 
     override fun onCreateBinding(inflater: LayoutInflater) = FragmentQueueBinding.inflate(inflater)
 
@@ -82,6 +84,14 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
             playbackModel.isPlaying,
             ::updateQueue,
         )
+        // Typing in the search row of the main screen filters the list.
+        collectImmediately(queueModel.query) {
+            updateQueue(
+                queueModel.queue.value,
+                queueModel.index.value,
+                playbackModel.isPlaying.value,
+            )
+        }
     }
 
     override fun onDestroyBinding(binding: FragmentQueueBinding) {
@@ -110,8 +120,21 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
 
     private fun updateQueue(queue: List<Song>, index: Int, isPlaying: Boolean) {
         val binding = requireBinding()
+        val query = queueModel.query.value
 
-        val instructions = queueModel.queueInstructions.consume()
+        val consumed = queueModel.queueInstructions.consume()
+        if (query.isNotBlank()) {
+            // Only the songs that match are shown, the position of the current song in that list
+            // is -1 if it does not match. The list is always replaced, as the instructions of the
+            // queue do not fit a filtered list.
+            val shown = QueueOrder.filter(queue, query)
+            queueAdapter.update(shown.map { queue[it] }, UpdateInstructions.Diff)
+            queueAdapter.setPosition(shown.indexOf(index), isPlaying, false)
+            shownFiltered = true
+            return
+        }
+        val instructions = if (shownFiltered) UpdateInstructions.Diff else consumed
+        shownFiltered = false
         queueAdapter.update(queue, instructions)
         queueAdapter.setPosition(index, isPlaying, instructions == null)
 

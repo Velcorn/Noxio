@@ -98,6 +98,7 @@
     <!-- Search for music -->
     <string name="lbl_search">Search</string>
     <string name="hint_search_music">Search your music</string>
+    <string name="hint_search_queue">Search the queue</string>
     <string name="fmt_search_in">Search %s</string>
     <!-- As in filtering to particular types of music in the search view -->
     <string name="lbl_filter">Filter</string>
@@ -180,6 +181,8 @@
     <string name="lbl_sleep_minutes">Minutes</string>
     <string name="lbl_sleep_unit">min</string>
     <string name="lbl_sort_custom">Custom order</string>
+    <string name="lbl_sort_random">Random</string>
+    <string name="lbl_sort_reverse">Reverse order</string>
     <string name="desc_back">Back</string>
     <string name="lbl_sleep_finish_song">Finish last song</string>
     <string name="lbl_sleep_fade">Fade out before stopping</string>

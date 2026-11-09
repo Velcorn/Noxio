@@ -130,6 +130,14 @@ interface PlaybackStateHolder {
     fun shuffled(shuffled: Boolean)
 
     /**
+     * Put the queue in a new order, as it is shown. The current song keeps playing. Shuffle ends,
+     * as the new order is the order of the queue.
+     *
+     * @param order For each position of the new queue, the position it had in the shown queue.
+     */
+    fun reorder(order: List<Int>)
+
+    /**
      * Handle a deferred playback action.
      *
      * @param action The action to handle.

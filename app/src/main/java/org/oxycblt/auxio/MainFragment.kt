@@ -28,6 +28,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
@@ -61,6 +62,7 @@ import org.oxycblt.auxio.home.HomeViewModel
 import org.oxycblt.auxio.home.Outer
 import org.oxycblt.auxio.home.tabs.NamedTabStrategy
 import org.oxycblt.auxio.list.ListViewModel
+import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicType
 import org.oxycblt.auxio.music.MusicViewModel
@@ -69,6 +71,7 @@ import org.oxycblt.auxio.playback.OpenPanel
 import org.oxycblt.auxio.playback.PlaybackBottomSheetBehavior
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.playback.queue.QueueBottomSheetBehavior
+import org.oxycblt.auxio.playback.queue.QueueViewModel
 import org.oxycblt.auxio.ui.DialogAwareNavigationListener
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.ui.ViewBindingFragment
@@ -101,6 +104,7 @@ class MainFragment :
     SpeedDialView.OnActionSelectedListener {
     private val musicModel: MusicViewModel by activityViewModels()
     private val detailModel: DetailViewModel by activityViewModels()
+    private val queueModel: QueueViewModel by activityViewModels()
     private val homeModel: HomeViewModel by activityViewModels()
     private val listModel: ListViewModel by activityViewModels()
     private val playbackModel: PlaybackViewModel by activityViewModels()
@@ -120,6 +124,8 @@ class MainFragment :
     private var settingTabs = false
     private var navMode = NavMode.NONE
     private var navInsetBottom = 0
+    private var keyboardLift = 0
+    private var stripBaseTranslation = 0f
     @Inject lateinit var uiSettings: UISettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -388,10 +394,29 @@ class MainFragment :
                 else -> showMoreMenu(it)
             }
         }
+        binding.queueSearchInput.doAfterTextChanged {
+            queueModel.setQuery(it?.toString().orEmpty())
+        }
+        binding.queueSearchInput.setOnEditorActionListener { view, _, _ ->
+            view.clearFocus()
+            view.context
+                .getSystemService(InputMethodManager::class.java)
+                ?.hideSoftInputFromWindow(view.windowToken, 0)
+            true
+        }
+        binding.queueSort.setOnClickListener { showQueueSortMenu(it) }
         binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
             // Keep the tabs clear of the system navigation.
             navInsetBottom = insets.systemBarInsetsCompat.bottom
             applyNavPadding(binding)
+            // The window does not resize for the keyboard, so what is at the bottom is lifted
+            // above it, or the field that is typed in would not be seen.
+            val keyboard =
+                WindowInsetsCompat.toWindowInsetsCompat(insets, view)
+                    .getInsets(WindowInsetsCompat.Type.ime())
+                    .bottom
+            keyboardLift = max(keyboard - navInsetBottom, 0)
+            applyKeyboardLift(binding)
             insets
         }
         binding.mainTabs.addOnTabSelectedListener(
@@ -448,7 +473,16 @@ class MainFragment :
      * The row is lifted a little above the system navigation where there are no tabs below it, so
      * that it does not sit lower than the tabs of the other screens.
      */
+    private fun applyKeyboardLift(binding: FragmentMainBinding) {
+        binding.queueRow.translationY = -keyboardLift.toFloat()
+        binding.mainBottomNav.translationY = -keyboardLift.toFloat()
+        if (stripAtBottom) {
+            binding.playbackBarFragment.translationY = stripBaseTranslation - keyboardLift
+        }
+    }
+
     private fun applyNavPadding(binding: FragmentMainBinding) {
+        binding.queueRow.updatePadding(bottom = navInsetBottom)
         val noTabs = !binding.mainTabs.isVisible
         val extra = if (noTabs) requireContext().getDimenPixels(R.dimen.spacing_medium) else 0
         binding.mainBottomNav.updatePadding(bottom = navInsetBottom + extra)
@@ -467,6 +501,29 @@ class MainFragment :
 
     private fun exploreNavigate(directions: androidx.navigation.NavDirections) {
         requireBinding().exploreNavHost.findNavController().navigateSafe(directions)
+    }
+
+    /** The ways to put the whole queue in a new order. The current song keeps playing. */
+    private fun showQueueSortMenu(anchor: View) {
+        fun ascending(mode: Sort.Mode) = Sort(mode, Sort.Direction.ASCENDING)
+        popupMenu(requireContext(), anchor).apply {
+            inflate(R.menu.queue_sort)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.queue_sort_name -> queueModel.sortQueue(ascending(Sort.Mode.ByName))
+                    R.id.queue_sort_artist -> queueModel.sortQueue(ascending(Sort.Mode.ByArtist))
+                    R.id.queue_sort_album -> queueModel.sortQueue(ascending(Sort.Mode.ByAlbum))
+                    R.id.queue_sort_date -> queueModel.sortQueue(ascending(Sort.Mode.ByDate))
+                    R.id.queue_sort_duration ->
+                        queueModel.sortQueue(ascending(Sort.Mode.ByDuration))
+                    R.id.queue_sort_random -> queueModel.shuffleQueue()
+                    R.id.queue_sort_reverse -> queueModel.reverseQueue()
+                    else -> return@setOnMenuItemClickListener false
+                }
+                true
+            }
+            show()
+        }
     }
 
     private fun showMoreMenu(anchor: View) {
@@ -646,6 +703,13 @@ class MainFragment :
 
             binding.playbackBarFragment.alpha = max(playbackOutRatio, queueBarRatio)
             placePlayingStrip(binding, queueBarRatio > 0f)
+            // The search row under the strip fades in with it.
+            binding.queueRow.alpha = queueBarRatio
+            binding.queueRow.isInvisible = queueBarRatio == 0f
+            if (queueBarRatio == 0f && binding.queueSearchInput.text.isNotEmpty()) {
+                // Not filtering what is not shown.
+                binding.queueSearchInput.setText("")
+            }
             binding.playbackPanelFragment.alpha = min(playbackInRatio, queuePanelRatio)
             binding.queueFragment.alpha = queueInRatio
 
@@ -708,13 +772,20 @@ class MainFragment :
         }
         stripAtBottom = atBottom
         val bars = lastInsets?.systemBarInsetsCompat
-        strip.translationY =
+        stripBaseTranslation =
             if (atBottom && bars != null) {
                 // The sheet is as tall as the screen, but its top is below the status bar.
-                (binding.playbackSheet.height - bars.top - bars.bottom - strip.height).toFloat()
+                // The search row is under the strip.
+                (binding.playbackSheet.height -
+                        bars.top -
+                        bars.bottom -
+                        strip.height -
+                        resources.getDimensionPixelSize(R.dimen.size_queue_row))
+                    .toFloat()
             } else {
                 0f
             }
+        strip.translationY = stripBaseTranslation - (if (atBottom) keyboardLift else 0)
         strip.translationZ = if (atBottom) 4 * resources.displayMetrics.density else 0f
         if (atBottom) {
             strip.setBackgroundColor(

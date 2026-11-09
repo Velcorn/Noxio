@@ -185,6 +185,15 @@ interface PlaybackStateManager {
     fun shuffled(shuffled: Boolean)
 
     /**
+     * Put the whole queue in a new order, which ends shuffle. The current song keeps playing. Does
+     * nothing if [order] is not a rearrangement of the positions of the queue.
+     *
+     * @param order For each position of the new queue, the position it had in the shown queue, see
+     *   [org.oxycblt.auxio.playback.queue.QueueOrder].
+     */
+    fun reorderQueue(order: List<Int>)
+
+    /**
      * Acknowledges that an event has happened that modified the state held by the current
      * [PlaybackStateHolder].
      *
@@ -527,6 +536,17 @@ class PlaybackStateManagerImpl @Inject constructor() : PlaybackStateManager {
         val stateHolder = stateHolder ?: return
         L.d("Reordering queue [shuffled=$shuffled]")
         stateHolder.shuffled(shuffled)
+    }
+
+    @Synchronized
+    override fun reorderQueue(order: List<Int>) {
+        val stateHolder = stateHolder ?: return
+        if (order.size != stateMirror.queue.size || order.sorted() != order.indices.toList()) {
+            L.w("Order is not a rearrangement of the queue, ignoring")
+            return
+        }
+        L.d("Reordering ${order.size} songs")
+        stateHolder.reorder(order)
     }
 
     // --- INTERNAL PLAYER FUNCTIONS ---

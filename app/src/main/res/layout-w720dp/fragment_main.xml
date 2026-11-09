@@ -222,4 +222,58 @@
 
     </LinearLayout>
 
+    <!-- The search row under the playing strip while the queue is open, with the same space below
+         it as the playlist page. Shown and faded by MainFragment together with the strip. -->
+    <LinearLayout
+        android:id="@+id/queue_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:alpha="0"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical"
+        android:translationZ="8dp"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="12dp">
+
+            <EditText
+                android:id="@+id/queue_search_input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawablePadding="@dimen/spacing_mid_medium"
+                android:drawableStart="@drawable/ic_search_20"
+                android:hint="@string/hint_search_queue"
+                android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                tools:ignore="Autofill" />
+
+            <ImageButton
+                android:id="@+id/queue_sort"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/lbl_sort"
+                android:src="@drawable/ic_sort_20"
+                app:tint="?android:attr/textColorSecondary" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_medium" />
+
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

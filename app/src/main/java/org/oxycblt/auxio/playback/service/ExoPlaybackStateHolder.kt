@@ -287,6 +287,30 @@ class ExoPlaybackStateHolder(
         deferSave()
     }
 
+    override fun reorder(order: List<Int>) {
+        // The positions of the order are the shown ones, ExoPlayer moves by the real ones.
+        val real = player.unscrambleQueueIndices()
+        if (real.size != order.size) {
+            return
+        }
+        // Moving one item after the other into place keeps the current song playing, where
+        // setting the items anew would restart it. current[position] is the real index of the
+        // item that is at that position right now.
+        val current = MutableList(real.size) { it }
+        for (target in order.indices) {
+            val wanted = real[order[target]]
+            val from = current.indexOf(wanted)
+            if (from != target) {
+                player.moveMediaItem(from, target)
+                current.add(target, current.removeAt(from))
+            }
+        }
+        // The order of the queue is the order now, so there is nothing left to shuffle.
+        player.shuffleModeEnabled = false
+        playbackManager.ack(this, StateAck.QueueReordered)
+        deferSave()
+    }
+
     override fun next() {
         // Replicate the old pseudo-circular queue behavior when no repeat option is implemented.
         // Basically, you can't skip back and wrap around the queue, but you can skip forward and

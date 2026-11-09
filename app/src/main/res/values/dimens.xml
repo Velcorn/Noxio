@@ -13,6 +13,9 @@
     <dimen name="size_touchable_small">48dp</dimen>
     <dimen name="size_touchable_medium">56dp</dimen>
     <dimen name="size_touchable_large">64dp</dimen>
+    <!-- The search row under the playing strip while the queue is open: the row and the space
+         below it, so that it does not sit too low. -->
+    <dimen name="size_queue_row">64dp</dimen>
     <dimen name="size_touchable_huge">80dp</dimen>
     <dimen name="size_fast_scroll_popup">96dp</dimen>
 

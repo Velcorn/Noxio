@@ -7,6 +7,7 @@
 - [x] Minimal launcher icon (white, no background), switchable in Settings > Appearance; needs a check on a device
 - [ ] Rebrand: fastlane metadata, about screen
 - [x] Bottom navigation: home screen (search row, tabs and floating shuffle button at the bottom), album, genre, playlist and artist pages with the same bottom row (filter field on artists and playlists, sort, more, floating shuffle button; Cancel and Save replace it while a playlist order is edited), artist tabs you can swipe between, search with filter chips at the bottom that skip hidden tabs; needs a check on a device
+- [x] Queue: search row under the playing strip (filters the queue, tap jumps to the song), sort of the whole queue by name, artist, album, date or duration, random and reverse order, all while the current song keeps playing; now playing title centered without the down arrow; needs a check on a device
 - [x] Genre tab removed (saved tab orders are read without it); listening stats bottom-oriented with swipe between artists, albums and songs; needs a check on a device
 - [x] No three-dot buttons on list rows, long press opens the item menu (selecting several songs by long press is gone for now); all bottom sheets pure black
 - [x] Themed-icon launchers (Kvaesitso) no longer clip the crescent; stats backup has a Back up now button and says that one file is replaced; search chips stay above the playback bar

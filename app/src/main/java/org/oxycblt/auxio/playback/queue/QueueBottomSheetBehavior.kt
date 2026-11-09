@@ -44,6 +44,8 @@ class QueueBottomSheetBehavior<V : View>(context: Context, attributeSet: Attribu
     BaseBottomSheetBehavior<V>(context, attributeSet) {
     private var barHeight = 0
     private var barSpacing = context.getDimenPixels(R.dimen.spacing_small)
+    // The search row under the playing strip, the queue ends above it.
+    private val rowHeight = context.getDimenPixels(R.dimen.size_queue_row)
 
     init {
         // Not hide-able (and not programmatically hide-able)
@@ -111,7 +113,7 @@ class QueueBottomSheetBehavior<V : View>(context: Context, attributeSet: Attribu
             bars.left,
             bars.top,
             bars.right,
-            expandedOffset + bars.bottom + effectiveBarHeight,
+            expandedOffset + bars.bottom + effectiveBarHeight + rowHeight,
         )
     }
 }

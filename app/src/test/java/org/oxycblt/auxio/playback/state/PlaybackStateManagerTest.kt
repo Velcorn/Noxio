@@ -411,6 +411,32 @@ class PlaybackStateManagerTest {
         assertEquals(emptyList<String>(), recorder.events)
     }
 
+    // --- Reordering ---
+
+    @Test
+    fun aNewOrderIsGivenToThePlayer() {
+        val player = attach(holder(a, b, c))
+        manager.ack(player.mock, StateAck.NewPlayback)
+        manager.reorderQueue(listOf(2, 0, 1))
+        verify { player.mock.reorder(listOf(2, 0, 1)) }
+    }
+
+    @Test
+    fun anOrderThatIsNotARearrangementOfTheQueueIsIgnored() {
+        val player = attach(holder(a, b, c))
+        manager.ack(player.mock, StateAck.NewPlayback)
+        manager.reorderQueue(listOf(0, 1))
+        manager.reorderQueue(listOf(0, 1, 1))
+        manager.reorderQueue(listOf(0, 1, 5))
+        verify(exactly = 0) { player.mock.reorder(any()) }
+    }
+
+    @Test
+    fun reorderingWithoutAPlayerDoesNothing() {
+        manager.reorderQueue(listOf(0))
+        assertNull(manager.currentSong)
+    }
+
     // --- Actions that wait for the player ---
 
     @Test

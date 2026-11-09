@@ -106,10 +106,6 @@ class PlaybackPanelFragment :
             insets
         }
 
-        binding.playbackToolbar.apply {
-            setNavigationOnClickListener { playbackModel.openMain() }
-        }
-
         binding.playbackPager?.apply {
             // intentional LTR override since thepager is a chronological element
             layoutDirection = View.LAYOUT_DIRECTION_LTR
