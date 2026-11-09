@@ -1,14 +1,19 @@
-# The source files Noxio added, relative to app/src/main/java/org/oxycblt/auxio/. The "Noxio code"
-# coverage report (./gradlew noxioCoverageReport) counts only these. Add every new file that Noxio
-# creates; code that came with Auxio is not listed and only counts in the all-code report.
+# The Noxio source files that can reasonably be unit tested, relative to
+# app/src/main/java/org/oxycblt/auxio/. The "Noxio code" coverage number
+# (scripts/noxio_coverage.py, run on the all-code report) counts only these. Add every new file Noxio
+# creates that holds logic.
+#
+# Left out on purpose, as they only wire views together and have nothing a JVM test can check:
+#   screens and dialogs (stats/StatsFragment, stats/StatsShareDialog, playback/timer/SleepTimerDialog,
+#   settings/categories/StatsPreferenceFragment, detail/sort/ArtistAlbumSortDialog) and the dependency
+#   injection module (stats/StatsModule). They still need a look on a device.
+#
+# Code that came with Auxio is not listed and only counts in the all-code report.
 detail/DetailBottomBar.kt
-detail/sort/ArtistAlbumSortDialog.kt
 list/recycler/BottomAlignment.kt
 playback/service/SleepTimerController.kt
 playback/timer/SleepTimer.kt
-playback/timer/SleepTimerDialog.kt
 playback/timer/SleepTimerMath.kt
-settings/categories/StatsPreferenceFragment.kt
 stats/PlayRecorder.kt
 stats/PlayTracker.kt
 stats/SafeDocumentWriter.kt
@@ -17,12 +22,9 @@ stats/StatsCsv.kt
 stats/StatsCsvImport.kt
 stats/StatsDatabase.kt
 stats/StatsFormat.kt
-stats/StatsFragment.kt
 stats/StatsImage.kt
-stats/StatsModule.kt
 stats/StatsRepository.kt
 stats/StatsSettings.kt
-stats/StatsShareDialog.kt
 stats/StatsViewModel.kt
 ui/BlackSurface.kt
 ui/BottomBarInsets.kt

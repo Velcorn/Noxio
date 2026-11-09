@@ -113,17 +113,17 @@ music library (`musikr`) comes with its own tests. They run in WSL, Linux or mac
 
 ```bash
 ./gradlew coverageReport            # runs the tests of the app and musikr, writes the all-code coverage report
-./gradlew noxioCoverageReport       # the same tests, a report of the files Noxio added only
+python3 scripts/noxio_coverage.py build/reports/jacoco/coverageReport/coverageReport.xml noxio-code.txt   # the Noxio code number and its gaps
 ./gradlew spotlessCheck app:lintDebug
 ```
 
 The coverage report is in `build/reports/jacoco/coverageReport/index.html`.
 
-**There are two coverage badges.** "Noxio code" counts only the files Noxio added, which are listed in
-`noxio-code.txt` (`./gradlew noxioCoverageReport`, report in `build/reports/jacoco/noxioCoverageReport/`). "All code"
-counts everything, Auxio and the music library included, and leaves out only generated code (view binding, Hilt, Room,
-resources); it is low on purpose, as most of that code has no tests. Screens and dialogs have no automated tests, so
-the Noxio number is held down by them. Everything visible still needs a look on a device.
+**There are two coverage badges.** "Noxio code" counts the files Noxio added that can reasonably be unit tested, which
+are listed in `noxio-code.txt`: the logic, helpers and views with behavior. Screens and dialogs that only wire views
+together are left out of it on purpose, and so is dependency injection. "All code" counts everything, Auxio and the
+music library included, and leaves out only generated code (view binding, Hilt, Room, resources); it is low on purpose,
+as most of that code has no tests. Everything visible, the screens included, still needs a look on a device.
 
 GitHub Actions runs the formatting check, Android lint and the tests on every push and pull request, and refreshes
 the badge from `dev`. Android lint knows the problems that came with Auxio (`app/lint-baseline.xml`), so only new

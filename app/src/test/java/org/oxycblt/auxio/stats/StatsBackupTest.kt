@@ -136,4 +136,20 @@ class StatsBackupTest {
         assertFalse(backup.run())
         assertNull(backup.lastBackupMs)
     }
+
+    @Test
+    fun turningTheBackupOnSchedulesItOnceAWeekAndOffCancelsIt() {
+        androidx.work.testing.WorkManagerTestInitHelper.initializeTestWorkManager(context)
+        val work = androidx.work.WorkManager.getInstance(context)
+        fun states() = work.getWorkInfosForUniqueWork("noxio_stats_backup").get().map { it.state }
+
+        backup.enable()
+        assertEquals(listOf(androidx.work.WorkInfo.State.ENQUEUED), states())
+        // Turning it on again does not schedule a second one.
+        backup.enable()
+        assertEquals(1, states().size)
+
+        backup.disable()
+        assertEquals(listOf(androidx.work.WorkInfo.State.CANCELLED), states())
+    }
 }

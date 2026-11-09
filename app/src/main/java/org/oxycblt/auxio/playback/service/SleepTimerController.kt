@@ -52,6 +52,7 @@ import timber.log.Timber as L
  * and listens for shakes. Lives next to the player since it needs to control its volume and
  * pause-at-end behavior.
  *
+ * @param scope Where the countdown runs.
  * @param onPauseAtEndChanged Called when the timer needs the player to pause at the end of the
  *   current track (or no longer needs that).
  */
@@ -61,9 +62,10 @@ class SleepTimerController(
     private val player: ExoPlayer,
     private val playbackManager: PlaybackStateManager,
     private val sleepTimer: SleepTimer,
+    private val scope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
     private val onPauseAtEndChanged: (Boolean) -> Unit,
 ) : SensorEventListener {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var job: Job? = null
 
     private val sensorManager = context.getSystemService(SensorManager::class.java)

@@ -19,8 +19,13 @@
 package org.oxycblt.auxio.stats
 
 import android.content.Context
+import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
 import java.io.OutputStream
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -28,6 +33,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 /** The moves between periods and categories of the stats screen. */
@@ -36,13 +42,16 @@ import org.robolectric.annotation.Config
 class StatsViewModelTest {
     private class FakeRepository : StatsRepository {
         var imported = 0
+        var summaries = mutableListOf<LongRange>()
 
         override suspend fun record(event: PlayEvent) = 1L
 
         override suspend fun updateListened(id: Long, listenedMs: Long) {}
 
-        override suspend fun summary(range: LongRange, unknownArtist: String) =
-            summarize(emptyList())
+        override suspend fun summary(range: LongRange, unknownArtist: String): ListeningStats {
+            summaries += range
+            return summarize(emptyList())
+        }
 
         override suspend fun exportCsv(out: OutputStream) {}
 
@@ -131,5 +140,36 @@ class StatsViewModelTest {
     fun anImportIsPassedOnAndTheCountReturned() = runBlocking {
         assertEquals(3, model.importCsv(emptyList()))
         assertEquals(1, repository.imported)
+    }
+
+    /** Let the main thread and the background run until [done], or fail after a few seconds. */
+    private fun waitFor(done: () -> Boolean) {
+        val deadline = System.currentTimeMillis() + 5_000
+        while (!done()) {
+            check(System.currentTimeMillis() < deadline) { "Timed out" }
+            shadowOf(Looper.getMainLooper()).idle()
+            Thread.sleep(10)
+        }
+    }
+
+    @Test
+    fun theSummaryOfThePeriodIsLoadedAgainWhenThePeriodChangesOrAnImportHappens() {
+        val collector = CoroutineScope(Dispatchers.Unconfined).launch { model.ui.collect {} }
+        waitFor { model.ui.value != null }
+        assertEquals(StatsPeriod.WEEK, model.ui.value!!.query.period)
+        assertEquals(1, repository.summaries.size)
+
+        model.setPeriod(StatsPeriod.YEAR)
+        waitFor { model.ui.value?.query?.period == StatsPeriod.YEAR }
+        assertEquals(2, repository.summaries.size)
+
+        runBlocking { model.importCsv(emptyList()) }
+        waitFor { repository.summaries.size == 3 }
+        collector.cancel()
+    }
+
+    @Test
+    fun exportingIsPassedOnToTheRepository() = runBlocking {
+        model.exportCsv(java.io.ByteArrayOutputStream())
     }
 }

@@ -20,6 +20,7 @@ package org.oxycblt.auxio.stats
 
 import android.content.Context
 import androidx.documentfile.provider.DocumentFile
+import androidx.documentfile.provider.NoRoomFolder
 import androidx.test.core.app.ApplicationProvider
 import java.io.File
 import java.io.IOException
@@ -63,6 +64,26 @@ class SafeDocumentWriterTest {
         assertTrue(backup("second"))
         assertEquals(listOf(csv), folder.root.list()!!.toList())
         assertEquals("second", file(csv).readText())
+    }
+
+    @Test
+    fun aFolderThatCannotCreateFilesIsAFailureAndLeavesNothingBehind() {
+        val written =
+            SafeDocumentWriter.write(context, NoRoomFolder(dir()), name, mime) { it.write(1) }
+        assertFalse(written)
+        assertEquals(emptyList<String>(), folder.root.list()!!.toList())
+    }
+
+    @Test
+    fun anUnexpectedErrorWhileProducingTheContentLeavesTheOldBackupAlone() {
+        write("the last good backup")
+        val written =
+            SafeDocumentWriter.write(context, dir(), name, mime) {
+                throw IllegalStateException("the export broke")
+            }
+        assertFalse(written)
+        assertEquals("the last good backup", file(name).readText())
+        assertEquals(listOf(name), folder.root.list()!!.toList())
     }
 
     @Test

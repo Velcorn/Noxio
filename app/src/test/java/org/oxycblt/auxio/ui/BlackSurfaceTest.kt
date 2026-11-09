@@ -114,4 +114,13 @@ class BlackSurfaceTest {
         assertEquals(120, (bar.layoutParams as FrameLayout.LayoutParams).bottomMargin)
         assertEquals(120, told)
     }
+
+    @Test
+    fun aPopupMenuIsMadeInBothThemes() {
+        for (themed in listOf(black, plain)) {
+            val popup = popupMenu(themed, View(themed))
+            popup.menu.add("An item")
+            assertEquals(1, popup.menu.size())
+        }
+    }
 }
