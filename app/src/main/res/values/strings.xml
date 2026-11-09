@@ -180,9 +180,7 @@
     <string name="lbl_sleep_custom">Custom</string>
     <string name="lbl_sleep_minutes">Minutes</string>
     <string name="lbl_sleep_unit">min</string>
-    <string name="lbl_sort_custom">Custom order</string>
     <string name="lbl_sort_random">Random</string>
-    <string name="lbl_sort_reverse">Reverse order</string>
     <string name="desc_back">Back</string>
     <string name="lbl_sleep_finish_song">Finish last song</string>
     <string name="lbl_sleep_fade">Fade out before stopping</string>

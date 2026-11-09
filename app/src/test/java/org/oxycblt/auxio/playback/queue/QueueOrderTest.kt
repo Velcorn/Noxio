@@ -20,7 +20,6 @@ package org.oxycblt.auxio.playback.queue
 
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.random.Random
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -75,25 +74,6 @@ class QueueOrderTest {
         assertThrows(IllegalArgumentException::class.java) {
             QueueOrder.matching(listOf(a, b), listOf(a, c))
         }
-    }
-
-    @Test
-    fun aRandomOrderHasEveryPositionOnce() {
-        val order = QueueOrder.random(50, Random(7))
-        assertEquals((0 until 50).toList(), order.sorted())
-        // And it is not the order it started in.
-        assertEquals(false, order == (0 until 50).toList())
-    }
-
-    @Test
-    fun aRandomOrderOfNothingIsNothing() {
-        assertEquals(emptyList<Int>(), QueueOrder.random(0))
-    }
-
-    @Test
-    fun reversingTurnsTheQueueAround() {
-        assertEquals(listOf(3, 2, 1, 0), QueueOrder.reversed(4))
-        assertEquals(emptyList<Int>(), QueueOrder.reversed(0))
     }
 
     @Test

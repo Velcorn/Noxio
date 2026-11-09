@@ -127,6 +127,12 @@
         tools:layout="@layout/dialog_sort" />
 
     <dialog
+        android:id="@+id/queue_sort_dialog"
+        android:name="org.oxycblt.auxio.playback.queue.QueueSortDialog"
+        android:label="queue_sort_dialog"
+        tools:layout="@layout/dialog_sort" />
+
+    <dialog
         android:id="@+id/playlist_sort_dialog"
         android:name="org.oxycblt.auxio.home.sort.PlaylistSortDialog"
         android:label="playlist_sort_dialog"

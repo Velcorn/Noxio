@@ -18,7 +18,6 @@
  
 package org.oxycblt.auxio.playback.queue
 
-import kotlin.random.Random
 import org.oxycblt.musikr.Song
 import org.oxycblt.musikr.tag.Name
 
@@ -46,12 +45,6 @@ object QueueOrder {
             requireNotNull(free[it]?.removeFirstOrNull()) { "Sorted queue has a song too many" }
         }
     }
-
-    /** A random order of [size] positions. */
-    fun random(size: Int, random: Random = Random.Default) = (0 until size).shuffled(random)
-
-    /** The order that turns a queue of [size] positions around. */
-    fun reversed(size: Int) = (size - 1 downTo 0).toList()
 
     /**
      * The positions of the songs of [queue] that match [query] in the title, the artist or the

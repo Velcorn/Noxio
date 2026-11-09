@@ -129,23 +129,14 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
     private fun queueIndex(adapterIndex: Int) =
         if (query.value.isBlank()) adapterIndex else shownIndices().getOrElse(adapterIndex) { -1 }
 
-    /** Put the whole queue in the order of [sort]. The current song keeps playing. */
+    /**
+     * Put the whole queue in the order of [sort], which may be random. The current song keeps
+     * playing.
+     */
     fun sortQueue(sort: Sort) {
         val queue = queue.value
         L.d("Sorting the queue by $sort")
         playbackManager.reorderQueue(QueueOrder.matching(queue, sort.songs(queue)))
-    }
-
-    /** Put the whole queue in a random order. The current song keeps playing. */
-    fun shuffleQueue() {
-        L.d("Putting the queue in a random order")
-        playbackManager.reorderQueue(QueueOrder.random(queue.value.size))
-    }
-
-    /** Turn the whole queue around. The current song keeps playing. */
-    fun reverseQueue() {
-        L.d("Reversing the queue")
-        playbackManager.reorderQueue(QueueOrder.reversed(queue.value.size))
     }
 
     fun goto(adapterIndex: Int) {

@@ -62,7 +62,6 @@ import org.oxycblt.auxio.home.HomeViewModel
 import org.oxycblt.auxio.home.Outer
 import org.oxycblt.auxio.home.tabs.NamedTabStrategy
 import org.oxycblt.auxio.list.ListViewModel
-import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicType
 import org.oxycblt.auxio.music.MusicViewModel
@@ -404,7 +403,10 @@ class MainFragment :
                 ?.hideSoftInputFromWindow(view.windowToken, 0)
             true
         }
-        binding.queueSort.setOnClickListener { showQueueSortMenu(it) }
+        binding.queueSort.setOnClickListener {
+            // The same dialog as the other lists have, it can be opened from any screen.
+            requireBinding().exploreNavHost.findNavController().navigate(R.id.queue_sort_dialog)
+        }
         binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
             // Keep the tabs clear of the system navigation.
             navInsetBottom = insets.systemBarInsetsCompat.bottom
@@ -501,29 +503,6 @@ class MainFragment :
 
     private fun exploreNavigate(directions: androidx.navigation.NavDirections) {
         requireBinding().exploreNavHost.findNavController().navigateSafe(directions)
-    }
-
-    /** The ways to put the whole queue in a new order. The current song keeps playing. */
-    private fun showQueueSortMenu(anchor: View) {
-        fun ascending(mode: Sort.Mode) = Sort(mode, Sort.Direction.ASCENDING)
-        popupMenu(requireContext(), anchor).apply {
-            inflate(R.menu.queue_sort)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.queue_sort_name -> queueModel.sortQueue(ascending(Sort.Mode.ByName))
-                    R.id.queue_sort_artist -> queueModel.sortQueue(ascending(Sort.Mode.ByArtist))
-                    R.id.queue_sort_album -> queueModel.sortQueue(ascending(Sort.Mode.ByAlbum))
-                    R.id.queue_sort_date -> queueModel.sortQueue(ascending(Sort.Mode.ByDate))
-                    R.id.queue_sort_duration ->
-                        queueModel.sortQueue(ascending(Sort.Mode.ByDuration))
-                    R.id.queue_sort_random -> queueModel.shuffleQueue()
-                    R.id.queue_sort_reverse -> queueModel.reverseQueue()
-                    else -> return@setOnMenuItemClickListener false
-                }
-                true
-            }
-            show()
-        }
     }
 
     private fun showMoreMenu(anchor: View) {

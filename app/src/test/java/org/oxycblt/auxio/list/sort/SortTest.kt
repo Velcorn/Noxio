@@ -146,7 +146,7 @@ class SortTest {
             Sort.Mode.ByDisc,
             Sort.Mode.ByTrack,
             Sort.Mode.ByDateAdded,
-            Sort.Mode.ByCustom,
+            Sort.Mode.ByRandom,
         )
 
     @Test
@@ -302,15 +302,13 @@ class SortTest {
     }
 
     @Test
-    fun aCustomOrderKeepsTheListAsItIs() {
-        assertEquals(
-            listOf("b", "c", "a"),
-            Sort(Sort.Mode.ByCustom, ASCENDING).songs(songs).names(),
-        )
-        assertEquals(
-            listOf("b", "c", "a"),
-            Sort(Sort.Mode.ByCustom, DESCENDING).songs(songs).names(),
-        )
+    fun aRandomOrderHasTheSongsOfTheList() {
+        for (direction in listOf(ASCENDING, DESCENDING)) {
+            assertEquals(
+                listOf("a", "b", "c"),
+                Sort(Sort.Mode.ByRandom, direction).songs(songs).names().sorted(),
+            )
+        }
     }
 
     @Test

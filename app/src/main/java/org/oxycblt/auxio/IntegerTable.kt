@@ -110,10 +110,8 @@ object IntegerTable {
     /** Sort.Mode.ByDateAdded */
     const val SORT_BY_DATE_ADDED = 0xA118
 
-    /**
-     * Sort mode for keeping a playlist in the order the user gives it, see [Sort.Mode.ByCustom].
-     */
-    const val SORT_BY_CUSTOM = 0xA119
+    /** Sort.Mode.ByRandom (this was a custom playlist order before, which no longer exists) */
+    const val SORT_BY_RANDOM = 0xA119
     /** ReplayGainMode.Off (No longer used but still reserved) */
     const val REPLAY_GAIN_MODE_OFF = 0xA110
     /** ReplayGainMode.Track */
