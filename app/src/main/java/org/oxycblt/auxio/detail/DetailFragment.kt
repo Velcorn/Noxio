@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -86,6 +87,10 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
 
         // --- UI SETUP ---
         binding.detailAppbar?.addOnOffsetChangedListener(this)
+
+        // Playing and shuffling are in the bottom bar and the floating button, not in two pills
+        // under the header.
+        (binding.detailPlayButton?.parent as? View)?.isVisible = false
 
         val pane = binding.detailPane
         if (pane != null) {

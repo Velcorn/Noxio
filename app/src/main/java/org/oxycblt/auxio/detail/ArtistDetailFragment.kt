@@ -21,7 +21,6 @@ package org.oxycblt.auxio.detail
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -226,8 +225,6 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
             setToolbarPlaybackButtonsEnabled(false)
         }
 
-        // Play and shuffle are the floating button of the main screen on an artist page.
-        (binding.detailPlayButton?.parent as? View)?.isVisible = false
         updatePlayback(
             playbackModel.song.value,
             playbackModel.parent.value,
