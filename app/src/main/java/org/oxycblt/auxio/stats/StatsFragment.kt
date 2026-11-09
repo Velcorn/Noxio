@@ -24,11 +24,8 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -36,7 +33,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.toColorInt
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -47,15 +43,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.time.LocalDate
 import java.util.Locale
-import kotlin.math.abs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentStatsBinding
 import org.oxycblt.auxio.databinding.ItemStatsRowBinding
+import org.oxycblt.auxio.ui.HorizontalSwipeDetector
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.ui.blackenWindowOnShow
+import org.oxycblt.auxio.ui.liftByBottomInset
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.showToast
 import org.oxycblt.auxio.util.systemBarInsetsCompat
@@ -120,14 +117,9 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                     insets.systemBarInsetsCompat.top +
                         resources.getDimensionPixelSize(R.dimen.spacing_small)
             }
-            binding.statsBar.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
-            binding.statsBar.updateLayoutParams<ViewGroup.LayoutParams> {
-                height =
-                    resources.getDimensionPixelSize(R.dimen.size_detail_bottom_bar) +
-                        insets.systemBarInsetsCompat.bottom
-            }
             insets
         }
+        binding.statsBar.liftByBottomInset()
         setupSwipeBetweenCategories(binding)
 
         binding.statsPeriodGroup.check(
@@ -175,34 +167,10 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
 
     /** A swipe to the left or right moves between artists, albums and songs. */
     private fun setupSwipeBetweenCategories(binding: FragmentStatsBinding) {
-        val context = requireContext()
-        val minDistance = 64 * context.resources.displayMetrics.density
-        val minVelocity = ViewConfiguration.get(context).scaledMinimumFlingVelocity
         val detector =
-            GestureDetector(
-                context,
-                object : GestureDetector.SimpleOnGestureListener() {
-                    override fun onFling(
-                        e1: MotionEvent?,
-                        e2: MotionEvent,
-                        velocityX: Float,
-                        velocityY: Float,
-                    ): Boolean {
-                        if (e1 == null) return false
-                        val dx = e2.x - e1.x
-                        val dy = e2.y - e1.y
-                        // Only a clearly horizontal swipe, so that scrolling is not mistaken for
-                        // it.
-                        if (abs(dx) < minDistance || abs(dx) < 2 * abs(dy)) return false
-                        if (abs(velocityX) < minVelocity) return false
-                        val next = neighbourCategory(statsModel.category.value, forward = dx < 0)
-                        if (next != null) {
-                            statsModel.setCategory(next)
-                        }
-                        return next != null
-                    }
-                },
-            )
+            HorizontalSwipeDetector(requireContext()) { forward ->
+                neighbourCategory(statsModel.category.value, forward)?.let(statsModel::setCategory)
+            }
         // Reading the touches does not take them from the scrolling.
         @SuppressLint("ClickableViewAccessibility")
         binding.statsContents.setOnTouchListener { _, event ->

@@ -193,7 +193,7 @@ constructor(
         get() = searchSettings.filters.intersect(visibleTypes)
 
     /** What is searched: the chosen filters, or all the types that are shown if none is chosen. */
-    private fun activeTypes() = filters.ifEmpty { visibleTypes }
+    private fun activeTypes() = activeSearchTypes(searchSettings.filters, visibleTypes)
 
     /**
      * Update the filters used by search. Will trigger a research.
@@ -213,3 +213,10 @@ constructor(
 /** The types of music whose tab is visible on the home screen. */
 fun visibleSearchTypes(tabs: Array<Tab>): Set<MusicType> =
     tabs.filterIsInstance<Tab.Visible>().mapTo(mutableSetOf()) { it.type }
+
+/**
+ * What a search covers: the types the user picked, without those that have no tab on the home
+ * screen, or all the types that have a tab if none of the picked ones is left.
+ */
+fun activeSearchTypes(picked: Set<MusicType>, visible: Set<MusicType>): Set<MusicType> =
+    picked.intersect(visible).ifEmpty { visible }

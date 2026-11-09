@@ -345,10 +345,15 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
                     } ?: height
                 // The space kept for a floating button is not counted: a short list goes all
                 // the way to the bottom, and the space is only kept when the list has to scroll.
-                val available =
-                    minOf(height, room) - paddingTop - (paddingBottom - bottomSpaceUsed())
-                gap = (available - content).coerceAtLeast(0)
-                reserve = gap == 0
+                val alignment =
+                    bottomAlignment(
+                        visibleHeight = minOf(height, room),
+                        paddingTop = paddingTop,
+                        paddingBottomWithoutSpace = paddingBottom - bottomSpaceUsed(),
+                        contentHeight = content,
+                    )
+                gap = alignment.gap
+                reserve = alignment.keepBottomSpace
             }
         }
         // A list that fits is not scrolled, so the bar stays expanded too. Letting it collapse

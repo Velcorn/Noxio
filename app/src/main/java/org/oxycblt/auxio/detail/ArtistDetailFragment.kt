@@ -19,15 +19,12 @@
 package org.oxycblt.auxio.detail
 
 import android.os.Bundle
-import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.ViewConfiguration
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.abs
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentDetailBinding
 import org.oxycblt.auxio.detail.list.ArtistDetailListAdapter
@@ -39,6 +36,7 @@ import org.oxycblt.auxio.music.PlaylistMessage
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.playback.PlaybackDecision
+import org.oxycblt.auxio.ui.HorizontalSwipeDetector
 import org.oxycblt.auxio.util.collect
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.getPlural
@@ -138,31 +136,10 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
 
     /** A swipe to the left or right on the list switches between the albums and the songs. */
     private fun setupSwipeBetweenTabs(binding: FragmentDetailBinding) {
-        val context = requireContext()
-        val minDistance = 64 * context.resources.displayMetrics.density
-        val minVelocity = ViewConfiguration.get(context).scaledMinimumFlingVelocity
         val detector =
-            GestureDetector(
-                context,
-                object : GestureDetector.SimpleOnGestureListener() {
-                    override fun onFling(
-                        e1: MotionEvent?,
-                        e2: MotionEvent,
-                        velocityX: Float,
-                        velocityY: Float,
-                    ): Boolean {
-                        if (e1 == null) return false
-                        val dx = e2.x - e1.x
-                        val dy = e2.y - e1.y
-                        // Only a clearly horizontal swipe, so that scrolling is not mistaken for
-                        // it.
-                        if (abs(dx) < minDistance || abs(dx) < 2 * abs(dy)) return false
-                        if (abs(velocityX) < minVelocity) return false
-                        detailModel.setArtistTab(if (dx < 0) ArtistTab.SONGS else ArtistTab.ALBUMS)
-                        return true
-                    }
-                },
-            )
+            HorizontalSwipeDetector(requireContext()) { forward ->
+                detailModel.setArtistTab(if (forward) ArtistTab.SONGS else ArtistTab.ALBUMS)
+            }
         binding.detailRecycler.addOnItemTouchListener(
             object : RecyclerView.SimpleOnItemTouchListener() {
                 override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {

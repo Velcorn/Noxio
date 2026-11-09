@@ -68,10 +68,11 @@ Also in [docs/screenshots](docs/screenshots): the albums list, an artist page an
 
 ## Minimal icon
 
-Besides the default icon, Noxio has a minimal version: a flat white crescent, play button and star with no
-background at all, so it sits straight on your wallpaper. Switch to it in Settings > Appearance > App icon. Any
-launcher shows the choice, since it is the app's own launcher icon, and launchers that support themed icons (like
-Kvaesitso) tint the single-color layer with your theme colors.
+Besides the default icon, Noxio has a minimal version: the crescent, the play button and a star as thin white
+outlines with no background at all, drawn like the icons of [Arcticons](https://github.com/Donnnno/Arcticons) so it
+sits straight on your wallpaper and does not stand out in a launcher that uses that pack. Switch to it in Settings >
+Appearance > App icon. Any launcher shows the choice, since it is the app's own launcher icon, and launchers that
+support themed icons (like Kvaesitso) tint the single-color layer with your theme colors.
 
 ## Branches
 
@@ -104,7 +105,7 @@ minimal conflicts. Only the application ID and branding differ.
 
 ## Tests
 
-The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the listening stats (play
+The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the formatting and navigation of the stats screen, the backup folder handling, which types a search covers, the swipe and bottom alignment maths, the listening stats (play
 counting including repeated songs, CSV export and import, ranking, the weekly, monthly, yearly and all time ranges,
 the undated "before Noxio" plays, the safe weekly backup) and the sleep timer (state, fade, shake detection). The
 music library (`musikr`) comes with its own tests. They run in WSL, Linux or macOS like the build:

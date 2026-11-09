@@ -6,56 +6,63 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Some launchers (Kvaesitso, for one) draw the artwork of an app enlarged and cut off what
+         reaches the edge. The artwork is kept small enough to survive that. -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.72"
+        android:scaleY="0.72">
+        <!-- Slim crescent moon -->
+        <path android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="2">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:endX="84"
+                    android:endY="84"
+                    android:startX="24"
+                    android:startY="24"
+                    android:type="linear">
+                    <item
+                        android:color="#ECE6FF"
+                        android:offset="0" />
+                    <item
+                        android:color="#A79DFF"
+                        android:offset="1" />
+                </gradient>
+            </aapt:attr>
+            <!-- The same gradient as an outline of 2 units rounds off the thin tips of the crescent, which
+                 launchers that draw icons small would lose. -->
+            <aapt:attr name="android:strokeColor">
+                <gradient
+                    android:endX="84"
+                    android:endY="84"
+                    android:startX="24"
+                    android:startY="24"
+                    android:type="linear">
+                    <item
+                        android:color="#ECE6FF"
+                        android:offset="0" />
+                    <item
+                        android:color="#A79DFF"
+                        android:offset="1" />
+                </gradient>
+            </aapt:attr>
+        </path>
 
-    <!-- Slim crescent moon -->
-    <path android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:strokeWidth="2">
-        <aapt:attr name="android:fillColor">
-            <gradient
-                android:endX="84"
-                android:endY="84"
-                android:startX="24"
-                android:startY="24"
-                android:type="linear">
-                <item
-                    android:color="#ECE6FF"
-                    android:offset="0" />
-                <item
-                    android:color="#A79DFF"
-                    android:offset="1" />
-            </gradient>
-        </aapt:attr>
-        <!-- The same gradient as an outline of 2 units rounds off the thin tips of the crescent, which
-             launchers that draw icons small would lose. -->
-        <aapt:attr name="android:strokeColor">
-            <gradient
-                android:endX="84"
-                android:endY="84"
-                android:startX="24"
-                android:startY="24"
-                android:type="linear">
-                <item
-                    android:color="#ECE6FF"
-                    android:offset="0" />
-                <item
-                    android:color="#A79DFF"
-                    android:offset="1" />
-            </gradient>
-        </aapt:attr>
-    </path>
+        <!-- Play button, centred -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M47 41L47 67L68 54Z"
+            android:strokeColor="#FFFFFF"
+            android:strokeLineJoin="round"
+            android:strokeWidth="5" />
 
-    <!-- Play button, centred -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M47 41L47 67L68 54Z"
-        android:strokeColor="#FFFFFF"
-        android:strokeLineJoin="round"
-        android:strokeWidth="5" />
-
-    <!-- Sparkle -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M75 33Q76.4 36.6 80 38Q76.4 39.4 75 43Q73.6 39.4 70 38Q73.6 36.6 75 33Z" />
+        <!-- Sparkle -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M75 33Q76.4 36.6 80 38Q76.4 39.4 75 43Q73.6 39.4 70 38Q73.6 36.6 75 33Z" />
+    </group>
 </vector>

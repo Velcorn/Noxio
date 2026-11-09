@@ -34,6 +34,7 @@ import org.oxycblt.auxio.databinding.FragmentAboutBinding
 import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.playback.formatDurationMs
 import org.oxycblt.auxio.ui.ViewBindingFragment
+import org.oxycblt.auxio.ui.liftByBottomInset
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.openInBrowser
 import org.oxycblt.auxio.util.systemBarInsetsCompat
@@ -60,19 +61,17 @@ class AboutFragment : ViewBindingFragment<FragmentAboutBinding>() {
 
         // --- UI SETUP ---
         binding.aboutBack.setOnClickListener { findNavController().navigateUp() }
-        // There is no top bar, so the content starts under the status bar, and the bottom bar is
-        // lifted above the navigation.
+        // There is no top bar, so the content starts under the status bar, and the bar at the
+        // bottom is lifted above the navigation.
         binding.aboutContents.setOnApplyWindowInsetsListener { view, insets ->
             view.updatePadding(top = insets.systemBarInsetsCompat.top)
-            binding.aboutBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.systemBarInsetsCompat.bottom
-            }
-            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin =
-                    resources.getDimensionPixelSize(R.dimen.size_detail_bottom_bar) +
-                        insets.systemBarInsetsCompat.bottom
-            }
             insets
+        }
+        val barHeight = resources.getDimensionPixelSize(R.dimen.size_detail_bottom_bar)
+        binding.aboutBar.liftByBottomInset { inset ->
+            binding.aboutContents.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = barHeight + inset
+            }
         }
         binding.aboutVersion.text = BuildConfig.VERSION_NAME
         binding.aboutCode.setOnClickListener { requireContext().openInBrowser(LINK_SOURCE) }

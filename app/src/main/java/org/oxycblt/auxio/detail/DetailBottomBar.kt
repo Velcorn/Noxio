@@ -27,9 +27,9 @@ import androidx.core.view.updateLayoutParams
 import com.google.android.material.button.MaterialButton
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentDetailBinding
+import org.oxycblt.auxio.ui.liftByBottomInset
 import org.oxycblt.auxio.util.getDimenPixels
 import org.oxycblt.auxio.util.inflater
-import org.oxycblt.auxio.util.systemBarInsetsCompat
 
 /**
  * The controls of a detail screen along the bottom, where the thumb is: back, the name, play,
@@ -75,12 +75,7 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
         // The bar sits right above the playback bar and the system navigation, so it is lifted by
         // the bottom inset. The list ends where the bar begins: it has its own bottom padding for
         // the inset, so only the height of the bar is added to its margin.
-        root.setOnApplyWindowInsetsListener { view, insets ->
-            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.systemBarInsetsCompat.bottom
-            }
-            insets
-        }
+        root.liftByBottomInset()
         binding.detailRecycler.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = barHeight
         }

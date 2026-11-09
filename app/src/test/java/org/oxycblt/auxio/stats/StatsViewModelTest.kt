@@ -1,0 +1,135 @@
+/*
+ * Copyright (c) 2026 Auxio Project
+ * StatsViewModelTest.kt is part of Auxio.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+ 
+package org.oxycblt.auxio.stats
+
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import java.io.OutputStream
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+
+/** The moves between periods and categories of the stats screen. */
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
+class StatsViewModelTest {
+    private class FakeRepository : StatsRepository {
+        var imported = 0
+
+        override suspend fun record(event: PlayEvent) = 1L
+
+        override suspend fun updateListened(id: Long, listenedMs: Long) {}
+
+        override suspend fun summary(range: LongRange, unknownArtist: String) =
+            summarize(emptyList())
+
+        override suspend fun exportCsv(out: OutputStream) {}
+
+        override suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
+            imported += 1
+            return 3
+        }
+    }
+
+    private val context = ApplicationProvider.getApplicationContext<Context>()
+    private val repository = FakeRepository()
+    private val model = StatsViewModel(repository, StatsSettings(context), context)
+
+    @Test
+    fun itStartsOnThisWeekWithTheArtists() {
+        assertEquals(StatsViewModel.Query(StatsPeriod.WEEK, 0), model.query.value)
+        assertEquals(StatsCategory.ARTISTS, model.category.value)
+        assertFalse(model.expanded.value)
+    }
+
+    @Test
+    fun previousGoesBackAndNextForwardButNotPastToday() {
+        model.previous()
+        model.previous()
+        assertEquals(-2, model.query.value.offset)
+        model.next()
+        assertEquals(-1, model.query.value.offset)
+        model.next()
+        model.next()
+        assertEquals(0, model.query.value.offset)
+    }
+
+    @Test
+    fun anotherPeriodStartsAtTheCurrentOneAndFoldsTheCard() {
+        model.previous()
+        model.toggleExpanded()
+        model.setPeriod(StatsPeriod.MONTH)
+        assertEquals(StatsViewModel.Query(StatsPeriod.MONTH, 0), model.query.value)
+        assertFalse(model.expanded.value)
+    }
+
+    @Test
+    fun theSamePeriodAgainChangesNothing() {
+        model.previous()
+        model.toggleExpanded()
+        model.setPeriod(StatsPeriod.WEEK)
+        assertEquals(-1, model.query.value.offset)
+        assertTrue(model.expanded.value)
+    }
+
+    @Test
+    fun anotherCategoryFoldsTheCardButTheSameOneDoesNot() {
+        model.toggleExpanded()
+        model.setCategory(StatsCategory.ARTISTS)
+        assertTrue(model.expanded.value)
+        model.setCategory(StatsCategory.SONGS)
+        assertEquals(StatsCategory.SONGS, model.category.value)
+        assertFalse(model.expanded.value)
+    }
+
+    @Test
+    fun theRowsShownAreThoseOfTheCategory() {
+        fun item(name: String) = RankedItem(name, null, 1, 1L)
+        val stats =
+            ListeningStats(
+                plays = 3,
+                listenedMs = 3L,
+                songs = listOf(item("song")),
+                artists = listOf(item("artist")),
+                albums = listOf(item("album")),
+            )
+        val ui =
+            StatsViewModel.Ui(
+                model.query.value,
+                statsRange(StatsPeriod.WEEK, 0),
+                stats,
+            )
+        assertEquals("artist", model.items(ui).single().name)
+        model.setCategory(StatsCategory.ALBUMS)
+        assertEquals("album", model.items(ui).single().name)
+        model.setCategory(StatsCategory.SONGS)
+        assertEquals("song", model.items(ui).single().name)
+    }
+
+    @Test
+    fun anImportIsPassedOnAndTheCountReturned() = runBlocking {
+        assertEquals(3, model.importCsv(emptyList()))
+        assertEquals(1, repository.imported)
+    }
+}
