@@ -70,14 +70,14 @@ enum class RepeatMode {
             }
 
     /**
-     * The icon for the notification and the media controls. They cannot tint an icon, so repeating
-     * all songs is shown with a dot below the arrows instead of the color used in the app.
+     * The icon for the notification and the media controls. They cannot tint an icon, so repeat off
+     * is shown faded to grey and repeat all at full strength, instead of the color used in the app.
      */
     val notificationIcon: Int
         get() =
             when (this) {
-                NONE -> R.drawable.ic_repeat_off_24
-                ALL -> R.drawable.ic_repeat_on_dot_24
+                NONE -> R.drawable.ic_repeat_notif_off_24
+                ALL -> R.drawable.ic_repeat_notif_on_24
                 TRACK -> R.drawable.ic_repeat_one_24
             }
 

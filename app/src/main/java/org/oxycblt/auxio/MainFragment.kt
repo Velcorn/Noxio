@@ -27,7 +27,6 @@ import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -71,6 +70,7 @@ import org.oxycblt.auxio.playback.queue.QueueBottomSheetBehavior
 import org.oxycblt.auxio.ui.DialogAwareNavigationListener
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.ui.ViewBindingFragment
+import org.oxycblt.auxio.ui.popupMenu
 import org.oxycblt.auxio.util.collect
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.context
@@ -413,7 +413,7 @@ class MainFragment :
     }
 
     private fun showMoreMenu(anchor: View) {
-        PopupMenu(requireContext(), anchor).apply {
+        popupMenu(requireContext(), anchor).apply {
             inflate(R.menu.home_overflow)
             setOnMenuItemClickListener {
                 when (it.itemId) {

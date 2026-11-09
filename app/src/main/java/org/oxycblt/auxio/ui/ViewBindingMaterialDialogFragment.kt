@@ -114,6 +114,7 @@ abstract class ViewBindingMaterialDialogFragment<VB : ViewBinding> : DialogFragm
 
     override fun onStart() {
         super.onStart()
+        requireDialog().blackenWindow()
 
         (requireDialog() as AlertDialog).apply {
             (getButton(AlertDialog.BUTTON_NEUTRAL) as AppCompatButton).fixDoubleRipple()

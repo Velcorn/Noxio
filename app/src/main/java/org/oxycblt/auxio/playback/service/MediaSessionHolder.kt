@@ -354,9 +354,9 @@ private constructor(
                     PlaybackActions.ACTION_INVERT_SHUFFLE,
                     context.getString(R.string.desc_shuffle),
                     if (playbackManager.isShuffled) {
-                        R.drawable.ic_shuffle_on_dot_24
+                        R.drawable.ic_shuffle_notif_on_24
                     } else {
-                        R.drawable.ic_shuffle_off_24
+                        R.drawable.ic_shuffle_notif_off_24
                     },
                 )
                 .build()
@@ -505,9 +505,9 @@ private class PlaybackNotification(
     ): NotificationCompat.Action {
         val drawableRes =
             if (isShuffled) {
-                R.drawable.ic_shuffle_on_dot_24
+                R.drawable.ic_shuffle_notif_on_24
             } else {
-                R.drawable.ic_shuffle_off_24
+                R.drawable.ic_shuffle_notif_off_24
             }
         return buildAction(context, PlaybackActions.ACTION_INVERT_SHUFFLE, drawableRes)
     }

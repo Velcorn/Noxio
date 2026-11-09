@@ -25,6 +25,7 @@ import androidx.preference.PreferenceDialogFragmentCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.oxycblt.auxio.BuildConfig
 import org.oxycblt.auxio.R
+import org.oxycblt.auxio.ui.blackenWindowOnShow
 import org.oxycblt.auxio.util.fixDoubleRipple
 
 /**
@@ -62,6 +63,7 @@ class IntListPreferenceDialog : PreferenceDialogFragmentCompat() {
                 dismiss()
             }
             .create()
+            .apply { blackenWindowOnShow() }
 
     override fun onDialogClosed(positiveResult: Boolean) {
         if (pendingValueIndex > -1) {

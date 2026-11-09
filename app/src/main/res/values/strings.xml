@@ -305,6 +305,8 @@
     <string name="set_black_mode_desc">Use a pure black dark theme</string>
     <string name="set_round_mode">Round mode</string>
     <string name="set_round_mode_desc">Enable rounded corners on additional UI elements (requires album covers to be rounded)</string>
+    <string name="set_wavy_seek_bar">Wavy seek bar</string>
+    <string name="set_wavy_seek_bar_desc">Let the seek bar of the player wave while playing. Off shows a plain line</string>
 
     <string name="set_personalize">Personalize</string>
     <string name="set_personalize_desc">Customize UI controls and behavior</string>

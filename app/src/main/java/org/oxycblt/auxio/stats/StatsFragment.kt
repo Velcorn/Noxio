@@ -48,6 +48,7 @@ import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentStatsBinding
 import org.oxycblt.auxio.databinding.ItemStatsRowBinding
 import org.oxycblt.auxio.ui.ViewBindingFragment
+import org.oxycblt.auxio.ui.blackenWindowOnShow
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.showToast
 import org.oxycblt.auxio.util.systemBarInsetsCompat
@@ -273,6 +274,8 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             .setMessage(R.string.lbl_stats_import_baseline_desc)
             .setPositiveButton(R.string.lbl_ok) { _, _ -> finishImport(files) }
             .setNegativeButton(R.string.lbl_cancel, null)
+            .create()
+            .apply { blackenWindowOnShow() }
             .show()
     }
 

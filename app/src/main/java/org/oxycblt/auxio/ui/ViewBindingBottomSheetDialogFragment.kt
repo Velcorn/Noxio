@@ -102,6 +102,7 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding> :
         if (!uiSettings.roundMode) {
             (dialog as BackportBottomSheetDialog).behavior.killCorners()
         }
+        (view.parent as? View)?.blackenSheet()
         onBindingCreated(requireBinding(), savedInstanceState)
         L.d("Fragment created")
     }

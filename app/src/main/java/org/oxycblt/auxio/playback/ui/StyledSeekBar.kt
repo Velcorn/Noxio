@@ -20,8 +20,10 @@ package org.oxycblt.auxio.playback.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.preference.PreferenceManager
 import com.google.android.material.slider.Slider
 import kotlin.math.max
+import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.ViewSeekBarBinding
 import org.oxycblt.auxio.playback.dsToSecs
 import org.oxycblt.auxio.playback.formatDurationDs
@@ -49,10 +51,17 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.seekBarSlider.addOnChangeListener(this)
     }
 
-    /** Enables/disables wavy active-track rendering to match playback state. */
+    /**
+     * Enables/disables wavy active-track rendering to match playback state. Nothing waves unless
+     * the user turned the wavy seek bar on in the settings.
+     */
     fun setWaveEnabled(enabled: Boolean) {
-        binding.seekBarSlider.setWaveEnabled(enabled)
+        binding.seekBarSlider.setWaveEnabled(enabled && wavyAllowed())
     }
+
+    private fun wavyAllowed() =
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean(context.getString(R.string.set_key_wavy_seek_bar), false)
 
     /** The current [Listener] attached to this instance. */
     var listener: Listener? = null

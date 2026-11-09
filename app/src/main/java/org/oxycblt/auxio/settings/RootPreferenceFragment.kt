@@ -32,6 +32,7 @@ import org.oxycblt.auxio.R
 import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.settings.ui.WrappedDialogPreference
+import org.oxycblt.auxio.ui.blackenWindowOnShow
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.navigateSafe
 import org.oxycblt.auxio.util.showToast
@@ -119,6 +120,8 @@ class RootPreferenceFragment : BasePreferenceFragment(R.xml.preferences_root) {
                 musicModel.rescan()
             }
             .setNegativeButton(R.string.lbl_cancel, null)
+            .create()
+            .apply { blackenWindowOnShow() }
             .show()
     }
 

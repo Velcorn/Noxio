@@ -35,7 +35,6 @@ import androidx.appcompat.R as AR
 import androidx.appcompat.view.SupportMenuInflater
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuItemImpl
-import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.children
@@ -306,7 +305,7 @@ constructor(
 
     @SuppressLint("RestrictedApi")
     private fun showPopupMenu(anchor: View, items: List<MenuItem>) {
-        val popup = PopupMenu(context, anchor)
+        val popup = popupMenu(context, anchor)
         val originalItems = mutableMapOf<Int, MenuItem>()
         for (item in items) {
             popup.menu.add(item.groupId, item.itemId, item.order, item.title).apply {
