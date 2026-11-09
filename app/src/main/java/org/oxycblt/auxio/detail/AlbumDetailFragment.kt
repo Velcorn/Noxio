@@ -58,7 +58,6 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
     // as a UID, as that is the only safe way to parcel an album.
     private val args: AlbumDetailFragmentArgs by navArgs()
     private val albumListAdapter = AlbumDetailListAdapter(this)
-    private var bottomBar: DetailBottomBar? = null
 
     override fun getDetailListAdapter() = albumListAdapter
 
@@ -67,16 +66,9 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
     override fun onBindingCreated(binding: FragmentDetailBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
 
-        // The controls are along the bottom: back, the name, sort, play, shuffle and more.
-        bottomBar =
-            DetailBottomBar.attach(binding)?.apply {
-                onBack = { findNavController().navigateUp() }
-                onPlay = { getToolbarParent()?.let(::onPlayParent) }
-                onShuffle = { getToolbarParent()?.let(::onShuffleParent) }
-                onMore = { onOpenParentMenu() }
-                onSort = { onOpenSortMenu() }
-                setSortAvailable(true)
-            }
+        // The controls are in the main navigation along the bottom (see MainFragment), so the
+        // top toolbar is collapsed to nothing until songs are selected.
+        DetailBottomBar.setTopToolbarShown(binding, false)
 
         // -- VIEWMODEL SETUP ---
         // DetailViewModel handles most initialization from the navigation argument.
@@ -99,7 +91,6 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
 
     override fun onDestroyBinding(binding: FragmentDetailBinding) {
         super.onDestroyBinding(binding)
-        bottomBar = null
         // Avoid possible race conditions that could cause a bad replace instruction to be consumed
         // during list initialization and crash the app. Could happen if the user is fast enough.
         detailModel.albumSongInstructions.consume()
@@ -142,7 +133,6 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
         val name = album.name.resolve(context)
 
         binding.detailNormalToolbar.title = name
-        bottomBar?.setTitle(name)
         binding.detailCover.bind(album)
         // The type text depends on the release type (Album, EP, Single, etc.)
         binding.detailType.text = album.releaseType.resolve(context)
@@ -168,7 +158,6 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
         binding.detailPlayButton?.setOnClickListener { playbackModel.play(album) }
         binding.detailShuffleButton?.setOnClickListener { playbackModel.shuffle(album) }
         setToolbarPlaybackButtonsEnabled(true)
-        bottomBar?.setPlayable(true)
         updatePlayback(
             playbackModel.song.value,
             playbackModel.parent.value,
@@ -266,7 +255,7 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
             binding.detailToolbar.setVisible(R.id.detail_normal_toolbar)
         }
         // The top toolbar is collapsed to nothing, except for the actions of selected songs.
-        bottomBar?.setTopToolbarShown(selected.isNotEmpty())
+        DetailBottomBar.setTopToolbarShown(binding, selected.isNotEmpty())
     }
 
     private fun handlePlaylistDecision(decision: PlaylistDecision?) {

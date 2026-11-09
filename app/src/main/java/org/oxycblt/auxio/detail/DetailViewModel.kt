@@ -31,6 +31,7 @@ import org.oxycblt.auxio.detail.list.DiscDivider
 import org.oxycblt.auxio.detail.list.DiscHeader
 import org.oxycblt.auxio.detail.list.EditHeader
 import org.oxycblt.auxio.detail.list.SongProperty
+import org.oxycblt.auxio.detail.list.SortHeader
 import org.oxycblt.auxio.list.BasicHeader
 import org.oxycblt.auxio.list.Item
 import org.oxycblt.auxio.list.ListSettings
@@ -642,7 +643,7 @@ constructor(
         list: MutableStateFlow<List<Item>>,
         instructions: MutableEvent<UpdateInstructions>,
         replace: Int?,
-        songHeader: (Int) -> PlainHeader = { BasicHeader(it) },
+        songHeader: (Int) -> PlainHeader = { SortHeader(it) },
     ) {
         if (detail == null) {
             parent.value = null
@@ -664,7 +665,7 @@ constructor(
                         section.items
                     }
                     is DetailSection.Discs -> {
-                        val header = BasicHeader(section.stringRes)
+                        val header = SortHeader(section.stringRes)
                         if (newList.isNotEmpty()) {
                             newList.add(PlainDivider(header))
                         }

@@ -242,7 +242,7 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
 
     protected abstract fun onShuffleParent(parent: P)
 
-    abstract fun onOpenParentMenu()
+    abstract override fun onOpenParentMenu()
 
     private companion object {
         const val KEY_DUAL_PANE = BuildConfig.APPLICATION_ID + ".detail.DUAL_PANE"

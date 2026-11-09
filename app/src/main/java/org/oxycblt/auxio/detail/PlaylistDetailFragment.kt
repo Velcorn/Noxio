@@ -81,14 +81,10 @@ class PlaylistDetailFragment :
 
         editNavigationListener = DialogAwareNavigationListener(detailModel::dropPlaylistEdit)
 
-        // The controls are along the bottom: back, name, play, shuffle and more, which become
-        // Cancel and Save while the order is edited.
+        // Cancel and Save are along the bottom while the order is edited, the rest of the time the
+        // main navigation is there (see MainFragment).
         bottomBar =
             DetailBottomBar.attach(binding)?.apply {
-                onBack = { findNavController().navigateUp() }
-                onPlay = { getToolbarParent()?.let(::onPlayParent) }
-                onShuffle = { getToolbarParent()?.let(::onShuffleParent) }
-                onMore = { onOpenParentMenu() }
                 onCancel = { detailModel.dropPlaylistEdit() }
                 onSave = { detailModel.savePlaylistEdit() }
             }
@@ -191,13 +187,6 @@ class PlaylistDetailFragment :
         playbackModel.play(item, detailModel.playInPlaylistWith)
     }
 
-    override val playlistQuery: String
-        get() = detailModel.playlistQuery
-
-    override fun onSearchPlaylist(query: String) {
-        detailModel.setPlaylistQuery(query)
-    }
-
     override fun onPickUp(viewHolder: RecyclerView.ViewHolder) {
         requireNotNull(touchHelper) { "ItemTouchHelper was not available" }.startDrag(viewHolder)
     }
@@ -223,7 +212,6 @@ class PlaylistDetailFragment :
         }
         val binding = requireBinding()
         binding.detailNormalToolbar.title = playlist.name.resolve(requireContext())
-        bottomBar?.setTitle(playlist.name.resolve(requireContext()))
         binding.detailEditToolbar.title =
             getString(R.string.fmt_editing, playlist.name.resolve(requireContext()))
 
@@ -272,7 +260,6 @@ class PlaylistDetailFragment :
             setOnClickListener { playbackModel.shuffle(playlist) }
         }
         setToolbarPlaybackButtonsEnabled(playable)
-        bottomBar?.setPlayable(playable)
         updatePlayback(
             playbackModel.song.value,
             playbackModel.parent.value,

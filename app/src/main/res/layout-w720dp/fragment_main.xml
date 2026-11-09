@@ -149,6 +149,7 @@
         android:translationZ="8dp">
 
         <LinearLayout
+            android:id="@+id/main_row"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center_vertical"

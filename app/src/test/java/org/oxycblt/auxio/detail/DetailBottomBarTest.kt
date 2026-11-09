@@ -60,11 +60,10 @@ class DetailBottomBarTest {
     private fun view(id: Int) = frame.findViewById<View>(id)
 
     @Test
-    fun theBarIsAddedToTheScreenAndItsTopToolbarIsCollapsed() {
+    fun theBarIsAddedHiddenAndItsTopToolbarIsCollapsed() {
         assertNotNull(view(R.id.detail_bottom_bar))
-        // The list ends where the bar begins.
-        val barHeight = context.resources.getDimensionPixelSize(R.dimen.size_detail_bottom_bar)
-        assertEquals(barHeight, (list.layoutParams as FrameLayout.LayoutParams).bottomMargin)
+        assertFalse(view(R.id.detail_bottom_bar).isVisible())
+        assertEquals(0, (list.layoutParams as FrameLayout.LayoutParams).bottomMargin)
         assertEquals(0, toolbar.layoutParams.height)
     }
 
@@ -77,67 +76,29 @@ class DetailBottomBarTest {
     }
 
     @Test
-    fun theSortButtonIsOnlyThereWhereTheListCanBeSorted() {
-        assertFalse(view(R.id.bar_sort).isVisible())
-        bar.setSortAvailable(true)
-        assertTrue(view(R.id.bar_sort).isVisible())
-    }
-
-    @Test
-    fun playingIsDisabledAndFadedWhileThereIsNothingToPlay() {
-        bar.setPlayable(false)
-        assertFalse(view(R.id.bar_play).isEnabled)
-        assertFalse(view(R.id.bar_shuffle).isEnabled)
-        assertEquals(0.38f, view(R.id.bar_play).alpha, 0.001f)
-        bar.setPlayable(true)
-        assertTrue(view(R.id.bar_play).isEnabled)
-        assertEquals(1f, view(R.id.bar_shuffle).alpha, 0f)
-    }
-
-    @Test
-    fun editingSwapsTheControlsForCancelAndSave() {
-        bar.setSortAvailable(true)
+    fun editingShowsCancelAndSaveAndTheListEndsAboveThem() {
+        val barHeight = context.resources.getDimensionPixelSize(R.dimen.size_detail_bottom_bar)
         bar.setEditing(editing = true, canSave = false)
-        assertFalse(view(R.id.bar_back).isVisible())
-        assertFalse(view(R.id.bar_sort).isVisible())
-        assertFalse(view(R.id.bar_more).isVisible())
-        assertTrue(view(R.id.bar_cancel).isVisible())
-        assertTrue(view(R.id.bar_save).isVisible())
+        assertTrue(view(R.id.detail_bottom_bar).isVisible())
         assertFalse(view(R.id.bar_save).isEnabled)
+        assertEquals(barHeight, (list.layoutParams as FrameLayout.LayoutParams).bottomMargin)
 
         bar.setEditing(editing = true, canSave = true)
         assertTrue(view(R.id.bar_save).isEnabled)
 
         bar.setEditing(editing = false, canSave = false)
-        assertTrue(view(R.id.bar_back).isVisible())
-        assertTrue(view(R.id.bar_sort).isVisible())
-        assertFalse(view(R.id.bar_cancel).isVisible())
+        assertFalse(view(R.id.detail_bottom_bar).isVisible())
+        assertEquals(0, (list.layoutParams as FrameLayout.LayoutParams).bottomMargin)
     }
 
     @Test
     fun theButtonsReportTheirClicks() {
-        var clicked = mutableListOf<String>()
-        bar.onBack = { clicked += "back" }
-        bar.onPlay = { clicked += "play" }
-        bar.onShuffle = { clicked += "shuffle" }
-        bar.onMore = { clicked += "more" }
-        bar.onSort = { clicked += "sort" }
+        val clicked = mutableListOf<String>()
         bar.onCancel = { clicked += "cancel" }
         bar.onSave = { clicked += "save" }
-        listOf(
-                R.id.bar_back,
-                R.id.bar_play,
-                R.id.bar_shuffle,
-                R.id.bar_more,
-                R.id.bar_sort,
-                R.id.bar_cancel,
-                R.id.bar_save,
-            )
-            .forEach { view(it).performClick() }
-        assertEquals(
-            listOf("back", "play", "shuffle", "more", "sort", "cancel", "save"),
-            clicked,
-        )
+        view(R.id.bar_cancel).performClick()
+        view(R.id.bar_save).performClick()
+        assertEquals(listOf("cancel", "save"), clicked)
     }
 
     private fun View.isVisible() = visibility == View.VISIBLE

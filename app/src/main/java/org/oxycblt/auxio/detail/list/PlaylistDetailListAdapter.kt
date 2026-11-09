@@ -26,12 +26,10 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R as MR
 import com.google.android.material.shape.MaterialShapeDrawable
 import org.oxycblt.auxio.IntegerTable
-import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.ItemEditHeaderBinding
 import org.oxycblt.auxio.databinding.ItemEditableSongBinding
 import org.oxycblt.auxio.list.EditableListListener
@@ -106,13 +104,7 @@ class PlaylistDetailListAdapter(private val listener: Listener) :
     }
 
     /** An extended [DetailListAdapter.Listener] for [PlaylistDetailListAdapter]. */
-    interface Listener : DetailListAdapter.Listener<Song>, EditableListListener {
-        /** What the songs are filtered by, empty if they are not. */
-        val playlistQuery: String
-
-        /** Called when the text in the search field of the header changes. */
-        fun onSearchPlaylist(query: String)
-    }
+    interface Listener : DetailListAdapter.Listener<Song>, EditableListListener
 
     /**
      * A [RecyclerView.ViewHolder] extension required to respond to changes in the editing state.
@@ -166,17 +158,6 @@ private class EditHeaderViewHolder private constructor(private val binding: Item
     RecyclerView.ViewHolder(binding.root), PlaylistDetailListAdapter.ViewHolder {
     private var listener: PlaylistDetailListAdapter.Listener? = null
 
-    init {
-        binding.headerSearchInput.doAfterTextChanged {
-            val query = it?.toString().orEmpty()
-            // Setting the text from the saved query in bind ends up here too, do not echo it.
-            val current = listener ?: return@doAfterTextChanged
-            if (query != current.playlistQuery) {
-                current.onSearchPlaylist(query)
-            }
-        }
-    }
-
     /**
      * Bind new data to this instance.
      *
@@ -192,42 +173,17 @@ private class EditHeaderViewHolder private constructor(private val binding: Item
             TooltipCompat.setTooltipText(this, contentDescription)
             setOnClickListener { listener.onOpenSortMenu() }
         }
-        binding.headerSearch.apply {
+        binding.headerMore.apply {
             TooltipCompat.setTooltipText(this, contentDescription)
-            setOnClickListener { showSearch(true) }
+            setOnClickListener { listener.onOpenParentMenu() }
         }
-        // A query that is still active (the header was scrolled away and came back) is shown again.
-        val query = listener.playlistQuery
-        binding.headerSearchInput.setText(query)
-        showSearch(query.isNotEmpty())
-    }
-
-    private fun showSearch(searching: Boolean) {
-        binding.headerTitle.isVisible = !searching
-        binding.headerSearchInput.isVisible = searching
-        if (searching) {
-            binding.headerSearchInput.requestFocus()
-        } else if (binding.headerSearchInput.text.isNotEmpty()) {
-            binding.headerSearchInput.setText("")
-        }
-        // While searching, the button closes the search instead.
-        binding.headerSearch.setIconResource(
-            if (searching) R.drawable.ic_close_24 else R.drawable.ic_search_20
-        )
-        binding.headerSearch.setOnClickListener { showSearch(!searching) }
     }
 
     override fun updateEditing(editing: Boolean) {
-        // A filtered list cannot be reordered, so searching is only possible outside of editing.
-        binding.headerSearch.apply {
-            isVisible = !editing
-            isClickable = !editing
-            isFocusable = !editing
-        }
-        if (editing) {
-            binding.headerSearchInput.isVisible = false
-            binding.headerTitle.isVisible = true
-        }
+        // The order is being changed by hand, so there is nothing to sort and the menu is not for
+        // now.
+        binding.headerSort.isVisible = !editing
+        binding.headerMore.isVisible = !editing
     }
 
     companion object {

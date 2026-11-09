@@ -82,6 +82,11 @@ abstract class DetailListAdapter(
          * should be opened.
          */
         fun onOpenSortMenu()
+
+        /**
+         * Called when the more button in a header item is pressed, requesting the parent's menu.
+         */
+        fun onOpenParentMenu()
     }
 
     protected companion object {
@@ -135,6 +140,10 @@ private class SortHeaderViewHolder(private val binding: ItemSortHeaderBinding) :
             // button can be clear.
             TooltipCompat.setTooltipText(this, contentDescription)
             setOnClickListener { listener.onOpenSortMenu() }
+        }
+        binding.headerMore.apply {
+            TooltipCompat.setTooltipText(this, contentDescription)
+            setOnClickListener { listener.onOpenParentMenu() }
         }
     }
 

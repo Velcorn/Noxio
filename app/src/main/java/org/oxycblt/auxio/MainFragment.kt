@@ -213,10 +213,12 @@ class MainFragment :
         binding.mainScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
         binding.sheetScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
         binding.homeShuffleFab.setOnClickListener {
-            if (currentNavMode(binding) == NavMode.ARTIST) {
-                detailModel.currentArtist.value?.let(playbackModel::shuffle)
-            } else {
-                playbackModel.shuffleAll()
+            when (currentNavMode(binding)) {
+                NavMode.ARTIST -> detailModel.currentArtist.value?.let(playbackModel::shuffle)
+                NavMode.ALBUM -> detailModel.currentAlbum.value?.let(playbackModel::shuffle)
+                NavMode.GENRE -> detailModel.currentGenre.value?.let(playbackModel::shuffle)
+                NavMode.PLAYLIST -> detailModel.currentPlaylist.value?.let(playbackModel::shuffle)
+                else -> playbackModel.shuffleAll()
             }
         }
         binding.homeNewPlaylistFab.apply {
@@ -301,21 +303,31 @@ class MainFragment :
     // --- MAIN NAVIGATION (search row and tabs) ---
 
     /**
-     * What the main navigation is for. It is the same row of search, sort and more above the tabs
-     * on two screens: the home screen (search the library, sort the list, the tabs are the music
-     * types) and an artist page (filter the artist, sort the list that is shown, the tabs are their
-     * songs and albums).
+     * What the main navigation is for. It is the same row of search, sort and more on every screen
+     * but the playing screen: the home screen (search the library, sort the list, the tabs are the
+     * music types), an artist page (filter the artist, sort the list that is shown, the tabs are
+     * their songs and albums) and the pages of an album, a genre and a playlist (no tabs, albums
+     * and genres have nothing to filter). The floating shuffle button plays what the screen is
+     * about.
      */
     private enum class NavMode {
         NONE,
         HOME,
         ARTIST,
+        ALBUM,
+        GENRE,
+        PLAYLIST,
     }
 
     private fun currentNavMode(binding: FragmentMainBinding) =
         when (binding.exploreNavHost.findNavController().currentDestination?.id) {
             R.id.home_fragment -> NavMode.HOME
             R.id.artist_detail_fragment -> NavMode.ARTIST
+            R.id.album_detail_fragment -> NavMode.ALBUM
+            R.id.genre_detail_fragment -> NavMode.GENRE
+            // Cancel and Save are along the bottom while the order of a playlist is edited.
+            R.id.playlist_detail_fragment ->
+                if (detailModel.editedPlaylist.value == null) NavMode.PLAYLIST else NavMode.NONE
             else -> NavMode.NONE
         }
 
@@ -325,8 +337,10 @@ class MainFragment :
             exploreNavigate(HomeFragmentDirections.search())
         }
         binding.mainSearchInput.doAfterTextChanged {
-            if (navMode == NavMode.ARTIST) {
-                detailModel.setArtistQuery(it?.toString().orEmpty())
+            when (navMode) {
+                NavMode.ARTIST -> detailModel.setArtistQuery(it?.toString().orEmpty())
+                NavMode.PLAYLIST -> detailModel.setPlaylistQuery(it?.toString().orEmpty())
+                else -> {}
             }
         }
         binding.mainSearchInput.setOnEditorActionListener { view, _, _ ->
@@ -358,12 +372,12 @@ class MainFragment :
             )
         }
         binding.mainMore.setOnClickListener {
-            if (navMode == NavMode.ARTIST) {
-                detailModel.currentArtist.value?.let {
-                    listModel.openMenu(R.menu.detail_parent, it)
-                }
-            } else {
-                showMoreMenu(it)
+            when (navMode) {
+                NavMode.ARTIST ->
+                    detailModel.currentArtist.value?.let {
+                        listModel.openMenu(R.menu.detail_parent, it)
+                    }
+                else -> showMoreMenu(it)
             }
         }
         binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
@@ -380,7 +394,7 @@ class MainFragment :
                     when (navMode) {
                         NavMode.HOME -> homeModel.synchronizeTabPosition(tab.position)
                         NavMode.ARTIST -> detailModel.setArtistTab(ARTIST_TABS[tab.position])
-                        NavMode.NONE -> {}
+                        else -> {}
                     }
                 }
 
@@ -397,20 +411,36 @@ class MainFragment :
     /** Set the search field and the tabs up for the screen that is shown. */
     private fun applyNavMode(binding: FragmentMainBinding, mode: NavMode) {
         navMode = mode
-        val artist = mode == NavMode.ARTIST
-        binding.mainSearch.isVisible = !artist
-        binding.mainSearchInput.isVisible = artist
-        if (artist) {
-            binding.mainSearchInput.setText(detailModel.artistQuery)
+        // Artists and playlists have a field to filter them. Albums and genres have nothing to
+        // filter, so there is no search at all there.
+        val filter = mode == NavMode.ARTIST || mode == NavMode.PLAYLIST
+        binding.mainSearch.isVisible = !filter
+        binding.mainSearchInput.isVisible = filter
+        // Sort and more are in the header of the list on the pages of an album, a genre and a
+        // playlist, so the row only has the filter field there (and nothing at all on albums and
+        // genres).
+        val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE || mode == NavMode.PLAYLIST
+        binding.mainSort.isVisible = !ownHeader
+        binding.mainMore.isVisible = !ownHeader
+        binding.mainRow.isVisible = mode != NavMode.ALBUM && mode != NavMode.GENRE
+        if (filter) {
+            binding.mainSearchInput.setText(
+                if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery
+            )
             updateSearchHint(binding)
         }
         rebuildTabs(binding)
     }
 
     private fun updateSearchHint(binding: FragmentMainBinding) {
-        val artist = detailModel.currentArtist.value ?: return
+        val name =
+            when (navMode) {
+                NavMode.ARTIST -> detailModel.currentArtist.value?.name
+                NavMode.PLAYLIST -> detailModel.currentPlaylist.value?.name
+                else -> null
+            } ?: return
         binding.mainSearchInput.hint =
-            getString(R.string.fmt_search_in, artist.name.resolve(requireContext()))
+            getString(R.string.fmt_search_in, name.resolve(requireContext()))
     }
 
     private fun exploreNavigate(directions: androidx.navigation.NavDirections) {
@@ -495,7 +525,15 @@ class MainFragment :
             rebuildTabs(binding)
         }
         // On the home screen a single tab makes the tabs redundant.
-        binding.mainTabs.isVisible = mode != NavMode.HOME || homeModel.currentTabTypes.size > 1
+        // The pages of an album, a genre and a playlist have no tabs.
+        binding.mainTabs.isVisible =
+            when (mode) {
+                NavMode.HOME -> homeModel.currentTabTypes.size > 1
+                NavMode.ALBUM,
+                NavMode.GENRE,
+                NavMode.PLAYLIST -> false
+                else -> true
+            }
         nav.alpha = if (shown) fadeRatio else 0f
         nav.isInvisible = nav.alpha == 0f
 
@@ -797,7 +835,7 @@ class MainFragment :
 
     /** The kind of list the floating button is for: an artist page has songs, like the song tab. */
     private fun fabTabType(binding: FragmentMainBinding) =
-        if (currentNavMode(binding) == NavMode.ARTIST) {
+        if (currentNavMode(binding).let { it != NavMode.HOME && it != NavMode.NONE }) {
             MusicType.SONGS
         } else {
             homeModel.currentTabType.value

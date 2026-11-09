@@ -23,9 +23,17 @@
         style="@style/Widget.Auxio.Button.Icon.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_mid_medium"
         android:contentDescription="@string/lbl_sort"
         app:icon="@drawable/ic_sort_24"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <org.oxycblt.auxio.ui.RippleFixMaterialButton
+        android:id="@+id/header_more"
+        style="@style/Widget.Auxio.Button.Icon.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_mid_medium"
+        android:contentDescription="@string/lbl_more"
+        app:icon="@drawable/ic_more_vert_24" />
 
 </LinearLayout>
