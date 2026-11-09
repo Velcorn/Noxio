@@ -258,6 +258,9 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      */
     private var bottomAlignGap = 0
 
+    /** The top of the view when the gap was last worked out. */
+    private var bottomAlignTop = Int.MIN_VALUE
+
     var popupProvider: PopupProvider? = null
     var listener: Listener? = null
 
@@ -319,6 +322,7 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      * does not fit, or that has more than one column, is left alone.
      */
     private fun updateBottomAlignment() {
+        bottomAlignTop = top
         val lm = layoutManager as? LinearLayoutManager
         val count = adapter?.itemCount ?: 0
         var gap = 0
@@ -351,6 +355,11 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
     // --- RECYCLERVIEW EVENT MANAGEMENT ---
 
     private fun onPreDraw() {
+        // A collapsing app bar moves the view without laying it out again, and the space it
+        // leaves for the list changes with it.
+        if (top != bottomAlignTop) {
+            updateBottomAlignment()
+        }
         updateThumbState()
 
         val thumbRange = thumbOffsetRange
