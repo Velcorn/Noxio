@@ -51,6 +51,21 @@ class SafeDocumentWriterTest {
         SafeDocumentWriter.write(context, dir(), name, mime) { it.write(text.toByteArray()) }
 
     @Test
+    fun aFolderThatAddsAnExtensionStillEndsUpWithTheExactNameOnceOnly() {
+        val csv = "backup.csv"
+        // A plain folder adds ".csv" to a name for this type, as some providers do.
+        fun backup(text: String) =
+            SafeDocumentWriter.write(context, dir(), csv, "text/csv") {
+                it.write(text.toByteArray())
+            }
+
+        assertTrue(backup("first"))
+        assertTrue(backup("second"))
+        assertEquals(listOf(csv), folder.root.list()!!.toList())
+        assertEquals("second", file(csv).readText())
+    }
+
+    @Test
     fun aNewFileIsCreatedWithTheContent() {
         assertTrue(write("hello"))
         assertEquals("hello", file(name).readText())

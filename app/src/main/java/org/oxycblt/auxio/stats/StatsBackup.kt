@@ -47,11 +47,17 @@ import timber.log.Timber as L
  */
 @Singleton
 class StatsBackup
-@Inject
-constructor(
-    @ApplicationContext private val context: Context,
+internal constructor(
+    private val context: Context,
     private val repository: StatsRepository,
+    private val openFolder: (Context, Uri) -> DocumentFile?,
 ) {
+    @Inject
+    constructor(
+        @ApplicationContext context: Context,
+        repository: StatsRepository,
+    ) : this(context, repository, { c, uri -> DocumentFile.fromTreeUri(c, uri) })
+
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     /** The folder the backup is written into, or null if none was chosen. */
@@ -65,7 +71,7 @@ constructor(
 
     /** The display name of the chosen folder, or null if there is none or it is unreachable. */
     val folderName: String?
-        get() = folder?.let { DocumentFile.fromTreeUri(context, it)?.name }
+        get() = folder?.let { openFolder(context, it)?.name }
 
     /** Start the weekly backup, and make one right away so the file shows up. */
     fun enable() {
@@ -88,7 +94,7 @@ constructor(
      * @return False if there is no usable folder, true once the file was written.
      */
     suspend fun run(): Boolean {
-        val tree = folder?.let { DocumentFile.fromTreeUri(context, it) }
+        val tree = folder?.let { openFolder(context, it) }
         if (tree == null || !tree.canWrite()) {
             L.w("Stats backup folder is missing or not writable")
             return false

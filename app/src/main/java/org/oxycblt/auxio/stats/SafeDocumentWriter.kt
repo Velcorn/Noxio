@@ -71,7 +71,7 @@ object SafeDocumentWriter {
             return false
         }
 
-        val target = folder.findFile(name) ?: folder.createFile(mimeType, name) ?: return false
+        val target = folder.findFile(name) ?: createNamed(folder, mimeType, name) ?: return false
         try {
             val input = resolver.openInputStream(temp.uri) ?: return false
             input.use {
@@ -85,6 +85,25 @@ object SafeDocumentWriter {
         }
         temp.delete()
         return true
+    }
+
+    /**
+     * Create a file with exactly [name]. Some providers add the extension of the type to the name
+     * ("backup.csv" becomes "backup.csv.csv"), and the next run would then not find the file and
+     * add another one. Such a file is renamed.
+     */
+    private fun createNamed(folder: DocumentFile, mimeType: String, name: String): DocumentFile? {
+        val created = folder.createFile(mimeType, name) ?: return null
+        if (created.name != name) {
+            L.w("The folder named the new file ${created.name}, renaming it to $name")
+            if (!created.renameTo(name)) {
+                created.delete()
+                return null
+            }
+            // renameTo can leave this instance pointing at the old name.
+            return folder.findFile(name) ?: created
+        }
+        return created
     }
 
     /** A type nobody maps to an extension, so the name of the temporary file stays as it is. */

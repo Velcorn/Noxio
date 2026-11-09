@@ -105,7 +105,7 @@ minimal conflicts. Only the application ID and branding differ.
 
 ## Tests
 
-The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the formatting and navigation of the stats screen, the backup folder handling, which types a search covers, the swipe and bottom alignment maths, the listening stats (play
+The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the formatting and navigation of the stats screen, the backup folder handling, how a search matches names, the settings of the search, the launcher icon switch, the share image, the swipe and bottom alignment maths, the listening stats (play
 counting including repeated songs, CSV export and import, ranking, the weekly, monthly, yearly and all time ranges,
 the undated "before Noxio" plays, the safe weekly backup) and the sleep timer (state, fade, shake detection). The
 music library (`musikr`) comes with its own tests. They run in WSL, Linux or macOS like the build:
