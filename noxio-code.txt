@@ -1,0 +1,30 @@
+# The source files Noxio added, relative to app/src/main/java/org/oxycblt/auxio/. The "Noxio code"
+# coverage report (./gradlew noxioCoverageReport) counts only these. Add every new file that Noxio
+# creates; code that came with Auxio is not listed and only counts in the all-code report.
+detail/DetailBottomBar.kt
+detail/sort/ArtistAlbumSortDialog.kt
+list/recycler/BottomAlignment.kt
+playback/service/SleepTimerController.kt
+playback/timer/SleepTimer.kt
+playback/timer/SleepTimerDialog.kt
+playback/timer/SleepTimerMath.kt
+settings/categories/StatsPreferenceFragment.kt
+stats/PlayRecorder.kt
+stats/PlayTracker.kt
+stats/SafeDocumentWriter.kt
+stats/StatsBackup.kt
+stats/StatsCsv.kt
+stats/StatsCsvImport.kt
+stats/StatsDatabase.kt
+stats/StatsFormat.kt
+stats/StatsFragment.kt
+stats/StatsImage.kt
+stats/StatsModule.kt
+stats/StatsRepository.kt
+stats/StatsSettings.kt
+stats/StatsShareDialog.kt
+stats/StatsViewModel.kt
+ui/BlackSurface.kt
+ui/BottomBarInsets.kt
+ui/HorizontalSwipe.kt
+ui/LauncherIcon.kt

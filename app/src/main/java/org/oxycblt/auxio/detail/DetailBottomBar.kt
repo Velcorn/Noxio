@@ -41,13 +41,14 @@ import org.oxycblt.auxio.util.inflater
  * It is added to the root of the detail layout from code, so the layouts of the other detail
  * screens stay as they are. Use [attach] to create one.
  */
-class DetailBottomBar private constructor(private val binding: FragmentDetailBinding) {
+class DetailBottomBar
+internal constructor(
+    private val frame: ViewGroup,
+    private val list: View,
+    private val topToolbar: View,
+) {
     private val root: View =
-        binding.root.context.inflater.inflate(
-            R.layout.view_detail_bottom_bar,
-            binding.root as ViewGroup,
-            false,
-        )
+        frame.context.inflater.inflate(R.layout.view_detail_bottom_bar, frame, false)
     private val back = root.findViewById<ImageButton>(R.id.bar_back)
     private val title = root.findViewById<TextView>(R.id.bar_title)
     private val play = root.findViewById<ImageButton>(R.id.bar_play)
@@ -68,7 +69,6 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
     var onSave: () -> Unit = {}
 
     init {
-        val frame = binding.root as ViewGroup
         frame.addView(root)
 
         val barHeight = root.context.getDimenPixels(R.dimen.size_detail_bottom_bar)
@@ -76,7 +76,7 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
         // the bottom inset. The list ends where the bar begins: it has its own bottom padding for
         // the inset, so only the height of the bar is added to its margin.
         root.liftByBottomInset()
-        binding.detailRecycler.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        list.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = barHeight
         }
         setTopToolbarShown(false)
@@ -129,7 +129,7 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
     /**
      * Show the top toolbar, which has the actions for selected songs, or collapse it to nothing.
      */
-    fun setTopToolbarShown(shown: Boolean) = setTopToolbarShown(binding, shown)
+    fun setTopToolbarShown(shown: Boolean) = setToolbarShown(topToolbar, shown)
 
     companion object {
         private const val DISABLED_ALPHA = 0.38f
@@ -138,8 +138,11 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
          * Collapse the top toolbar of a detail screen to nothing, or bring it back. Screens whose
          * controls are not in a [DetailBottomBar] but in the main navigation use this too.
          */
-        fun setTopToolbarShown(binding: FragmentDetailBinding, shown: Boolean) {
-            binding.detailToolbar.updateLayoutParams<ViewGroup.LayoutParams> {
+        fun setTopToolbarShown(binding: FragmentDetailBinding, shown: Boolean) =
+            setToolbarShown(binding.detailToolbar, shown)
+
+        internal fun setToolbarShown(toolbar: View, shown: Boolean) {
+            toolbar.updateLayoutParams<ViewGroup.LayoutParams> {
                 height = if (shown) ViewGroup.LayoutParams.WRAP_CONTENT else 0
             }
         }
@@ -154,7 +157,11 @@ class DetailBottomBar private constructor(private val binding: FragmentDetailBin
             if (binding.detailPane != null || binding.root !is ViewGroup) {
                 return null
             }
-            return DetailBottomBar(binding)
+            return DetailBottomBar(
+                binding.root as ViewGroup,
+                binding.detailRecycler,
+                binding.detailToolbar,
+            )
         }
     }
 }

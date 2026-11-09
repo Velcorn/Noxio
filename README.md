@@ -3,7 +3,8 @@
 <h4 align="center">A simple, rational music player for Android, built for listening through the night.</h4>
 <p align="center">
     <a href="https://github.com/Velcorn/Noxio/actions/workflows/ci.yml"><img src="https://github.com/Velcorn/Noxio/actions/workflows/ci.yml/badge.svg?branch=dev" alt="CI"></a>
-    <a href="#tests"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FVelcorn%2FNoxio%2Fbadges%2Fcoverage.json" alt="Coverage"></a>
+    <a href="#tests"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FVelcorn%2FNoxio%2Fbadges%2Fcoverage.json" alt="Coverage of Noxio code"></a>
+    <a href="#tests"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FVelcorn%2FNoxio%2Fbadges%2Fcoverage-all.json" alt="Coverage of all code"></a>
     <a href="https://github.com/Velcorn/Noxio/releases"><img src="https://img.shields.io/github/v/release/Velcorn/Noxio?include_prereleases&label=release" alt="Latest release"></a>
     <img src="https://img.shields.io/badge/code%20style-ktfmt-7F52FF?style=flat" alt="ktfmt">
     <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=flat" alt="GPL v3">
@@ -33,7 +34,7 @@ upstream issues should not be reported against it.
 | --- | --- | --- |
 | Sleep timer | none | Moon icon above the seek bar. End of track, 30 min, custom minutes or 60 min, with fade-out. Remembers your last choice. Restart it from the notification or by shaking the device. |
 | Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. The artists, albums and songs switch is at the top and you can also swipe between them, while the range and period controls are at the bottom, in reach of the thumb. Colorful cards you can share as an image, CSV export and import with an optional weekly backup to a folder (one file that is replaced each time, with a "Back up now" button). Musicolet's "Most played songs" lists import as your history from before Noxio, counted in All time only. Stored on the device only. |
-| Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use. Optional wavy seek bar (Settings > Appearance), off by default |
+| Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use, and the playing strip moves to the bottom while the queue is open. Optional wavy seek bar (Settings > Appearance), off by default |
 | Navigation | Tabs and search at the top, five tabs including Genres | Search row and tabs at the bottom of the home screen (Artists, Albums, Songs, Playlists, no Genres tab), the player above the navigation, a floating shuffle button. Short lists sit at the bottom edge instead of the top |
 | Detail pages | Header with Play and Shuffle pills, sort in the list header | Album, genre, playlist and artist pages have a bottom bar (back, name, sort, play, shuffle, more). Artist pages have Albums and Songs tabs you can swipe between, each with its own sort, and the search filters the list shown. Playlists can be searched, sorted and kept in a custom order |
 | Search | Filter chips at the top, every type is searched | Filter chips at the bottom, above the keyboard. Only the types that have a tab on the home screen are shown and searched |
@@ -111,15 +112,18 @@ the undated "before Noxio" plays, the safe weekly backup) and the sleep timer (s
 music library (`musikr`) comes with its own tests. They run in WSL, Linux or macOS like the build:
 
 ```bash
-./gradlew coverageReport            # runs the tests of the app and musikr, writes the coverage report
+./gradlew coverageReport            # runs the tests of the app and musikr, writes the all-code coverage report
+./gradlew noxioCoverageReport       # the same tests, a report of the files Noxio added only
 ./gradlew spotlessCheck app:lintDebug
 ```
 
 The coverage report is in `build/reports/jacoco/coverageReport/index.html`.
 
-**The coverage badge counts all the code**, the app and the music library, and leaves out only generated code (view
-binding, Hilt, Room, resources). Screens and most of Auxio's own code have no tests, so the number is low on purpose:
-it shows how much is still untested, not just the tested parts. Everything visible still needs a look on a device.
+**There are two coverage badges.** "Noxio code" counts only the files Noxio added, which are listed in
+`noxio-code.txt` (`./gradlew noxioCoverageReport`, report in `build/reports/jacoco/noxioCoverageReport/`). "All code"
+counts everything, Auxio and the music library included, and leaves out only generated code (view binding, Hilt, Room,
+resources); it is low on purpose, as most of that code has no tests. Screens and dialogs have no automated tests, so
+the Noxio number is held down by them. Everything visible still needs a look on a device.
 
 GitHub Actions runs the formatting check, Android lint and the tests on every push and pull request, and refreshes
 the badge from `dev`. Android lint knows the problems that came with Auxio (`app/lint-baseline.xml`), so only new

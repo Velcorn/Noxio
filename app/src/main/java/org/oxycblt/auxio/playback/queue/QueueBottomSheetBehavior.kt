@@ -57,8 +57,9 @@ class QueueBottomSheetBehavior<V : View>(context: Context, attributeSet: Attribu
         // Pre-calculate expandedOffset before the sheet is positioned by super.onLayoutChild().
         // This ensures the sheet uses the correct offset during configuration changes like
         // split-screen resize, where layout happens before insets are re-applied.
-        val effectiveBarHeight = if (barHeight > 0) barHeight else getIdealBarHeight(child.context)
-        expandedOffset = effectiveBarHeight + barSpacing
+        // The playing strip is at the bottom while the queue is open, so the queue starts at the
+        // top.
+        expandedOffset = barSpacing
         return super.onLayoutChild(parent, child, layoutDirection)
     }
 
@@ -100,17 +101,17 @@ class QueueBottomSheetBehavior<V : View>(context: Context, attributeSet: Attribu
 
     override fun applyWindowInsets(child: View, insets: WindowInsets): WindowInsets {
         super.applyWindowInsets(child, insets)
-        // Offset our expanded panel by the size of the playback bar, as that is shown when
-        // we slide up the panel. Use ideal bar height as fallback when the bar hasn't been
-        // measured yet (can occur when window insets are applied before onDependentViewChanged).
+        // The playing strip is shown at the bottom, over the queue, while it is open, so the queue
+        // ends above it. Use the ideal bar height as fallback when the bar hasn't been measured yet
+        // (can occur when window insets are applied before onDependentViewChanged).
         val bars = insets.systemBarInsetsCompat
         val effectiveBarHeight = if (barHeight > 0) barHeight else getIdealBarHeight(child.context)
-        expandedOffset = effectiveBarHeight + barSpacing
+        expandedOffset = barSpacing
         return insets.replaceSystemBarInsetsCompat(
             bars.left,
             bars.top,
             bars.right,
-            expandedOffset + bars.bottom,
+            expandedOffset + bars.bottom + effectiveBarHeight,
         )
     }
 }

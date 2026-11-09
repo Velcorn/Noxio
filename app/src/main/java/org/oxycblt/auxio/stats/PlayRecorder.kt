@@ -51,10 +51,15 @@ import timber.log.Timber as L
  * only connects them to the player.
  */
 class PlayRecorder
-private constructor(
-    private val context: Context,
+internal constructor(
     private val playbackManager: PlaybackStateManager,
     private val repository: StatsRepository,
+    private val eventFor: (Song, startedAt: Long) -> PlayEvent,
+    private val keyOf: (Song) -> String,
+    // The tracker is only touched on the main thread, the database work happens on one background
+    // thread so the writes of a play stay in order.
+    private val mainScope: CoroutineScope,
+    private val writeScope: CoroutineScope,
 ) : PlaybackStateManager.Listener {
     class Factory
     @Inject
@@ -63,14 +68,18 @@ private constructor(
         private val playbackManager: PlaybackStateManager,
         private val repository: StatsRepository,
     ) {
-        fun create() = PlayRecorder(context, playbackManager, repository)
+        @OptIn(ExperimentalCoroutinesApi::class)
+        fun create() =
+            PlayRecorder(
+                playbackManager,
+                repository,
+                eventFor = { song, startedAt -> playEventFor(context, song, startedAt) },
+                keyOf = { it.uid.toString() },
+                mainScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
+                writeScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1)),
+            )
     }
 
-    // The tracker is only touched on the main thread, the database work happens on one background
-    // thread so the writes of a play stay in order.
-    private val mainScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val writeScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
     private val tracker = PlayTracker()
     private var song: Song? = null
     private var write: PlayWrite? = null
@@ -119,7 +128,7 @@ private constructor(
     /** Finish the tracked song and start tracking the new one if the current song changed. */
     private fun syncSong() {
         val current = playbackManager.currentSong
-        if (current?.uid?.toString() != tracker.current) {
+        if (current?.let(keyOf) != tracker.current) {
             finish()
             begin(current)
         }
@@ -130,7 +139,7 @@ private constructor(
         val playing = newSong != null && playbackManager.progression.isPlaying
         val startedAt = System.currentTimeMillis()
         tracker.begin(
-            key = newSong?.uid?.toString(),
+            key = newSong?.let(keyOf),
             durationMs = newSong?.durationMs ?: 0,
             wallNowMs = startedAt,
             playing = playing,
@@ -174,25 +183,6 @@ private constructor(
         }
     }
 
-    private fun eventFor(song: Song, startedAt: Long): PlayEvent =
-        PlayEvent(
-            songUid = song.uid.toString(),
-            title = song.name.resolve(context),
-            artists =
-                song.artists.joinToString(PlayEvent.ARTIST_SEPARATOR) { it.name.resolve(context) },
-            album = song.album.name.resolve(context),
-            startedAt = startedAt,
-            listenedMs = 0,
-            durationMs = song.durationMs,
-            filePath = song.path.components.toString(),
-            albumArtist =
-                song.album.artists.joinToString(PlayEvent.ARTIST_SEPARATOR) {
-                    it.name.resolve(context)
-                },
-            genre = song.genres.firstOrNull()?.name?.resolve(context) ?: "",
-            year = song.date?.year ?: 0,
-        )
-
     private fun now() = SystemClock.elapsedRealtime()
 
     private companion object {
@@ -200,3 +190,23 @@ private constructor(
         const val CHECKPOINT_MS = 15_000L
     }
 }
+
+/** Describe a song as the play event that is saved for it, with the names as they are shown. */
+fun playEventFor(context: Context, song: Song, startedAt: Long): PlayEvent =
+    PlayEvent(
+        songUid = song.uid.toString(),
+        title = song.name.resolve(context),
+        artists =
+            song.artists.joinToString(PlayEvent.ARTIST_SEPARATOR) { it.name.resolve(context) },
+        album = song.album.name.resolve(context),
+        startedAt = startedAt,
+        listenedMs = 0,
+        durationMs = song.durationMs,
+        filePath = song.path.components.toString(),
+        albumArtist =
+            song.album.artists.joinToString(PlayEvent.ARTIST_SEPARATOR) {
+                it.name.resolve(context)
+            },
+        genre = song.genres.firstOrNull()?.name?.resolve(context) ?: "",
+        year = song.date?.year ?: 0,
+    )

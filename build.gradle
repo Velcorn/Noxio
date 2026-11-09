@@ -88,3 +88,39 @@ tasks.register("coverageReport", JacocoReport) {
         csv.required = false
     }
 }
+
+// Coverage of Noxio's own code: the files listed in noxio-code.txt, which are the ones Noxio added.
+// The all-code report above is dominated by Auxio and the music library, which Noxio did not write.
+def noxioClasses = file("noxio-code.txt").readLines()
+    .collect { it.trim() }
+    .findAll { it && !it.startsWith("#") }
+    .collectMany { path ->
+        def dir = path.contains("/") ? path.substring(0, path.lastIndexOf("/") + 1) : ""
+        def name = path.substring(path.lastIndexOf("/") + 1).replace(".kt", "")
+        // The class itself, its nested classes, and the class Kotlin makes for top-level functions.
+        ["org/oxycblt/auxio/${dir}${name}.class", "org/oxycblt/auxio/${dir}${name}\$*.class",
+         "org/oxycblt/auxio/${dir}${name}Kt.class", "org/oxycblt/auxio/${dir}${name}Kt\$*.class"]
+    }
+
+tasks.register("noxioCoverageReport", JacocoReport) {
+    group = "verification"
+    description = "Runs the unit tests and writes a coverage report of the files Noxio added."
+    dependsOn ":app:testDebugUnitTest"
+    def module = project(":app")
+    classDirectories.from(
+        fileTree(
+            dir: module.layout.buildDirectory.dir("intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes"),
+            includes: noxioClasses,
+            excludes: generatedCode,
+        )
+    )
+    sourceDirectories.from(module.files("src/main/java"))
+    executionData.from(
+        module.layout.buildDirectory.file("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+    )
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}

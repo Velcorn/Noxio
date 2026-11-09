@@ -37,6 +37,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.R as MR
 import com.google.android.material.bottomsheet.BackportBottomSheetBehavior
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -107,6 +108,7 @@ class MainFragment :
     private var speedDialBackCallback: SpeedDialBackPressedCallback? = null
     private var navigationListener: DialogAwareNavigationListener? = null
     private var lastInsets: WindowInsets? = null
+    private var stripAtBottom = false
     private var elevationNormal = 0f
     private var normalCornerSize = 0f
     private var lastCornerSize = Float.NaN
@@ -582,6 +584,7 @@ class MainFragment :
             val queuePanelRatio = 1 - min(queuePanelEdgeRatio * queuePanelBackRatio, 1f)
 
             binding.playbackBarFragment.alpha = max(playbackOutRatio, queueBarRatio)
+            placePlayingStrip(binding, queueBarRatio > 0f)
             binding.playbackPanelFragment.alpha = min(playbackInRatio, queuePanelRatio)
             binding.queueFragment.alpha = queueInRatio
 
@@ -631,6 +634,34 @@ class MainFragment :
             binding.homeNewPlaylistFab.mainFab.isVisible || binding.homeShuffleFab.isVisible
 
         return true
+    }
+
+    /**
+     * While the queue is open the playing strip is at the bottom, where the thumb is, with the
+     * queue above it. It sits over the end of the queue, so it needs a background of its own.
+     */
+    private fun placePlayingStrip(binding: FragmentMainBinding, atBottom: Boolean) {
+        val strip = binding.playbackBarFragment
+        if (atBottom == stripAtBottom) {
+            return
+        }
+        stripAtBottom = atBottom
+        val bars = lastInsets?.systemBarInsetsCompat
+        strip.translationY =
+            if (atBottom && bars != null) {
+                // The sheet is as tall as the screen, but its top is below the status bar.
+                (binding.playbackSheet.height - bars.top - bars.bottom - strip.height).toFloat()
+            } else {
+                0f
+            }
+        strip.translationZ = if (atBottom) 4 * resources.displayMetrics.density else 0f
+        if (atBottom) {
+            strip.setBackgroundColor(
+                MaterialColors.getColor(strip, com.google.android.material.R.attr.colorSurface)
+            )
+        } else {
+            strip.background = null
+        }
     }
 
     override fun onActionSelected(actionItem: SpeedDialActionItem): Boolean {

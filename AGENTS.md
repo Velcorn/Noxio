@@ -11,7 +11,7 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 ## Tests
 - Unit tests live in `app/src/test` (the app) and `musikr/src/test` and run on the JVM (Robolectric where Android classes are needed): `./gradlew coverageReport` runs both and writes one coverage report (`build/reports/jacoco/coverageReport/`).
 - Write or extend tests for every change to code that has logic: the stats (CSV, import, ranking, ranges, play counting, backup) and the sleep timer have the most. Fix failures before committing. The user does not write Android code, so tests are how mistakes get caught. Screens and dialogs have no tests: say clearly that they are untested.
-- CI (`.github/workflows/ci.yml`) runs `spotlessCheck`, `app:lintDebug` and the tests, and publishes the coverage badge from `dev` to the `badges` branch. The coverage number counts all the code except generated code (see `coverageReport` in the root `build.gradle`), so it only goes up when tests are added.
+- CI (`.github/workflows/ci.yml`) runs `spotlessCheck`, `app:lintDebug` and the tests, and publishes two coverage badges from `dev` to the `badges` branch: "Noxio code" (only the files listed in `noxio-code.txt`) and "all code" (everything except generated code, see `coverageReport` in the root `build.gradle`). Add every new source file Noxio creates to `noxio-code.txt`.
 - `app/lint-baseline.xml` holds the lint problems that came with Auxio. Do not add new ones to it to make lint pass; fix them.
 
 ## Releases
