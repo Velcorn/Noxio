@@ -61,6 +61,16 @@ android {
     }
     testOptions {
         targetSdk target_sdk
+        unitTests {
+            all {
+                // Robolectric loads the classes under test itself. Without this their coverage is
+                // lost, and the report shows tests that do run as covering nothing.
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ["jdk.internal.*"]
+                }
+            }
+        }
     }
 }
 
