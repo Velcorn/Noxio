@@ -8,8 +8,28 @@
     android:viewportHeight="108">
 
     <!-- Slim crescent moon -->
-    <path android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z">
+    <path android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2">
         <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="84"
+                android:endY="84"
+                android:startX="24"
+                android:startY="24"
+                android:type="linear">
+                <item
+                    android:color="#ECE6FF"
+                    android:offset="0" />
+                <item
+                    android:color="#A79DFF"
+                    android:offset="1" />
+            </gradient>
+        </aapt:attr>
+        <!-- The same gradient as an outline of 2 units rounds off the thin tips of the crescent, which
+             launchers that draw icons small would lose. -->
+        <aapt:attr name="android:strokeColor">
             <gradient
                 android:endX="84"
                 android:endY="84"

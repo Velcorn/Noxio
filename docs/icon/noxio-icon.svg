@@ -10,7 +10,7 @@
     </linearGradient>
   </defs>
   <rect x="18" y="18" width="72" height="72" rx="16" fill="#000"/>
-  <path d="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z" fill="url(#moon)"/>
+  <path d="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z" fill="url(#moon)" stroke="url(#moon)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
   <path d="M47 41L47 67L68 54Z" fill="#fff" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
   <path d="M75 33Q76.4 36.6 80 38Q76.4 39.4 75 43Q73.6 39.4 70 38Q73.6 36.6 75 33Z" fill="#fff"/>
 </svg>
