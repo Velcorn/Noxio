@@ -136,11 +136,26 @@ class StatsRepositoryTest {
         statsRange(period, offset, wednesday.toInstant().toEpochMilli(), utcCalendar())
 
     @Test
-    fun theWeekStartsOnTheFirstDayOfTheWeek() {
-        // The US week starts on Sunday: Sun Nov 12 until Sun Nov 19.
+    fun theWeekStartsOnMonday() {
+        // Wed Nov 15: the week is Mon Nov 13 until Mon Nov 20. The calendar here is a US one, whose
+        // week starts on Sunday, so this also shows that the regional setting does not matter.
         val week = range(StatsPeriod.WEEK, 0)
-        assertEquals(at(2023, 11, 12), week.first)
-        assertEquals(at(2023, 11, 19), week.last + 1)
+        assertEquals(at(2023, 11, 13), week.first)
+        assertEquals(at(2023, 11, 20), week.last + 1)
+    }
+
+    @Test
+    fun aSundayBelongsToTheWeekBeforeIt() {
+        // Sun Nov 19 is the last day of the week of Mon Nov 13, not the first of the next one.
+        val sunday = statsRange(StatsPeriod.WEEK, 0, at(2023, 11, 19) + 3_600_000L, utcCalendar())
+        assertEquals(at(2023, 11, 13), sunday.first)
+        assertEquals(at(2023, 11, 20), sunday.last + 1)
+    }
+
+    @Test
+    fun aMondayStartsANewWeek() {
+        val monday = statsRange(StatsPeriod.WEEK, 0, at(2023, 11, 20) + 3_600_000L, utcCalendar())
+        assertEquals(at(2023, 11, 20), monday.first)
     }
 
     @Test
@@ -155,7 +170,7 @@ class StatsRepositoryTest {
 
     @Test
     fun negativeOffsetsGoBack() {
-        assertEquals(at(2023, 11, 5), range(StatsPeriod.WEEK, -1).first)
+        assertEquals(at(2023, 11, 6), range(StatsPeriod.WEEK, -1).first)
         assertEquals(at(2023, 10, 1), range(StatsPeriod.MONTH, -1).first)
         assertEquals(at(2022, 1, 1), range(StatsPeriod.YEAR, -1).first)
     }

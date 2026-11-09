@@ -67,6 +67,8 @@ fun statsRange(
     if (period == StatsPeriod.ALL) {
         return PlayEvent.BASELINE_TIME until Long.MAX_VALUE
     }
+    // A week starts on Monday everywhere, whatever the regional setting of the phone says.
+    calendar.firstDayOfWeek = Calendar.MONDAY
     calendar.timeInMillis = nowMs
     calendar.set(Calendar.HOUR_OF_DAY, 0)
     calendar.set(Calendar.MINUTE, 0)
