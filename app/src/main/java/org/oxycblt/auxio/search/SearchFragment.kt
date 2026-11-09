@@ -63,6 +63,7 @@ import org.oxycblt.auxio.util.getSystemServiceCompat
 import org.oxycblt.auxio.util.navigateSafe
 import org.oxycblt.auxio.util.setFullWidthLookup
 import org.oxycblt.auxio.util.showToast
+import org.oxycblt.auxio.util.systemBarInsetsCompat
 import org.oxycblt.musikr.Album
 import org.oxycblt.musikr.Artist
 import org.oxycblt.musikr.Genre
@@ -243,10 +244,12 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
     private fun setupFilterBar(binding: FragmentSearchBinding) {
         val bar = binding.searchFiltersBar
         val root = binding.root
+        // The insets given to the screen already include the playback bar, which sits over the
+        // bottom of it. The window itself does not know about that.
+        var system = 0
         fun update() {
             val insets = ViewCompat.getRootWindowInsets(root)
             val keyboard = insets?.getInsets(WindowInsetsCompat.Type.ime())?.bottom ?: 0
-            val system = insets?.getInsets(WindowInsetsCompat.Type.systemBars())?.bottom ?: 0
             val location = IntArray(2)
             root.getLocationInWindow(location)
             val below = root.rootView.height - (location[1] + root.height)
@@ -256,7 +259,8 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
                 bottomMargin = if (bar.isVisible) bar.height + wanted else 0
             }
         }
-        ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
+        root.setOnApplyWindowInsetsListener { _, insets ->
+            system = insets.systemBarInsetsCompat.bottom
             update()
             insets
         }

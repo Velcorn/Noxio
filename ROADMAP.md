@@ -9,6 +9,7 @@
 - [x] Bottom navigation: home screen (search row, tabs and floating shuffle button at the bottom), album, genre, playlist and artist pages with a bottom bar, artist tabs you can swipe between, search with filter chips at the bottom that skip hidden tabs; needs a check on a device
 - [x] Genre tab removed (saved tab orders are read without it); listening stats bottom-oriented with swipe between artists, albums and songs; needs a check on a device
 - [x] No three-dot buttons on list rows, long press opens the item menu (selecting several songs by long press is gone for now); all bottom sheets pure black
+- [x] Themed-icon launchers (Kvaesitso) no longer clip the crescent; stats backup has a Back up now button and says that one file is replaced; search chips stay above the playback bar
 - [x] Black theme: menus, dialogs, sheets, app bar and status bar pure black; grey shuffle and repeat in the notification; optional wavy seek bar
 - [x] Settings regrouped into five screens (Appearance, Home and player, Playback, Library, Listening stats)
 - [x] About page: Noxio links, Auxio credit and fork notice, upstream donate and supporters removed; needs a check on a device
@@ -22,6 +23,7 @@
 - [ ] Shareable "Wrapped" cards
 
 ## Ideas
+- Write the measured ReplayGain values into the audio files as tags, so other players use them too (needs tag writing, which the bundled taglib wrapper does not have, and write access to the files)
 - More screenshots (settings, playlists, the share cards) and ones from a real device
 - Bottom bar on the now playing screen for jumping to Songs, Albums, Artists and Playlists (deferred)
 - Show the remaining time next to the toolbar icon (currently the icon is only tinted)

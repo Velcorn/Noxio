@@ -6,22 +6,31 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <path
-        android:fillColor="#000000"
-        android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z"
-        android:strokeColor="#000000"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:strokeWidth="2" />
+    <!-- Launchers with themed icons (Kvaesitso, for one) draw this layer enlarged so that it fills
+         their icon shape, which cut off the tips of the crescent. The artwork is kept small enough
+         to survive that. -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.72"
+        android:scaleY="0.72">
+        <path
+            android:fillColor="#000000"
+            android:pathData="M69.818 28.509A30 30 0 1 0 69.818 79.491A27.5 27.5 0 1 1 69.818 28.509Z"
+            android:strokeColor="#000000"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="2" />
 
-    <path
-        android:fillColor="#000000"
-        android:pathData="M47 41L47 67L68 54Z"
-        android:strokeColor="#000000"
-        android:strokeLineJoin="round"
-        android:strokeWidth="5" />
+        <path
+            android:fillColor="#000000"
+            android:pathData="M47 41L47 67L68 54Z"
+            android:strokeColor="#000000"
+            android:strokeLineJoin="round"
+            android:strokeWidth="5" />
 
-    <path
-        android:fillColor="#000000"
-        android:pathData="M75 32Q77.1 35.9 81 38Q77.1 40.1 75 44Q72.9 40.1 69 38Q72.9 35.9 75 32Z" />
+        <path
+            android:fillColor="#000000"
+            android:pathData="M75 32Q77.1 35.9 81 38Q77.1 40.1 75 44Q72.9 40.1 69 38Q72.9 35.9 75 32Z" />
+    </group>
 </vector>

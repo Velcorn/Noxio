@@ -20,4 +20,8 @@
         app:key="@string/set_key_stats_backup_folder"
         app:title="@string/set_stats_backup_folder" />
 
+    <Preference
+        app:key="@string/set_key_stats_backup_now"
+        app:title="@string/set_stats_backup_now" />
+
 </PreferenceScreen>

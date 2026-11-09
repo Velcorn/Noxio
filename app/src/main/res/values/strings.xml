@@ -158,7 +158,11 @@
     <string name="set_week_start_sunday">Sunday</string>
     <string name="set_week_start_saturday">Saturday</string>
     <string name="set_stats_backup">Weekly CSV backup</string>
-    <string name="set_stats_backup_desc">Keeps a CSV copy of your listening history up to date in a folder you choose</string>
+    <string name="set_stats_backup_desc">Keeps a CSV copy of your listening history up to date in a folder you choose. The same file, noxio-stats.csv, is replaced each time</string>
+    <string name="set_stats_backup_now">Back up now</string>
+    <string name="set_stats_backup_now_desc">Replaces noxio-stats.csv in the backup folder with the current history</string>
+    <string name="lng_stats_backup_done">Backup saved to noxio-stats.csv</string>
+    <string name="err_stats_backup">Could not write the backup. Choose the folder again</string>
     <string name="set_stats_backup_folder">Backup folder</string>
     <string name="lbl_stats_backup_no_folder">No folder chosen</string>
     <string name="fmt_stats_backup_last">Last backup: %s</string>

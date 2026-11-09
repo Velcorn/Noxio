@@ -23,13 +23,18 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.settings.BasePreferenceFragment
 import org.oxycblt.auxio.stats.StatsBackup
+import org.oxycblt.auxio.util.showToast
 
 /**
  * The settings of the listening stats: the first day of the week and the automatic CSV backup.
@@ -83,7 +88,31 @@ class StatsPreferenceFragment : BasePreferenceFragment(R.xml.preferences_stats) 
                 folderLauncher.launch(null)
                 true
             }
+        findPreference<Preference>(getString(R.string.set_key_stats_backup_now))
+            ?.setOnPreferenceClickListener {
+                backUpNow()
+                true
+            }
         updateBackupSummaries()
+    }
+
+    /** Write the backup right away, replacing the file that is there. */
+    private fun backUpNow() {
+        val context = requireContext()
+        if (statsBackup.folder == null) {
+            folderLauncher.launch(null)
+            return
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            val saved =
+                withContext(Dispatchers.IO) {
+                    runCatching { statsBackup.run() }.getOrDefault(false)
+                }
+            context.showToast(
+                if (saved) R.string.lng_stats_backup_done else R.string.err_stats_backup
+            )
+            updateBackupSummaries()
+        }
     }
 
     private fun backupSwitch() =
@@ -93,6 +122,15 @@ class StatsPreferenceFragment : BasePreferenceFragment(R.xml.preferences_stats) 
         findPreference<Preference>(getString(R.string.set_key_stats_backup_folder))?.summary =
             statsBackup.folderName ?: getString(R.string.lbl_stats_backup_no_folder)
         val last = statsBackup.lastBackupMs
+        findPreference<Preference>(getString(R.string.set_key_stats_backup_now))?.summary =
+            if (last != null) {
+                getString(
+                    R.string.fmt_stats_backup_last,
+                    DateUtils.getRelativeTimeSpanString(last).toString(),
+                )
+            } else {
+                getString(R.string.set_stats_backup_now_desc)
+            }
         backupSwitch()?.summary =
             if (last != null) {
                 getString(

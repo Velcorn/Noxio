@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Everything is at the bottom, in the thumb zone: the totals and the card sit right above the
-     controls (range, period, category), and back is in the bar underneath. There is no top bar. -->
+<!-- The totals and the card are centered between the categories at the top and the controls at
+     the bottom (range, period), with back in the bar underneath. There is no top bar. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -67,7 +67,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/spacing_medium">
 
