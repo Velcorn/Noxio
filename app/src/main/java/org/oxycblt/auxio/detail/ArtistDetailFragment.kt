@@ -19,6 +19,7 @@
 package org.oxycblt.auxio.detail
 
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -171,8 +172,6 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
 
             // In the case that this header used to he configured to have no songs,
             // we want to reset the visibility of all information that was hidden.
-            binding.detailPlayButton?.isEnabled = true
-            binding.detailShuffleButton?.isEnabled = true
             setToolbarPlaybackButtonsEnabled(true)
         } else {
             // The artist does not have any songs, so hide functionality that makes no sense.
@@ -180,13 +179,11 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
             // Artists are always guaranteed to have albums however, so continue to show those.
             L.d("Artist is empty, disabling genres and playback")
             binding.detailSubhead.isVisible = false
-            binding.detailPlayButton?.isEnabled = false
-            binding.detailShuffleButton?.isEnabled = false
             setToolbarPlaybackButtonsEnabled(false)
         }
 
-        binding.detailPlayButton?.setOnClickListener { playbackModel.play(artist) }
-        binding.detailShuffleButton?.setOnClickListener { playbackModel.shuffle(artist) }
+        // Play and shuffle are the floating button of the main screen on an artist page.
+        (binding.detailPlayButton?.parent as? View)?.isVisible = false
         updatePlayback(
             playbackModel.song.value,
             playbackModel.parent.value,

@@ -209,9 +209,19 @@ class MainFragment :
         binding.sheetScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
         binding.homeShuffleFab.setOnClickListener {
             if (currentNavMode(binding) == NavMode.ARTIST) {
-                detailModel.currentArtist.value?.let(playbackModel::shuffle)
+                // On an artist page the button plays, and a long press shuffles.
+                detailModel.currentArtist.value?.let(playbackModel::play)
             } else {
                 playbackModel.shuffleAll()
+            }
+        }
+        binding.homeShuffleFab.setOnLongClickListener {
+            val artist = detailModel.currentArtist.value
+            if (currentNavMode(binding) == NavMode.ARTIST && artist != null) {
+                playbackModel.shuffle(artist)
+                true
+            } else {
+                false
             }
         }
         binding.homeNewPlaylistFab.apply {
@@ -399,6 +409,11 @@ class MainFragment :
             binding.mainSearchInput.setText(detailModel.artistQuery)
             updateSearchHint(binding)
         }
+        binding.homeShuffleFab.setImageResource(
+            if (artist) R.drawable.ic_play_24 else R.drawable.ic_shuffle_off_24
+        )
+        binding.homeShuffleFab.contentDescription =
+            getString(if (artist) R.string.lbl_play else R.string.lbl_shuffle)
         rebuildTabs(binding)
     }
 
@@ -1046,7 +1061,7 @@ class MainFragment :
 
     private companion object {
         /** The tabs of an artist page, in the order they are shown. */
-        val ARTIST_TABS = listOf(ArtistTab.SONGS, ArtistTab.ALBUMS)
+        val ARTIST_TABS = listOf(ArtistTab.ALBUMS, ArtistTab.SONGS)
 
         val FAB_HIDE_FROM_USER_FIELD: Method by
             lazyReflectedMethod(

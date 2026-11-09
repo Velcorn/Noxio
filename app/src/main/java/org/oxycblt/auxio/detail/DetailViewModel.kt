@@ -406,7 +406,15 @@ constructor(
 
     private fun refreshArtist(uid: Music.UID, replace: Int?) {
         val artist = detailGenerator.artist(uid)?.let(::filterArtist)
-        refreshDetail(artist, currentArtist, _artistSongList, artistSongInstructions, replace)
+        refreshDetail(
+            artist,
+            currentArtist,
+            _artistSongList,
+            artistSongInstructions,
+            replace,
+            // The sort of the songs is in the bottom bar, not in the header.
+            songHeader = { BasicHeader(it) },
+        )
     }
 
     /** Keep the list that is shown, and the items of it that match the filter. */
