@@ -27,11 +27,9 @@ import org.oxycblt.auxio.databinding.FragmentPlaybackBarBinding
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
-import org.oxycblt.auxio.playback.state.RepeatMode
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.musikr.Song
-import timber.log.Timber as L
 
 /**
  * A [ViewBindingFragment] that shows the current playback state in a compact manner.
@@ -68,17 +66,17 @@ class PlaybackBarFragment : ViewBindingFragment<FragmentPlaybackBarBinding>() {
         // Set up actions
         binding.playbackPlayPause.setOnClickListener { playbackModel.togglePlaying() }
         binding.playbackSkipPrev.setOnClickListener { playbackModel.prev() }
+        // Noxio: the bar always has the previous and the next song, there is no custom action.
+        binding.playbackSecondaryAction.apply {
+            setIconResource(R.drawable.ic_skip_next_24)
+            contentDescription = getString(R.string.desc_skip_next)
+            setOnClickListener { playbackModel.next() }
+        }
 
         // -- VIEWMODEL SETUP ---
         collectImmediately(playbackModel.song, ::updateSong)
         collectImmediately(playbackModel.isPlaying, ::updatePlaying)
         collectImmediately(playbackModel.positionDs, ::updatePosition)
-        collectImmediately(
-            playbackModel.currentBarAction,
-            playbackModel.repeatMode,
-            playbackModel.isShuffled,
-            ::updateBarAction,
-        )
     }
 
     override fun onDestroyBinding(binding: FragmentPlaybackBarBinding) {
@@ -109,51 +107,5 @@ class PlaybackBarFragment : ViewBindingFragment<FragmentPlaybackBarBinding>() {
 
     private fun updatePosition(positionDs: Long) {
         requireBinding().playbackProgressBar.progress = positionDs.toInt()
-    }
-
-    private fun updateBarAction(
-        actionMode: ActionMode,
-        repeatMode: RepeatMode,
-        isShuffled: Boolean,
-    ) {
-        val binding = requireBinding()
-        when (actionMode) {
-            ActionMode.NEXT -> {
-                L.d("Using skip next action")
-                binding.playbackSecondaryAction.apply {
-                    if (tag != actionMode) {
-                        setIconResource(R.drawable.ic_skip_next_24)
-                        contentDescription = getString(R.string.desc_skip_next)
-                        setOnClickListener { playbackModel.next() }
-                        isChecked = false
-                        tag = actionMode
-                    }
-                }
-            }
-            ActionMode.REPEAT -> {
-                L.d("Using repeat mode action")
-                binding.playbackSecondaryAction.apply {
-                    if (tag != actionMode) {
-                        contentDescription = getString(R.string.desc_change_repeat)
-                        setOnClickListener { playbackModel.toggleRepeatMode() }
-                        tag = actionMode
-                    }
-                    setIconResource(repeatMode.icon)
-                    isChecked = repeatMode != RepeatMode.NONE
-                }
-            }
-            ActionMode.SHUFFLE -> {
-                L.d("Using shuffle action")
-                binding.playbackSecondaryAction.apply {
-                    if (tag != actionMode) {
-                        setIconResource(R.drawable.sel_shuffle_state_24)
-                        contentDescription = getString(R.string.desc_shuffle)
-                        setOnClickListener { playbackModel.toggleShuffled() }
-                        tag = actionMode
-                    }
-                    isChecked = isShuffled
-                }
-            }
-        }
     }
 }

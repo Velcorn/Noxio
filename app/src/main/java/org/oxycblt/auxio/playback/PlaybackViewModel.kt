@@ -90,10 +90,6 @@ constructor(
     val isShuffled: StateFlow<Boolean>
         field = MutableStateFlow(false)
 
-    /** The current secondary action to show alongside the play button in the playback bar. */
-    val currentBarAction: StateFlow<ActionMode>
-        field = MutableStateFlow(playbackSettings.barAction)
-
     /**
      * A [OpenPanel] command that is awaiting a view capable of responding to it. Null if none
      * currently.
@@ -200,10 +196,6 @@ constructor(
 
     override fun onRepeatModeChanged(repeatMode: RepeatMode) {
         this.repeatMode.value = repeatMode
-    }
-
-    override fun onBarActionChanged() {
-        currentBarAction.value = playbackSettings.barAction
     }
 
     // --- PLAYING FUNCTIONS ---

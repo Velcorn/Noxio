@@ -199,10 +199,7 @@
     <string name="set_separators_plus">Plus (+)</string>
     <string name="lbl_mix">DJ kompilacija</string>
     <string name="set_separators_semicolon">Točka-zarez (;)</string>
-    <string name="set_bar_action">Prilagođena radnja trake reprodukcije</string>
     <string name="lbl_equalizer">Ekvilajzer</string>
-    <string name="set_action_mode_next">Prijeđi na sljedeću</string>
-    <string name="set_action_mode_repeat">Način ponavljanja</string>
     <string name="set_hide_collaborators">Sakrij suradnike</string>
     <string name="set_cover_mode_off">Isključeno</string>
     <string name="set_exclude_non_music">Isključi sve što nije glazba</string>

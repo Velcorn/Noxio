@@ -156,9 +156,7 @@
     <string name="set_observing">Automatinis įkėlimas iš naujo</string>
     <string name="desc_exit">Stabdyti įrašo perklausą</string>
     <string name="def_track">Be takelio</string>
-    <string name="set_action_mode_next">Praleisti į sekančią</string>
     <string name="set_headset_autoplay">Automatinis ausinių leidimas</string>
-    <string name="set_action_mode_repeat">Kartojimo režimas</string>
     <string name="desc_queue_bar">Atverti eilę</string>
     <string name="desc_clear_search">Valyti paieškos užklausą</string>
     <string name="desc_remove_song">Šalinti šią dainą</string>
@@ -183,7 +181,6 @@
     <string name="set_locations">Muzikos šaltiniai</string>
     <string name="set_reindex">Atnaujinti muziką</string>
     <string name="set_reindex_desc">Įkelti iš naujo muzikos biblioteką, naudojant podėlio žymes, kai įmanoma.</string>
-    <string name="set_bar_action">Pasirinktinis įrašo perklausos juostos veiksmas</string>
     <string name="set_pre_amp">„ReplayGain“ išankstinis stiprintuvas</string>
     <string name="set_locations_desc">Tvarkykite, iš kur turėtų muzika būti įkeliama.</string>
     <string name="desc_genre_image">Žanro vaizdas, skirtas „%s“</string>

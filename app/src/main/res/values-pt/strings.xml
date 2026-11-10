@@ -93,8 +93,6 @@
     <string name="set_personalize_desc">Personalize os controlos e o comportamento do interface do utilizador</string>
     <string name="set_theme_night">Escuro</string>
     <string name="set_accent">Esquema de cores</string>
-    <string name="set_action_mode_next">Avançar para o próximo</string>
-    <string name="set_action_mode_repeat">Modo de repetição</string>
     <string name="set_behavior">Comportamento</string>
     <string name="lbl_export_playlist">Exportar lista de reprodução</string>
     <string name="lbl_share">Partilhar</string>
@@ -131,7 +129,6 @@
     <string name="lbl_author_name">Desenvolvido por Alexander Capehart</string>
     <string name="lbl_supporters">Apoiadores</string>
     <string name="set_display">Mostrar</string>
-    <string name="set_bar_action">Personalizar a barra de reprodução</string>
     <string name="set_square_covers">Forçar capas em formato quadrado</string>
     <string name="set_square_covers_desc">Recortar à capa dos álbuns numa proporção de 1:1</string>
     <string name="set_audio_desc">Configurar o som e comportamento da reprodução</string>

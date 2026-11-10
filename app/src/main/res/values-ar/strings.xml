@@ -120,7 +120,6 @@
     <string name="clr_purple">أرجواني</string>
     <string name="clr_deep_purple">الأرجواني العميق</string>
     <string name="lng_playlist_imported">تم استيراد قائمة التشغيل</string>
-    <string name="set_action_mode_next">الانتقال إلى التالي</string>
     <string name="desc_no_cover">غلاف الألبوم</string>
     <string name="err_export_failed">غير قادر على تصدير قائمة التشغيل إلى هذا الملف</string>
     <string name="desc_music_location_delete">إزالة المجلد</string>
@@ -143,7 +142,6 @@
     <string name="lng_supporters_promo">تبرع إلى المشروع لإضافة اسمك هنا!</string>
     <string name="set_lib_tabs">علامات تبويب المكتبة</string>
     <string name="set_lib_tabs_desc">تغيير مرئية وترتيب علامات تبويب المكتبة</string>
-    <string name="set_bar_action">إجراء شريط التشغيل المخصص</string>
     <string name="set_play_song_none">تشغيل من العنصر المعروض</string>
     <string name="set_play_song_from_album">تشغيل من الألبوم</string>
     <string name="set_play_song_from_artist">تشغيل من الفنان</string>
@@ -196,7 +194,6 @@
     <string name="set_round_mode">الوضع الدائري</string>
     <string name="set_play_in_list_with">عند التشغيل من المكتبة</string>
     <string name="set_play_song_from_all">تشغيل من جميع الأغاني</string>
-    <string name="set_action_mode_repeat">وضع التكرار</string>
     <string name="set_behavior">السلوك</string>
     <string name="set_play_in_parent_with">عند التشغيل من تفاصيل العنصر</string>
     <string name="set_exclude_non_music_desc">تجاهل ملفات الصوت التي ليست موسيقى، مثل البودكاست</string>

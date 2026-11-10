@@ -169,17 +169,8 @@ constructor(
     /** Write the full play history as CSV. Must be called off the main thread. */
     suspend fun exportCsv(out: OutputStream) = repository.exportCsv(out)
 
-    /** How many undated plays from before Noxio there are. Must be called off the main thread. */
-    suspend fun undatedPlays() = repository.undatedPlays()
-
-    /**
-     * Add the plays of imported files. Must be called off the main thread.
-     *
-     * @param removeUndated First remove the undated plays from before Noxio, which weekly and
-     *   monthly lists replace.
-     */
-    suspend fun importCsv(files: List<StatsCsvImport.Parsed>, removeUndated: Boolean = false): Int {
-        if (removeUndated) repository.removeUndated()
+    /** Add the plays of imported files. Must be called off the main thread. */
+    suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
         val added = repository.importCsv(files)
         refresh.value += 1
         return added

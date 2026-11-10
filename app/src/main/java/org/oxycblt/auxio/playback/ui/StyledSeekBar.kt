@@ -52,8 +52,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     /**
-     * Enables/disables wavy active-track rendering to match playback state. Nothing waves unless
-     * the user turned the wavy seek bar on in the settings.
+     * Enables/disables wavy active-track rendering to match playback state. It waves by default,
+     * the user can turn that off in the settings for less motion.
      */
     fun setWaveEnabled(enabled: Boolean) {
         binding.seekBarSlider.setWaveEnabled(enabled && wavyAllowed())
@@ -61,7 +61,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun wavyAllowed() =
         PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean(context.getString(R.string.set_key_wavy_seek_bar), false)
+            .getBoolean(context.getString(R.string.set_key_wavy_seek_bar), true)
 
     /** The current [Listener] attached to this instance. */
     var listener: Listener? = null

@@ -139,8 +139,6 @@
     <string name="set_display">Дисплей</string>
     <string name="set_lib_tabs">Раздели на библиотеката</string>
     <string name="set_lib_tabs_desc">Промени видимостта и реда на разделите на библиотеката</string>
-    <string name="set_action_mode_next">Премини към следваща</string>
-    <string name="set_action_mode_repeat">Режим на повторение</string>
     <string name="set_behavior">Поведение</string>
     <string name="set_play_in_parent_with">При изпълнение от детайли на елемента</string>
     <string name="set_play_in_list_with">При изпълнение от библиотеката</string>
@@ -184,7 +182,6 @@
     <string name="set_replay_gain_mode_off">Изключено</string>
     <string name="lng_supporters_promo">Дарете за проекта, за да бъде добавено името ви тук!</string>
     <string name="lng_search_library">Търсене във вашата библиотека…</string>
-    <string name="set_bar_action">Персонализирано действие на лентата за възпроизвеждане</string>
     <string name="set_play_song_none">Изпълни от показания елемент</string>
     <string name="set_play_song_from_all">Изпълни от всички песни</string>
     <string name="set_exclude_non_music_desc">Игнорирайте аудио файлове, които не са музика, като например подкасти</string>

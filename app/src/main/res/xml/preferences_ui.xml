@@ -30,7 +30,7 @@
         app:title="@string/set_round_mode" />
 
     <SwitchPreferenceCompat
-        app:defaultValue="false"
+        app:defaultValue="true"
         app:key="@string/set_key_wavy_seek_bar"
         app:summary="@string/set_wavy_seek_bar_desc"
         app:title="@string/set_wavy_seek_bar" />

@@ -35,7 +35,10 @@ data class ItemStats(
     val listenedMs: Long,
     /** The part of all listening of the period that went to it, from 0 to 1. */
     val share: Float,
-    /** On how many different days of the period it was played. Undated plays have no day. */
+    /**
+     * On how many different days of the period it was played. Only plays with a real time count, an
+     * imported play is only known to its week or month.
+     */
     val daysPlayed: Int,
     /** What one bar of [buckets] stands for. */
     val bucketUnit: BucketUnit,
@@ -45,14 +48,28 @@ data class ItemStats(
     val topSongs: List<RankedItem>,
     /** How often it was played over all time, with the plays from before Noxio. */
     val allTimePlays: Int,
-    /** When it was played for the first time. Null if none of its plays has a date. */
+    /**
+     * When it was played for the first time, imported plays included. Null if none of its plays has
+     * a date.
+     */
     val firstPlayedMs: Long?,
-    /** When it was played for the last time. Null if none of its plays has a date. */
+    /** When it was played for the last time, imported plays included. Null if none has a date. */
     val lastPlayedMs: Long?,
     /**
      * How many of the plays inside the period come from imported counts and have a guessed time.
      */
     val estimatedPlays: Int = 0,
+    /** In how many different weeks of the period it was played, imported plays included. */
+    val weeksPlayed: Int = 0,
+    /**
+     * Whether the weeks are the number to show instead of the days: for a year and all time, where
+     * imported plays are exact enough to their week.
+     */
+    val countsWeeks: Boolean = false,
+    /** Whether [firstPlayedMs] is the guessed time of an imported play. */
+    val firstPlayEstimated: Boolean = false,
+    /** Whether [lastPlayedMs] is the guessed time of an imported play. */
+    val lastPlayEstimated: Boolean = false,
 ) {
     /** The plays that started in the day, month or year beginning at [startMs]. */
     data class Bucket(val startMs: Long, val plays: Int)
@@ -109,18 +126,36 @@ fun summarizeItem(
             inPeriod.size.toFloat() / periodEvents.size
         }
 
-    // Plays with a guessed time count for the totals, but not for what needs a real time.
-    val dated = inPeriod.filterNot { it.hasGuessedTime }.map { it.startedAt }
-    val allTimeDated = allTime.filterNot { it.hasGuessedTime }.map { it.startedAt }
+    // Imported plays are only known to their week or month: they count for weeks, months and
+    // years, but not for days. Undated plays from before Noxio have no time at all.
+    val real = inPeriod.filterNot { it.hasGuessedTime }.map { it.startedAt }
+    val withDate = inPeriod.filter { it.startedAt != PlayEvent.BASELINE_TIME }.map { it.startedAt }
+    val allTimeWithDate = allTime.filter { it.startedAt != PlayEvent.BASELINE_TIME }
+    val first = allTimeWithDate.minByOrNull { it.startedAt }
+    val last = allTimeWithDate.maxByOrNull { it.startedAt }
     val days =
-        dated
+        real
             .map {
                 calendar.timeInMillis = it
                 calendar.get(Calendar.YEAR) * 1000 + calendar.get(Calendar.DAY_OF_YEAR)
             }
             .toSet()
+    val weekCalendar =
+        (calendar.clone() as Calendar).apply {
+            firstDayOfWeek = Calendar.MONDAY
+            minimalDaysInFirstWeek = 4
+        }
+    val weeks =
+        withDate
+            .map {
+                weekCalendar.timeInMillis = it
+                weekCalendar.weekYear * 100 + weekCalendar.get(Calendar.WEEK_OF_YEAR)
+            }
+            .toSet()
 
-    val unit = bucketUnit(period, dated.minOrNull(), nowMs, calendar)
+    val unit = bucketUnit(period, withDate.minOrNull(), nowMs, calendar)
+    // Bars of a day need real times, bars of a month or year are fine with imported ones.
+    val charted = if (unit == ItemStats.BucketUnit.DAY) real else withDate
     return ItemStats(
         category = category,
         name =
@@ -136,19 +171,23 @@ fun summarizeItem(
         daysPlayed = days.size,
         bucketUnit = unit,
         buckets =
-            if (dated.isEmpty()) emptyList()
+            if (charted.isEmpty()) emptyList()
             else
                 buckets(
-                    dated,
-                    bucketStarts(period, range, unit, dated.minOrNull(), nowMs, calendar),
+                    charted,
+                    bucketStarts(period, range, unit, withDate.minOrNull(), nowMs, calendar),
                 ),
         topSongs =
             if (category == StatsCategory.SONGS) emptyList()
             else summarize(inPeriod, limit = topSongs, unknownArtist = unknownArtist).songs,
         allTimePlays = allTime.size,
-        firstPlayedMs = allTimeDated.minOrNull(),
-        lastPlayedMs = allTimeDated.maxOrNull(),
+        firstPlayedMs = first?.startedAt,
+        lastPlayedMs = last?.startedAt,
         estimatedPlays = inPeriod.count { it.hasGuessedTime },
+        weeksPlayed = weeks.size,
+        countsWeeks = period == StatsPeriod.YEAR || period == StatsPeriod.ALL,
+        firstPlayEstimated = first?.hasGuessedTime == true,
+        lastPlayEstimated = last?.hasGuessedTime == true,
     )
 }
 

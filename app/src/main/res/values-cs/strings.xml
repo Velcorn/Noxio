@@ -190,9 +190,6 @@
     <string name="lbl_ep_remix">Remixové EP</string>
     <string name="desc_queue_bar">Otevřít frontu</string>
     <string name="lbl_genre">Žánr</string>
-    <string name="set_bar_action">Vlastní akce lišty přehrávání</string>
-    <string name="set_action_mode_next">Přeskočit na další</string>
-    <string name="set_action_mode_repeat">Režim opakování</string>
     <string name="lbl_equalizer">Ekvalizér</string>
     <string name="desc_exit">Zastavit přehrávání</string>
     <string name="set_separators_and">Ampersand (&amp;)</string>

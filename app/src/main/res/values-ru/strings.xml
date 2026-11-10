@@ -188,8 +188,6 @@
     <string name="fmt_lib_album_count">Альбомов загружено: %d</string>
     <string name="fmt_indexing">Загрузка музыкальной библиотеки… (%1$d/%2$d)</string>
     <string name="lbl_genre">Жанр</string>
-    <string name="set_action_mode_next">Перейти к следующей</string>
-    <string name="set_action_mode_repeat">Режим повтора</string>
     <string name="lbl_equalizer">Эквалайзер</string>
     <string name="set_hide_collaborators">Скрыть соавторов</string>
     <string name="set_hide_collaborators_desc">Показывать только тех исполнителей, которые напрямую указаны в альбоме</string>
@@ -212,7 +210,6 @@
     <string name="set_cover_mode_balanced">Исходные (Быстрая загрузка)</string>
     <string name="set_cover_mode_high_quality">Повышенного качества (Медленная загрузка)</string>
     <string name="lbl_compilation_live">Сборник концертных записей</string>
-    <string name="set_bar_action">Пользовательское поведение панели воспроизведения</string>
     <string name="set_rescan">Пересканировать музыку</string>
     <string name="set_rescan_desc">Очистить кэш тегов и полностью обновить библиотеку (медленно, но более точно)</string>
     <string name="lbl_compilation_remix">Сборник ремиксов</string>

@@ -210,7 +210,6 @@
     <string name="lbl_live_group">Live</string>
     <string name="lbl_rename_playlist">Hernoem afspeellijst</string>
     <string name="lbl_confirm_delete_playlist">Verwijder afspeellijst?</string>
-    <string name="set_action_mode_repeat">Herhaalmodus</string>
     <string name="desc_queue_bar">Open de wachtrij</string>
     <string name="fmt_deletion_info">%s verwijderen? Dit kan niet ongedaan worden gemaakt.</string>
     <string name="set_cover_mode_off">Uit</string>
@@ -236,7 +235,6 @@
     <string name="lng_observing">Uw muziekbibliotheek controleren op wijzigingen…</string>
     <string name="lng_playlist_renamed">Afspeellijst hernoemd</string>
     <string name="lbl_rename">Hernoem</string>
-    <string name="set_bar_action">Aangepaste afspeelbalk actie</string>
     <string name="set_separators_desc">Configureer tekens die meerdere tag waarden aanduiden</string>
     <string name="lbl_delete">Verwijder</string>
     <string name="set_separators">Meerdere waarden scheidingstekens</string>
@@ -254,7 +252,6 @@
     <string name="lbl_playlists">Afspeellijsten</string>
     <string name="lbl_share">Deel</string>
     <string name="lng_playlist_deleted">Afspeellijst verwijderd</string>
-    <string name="set_action_mode_next">Naar volgende</string>
     <string name="set_observing_desc">Laad de muziekbibliotheek opnieuw wanneer deze wordt gewijzigd (vereist permanente melding)</string>
     <string name="set_exclude_non_music">Sluit niet-muziek uit</string>
     <string name="set_exclude_non_music_desc">Negeer audiobestanden die geen muziek zijn, zoals podcasts</string>

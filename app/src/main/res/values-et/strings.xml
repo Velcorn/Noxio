@@ -197,7 +197,6 @@
     <string name="set_replay_gain_mode_album">Eelista albumikohast esitusvaljuse tundlikkust</string>
     <string name="set_replay_gain_mode_dynamic">Kui album juba on esitamisel, siis eelista albumikohast esitusvaljuse tundlikkust</string>
     <string name="set_pre_amp">Esitusvaljuse tundlikkuse eelvõimendus</string>
-    <string name="set_bar_action">Kohandatud toimingud taasesitusribal</string>
     <string name="set_play_in_list_with">Esitamisel muusikakogust</string>
     <string name="set_play_song_none">Esita näidatud palast</string>
     <string name="set_play_song_from_genre">Esita žanrist</string>
@@ -207,8 +206,6 @@
     <string name="set_exclude_non_music">Välista failid, kus pole muusikat</string>
     <string name="set_intelligent_sorting_desc">Järjesta muusikat nii, et arvesse ei lähe numbrid ja artiklid nagu „the“ (toimib kõige paremini ingliskeelse muusika puhul)</string>
     <string name="set_hide_collaborators">Peida kaasautorid</string>
-    <string name="set_action_mode_next">Hüppa järgmise juurde</string>
-    <string name="set_action_mode_repeat">Taasesituse viis</string>
     <string name="set_play_song_from_album">Esita albumist</string>
     <string name="set_behavior">Käitumine</string>
     <string name="set_play_in_parent_with">Esitamisel pala detailsest vaatest</string>

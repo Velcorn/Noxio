@@ -166,11 +166,8 @@
     <string name="lbl_indexing">Carregando músicas</string>
     <string name="lbl_observing">Monitorando a biblioteca de músicas</string>
     <string name="set_round_mode">Cantos arredondados</string>
-    <string name="set_action_mode_next">Pular para o próximo</string>
     <string name="set_play_song_from_album">Reproduzir do álbum</string>
     <string name="lng_widget">Visualize e controle a reprodução de música</string>
-    <string name="set_bar_action">Ação personalizada na barra de reprodução</string>
-    <string name="set_action_mode_repeat">Modo de repetição</string>
     <string name="lbl_eps">EPs</string>
     <string name="lbl_ep">EP</string>
     <string name="lbl_singles">Singles</string>

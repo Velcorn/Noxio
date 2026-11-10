@@ -115,9 +115,6 @@ interface PlayEventDao {
 
     @Insert suspend fun insertAll(events: List<PlayEvent>)
 
-    /** How many undated plays from before Noxio there are. */
-    @Query("SELECT COUNT(*) FROM PlayEvent WHERE startedAt = 0") suspend fun countBaseline(): Int
-
     /** Remove the undated plays from before Noxio, so a new import can replace them. */
     @Query("DELETE FROM PlayEvent WHERE startedAt = 0") suspend fun deleteBaseline()
 

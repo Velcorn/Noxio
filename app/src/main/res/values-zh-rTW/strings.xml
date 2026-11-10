@@ -121,7 +121,6 @@
     <string name="lbl_parent_detail">檢視</string>
     <string name="lbl_feedback">傳送意見</string>
     <string name="lng_observing">正在檢查媒體變更…</string>
-    <string name="set_bar_action">自訂播放工具列動作</string>
     <string name="set_behavior">動作</string>
     <string name="set_content_desc">設定載入音樂和影像方式</string>
     <string name="set_images">影像</string>
@@ -152,8 +151,6 @@
     <string name="set_remember_pause">記憶暫停</string>
     <string name="set_lib_tabs">管理分頁</string>
     <string name="set_ui_desc">變更主題與色彩</string>
-    <string name="set_action_mode_repeat">循環模式</string>
-    <string name="set_action_mode_next">移至下一首</string>
     <string name="set_play_song_from_all">播放所有曲目</string>
     <string name="fmt_lib_song_count">載入歌曲：%d</string>
     <string name="fmt_indexing">正在載入您的媒體… (%1$d / %2$d)</string>

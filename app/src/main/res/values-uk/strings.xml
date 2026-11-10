@@ -75,7 +75,6 @@
     <string name="set_cover_mode">Обкладинки альбомів</string>
     <string name="set_hide_collaborators">Приховати співавторів</string>
     <string name="set_cover_mode_off">Вимкнено</string>
-    <string name="set_action_mode_next">Перейти до наступної</string>
     <string name="set_cover_mode_balanced">Швидкі</string>
     <string name="set_locations_desc">Вкажіть звідки слід завантажувати музику</string>
     <string name="fmt_lib_total_duration">Загальна тривалість: %s</string>
@@ -125,7 +124,6 @@
     <string name="set_accent">Кольоровий акцент</string>
     <string name="set_lib_tabs">Вкладки бібліотеки</string>
     <string name="set_headset_autoplay">Автовідтворення в навушниках</string>
-    <string name="set_action_mode_repeat">Режим повторення</string>
     <string name="set_pre_amp">Попередній підсилювач ReplayGain</string>
     <string name="set_play_song_from_album">Відтворити альбом</string>
     <string name="set_play_in_list_with">При відтворенні з бібліотеки</string>
@@ -142,7 +140,6 @@
     <string name="set_replay_gain_mode_track">За піснею</string>
     <string name="set_content">Зміст</string>
     <string name="lng_observing">Відстеження змін в музичній бібліотеці…</string>
-    <string name="set_bar_action">Власна дія для панелі відтворення</string>
     <string name="set_pre_amp_without">Регулювання без тегів</string>
     <string name="set_play_song_none">Відтворення з показаного елемента</string>
     <string name="set_keep_shuffle_desc">Продовжити перемішування після вибору нової пісні</string>

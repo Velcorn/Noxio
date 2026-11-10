@@ -35,8 +35,6 @@ import timber.log.Timber as L
  * @author Alexander Capehart (OxygenCobalt)
  */
 interface PlaybackSettings : Settings<PlaybackSettings.Listener> {
-    /** The action to display on the playback bar. */
-    val barAction: ActionMode
     /** Whether to start playback when a headset is plugged in. */
     val headsetAutoplay: Boolean
     /** The current ReplayGain configuration. */
@@ -65,9 +63,6 @@ interface PlaybackSettings : Settings<PlaybackSettings.Listener> {
         /** Called when one of the ReplayGain configurations have changed. */
         fun onReplayGainSettingsChanged() {}
 
-        /** Called when [barAction] has changed. */
-        fun onBarActionChanged() {}
-
         /** Called when [pauseOnRepeat] has changed. */
         fun onPauseOnRepeatChanged() {}
     }
@@ -92,12 +87,6 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
                     Int.MIN_VALUE,
                 )
             )
-
-    override val barAction: ActionMode
-        get() =
-            ActionMode.fromIntCode(
-                sharedPreferences.getInt(getString(R.string.set_key_bar_action), Int.MIN_VALUE)
-            ) ?: ActionMode.NEXT
 
     override val headsetAutoplay: Boolean
         get() = sharedPreferences.getBoolean(getString(R.string.set_key_headset_autoplay), false)
@@ -192,10 +181,6 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
             getString(R.string.set_key_pre_amp_without) -> {
                 L.d("Dispatching ReplayGain setting change")
                 listener.onReplayGainSettingsChanged()
-            }
-            getString(R.string.set_key_bar_action) -> {
-                L.d("Dispatching bar action change")
-                listener.onBarActionChanged()
             }
             getString(R.string.set_key_repeat_pause) -> {
                 L.d("Dispatching pause on repeat change")

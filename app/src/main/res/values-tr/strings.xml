@@ -216,11 +216,8 @@
     <string name="desc_exit">Çalmayı durdur</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="set_rescan">Müzikleri yeniden tara</string>
-    <string name="set_bar_action">Çalma çubuğu eylemi</string>
-    <string name="set_action_mode_next">Sonrakine geç</string>
     <string name="set_separators_slash">Eğik çizgi (/)</string>
     <string name="desc_queue_bar">Çalma sırasını aç</string>
-    <string name="set_action_mode_repeat">Tekrarla</string>
     <string name="set_play_song_from_genre">Türden çal</string>
     <string name="set_exclude_non_music_desc">Podcast\'ler gibi müzik olmayan ses dosyalarını yok say</string>
     <string name="set_separators_warning">Uyarı: Bu ayarın kullanılması bazı etiketlerin yanlışlıkla birden fazla değere sahip olarak yorumlanmasına neden olabilir. Bunu istenmeyen ayırıcı karakterlerin önüne ters eğik çizgi (\\) koyarak çözebilirsiniz.</string>

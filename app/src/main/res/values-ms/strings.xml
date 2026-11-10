@@ -159,9 +159,6 @@
     <string name="set_display">Paparan</string>
     <string name="set_lib_tabs">Tab pustaka</string>
     <string name="set_lib_tabs_desc">Ubah keterlihatan dan susunan tab pustaka</string>
-    <string name="set_bar_action">Bar main balik tersuai</string>
-    <string name="set_action_mode_next">Langkau ke seterusnya</string>
-    <string name="set_action_mode_repeat">Mod berulang</string>
     <string name="set_behavior">Sifat</string>
     <string name="set_play_in_list_with">Apabila dimainkan daripada pustaka</string>
     <string name="set_play_in_parent_with">Apabila dimainkan daripada butiran item</string>

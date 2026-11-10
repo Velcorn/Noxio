@@ -89,8 +89,6 @@
     <string name="lbl_date">Data</string>
     <string name="set_cover_mode_balanced">Rápido</string>
     <string name="set_cover_mode_high_quality">Qualidade alta</string>
-    <string name="set_bar_action">Personalizar a barra de reprodução</string>
-    <string name="set_action_mode_repeat">Modo de repetição</string>
     <string name="set_play_song_from_artist">Reproduzir do artista</string>
     <string name="set_repeat_pause">Pausar na repetição</string>
     <string name="err_bad_location">Esta pasta não é compatível</string>
@@ -101,7 +99,6 @@
     <string name="lbl_disc">Disco</string>
     <string name="lbl_track">Faixa</string>
     <string name="lbl_bitrate">Taxa de bits</string>
-    <string name="set_action_mode_next">Avançar para o próximo</string>
     <string name="set_pre_amp_warning">Aviso: Alterar o pré-amplificador para um valor positivo alto pode resultar em picos em algumas faixas de áudio.</string>
     <string name="set_pre_amp_with">Ajustar com etiquetas</string>
     <string name="set_separators_slash">Barra (/)</string>

@@ -140,10 +140,7 @@
     <string name="set_round_mode_desc">Active les coins arrondis sur plus d\'éléments de l\'interface (nécessite que les couvertures d\'album soient arrondies)</string>
     <string name="lbl_sort_dsc">Descendant</string>
     <string name="set_personalize_desc">Personnaliser les commandes et le comportement de l\'interface utilisateur</string>
-    <string name="set_action_mode_next">Passer au suivant</string>
-    <string name="set_action_mode_repeat">Mode répétition</string>
     <string name="set_behavior">Comportement</string>
-    <string name="set_bar_action">Action personnalisée de la barre de lecture</string>
     <string name="set_ui_desc">Changer le thème et les couleurs de l\'application</string>
     <string name="set_content">Contenu</string>
     <string name="set_observing_desc">Recharge la bibliothèque musicale chaque fois qu\'elle change (nécessite une notification persistante)</string>

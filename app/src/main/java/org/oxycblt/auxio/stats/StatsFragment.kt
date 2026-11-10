@@ -327,12 +327,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 // dates, so it can only count towards all time.
                 files.any { it is StatsCsvImport.Parsed.MostPlayed && it.period == null } ->
                     confirmBaseline(files)
-                // Weekly and monthly lists say more than the undated plays of an earlier import,
-                // which would otherwise count twice in all time.
-                files.any { it is StatsCsvImport.Parsed.MostPlayed && it.period != null } -> {
-                    val undated = withContext(Dispatchers.IO) { statsModel.undatedPlays() }
-                    if (undated > 0) confirmRemoveUndated(files, undated) else finishImport(files)
-                }
                 else -> finishImport(files)
             }
         }
@@ -349,32 +343,10 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             .show()
     }
 
-    private fun confirmRemoveUndated(files: List<StatsCsvImport.Parsed>, undated: Int) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.lbl_stats_import_undated)
-            .setMessage(
-                resources.getQuantityString(
-                    R.plurals.fmt_stats_import_undated_desc,
-                    undated,
-                    undated,
-                )
-            )
-            .setPositiveButton(R.string.lbl_stats_import_undated_remove) { _, _ ->
-                finishImport(files, removeUndated = true)
-            }
-            .setNeutralButton(R.string.lbl_stats_import_undated_keep) { _, _ ->
-                finishImport(files)
-            }
-            .setNegativeButton(R.string.lbl_cancel, null)
-            .create()
-            .apply { blackenWindowOnShow() }
-            .show()
-    }
-
-    private fun finishImport(files: List<StatsCsvImport.Parsed>, removeUndated: Boolean = false) {
+    private fun finishImport(files: List<StatsCsvImport.Parsed>) {
         val context = requireContext()
         viewLifecycleOwner.lifecycleScope.launch {
-            val added = withContext(Dispatchers.IO) { statsModel.importCsv(files, removeUndated) }
+            val added = withContext(Dispatchers.IO) { statsModel.importCsv(files) }
             Toast.makeText(
                     context,
                     context.resources.getQuantityString(R.plurals.fmt_stats_imported, added, added),

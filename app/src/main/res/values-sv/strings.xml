@@ -109,9 +109,6 @@
     <string name="set_round_mode_desc">Aktivera rundade hörn på ytterligare element i användargränssnittet (kräver att albumomslag är rundade)</string>
     <string name="set_personalize">Anpassa</string>
     <string name="set_lib_tabs_desc">Ändra synlighet och ordningsföljd på bibliotekflikar</string>
-    <string name="set_bar_action">Anpassad åtgärd för uppspelningsfält</string>
-    <string name="set_action_mode_next">Hoppa till nästa</string>
-    <string name="set_action_mode_repeat">Upprepningsmodus</string>
     <string name="set_behavior">Beteende</string>
     <string name="set_play_in_parent_with">Vid uppspelning baserat på objektuppgifter</string>
     <string name="set_play_song_from_genre">Spela från genre</string>

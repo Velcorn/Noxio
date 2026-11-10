@@ -147,7 +147,6 @@
     <string name="lbl_ep">Podaljšano</string>
     <string name="lbl_songs">Pesmi</string>
     <string name="set_square_covers_desc">Prireži vse naslovnice albumov v razmerje 1:1</string>
-    <string name="set_bar_action">Prilagojeno dejanje na vrstici za predvajanje</string>
     <string name="clr_indigo">Indigo modra</string>
     <string name="fmt_db_neg">-%.1f dB</string>
     <string name="lbl_indexer">Nalaganje glasbe</string>
@@ -160,8 +159,6 @@
     <string name="fmt_db_pos">+%.1f dB</string>
     <string name="set_personalize">Prilagodi</string>
     <string name="fmt_editing">Urejanje %s</string>
-    <string name="set_action_mode_next">Preskoči na naslednjo</string>
-    <string name="set_action_mode_repeat">Način ponavljanja</string>
     <plurals name="fmt_album_count">
         <item quantity="one">%d album</item>
         <item quantity="two">%d albuma</item>

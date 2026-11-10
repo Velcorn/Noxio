@@ -177,8 +177,6 @@
     <string name="set_separators_and">앰퍼샌드 (&amp;)</string>
     <string name="cdc_mp3">MPEG-1 오디오</string>
     <string name="lbl_date_added">추가한 날짜</string>
-    <string name="set_bar_action">맞춤형 재생 동작 버튼</string>
-    <string name="set_action_mode_repeat">반복 방식</string>
     <string name="desc_queue_bar">대기열 열기</string>
     <string name="lbl_ep_live">라이브 EP</string>
     <string name="lbl_single_remix">리믹스 싱글</string>
@@ -216,7 +214,6 @@
     <string name="set_separators_warning">경고: 이 설정을 사용하면 몇몇 태그가 다중 값을 가진 것으로 잘못 나타날 수 있습니다. 태그에서 구분 기호 앞에 백슬래시(\\)를 붙이면 구분 기호로 인식하지 않습니다.</string>
     <string name="set_play_in_parent_with">항목 세부 정보에서 재생할 때</string>
     <string name="lng_observing">음악 라이브러리 변경 사항 모니터링 중…</string>
-    <string name="set_action_mode_next">다음 곡으로 건너뛰기</string>
     <string name="set_exclude_non_music_desc">팟캐스트 등 음악이 아닌 오디오 파일 무시</string>
     <string name="set_hide_collaborators">공동 작업자 숨기기</string>
     <string name="set_hide_collaborators_desc">앨범에 등장하는 아티스트만 표시 (자세히 태그된 라이브러리에 최적화)</string>

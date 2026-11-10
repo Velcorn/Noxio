@@ -72,16 +72,6 @@ class StatsViewModelTest {
             imported += 1
             return 3
         }
-
-        var undated = 2
-        var removed = 0
-
-        override suspend fun undatedPlays() = undated
-
-        override suspend fun removeUndated() {
-            removed += 1
-            undated = 0
-        }
     }
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
@@ -231,15 +221,5 @@ class StatsViewModelTest {
     @Test
     fun exportingIsPassedOnToTheRepository() = runBlocking {
         model.exportCsv(java.io.ByteArrayOutputStream())
-    }
-
-    @Test
-    fun theUndatedPlaysAreOnlyRemovedWhenAsked() = runBlocking {
-        assertEquals(2, model.undatedPlays())
-        model.importCsv(emptyList())
-        assertEquals(0, repository.removed)
-        model.importCsv(emptyList(), removeUndated = true)
-        assertEquals(1, repository.removed)
-        assertEquals(0, model.undatedPlays())
     }
 }

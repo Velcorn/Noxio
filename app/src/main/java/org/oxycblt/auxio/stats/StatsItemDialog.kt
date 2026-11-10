@@ -143,12 +143,19 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
                         StatsFormat.percent(stats.share),
                         getString(R.string.lbl_stats_item_share),
                     ),
-                    StatsItemImageContent.Tile(
-                        // Imported plays have no real day.
-                        if (stats.daysPlayed == 0 && stats.estimatedPlays > 0) "–"
-                        else stats.daysPlayed.toString(),
-                        getString(R.string.lbl_stats_item_days),
-                    ),
+                    if (stats.countsWeeks) {
+                        StatsItemImageContent.Tile(
+                            stats.weeksPlayed.toString(),
+                            getString(R.string.lbl_stats_item_weeks),
+                        )
+                    } else {
+                        StatsItemImageContent.Tile(
+                            // Imported plays have no real day.
+                            if (stats.daysPlayed == 0 && stats.estimatedPlays > 0) "–"
+                            else stats.daysPlayed.toString(),
+                            getString(R.string.lbl_stats_item_days),
+                        )
+                    },
                 ),
             sectionTitle =
                 getString(
@@ -175,7 +182,11 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
                 },
             footerStart =
                 stats.firstPlayedMs?.let {
-                    getString(R.string.fmt_stats_item_first, StatsFormat.date(context, it))
+                    getString(
+                        if (stats.firstPlayEstimated) R.string.fmt_stats_item_first_estimated
+                        else R.string.fmt_stats_item_first,
+                        StatsFormat.date(context, it),
+                    )
                 } ?: "",
             // Inside a period the total of all time is the other number of interest. All time has
             // it at the top already.
@@ -187,7 +198,11 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
                     )
                 } else {
                     stats.lastPlayedMs?.let {
-                        getString(R.string.fmt_stats_item_last, StatsFormat.date(context, it))
+                        getString(
+                            if (stats.lastPlayEstimated) R.string.fmt_stats_item_last_estimated
+                            else R.string.fmt_stats_item_last,
+                            StatsFormat.date(context, it),
+                        )
                     } ?: ""
                 },
         )

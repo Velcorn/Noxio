@@ -190,9 +190,6 @@
     <string name="lbl_equalizer">Equalizzatore</string>
     <string name="desc_queue_bar">Apri la coda</string>
     <string name="lbl_genre">Genere</string>
-    <string name="set_bar_action">Personalizza azione barra di riproduzione</string>
-    <string name="set_action_mode_next">Passa al brano successivo</string>
-    <string name="set_action_mode_repeat">Modalità ripetizione</string>
     <string name="desc_exit">Interrompi la riproduzione</string>
     <string name="set_hide_collaborators">Nascondi collaboratori</string>
     <string name="set_hide_collaborators_desc">Mostra solo gli artisti che appaiono esplicitamente nei riconoscimenti di un album (funziona meglio su librerie ben taggate)</string>

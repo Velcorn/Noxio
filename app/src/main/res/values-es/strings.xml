@@ -201,7 +201,6 @@
     <string name="lbl_equalizer">Ecualizador</string>
     <string name="set_cover_mode">Portadas de álbumes</string>
     <string name="set_cover_mode_off">Desactivadas</string>
-    <string name="set_action_mode_repeat">Modo de repetición</string>
     <string name="set_separators_plus">Más (+)</string>
     <string name="set_separators_and">Y griega inglesa</string>
     <string name="desc_exit">Detener la reproducción</string>
@@ -209,8 +208,6 @@
     <string name="set_separators_warning">Advertencia: El uso de esta configuración puede dar lugar a que algunas etiquetas se interpreten incorrectamente como si tuvieran varios valores. Puede resolverlo anteponiendo a los caracteres separadores no deseados una barra invertida (\\).</string>
     <string name="set_cover_mode_high_quality">Alta calidad</string>
     <string name="set_cover_mode_balanced">Equilibrado</string>
-    <string name="set_bar_action">Acción personalizada de la barra de reproducción</string>
-    <string name="set_action_mode_next">Saltar al siguiente</string>
     <string name="set_hide_collaborators_desc">Mostrar solo artistas que estén acreditados directamente en un álbum (funciona mejor en bibliotecas bien etiquetadas)</string>
     <string name="set_hide_collaborators">Ocultar colaboradores</string>
     <plurals name="fmt_artist_count">

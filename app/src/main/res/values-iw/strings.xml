@@ -79,8 +79,6 @@
     <string name="set_personalize_desc">התאמת רכיבי והתנהגות הממשק</string>
     <string name="set_display">תצוגה</string>
     <string name="set_lib_tabs">לשוניות ספרייה</string>
-    <string name="set_action_mode_next">דילוג לבא</string>
-    <string name="set_action_mode_repeat">מצב חזרה</string>
     <string name="set_behavior">התנהגות</string>
     <string name="set_play_in_list_with">כאשר מנוגן מהספרייה</string>
     <string name="set_play_in_parent_with">כאשר מנוגן מפרטי הפריט</string>
@@ -134,7 +132,6 @@
     <string name="set_theme_auto">אוטומטי</string>
     <string name="set_round_mode_desc">הפעלת פינות מעוגלות ברכיבי ממשק נוספים (עטיפות אלבומים נדרשות להיות מעוגלות)</string>
     <string name="set_lib_tabs_desc">שינוי מראה וסדר לשוניות הספרייה</string>
-    <string name="set_bar_action">פעולת סרגל השמעה מותאמת אישית</string>
     <string name="set_content_desc">הגדרת אופן טעינת מוזיקה ותמונות</string>
     <string name="set_music">מוזיקה</string>
     <string name="set_exclude_non_music">אי-הכללת תוכן שאינו מוזיקה</string>

@@ -160,9 +160,6 @@
     <string name="set_display">Visualització</string>
     <string name="set_lib_tabs">Pestanyes de la fonoteca</string>
     <string name="set_lib_tabs_desc">Canvieu la visibilitat i l\'ordre de les pestanyes de la fonoteca</string>
-    <string name="set_bar_action">Acció personalitzada de la barra de reproducció</string>
-    <string name="set_action_mode_next">Salta a la següent</string>
-    <string name="set_action_mode_repeat">Mode de repetició</string>
     <string name="set_behavior">Comportament</string>
     <string name="set_play_in_list_with">En reproduir des de la fonoteca</string>
     <string name="set_play_in_parent_with">En reproduir des dels detalls d\'un element</string>

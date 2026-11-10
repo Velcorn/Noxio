@@ -217,7 +217,7 @@ class StatsItemTest {
     }
 
     @Test
-    fun `plays with a guessed time count for the totals but not for days, bars or dates`() {
+    fun `plays with a guessed time count for totals, weeks and dates but not for days`() {
         val events =
             listOf(
                 play("A", startedAt = at(2026, 11, 9)).copy(estimated = true),
@@ -228,19 +228,54 @@ class StatsItemTest {
         assertEquals(3, week.plays)
         assertEquals(2, week.estimatedPlays)
         assertEquals(1, week.daysPlayed)
+        // A week has a bar for each day, which needs real times.
         assertEquals(1, week.buckets.sumOf { it.plays })
-        assertEquals(at(2026, 11, 11), week.firstPlayedMs)
-        assertEquals(3, week.allTimePlays)
+        assertEquals(false, week.countsWeeks)
+        // The first play is an imported one, and says so.
+        assertEquals(at(2026, 11, 9), week.firstPlayedMs)
+        assertTrue(week.firstPlayEstimated)
+        assertEquals(at(2026, 11, 11), week.lastPlayedMs)
+        assertEquals(false, week.lastPlayEstimated)
     }
 
     @Test
-    fun `a week of imported plays has no bars`() {
+    fun `a year counts the weeks and charts its months with imported plays`() {
+        val events =
+            listOf(
+                play("A", startedAt = at(2026, 3, 2)).copy(estimated = true),
+                play("A", startedAt = at(2026, 3, 4)).copy(estimated = true),
+                play("A", startedAt = at(2026, 6, 10)).copy(estimated = true),
+                play("A", startedAt = at(2026, 11, 9)),
+            )
+        val year = look(events, StatsCategory.SONGS, songKey(events[0]), StatsPeriod.YEAR)!!
+        assertTrue(year.countsWeeks)
+        // March 2 and 4 are in the same week.
+        assertEquals(3, year.weeksPlayed)
+        assertEquals(4, year.buckets.sumOf { it.plays })
+        assertEquals(2, year.buckets[2].plays)
+    }
+
+    @Test
+    fun `undated plays have no week and no date`() {
+        val events =
+            listOf(
+                play("A", startedAt = PlayEvent.BASELINE_TIME),
+                play("A", startedAt = at(2026, 11, 9)).copy(estimated = true),
+            )
+        val all = look(events, StatsCategory.SONGS, songKey(events[0]), StatsPeriod.ALL)!!
+        assertEquals(2, all.plays)
+        assertEquals(1, all.weeksPlayed)
+        assertEquals(at(2026, 11, 9), all.firstPlayedMs)
+    }
+
+    @Test
+    fun `a week of imported plays has no bars and no days`() {
         val events = listOf(play("A", startedAt = at(2026, 11, 9)).copy(estimated = true))
         val week = look(events, StatsCategory.SONGS, songKey(events[0]))!!
         assertEquals(1, week.plays)
         assertEquals(0, week.daysPlayed)
         assertTrue(week.buckets.isEmpty())
-        assertNull(week.firstPlayedMs)
+        assertEquals(at(2026, 11, 9), week.firstPlayedMs)
     }
 
     @Test

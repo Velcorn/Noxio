@@ -139,10 +139,6 @@ class PlaybackSettingsTest {
                     reported += "replay gain"
                 }
 
-                override fun onBarActionChanged() {
-                    reported += "bar action"
-                }
-
                 override fun onPauseOnRepeatChanged() {
                     reported += "pause on repeat"
                 }
@@ -153,13 +149,12 @@ class PlaybackSettingsTest {
         }
         preferences.edit { putFloat(key(R.string.set_key_pre_amp_with), 2f) }
         preferences.edit { putFloat(key(R.string.set_key_pre_amp_without), 2f) }
-        preferences.edit { putInt(key(R.string.set_key_bar_action), 0) }
         preferences.edit { putBoolean(key(R.string.set_key_repeat_pause), true) }
         preferences.edit { putBoolean(key(R.string.set_key_keep_shuffle), false) }
         settings.unregisterListener(listener)
         preferences.edit { putBoolean(key(R.string.set_key_repeat_pause), false) }
         assertEquals(
-            listOf("replay gain", "replay gain", "replay gain", "bar action", "pause on repeat"),
+            listOf("replay gain", "replay gain", "replay gain", "pause on repeat"),
             reported,
         )
     }

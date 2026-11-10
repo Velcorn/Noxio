@@ -58,8 +58,6 @@
     <string name="set_lib_tabs">Kirjaston välilehdet</string>
     <string name="set_behavior">Toiminta</string>
     <string name="set_lib_tabs_desc">Muuta kirjastovälilehtien näkyvyyttä ja järjestystä</string>
-    <string name="set_action_mode_next">Siirry seuraavaan</string>
-    <string name="set_action_mode_repeat">Kertaustila</string>
     <string name="set_play_in_list_with">Kun toistetaan kirjastosta</string>
     <string name="set_play_in_parent_with">Kohteen tiedoista toistettaessa</string>
     <string name="set_keep_shuffle">Muista sekoitus</string>
@@ -272,7 +270,6 @@
     <string name="err_export_failed">Soittolistan vienti tähän tiedostoon ei onnistu</string>
     <string name="desc_selection_image">Valintakuva</string>
     <string name="set_replay_gain_mode_off">Pois</string>
-    <string name="set_bar_action">Mukautettu toistopalkin toiminto</string>
     <string name="lbl_start_playback">Aloita toisto</string>
     <string name="lbl_mixtapes">Mixtapet</string>
     <string name="lbl_mixtape">Mixtape</string>

@@ -186,9 +186,6 @@
     <string name="desc_queue_bar">Warteschlange öffnen</string>
     <string name="lbl_genre">Genre</string>
     <string name="lbl_equalizer">Equalizer</string>
-    <string name="set_bar_action">Angepasste Wiedergabeaktionstaste</string>
-    <string name="set_action_mode_next">Zum nächsten Song gehen</string>
-    <string name="set_action_mode_repeat">Wiederholungsmodus</string>
     <string name="desc_exit">Wiedergabe anhalten</string>
     <string name="lbl_compilation_live">Live-Kompilation</string>
     <string name="lbl_compilation_remix">Remix-Kompilation</string>
@@ -224,7 +221,7 @@
     <string name="lbl_reset">Zurücksetzen</string>
     <string name="set_behavior">Verhalten</string>
     <string name="set_ui_desc">Thema, Farben, App-Icon und Cover</string>
-    <string name="set_personalize_desc">Bibliothek-Tabs und die Wiedergabeleiste</string>
+    <string name="set_personalize_desc">Bibliothek-Tabs</string>
     <string name="set_content_desc">Musikquellen, Einlesen und Tags</string>
     <string name="set_music">Musik</string>
     <string name="set_images">Bilder</string>
@@ -436,6 +433,9 @@
     <string name="fmt_stats_item_album">#%1$d Album · %2$s</string>
     <string name="fmt_stats_item_song">#%1$d Lied · %2$s</string>
     <string name="fmt_stats_item_first">Zuerst gehört %s</string>
+    <string name="lbl_stats_item_weeks">Wochen gehört</string>
+    <string name="fmt_stats_item_first_estimated">Zuerst gehört ≈ %s</string>
+    <string name="fmt_stats_item_last_estimated">Zuletzt gehört ≈ %s</string>
     <string name="fmt_stats_item_last">Zuletzt gehört %s</string>
     <string name="fmt_stats_item_total">%s insgesamt</string>
     <string name="lbl_sleep_end_of_track">Ende des Titels</string>
@@ -456,7 +456,7 @@
     <string name="lng_based_on_auxio">Noxio ist ein Fork von Auxio von Alexander Capehart. Es gehört nicht zum Auxio-Projekt, melde Probleme mit Noxio also bitte nicht dort.</string>
     <string name="lbl_auxio_author">Auxio von Alexander Capehart</string>
     <string name="set_wavy_seek_bar">Wellige Fortschrittsleiste</string>
-    <string name="set_wavy_seek_bar_desc">Lässt die Fortschrittsleiste des Players beim Abspielen wellen. Aus zeigt eine glatte Linie</string>
+    <string name="set_wavy_seek_bar_desc">Lässt die Fortschrittsleiste des Players beim Abspielen wellen. Schalte es aus für weniger Bewegung</string>
     <string name="set_launcher">Launcher</string>
     <string name="set_launcher_icon">App-Icon</string>
     <string name="set_launcher_icon_default">Standard</string>
@@ -483,11 +483,4 @@
         <item quantity="one">%d Wiedergabe</item>
         <item quantity="other">%d Wiedergaben</item>
     </plurals>
-    <string name="lbl_stats_import_undated">Deine Wiedergaben vor Noxio ersetzen?</string>
-    <plurals name="fmt_stats_import_undated_desc">
-        <item quantity="one">Ein früherer Import hat %d Wiedergabe ohne Datum hinterlassen, die nur für Gesamt zählt. Die Wochen- und Monatslisten, die du importierst, enthalten dieselben Wiedergaben mit ihrer Woche oder ihrem Monat. Vor dem Import entfernen? Sonst zählt Gesamt sie doppelt.</item>
-        <item quantity="other">Ein früherer Import hat %d Wiedergaben ohne Datum hinterlassen, die nur für Gesamt zählen. Die Wochen- und Monatslisten, die du importierst, enthalten dieselben Wiedergaben mit ihrer Woche oder ihrem Monat. Vor dem Import entfernen? Sonst zählt Gesamt sie doppelt.</item>
-    </plurals>
-    <string name="lbl_stats_import_undated_remove">Entfernen</string>
-    <string name="lbl_stats_import_undated_keep">Behalten</string>
 </resources>

@@ -140,9 +140,6 @@
     <string name="lbl_author_name">Autorstwa Alexandra Capeharta</string>
     <string name="set_round_mode">Zaokrąglone krawędzie</string>
     <string name="set_round_mode_desc">Włącz zaokrąglone narożniki na dodatkowych elementach interfejsu (wymaga zaokrąglenia okładek albumów)</string>
-    <string name="set_bar_action">Akcja na pasku odtwarzania</string>
-    <string name="set_action_mode_next">Następny utwór</string>
-    <string name="set_action_mode_repeat">Tryb powtarzania</string>
     <string name="set_replay_gain_mode">Ustawienie ReplayGain</string>
     <string name="set_replay_gain_mode_dynamic">Preferuj album, jeśli jest odtwarzany</string>
     <string name="set_play_in_list_with">Odtwarzanie z widoku biblioteki</string>

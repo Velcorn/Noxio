@@ -147,13 +147,11 @@
     <string name="lng_observing">Zenekönyvtár változás figyelése…</string>
     <string name="set_ui_desc">Az app téma és színeinek módosítása</string>
     <string name="set_round_mode">Lekerekítés</string>
-    <string name="set_action_mode_repeat">Ismétlő mód</string>
     <string name="set_behavior">Viselkedés</string>
     <string name="set_keep_shuffle">Emlékezzen a keverésre</string>
     <string name="set_replay_gain_mode_dynamic">Inkább album, ha egyet játszik</string>
     <string name="set_reindex">Zene frissítése</string>
     <string name="lbl_cancel">Mégse</string>
-    <string name="set_bar_action">Egyéni lejátszási sáv művelet</string>
     <string name="set_headset_autoplay_desc">A lejátszás mindig akkor indul el, ha a fejhallgató csatlakoztatva van (nem minden eszközön működik)</string>
     <string name="set_observing">Automatikus újratöltés</string>
     <string name="clr_cyan">Cián</string>
@@ -224,7 +222,6 @@
     <string name="lbl_library_counts">Könyvtár statisztika</string>
     <string name="lng_playlist_renamed">Playlista átnevezve</string>
     <string name="lng_playlist_deleted">Playlista törölve</string>
-    <string name="set_action_mode_next">Ugrás a következőre</string>
     <string name="set_play_song_from_artist">Lejátszás előadótól</string>
     <string name="set_music">Zene</string>
     <string name="set_exclude_non_music_desc">A nem zenei fájlok, például podcastok figyelmen kívül hagyása</string>

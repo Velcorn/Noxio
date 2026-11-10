@@ -145,13 +145,6 @@
     <string name="lbl_stats_all">All time</string>
     <string name="lbl_stats_import_baseline">Import as your history before Noxio?</string>
     <string name="lbl_stats_import_baseline_desc">Play counts without a week or month in the file name are added to All time only, not to any week, month or year. They replace the ones of an earlier import. Several files are added together.</string>
-    <string name="lbl_stats_import_undated">Replace your plays from before Noxio?</string>
-    <plurals name="fmt_stats_import_undated_desc">
-        <item quantity="one">An earlier import left %d play without a date, which counts in All time only. The weekly and monthly lists you are importing hold the same listens with their week or month. Remove it before the import? Otherwise All time counts these listens twice.</item>
-        <item quantity="other">An earlier import left %d plays without a date, which count in All time only. The weekly and monthly lists you are importing hold the same listens with their week or month. Remove them before the import? Otherwise All time counts these listens twice.</item>
-    </plurals>
-    <string name="lbl_stats_import_undated_remove">Remove</string>
-    <string name="lbl_stats_import_undated_keep">Keep</string>
     <plurals name="fmt_stats_item_estimated">
         <item quantity="one">Includes %d imported play with an estimated time</item>
         <item quantity="other">Includes %d imported plays with estimated times</item>
@@ -224,6 +217,9 @@
     <string name="fmt_stats_item_album" tools:ignore="PluralsCandidate">#%1$d album · %2$s</string>
     <string name="fmt_stats_item_song" tools:ignore="PluralsCandidate">#%1$d song · %2$s</string>
     <string name="fmt_stats_item_first">First play %s</string>
+    <string name="lbl_stats_item_weeks">Weeks listened</string>
+    <string name="fmt_stats_item_first_estimated">First play ≈ %s</string>
+    <string name="fmt_stats_item_last_estimated">Last play ≈ %s</string>
     <string name="fmt_stats_item_last">Last play %s</string>
     <string name="fmt_stats_item_total">%s in total</string>
     <string name="lbl_sleep_end_of_track">End of track</string>
@@ -363,10 +359,10 @@
     <string name="set_round_mode">Round mode</string>
     <string name="set_round_mode_desc">Enable rounded corners on additional UI elements (requires album covers to be rounded)</string>
     <string name="set_wavy_seek_bar">Wavy seek bar</string>
-    <string name="set_wavy_seek_bar_desc">Let the seek bar of the player wave while playing. Off shows a plain line</string>
+    <string name="set_wavy_seek_bar_desc">Let the seek bar of the player wave while playing. Turn it off for less motion</string>
 
     <string name="set_personalize">Home and player</string>
-    <string name="set_personalize_desc">Library tabs and the playback bar</string>
+    <string name="set_personalize_desc">Library tabs</string>
     <string name="set_display">Display</string>
     <string name="set_lib_tabs">Library tabs</string>
     <string name="set_lib_tabs_desc">Change visibility and order of library tabs</string>
@@ -375,9 +371,6 @@
     <string name="set_launcher_icon">App icon</string>
     <string name="set_launcher_icon_default">Default</string>
     <string name="set_launcher_icon_minimal">Minimal, white without a background</string>
-    <string name="set_bar_action">Custom playback bar action</string>
-    <string name="set_action_mode_next">Skip to next</string>
-    <string name="set_action_mode_repeat">Repeat mode</string>
     <string name="set_behavior">Behavior</string>
     <string name="set_play_in_list_with">When playing from the library</string>
     <string name="set_play_in_parent_with">When playing from item details</string>

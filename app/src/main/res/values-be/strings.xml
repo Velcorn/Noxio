@@ -11,7 +11,6 @@
     <string name="lng_observing">Адсочванне змяненняў у вашай музычнай бібліятэцы…</string>
     <string name="lng_queue_added">Дададзены ў чаргу</string>
     <string name="lbl_author_name">Распрацавана Аляксандрам Кейпхартам</string>
-    <string name="set_bar_action">Карыстальніцкае дзеянне панэлі прайгравання</string>
     <string name="set_play_song_from_album">Прайграць з альбома</string>
     <string name="set_separators_comma">Коска (,)</string>
     <string name="set_separators_plus">Плюс (+)</string>
@@ -203,8 +202,6 @@
     <string name="set_display">Экран</string>
     <string name="set_lib_tabs">Ўкладкі бібліятэкі</string>
     <string name="set_lib_tabs_desc">Змяніць бачнасць і парадак укладак бібліятэкі</string>
-    <string name="set_action_mode_next">Перайсці да наступнага</string>
-    <string name="set_action_mode_repeat">Рэжым паўтору</string>
     <string name="set_behavior">Паводзіны</string>
     <string name="set_play_in_list_with">Пры прайграванні з бібліятэкі</string>
     <string name="set_play_song_from_all">Прайграць усе песні</string>

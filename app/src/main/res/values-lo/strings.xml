@@ -159,9 +159,6 @@
     <string name="set_display">ການສະແດງຜົນ</string>
     <string name="set_lib_tabs">ແທັບຄັງເພງ</string>
     <string name="set_lib_tabs_desc">ປ່ຽນການເບິ່ງເຫັນ ແລະ ລຳດັບຂອງແທັບຄັງເພງ</string>
-    <string name="set_bar_action">ປັບແຕ່ງຄຳສັ່ງແຖບການຫຼິ້ນ</string>
-    <string name="set_action_mode_next">ຂ້າມໄປເພງຖັດໄປ</string>
-    <string name="set_action_mode_repeat">ໂໝດຫຼິ້ນຊ້ຳ</string>
     <string name="set_behavior">ພຶດຕິກຳ</string>
     <string name="set_play_in_list_with">ເມື່ອຫຼິ້ນຈາກຄັງເພງ</string>
     <string name="set_play_in_parent_with">ເມື່ອຫຼິ້ນຈາກລາຍລະອຽດລາຍການ</string>

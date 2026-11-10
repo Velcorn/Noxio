@@ -263,8 +263,6 @@
     <string name="lbl_live_group">Langsung</string>
     <string name="lbl_mixes">DJ Campuran</string>
     <string name="lbl_mix">DJ Campuran</string>
-    <string name="set_action_mode_next">Lewati ke lagu berikutnya</string>
-    <string name="set_action_mode_repeat">Mode perulangan</string>
     <string name="set_separators_warning">Peringatan: Menggunakan pengaturan ini mungkin akan menghasilkan beberapa tag salah diinterpretasikan sebagai nilai multipel. Anda dapat mengatasinya dengan mengawali karakter yang tidak diinginkan dengan garis miring terbalik (\\).</string>
     <string name="set_replay_gain_mode_off">Nonaktif</string>
     <string name="lbl_empty_playlist">Daftar putar kosong</string>
@@ -279,7 +277,6 @@
     <string name="lbl_path">Jalur</string>
     <string name="lbl_selection">Pilihan</string>
     <string name="lng_playlist_renamed">Nama daftar putar diubah</string>
-    <string name="set_bar_action">Aksi bar playback kustom</string>
     <string name="set_play_song_by_itself">Putar lagu dengan sendirinya</string>
     <string name="set_separators_desc">Konfigurasi karakter yang menunjukkan nilai tag multipel</string>
     <string name="set_intelligent_sorting">Penyortiran cerdas</string>

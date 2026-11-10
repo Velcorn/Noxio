@@ -70,8 +70,6 @@
     <string name="lbl_save">सहेजें</string>
     <string name="set_ui_desc">एप्लिकेशन की थीम और रंग बदलें</string>
     <string name="lng_playlist_added">प्लेलिस्ट में जोड़ा गया</string>
-    <string name="set_action_mode_next">अगले पर जाएं</string>
-    <string name="set_action_mode_repeat">रिपीट मोड</string>
     <string name="set_content_desc">संगीत और छवियों को लोड करने के तरीके को नियंत्रित करें</string>
     <string name="set_exclude_non_music">गैर-संगीत को बाहर रखें</string>
     <string name="set_observing">स्वचालित पुनः लोडिंग</string>
@@ -100,7 +98,6 @@
     <string name="set_music">संगीत</string>
     <string name="set_personalize_desc">UI नियंत्रण और व्यवहार अनुकूलित करें</string>
     <string name="fmt_lib_artist_count">कलाकार लोड किए गए: %d</string>
-    <string name="set_bar_action">कस्टम प्लेबैक बार एक्शन</string>
     <string name="set_play_in_parent_with">आइटम विवरण से चलाते समय</string>
     <string name="lbl_album_live">लाइव एल्बम</string>
     <string name="lbl_album_remix">रीमिक्स एल्बम</string>
