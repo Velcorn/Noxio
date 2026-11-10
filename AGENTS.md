@@ -15,8 +15,8 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 - `app/lint-baseline.xml` holds the lint problems that came with Auxio. Do not add new ones to it to make lint pass; fix them.
 
 ## Releases
-- Pushing a tag `v*` runs `.github/workflows/release.yml`, which builds a signed release APK and publishes it as a GitHub Release (a hyphen in the tag, like `v1.0.0-dev.5`, makes it a pre-release). Obtainium follows these.
-- Final releases (tags without a hyphen, like `v1.0.0`) are signed with the real key from the repository secrets `NOXIO_KEYSTORE_BASE64`, `NOXIO_KEYSTORE_PASSWORD`, `NOXIO_KEY_ALIAS` and `NOXIO_KEY_PASSWORD`; the key file is never committed. Do not tag a final release before those secrets exist.
+- Pushing a tag `v*` or a plain version number like `1.0.0` runs `.github/workflows/release.yml`, which builds a signed release APK and publishes it as a GitHub Release (a hyphen in the tag, like `v1.0.0-dev.5`, makes it a pre-release). Obtainium follows these.
+- Final releases (tags without a hyphen, like `1.0.0`; final releases use plain tags without the `v`) are signed with the real key from the repository secrets `NOXIO_KEYSTORE_BASE64`, `NOXIO_KEYSTORE_PASSWORD`, `NOXIO_KEY_ALIAS` and `NOXIO_KEY_PASSWORD`; the key file is never committed. Do not tag a final release before those secrets exist.
 - Dev builds are signed with a throwaway key in `keystore/dev.jks`. Replace it with a secret-backed key before real releases.
 - Nothing is tested on a device by the agent, and screens have no automated tests. Say so instead of claiming a feature works.
 
@@ -30,4 +30,4 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 - Keep the UI in line with the rest of the app: reuse the patterns, components and dialogs that are already there (the sort dialog, the bottom row with search, sort and more, the floating shuffle button, popup menus, spacing) and only design something new when it is a completely new kind of UI. Look at how the other screens do the same thing before building it.
 - Describe a UI change before big restructurings and offer options when the direction is open. There are no mockups any more; icon sources are in `docs/icon/`, and screenshots from a device will go into the README.
 - Nothing that changes how the app looks is committed before the user has reviewed it. Describe the result (or show a screenshot if there is one) and wait for approval, then commit. Tests, lint and the build can run in the meantime, but the commit and any release tag wait. This also holds for small tweaks and for fixes of a visual bug.
-- Branches: `dev` is day-to-day work, `main` is releasable. Do not push to `main`.
+- Branches: `dev` is day-to-day work, `main` is releasable. The user allowed pushing to `main` (Nov 2026): after a final release tag, fast-forward `main` to that tag, and only then; day-to-day work stays on `dev`.

@@ -1,10 +1,10 @@
 name: Release
 
-# Push a tag like v1.0.0-dev.1 to build a signed release APK and publish it as a GitHub Release.
+# Push a tag like 1.0.0 (or v1.0.0-dev.1) to build a signed release APK and publish it as a GitHub Release.
 # Tags containing a hyphen (v1.0.0-dev.1) are marked as pre-releases.
 on:
   push:
-    tags: ["v*"]
+    tags: ["[0-9]*", "v*"]
 
 permissions:
   contents: write
