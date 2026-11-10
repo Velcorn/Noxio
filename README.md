@@ -36,6 +36,7 @@ upstream issues should not be reported against it.
 | Sleep timer | none | Hold the player's play/pause button to open the timer; hold it again to reopen the timer sheet. 30 min, custom minutes (1–599) or 60 min, optionally finishing the last song and fading out, and shaking the device restarts it (all three switches are in the timer sheet). The countdown appears inside the play/pause button in the icon colour. Pausing playback freezes the timer and resuming continues it; and a quiet notification of its own counts down live (or shows the frozen time while paused) with +10 min and Stop timer buttons (it needs the permission to post notifications, which is asked for when a timer starts). Remembers your last choice. |
 | Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. The artists, albums and songs switch is at the top and you can also swipe between them, while the range and period controls are at the bottom, in reach of the thumb. Tap an artist, album or song for a closer look at it: plays, listening time, its share of all your listening and the days you listened in that period, the top songs of an artist or album, or the plays of a song over time, with the first play and the total. Colorful cards you can share as an image, the overview as well as a single artist, album or song, CSV export and import. Musicolet's "Most played songs" lists can be imported: a weekly file ("Most played Songs • Week 22 - 2026.csv") puts its plays into that week (weeks start on Monday and are numbered like ISO 8601), spread evenly over its seven days, and a monthly file into that month, spread over its days. Weekly files are preferred: a month that already has weekly plays is not imported, and a weekly file replaces the plays of the same week, so importing a file twice changes nothing. Plays imported this way count for rankings, plays and listening time of the week, month, year and all time, but their day and time are only an estimate. They count for weeks listened (shown for a year and all time), for the plays-over-time chart when its bars are months or years, and for the first and last play, which then get a "≈". They are left out of days listened and of day bars, and the closer look says how many of its plays are imported. A list without a week or month in its name is counted in All time only. Stored on the device only. |
 | Backup | none | Settings > Backup. A full backup of your settings, listening history and playlists in one zip, written automatically every day, week or month at a day and hour you pick (and on "Back up now") into a folder you choose, one file per day (`noxio_YYYY-MM-DD.zip`) with the last five kept. A backup that holds much less than the last good one (an empty or freshly installed app, or less than half of the plays) is not written on its own, so it cannot replace a good backup; "Back up now" asks first and saves such a backup under its own name (`_small`), and good backups are never removed below three. "Restore from backup" shows what is in the file first, replaces the settings, adds the plays that are missing and creates the playlists that do not exist yet, finding their songs by file path or by title, artist and album. A backup from a newer version is refused. The zip holds plain text files (settings, a history CSV and playlists as JSON). |
+| APK downloads | One universal APK | Universal APK for all supported architectures, plus a smaller `arm64-v8a` APK for 64-bit ARM devices. Both contain the same features and use the same release signing key |
 | Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use, and the playing strip moves to the bottom while the queue is open. Wavy seek bar while playing, which can be turned off for less motion (Settings > Appearance). The playback bar always has previous, play and next; the setting for a custom action (next, repeat or shuffle) is gone |
 | Navigation | Tabs and search at the top, five tabs including Genres | Search row and tabs at the bottom of the home screen (Artists, Albums, Songs, Playlists by default, no Genres tab; an old Auxio default order is reset once), the player above the navigation, a floating shuffle button. Short lists sit at the bottom edge instead of the top. No screen has a back button (search, settings, about, listening stats and the detail pages included), the back gesture does that |
 | Queue | Reorder by dragging, remove by swiping | Search row under the playing strip: filter the queue and jump to a song, sort the whole queue in the same sort dialog as the other lists (name, artist, album, date, duration, ascending or descending, or random). The current song keeps playing |
@@ -103,7 +104,27 @@ Noxio relies on a patched Media3 and taglib, which adds some caveats:
 ```bash
 ./gradlew assembleDebug   # build
 ./gradlew installDebug    # install on a connected device or emulator
+# Optional: build only the JNI bridges and APK for the target architecture.
+./gradlew app:assembleDebug -Pandroid.injected.build.abi=x86_64   # x86_64 emulator
+./gradlew app:assembleDebug -Pandroid.injected.build.abi=arm64-v8a # 64-bit ARM phone
 ```
+
+Release tags publish `Noxio-<version>.apk` (universal, keeping the existing filename) and
+`Noxio-arm64-v8a-<version>.apk` (64-bit ARM only). When using Obtainium, the universal APK remains
+available; select the ARM64 asset explicitly if you want the smaller download.
+
+To build both locally (the local release uses the development signing key):
+
+```bash
+./gradlew app:assembleRelease -PnoxioSplitApks=true
+```
+
+Gradle's build-output cache is enabled. CI also caches the compiled TagLib and FFmpeg libraries
+and FFmpeg's generated headers, using the submodule revisions and native build settings as the
+cache key. Native caches have no fallback keys. The first build fills the caches; subsequent
+builds can reuse them. The cautious memory and worker limits for WSL remain in place. CI lint/tests select `x86_64`;
+normal builds still support all four architectures. The upstream static-library preparation scripts
+build all architectures once even when `android.injected.build.abi` selects one JNI target. Use the target-ABI option for development, and omit it when publishing split APKs.
 
 The code still lives under the `org.oxycblt.auxio` package on purpose, so changes from upstream can be merged with
 minimal conflicts. Only the application ID and branding differ.

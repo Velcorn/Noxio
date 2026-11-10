@@ -90,6 +90,16 @@ android {
         }
     }
 
+    // Opt in for publishing. Normal debug builds keep producing one universal APK.
+    splits {
+        abi {
+            enable providers.gradleProperty("noxioSplitApks").map { it.toBoolean() }.getOrElse(false)
+            reset()
+            include "arm64-v8a"
+            universalApk true
+        }
+    }
+
     packagingOptions {
         jniLibs {
             excludes += ['**/kotlin/**', '**/okhttp3/**']

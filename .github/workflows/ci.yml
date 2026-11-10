@@ -20,10 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-build
+      - name: Test release APK checks
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
       - name: Check formatting (ktfmt via spotless)
         run: ./gradlew spotlessCheck
       - name: Android lint
-        run: ./gradlew app:lintDebug
+        run: ./gradlew app:lintDebug -Pandroid.injected.build.abi=x86_64
       - name: Upload lint report
         if: failure()
         uses: actions/upload-artifact@v5
@@ -40,7 +42,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-build
       - name: Run the tests
-        run: ./gradlew coverageReport
+        run: ./gradlew coverageReport -Pandroid.injected.build.abi=x86_64
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v5

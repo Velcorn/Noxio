@@ -26,15 +26,23 @@ jobs:
           echo "NOXIO_KEYSTORE_PASSWORD=${{ secrets.NOXIO_KEYSTORE_PASSWORD }}" >> "$GITHUB_ENV"
           echo "NOXIO_KEY_ALIAS=${{ secrets.NOXIO_KEY_ALIAS }}" >> "$GITHUB_ENV"
           echo "NOXIO_KEY_PASSWORD=${{ secrets.NOXIO_KEY_PASSWORD }}" >> "$GITHUB_ENV"
-      - name: Build release APK
+      - name: Build universal and ARM64 release APKs
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          ./gradlew app:assembleRelease -PbuildNumber=${{ github.run_number }} -PversionName="$VERSION"
-      - name: Rename APK
-        run: cp app/build/outputs/apk/release/app-release.apk "Noxio-${{ github.ref_name }}.apk"
+          ./gradlew app:assembleRelease -PbuildNumber=${{ github.run_number }} -PversionName="$VERSION" -PnoxioSplitApks=true
+      - name: Check APK architectures and matching payloads
+        run: python3 scripts/check_release_apks.py app/build/outputs/apk/release/app-universal-release.apk app/build/outputs/apk/release/app-arm64-v8a-release.apk
+      - name: Name release APKs
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          cp app/build/outputs/apk/release/app-universal-release.apk "Noxio-${RELEASE_TAG}.apk"
+          cp app/build/outputs/apk/release/app-arm64-v8a-release.apk "Noxio-arm64-v8a-${RELEASE_TAG}.apk"
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          files: Noxio-${{ github.ref_name }}.apk
+          files: |
+            Noxio-${{ github.ref_name }}.apk
+            Noxio-arm64-v8a-${{ github.ref_name }}.apk
           prerelease: ${{ contains(github.ref_name, '-') }}
           generate_release_notes: true

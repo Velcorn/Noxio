@@ -16,3 +16,6 @@ captures/
 .kotlin
 .aider*
 .env
+
+# Python helper scripts
+__pycache__/
