@@ -236,4 +236,144 @@ class StatsCsvImportTest {
                 StatsCsvImport.historyKey(base.copy(startedAt = 6_000))
         )
     }
+
+    // --- weekly Musicolet files ---
+
+    private val utc = java.util.TimeZone.getTimeZone("UTC")
+
+    private fun day(ms: Long) =
+        java.time.Instant.ofEpochMilli(ms).atZone(java.time.ZoneOffset.UTC).toLocalDate()
+
+    @Test
+    fun theWeekIsReadFromAMusicoletFileName() {
+        val week =
+            StatsCsvImport.periodOfFileName(
+                "Most played Songs • Week 22 - 2026.csv",
+                java.util.Calendar.MONDAY,
+                utc,
+            )!!
+        assertEquals(2026, week.year)
+        assertEquals(22, week.number)
+        // ISO week 22 of 2026 is May 25 to 31.
+        assertEquals(java.time.LocalDate.of(2026, 5, 25), day(week.startMs))
+        assertEquals(java.time.LocalDate.of(2026, 6, 1), day(week.endMs))
+    }
+
+    @Test
+    fun aWeekStartingOnSundayBeginsOnASunday() {
+        val week =
+            StatsCsvImport.periodOfFileName("Week 2 - 2026.csv", java.util.Calendar.SUNDAY, utc)!!
+        assertEquals(java.time.DayOfWeek.SUNDAY, day(week.startMs).dayOfWeek)
+        assertEquals(7L * 24 * 3600 * 1000, week.endMs - week.startMs)
+    }
+
+    @Test
+    fun otherFileNamesHaveNoWeek() {
+        assertNull(StatsCsvImport.periodOfFileName("Most played Songs.csv"))
+        assertNull(StatsCsvImport.periodOfFileName("Week 99 - 2026.csv"))
+        assertNull(StatsCsvImport.periodOfFileName("Week 0 - 2026.csv"))
+    }
+
+    @Test
+    fun parseKeepsTheWeekOfTheFileName() {
+        val parsed =
+            StatsCsvImport.parse(
+                "$header\nMusic/a.mp3,Song A,Artist,Album,x,x,x,2019,180000,3\n",
+                "Most played Songs • Week 22 - 2026.csv",
+            ) as StatsCsvImport.Parsed.MostPlayed
+        assertEquals(22, parsed.period?.number)
+        val plain =
+            StatsCsvImport.parse("$header\nMusic/a.mp3,Song A,Artist,Album,x,x,x,2019,180000,3\n")
+                as StatsCsvImport.Parsed.MostPlayed
+        assertNull(plain.period)
+    }
+
+    @Test
+    fun theWeeklyPlaysOfASongAreSpreadOverTheWholeWeek() {
+        val week =
+            StatsCsvImport.periodOfFileName("Week 22 - 2026.csv", java.util.Calendar.MONDAY, utc)!!
+        val rows =
+            listOf(
+                StatsCsvImport.MostPlayedRow("a.mp3", "A", "X", "Al", "", "", 0, 1000, 7),
+                StatsCsvImport.MostPlayedRow("b.mp3", "B", "X", "Al", "", "", 0, 1000, 1),
+            )
+        val events = StatsCsvImport.spreadEvents(rows, week)
+        assertEquals(8, events.size)
+        assertTrue(events.all { it.estimated && it.startedAt in week.startMs until week.endMs })
+        val days = events.filter { it.title == "A" }.map { day(it.startedAt) }.toSet()
+        assertEquals(7, days.size)
+        // The same file always gives the same plays.
+        assertEquals(events, StatsCsvImport.spreadEvents(rows, week))
+    }
+
+    @Test
+    fun theTimeOfASingleWeeklyPlayIsInsideTheWeek() {
+        val week =
+            StatsCsvImport.periodOfFileName("Week 1 - 2026.csv", java.util.Calendar.MONDAY, utc)!!
+        val rows =
+            (0 until 50).map {
+                StatsCsvImport.MostPlayedRow("$it.mp3", "T$it", "X", "", "", "", 0, 1000, 1)
+            }
+        assertTrue(
+            StatsCsvImport.spreadEvents(rows, week).all {
+                it.startedAt in week.startMs until week.endMs
+            }
+        )
+    }
+
+    @Test
+    fun anEstimatedMarkerSurvivesAHistoryRoundTrip() {
+        val out = java.io.ByteArrayOutputStream()
+        val event =
+            PlayEvent(
+                songUid = "u",
+                title = "T",
+                artists = "A",
+                album = "B",
+                startedAt = 1_700_000_000_000,
+                listenedMs = 5,
+                durationMs = 5,
+                estimated = true,
+            )
+        StatsCsv.writeHistory(listOf(event), out, java.time.ZoneOffset.UTC)
+        val parsed =
+            StatsCsvImport.parse(out.toString(Charsets.UTF_8)) as StatsCsvImport.Parsed.History
+        assertTrue(parsed.events.single().estimated)
+    }
+
+    @Test
+    fun aMonthIsReadFromANumberOrAName() {
+        for (name in
+            listOf(
+                "Most played Songs • Month 5 - 2026.csv",
+                "Most played Songs • May - 2026.csv",
+                "Most played Songs • May 2026.csv",
+                "Most played Songs • may, 2026.csv",
+            )) {
+            val month = StatsCsvImport.periodOfFileName(name, java.util.Calendar.MONDAY, utc)!!
+            assertTrue(name, month.isMonth)
+            assertEquals(name, 5, month.number)
+            assertEquals(name, java.time.LocalDate.of(2026, 5, 1), day(month.startMs))
+            assertEquals(name, java.time.LocalDate.of(2026, 6, 1), day(month.endMs))
+        }
+    }
+
+    @Test
+    fun aMonthThatIsNotOneHasNoPeriod() {
+        assertNull(StatsCsvImport.periodOfFileName("Month 13 - 2026.csv"))
+        assertNull(StatsCsvImport.periodOfFileName("Most played Songs 2026.csv"))
+        assertNull(StatsCsvImport.periodOfFileName("Something - 2026.csv"))
+    }
+
+    @Test
+    fun theMonthlyPlaysAreSpreadOverTheWholeMonth() {
+        val month =
+            StatsCsvImport.periodOfFileName("May 2026.csv", java.util.Calendar.MONDAY, utc)!!
+        val rows =
+            listOf(StatsCsvImport.MostPlayedRow("a.mp3", "A", "X", "Al", "", "", 0, 1000, 31))
+        val events = StatsCsvImport.spreadEvents(rows, month)
+        assertEquals(31, events.size)
+        assertEquals(31, events.map { day(it.startedAt) }.toSet().size)
+        assertTrue(events.all { it.startedAt in month.startMs until month.endMs })
+    }
 }

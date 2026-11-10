@@ -45,6 +45,9 @@ import androidx.room.migration.Migration
  * @param albumArtist The album artists of the song's album, joined with "; ". Empty if not known.
  * @param genre The first genre of the song. Empty if not known.
  * @param year The release year of the song. 0 if not known.
+ * @param estimated True for plays that were made up from imported play counts: their time is a
+ *   guess (spread over a week, or none at all), so they count for rankings and totals but not for
+ *   what needs a real time, like days listened.
  */
 @Entity(indices = [Index("startedAt")])
 data class PlayEvent(
@@ -60,7 +63,12 @@ data class PlayEvent(
     @ColumnInfo(defaultValue = "''") val albumArtist: String = "",
     @ColumnInfo(defaultValue = "''") val genre: String = "",
     @ColumnInfo(defaultValue = "0") val year: Int = 0,
+    @ColumnInfo(defaultValue = "0") val estimated: Boolean = false,
 ) {
+    /** Whether the time of this play is a guess, see [estimated]. Undated plays always are. */
+    val hasGuessedTime: Boolean
+        get() = estimated || startedAt == BASELINE_TIME
+
     companion object {
         /** Unit separator control character, which does not show up in artist names. */
         const val ARTIST_SEPARATOR = "\u001F"
@@ -74,7 +82,7 @@ data class PlayEvent(
 }
 
 /** Raw access to the listening history. */
-@Database(entities = [PlayEvent::class], version = 2, exportSchema = false)
+@Database(entities = [PlayEvent::class], version = 3, exportSchema = false)
 abstract class StatsDatabase : RoomDatabase() {
     abstract fun playEventDao(): PlayEventDao
 
@@ -86,6 +94,13 @@ abstract class StatsDatabase : RoomDatabase() {
                 it.execSQL("ALTER TABLE PlayEvent ADD COLUMN albumArtist TEXT NOT NULL DEFAULT ''")
                 it.execSQL("ALTER TABLE PlayEvent ADD COLUMN genre TEXT NOT NULL DEFAULT ''")
                 it.execSQL("ALTER TABLE PlayEvent ADD COLUMN year INTEGER NOT NULL DEFAULT 0")
+            }
+
+        /** Added the marker for plays whose time is a guess. Undated plays are such plays. */
+        val MIGRATION_2_3 =
+            Migration(2, 3) {
+                it.execSQL("ALTER TABLE PlayEvent ADD COLUMN estimated INTEGER NOT NULL DEFAULT 0")
+                it.execSQL("UPDATE PlayEvent SET estimated = 1 WHERE startedAt = 0")
             }
     }
 }
@@ -102,6 +117,12 @@ interface PlayEventDao {
 
     /** Remove the undated plays from before Noxio, so a new import can replace them. */
     @Query("DELETE FROM PlayEvent WHERE startedAt = 0") suspend fun deleteBaseline()
+
+    /** Remove the made up plays of a week, so a new import of that week can replace them. */
+    @Query(
+        "DELETE FROM PlayEvent WHERE estimated = 1 AND startedAt >= :fromMs AND startedAt < :toMs"
+    )
+    suspend fun deleteEstimatedBetween(fromMs: Long, toMs: Long)
 
     @Query("SELECT * FROM PlayEvent WHERE startedAt >= :fromMs AND startedAt < :toMs")
     suspend fun between(fromMs: Long, toMs: Long): List<PlayEvent>

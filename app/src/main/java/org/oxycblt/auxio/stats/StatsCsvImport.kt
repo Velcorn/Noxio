@@ -19,6 +19,9 @@
 package org.oxycblt.auxio.stats
 
 import java.time.OffsetDateTime
+import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.TimeZone
 
 /** Reads the CSV files written by [StatsCsv], and Musicolet's "Most played songs" exports. */
 object StatsCsvImport {
@@ -35,16 +38,82 @@ object StatsCsvImport {
         val plays: Int,
     )
 
+    /**
+     * The week or month a Musicolet export is for, named by a file like "Most played Songs • Week
+     * 22
+     * - 2026.csv". The plays of the file are spread over it.
+     */
+    data class Period(
+        val isMonth: Boolean,
+        val year: Int,
+        /** The number of the week in the year, or of the month (1 is January). */
+        val number: Int,
+        val startMs: Long,
+        val endMs: Long,
+    )
+
     sealed interface Parsed {
         /** A history with a time for every play. */
         data class History(val events: List<PlayEvent>) : Parsed
 
         /** Play counts per song, without times. */
-        data class MostPlayed(val rows: List<MostPlayedRow>) : Parsed
+        data class MostPlayed(val rows: List<MostPlayedRow>, val period: Period? = null) : Parsed
     }
 
-    /** @return The parsed file, or null if it is not a stats file this can read. */
-    fun parse(text: String): Parsed? {
+    /**
+     * Read the week or month a Musicolet export is for from its file name: "Week 22 - 2026" for a
+     * week, "Month 5 - 2026" or "May 2026" (also "May - 2026") for a month.
+     *
+     * @param firstDayOfWeek The day a week starts on, a [Calendar] day. A week that starts on
+     *   Monday is counted like ISO 8601 does (week 1 has four days of the new year), any other like
+     *   the American calendar (week 1 holds January 1st).
+     * @return Null if the name does not say a week or month.
+     */
+    fun periodOfFileName(
+        name: String,
+        firstDayOfWeek: Int = Calendar.MONDAY,
+        zone: TimeZone = TimeZone.getDefault(),
+    ): Period? {
+        val calendar = GregorianCalendar(zone)
+        calendar.clear()
+        WEEK_NAME.find(name)?.let { match ->
+            val number = match.groupValues[1].toInt()
+            val year = match.groupValues[2].toInt()
+            if (number !in 1..53) return null
+            calendar.firstDayOfWeek = firstDayOfWeek
+            calendar.minimalDaysInFirstWeek = if (firstDayOfWeek == Calendar.MONDAY) 4 else 1
+            calendar.setWeekDate(year, number, firstDayOfWeek)
+            val start = calendar.timeInMillis
+            calendar.add(Calendar.DAY_OF_YEAR, 7)
+            return Period(false, year, number, start, calendar.timeInMillis)
+        }
+        val (month, year) =
+            MONTH_NUMBER_NAME.find(name)?.let {
+                it.groupValues[1].toInt() to it.groupValues[2].toInt()
+            }
+                ?: MONTH_WORD_NAME.find(name)?.let { match ->
+                    val index = MONTHS.indexOfFirst {
+                        match.groupValues[1].lowercase().startsWith(it)
+                    }
+                    if (index < 0) null else index + 1 to match.groupValues[2].toInt()
+                }
+                ?: return null
+        if (month !in 1..12) return null
+        calendar.set(year, month - 1, 1)
+        val start = calendar.timeInMillis
+        calendar.add(Calendar.MONTH, 1)
+        return Period(true, year, month, start, calendar.timeInMillis)
+    }
+
+    /**
+     * @param fileName The name of the file, which names the week of a Musicolet export.
+     * @return The parsed file, or null if it is not a stats file this can read.
+     */
+    fun parse(
+        text: String,
+        fileName: String? = null,
+        firstDayOfWeek: Int = Calendar.MONDAY,
+    ): Parsed? {
         val rows = readRows(text)
         val header = rows.firstOrNull()?.mapIndexed { i, name -> name.trim().uppercase() to i }
         val columns = header?.toMap() ?: return null
@@ -83,6 +152,7 @@ object StatsCsvImport {
                         albumArtist = splitArtists(cell(row, "ALBUM_ARTIST")),
                         genre = cell(row, "GENRE"),
                         year = cell(row, "YEAR").toIntOrNull() ?: 0,
+                        estimated = cell(row, "ESTIMATED") == "1",
                     )
                 }
             )
@@ -105,8 +175,38 @@ object StatsCsvImport {
                             plays = plays.coerceAtMost(MAX_PLAYS_PER_SONG),
                         )
                     }
-                }
+                },
+                period = fileName?.let { periodOfFileName(it, firstDayOfWeek) },
             )
+        }
+    }
+
+    /**
+     * Turn the play counts of one week or month into plays that are spread evenly over it: a song
+     * played five times in a week gets five plays a bit more than a day apart. Their time is a
+     * guess, so they are [PlayEvent.estimated]. The same file always gives the same plays.
+     */
+    fun spreadEvents(rows: List<MostPlayedRow>, period: Period): List<PlayEvent> {
+        val length = period.endMs - period.startMs
+        return rows.flatMapIndexed { index, row ->
+            // Songs are shifted against each other a little, so they do not all start at once.
+            val shift = (index * SHIFT_MS) % DAY_MS
+            (0 until row.plays).map { i ->
+                PlayEvent(
+                    songUid = IMPORT_PREFIX + row.filePath.ifEmpty { row.title + row.artist },
+                    title = row.title,
+                    artists = splitArtists(row.artist),
+                    album = row.album,
+                    startedAt = period.startMs + length * i / row.plays + shift,
+                    listenedMs = row.durationMs,
+                    durationMs = row.durationMs,
+                    filePath = row.filePath,
+                    albumArtist = splitArtists(row.albumArtist),
+                    genre = row.genre,
+                    year = row.year,
+                    estimated = true,
+                )
+            }
         }
     }
 
@@ -129,6 +229,7 @@ object StatsCsvImport {
                 albumArtist = splitArtists(row.albumArtist),
                 genre = row.genre,
                 year = row.year,
+                estimated = true,
             )
         }
     }
@@ -193,4 +294,12 @@ object StatsCsvImport {
     const val IMPORT_PREFIX = "import:"
     private const val HISTORY_PREFIX = "csv:"
     private const val MAX_PLAYS_PER_SONG = 10_000
+    private const val SHIFT_MS = 97_000L
+    private const val DAY_MS = 24L * 3600 * 1000
+    private val WEEK_NAME = Regex("""Week\s*(\d{1,2})\s*[-–]\s*(\d{4})""", RegexOption.IGNORE_CASE)
+    private val MONTH_NUMBER_NAME =
+        Regex("""Month\s*(\d{1,2})\s*[-–]\s*(\d{4})""", RegexOption.IGNORE_CASE)
+    private val MONTH_WORD_NAME = Regex("""\b([A-Za-z]{3,9})\.?\s*[-–,]?\s*(\d{4})\b""")
+    private val MONTHS =
+        listOf("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
 }

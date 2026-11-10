@@ -113,7 +113,7 @@ class StatsDatabaseTest {
         }
         val migrated =
             Room.databaseBuilder(context, StatsDatabase::class.java, "migrate.db")
-                .addMigrations(StatsDatabase.MIGRATION_1_2)
+                .addMigrations(StatsDatabase.MIGRATION_1_2, StatsDatabase.MIGRATION_2_3)
                 .allowMainThreadQueries()
                 .build()
         try {
@@ -121,6 +121,42 @@ class StatsDatabaseTest {
             assertEquals("Kept", kept.title)
             assertEquals("", kept.filePath)
             assertEquals(0, kept.year)
+        } finally {
+            migrated.close()
+        }
+    }
+
+    @Test
+    fun undatedPlaysAreMarkedAsGuessedWhenTheTableIsMigratedToTheThirdVersion() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val file = context.getDatabasePath("migrate3.db")
+        file.parentFile?.mkdirs()
+        android.database.sqlite.SQLiteDatabase.openOrCreateDatabase(file, null).use { old ->
+            old.execSQL(
+                "CREATE TABLE `PlayEvent` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`songUid` TEXT NOT NULL, `title` TEXT NOT NULL, `artists` TEXT NOT NULL, " +
+                    "`album` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, " +
+                    "`listenedMs` INTEGER NOT NULL, `durationMs` INTEGER NOT NULL, " +
+                    "`filePath` TEXT NOT NULL DEFAULT '', `albumArtist` TEXT NOT NULL DEFAULT '', " +
+                    "`genre` TEXT NOT NULL DEFAULT '', `year` INTEGER NOT NULL DEFAULT 0)"
+            )
+            old.execSQL("CREATE INDEX `index_PlayEvent_startedAt` ON `PlayEvent` (`startedAt`)")
+            old.execSQL(
+                "INSERT INTO PlayEvent (songUid, title, artists, album, startedAt, listenedMs, " +
+                    "durationMs) VALUES ('u', 'Undated', 'A', 'B', 0, 6, 7), " +
+                    "('v', 'Dated', 'A', 'B', 5, 6, 7)"
+            )
+            old.version = 2
+        }
+        val migrated =
+            Room.databaseBuilder(context, StatsDatabase::class.java, "migrate3.db")
+                .addMigrations(StatsDatabase.MIGRATION_2_3)
+                .allowMainThreadQueries()
+                .build()
+        try {
+            val events = runBlocking { migrated.playEventDao().all() }.associateBy { it.title }
+            assertEquals(true, events.getValue("Undated").estimated)
+            assertEquals(false, events.getValue("Dated").estimated)
         } finally {
             migrated.close()
         }

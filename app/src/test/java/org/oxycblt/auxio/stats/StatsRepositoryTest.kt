@@ -244,6 +244,10 @@ class StatsRepositoryTest {
             events.removeAll { it.startedAt == PlayEvent.BASELINE_TIME }
         }
 
+        override suspend fun deleteEstimatedBetween(fromMs: Long, toMs: Long) {
+            events.removeAll { it.estimated && it.startedAt in fromMs until toMs }
+        }
+
         override suspend fun between(fromMs: Long, toMs: Long) = events.filter {
             it.startedAt in fromMs until toMs
         }
@@ -285,6 +289,59 @@ class StatsRepositoryTest {
             )
         assertEquals(5, added)
         assertTrue(dao.events.all { it.startedAt == PlayEvent.BASELINE_TIME })
+    }
+
+    @Test
+    fun aWeeklyListIsPlacedInItsWeekAndReplacedWhenImportedAgain() = runBlocking {
+        val week =
+            StatsCsvImport.periodOfFileName(
+                "Week 22 - 2026.csv",
+                Calendar.MONDAY,
+                TimeZone.getTimeZone("UTC"),
+            )!!
+        val first = StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 3)), week)
+        assertEquals(3, repository.importCsv(listOf(first)))
+        assertTrue(dao.events.all { it.estimated && it.startedAt in week.startMs until week.endMs })
+        // Importing the week again, with other counts, replaces the first import.
+        repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 5)), week)))
+        assertEquals(5, dao.events.size)
+        // Real plays of that week are not touched.
+        repository.record(play("Live", startedAt = week.startMs + 1000))
+        repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 2)), week)))
+        assertEquals(3, dao.events.size)
+        assertTrue(dao.events.any { it.title == "Live" })
+    }
+
+    @Test
+    fun aMonthIsSkippedWhenItAlreadyHasWeeklyPlaysAndWeeklyListsStillOverwriteIt() = runBlocking {
+        val utc = TimeZone.getTimeZone("UTC")
+        val week = StatsCsvImport.periodOfFileName("Week 22 - 2026.csv", Calendar.MONDAY, utc)!!
+        val month = StatsCsvImport.periodOfFileName("May 2026.csv", Calendar.MONDAY, utc)!!
+        repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 3)), week)))
+        // The weekly list says more than the monthly one: nothing is added for that month.
+        assertEquals(
+            0,
+            repository.importCsv(
+                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 40)), month))
+            ),
+        )
+        assertEquals(3, dao.events.size)
+
+        // Another month has no weekly plays and is spread over its days.
+        val june = StatsCsvImport.periodOfFileName("June 2026.csv", Calendar.MONDAY, utc)!!
+        assertEquals(
+            10,
+            repository.importCsv(
+                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("B", 10)), june))
+            ),
+        )
+
+        // A month imported first is overwritten, inside the week, by the weekly list.
+        dao.events.clear()
+        repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 31)), month)))
+        repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 2)), week)))
+        val inWeek = dao.events.filter { it.startedAt in week.startMs until week.endMs }
+        assertEquals(2, inWeek.size)
     }
 
     @Test

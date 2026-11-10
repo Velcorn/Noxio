@@ -49,6 +49,10 @@ data class ItemStats(
     val firstPlayedMs: Long?,
     /** When it was played for the last time. Null if none of its plays has a date. */
     val lastPlayedMs: Long?,
+    /**
+     * How many of the plays inside the period come from imported counts and have a guessed time.
+     */
+    val estimatedPlays: Int = 0,
 ) {
     /** The plays that started in the day, month or year beginning at [startMs]. */
     data class Bucket(val startMs: Long, val plays: Int)
@@ -105,9 +109,9 @@ fun summarizeItem(
             inPeriod.size.toFloat() / periodEvents.size
         }
 
-    val dated = inPeriod.filter { it.startedAt != PlayEvent.BASELINE_TIME }.map { it.startedAt }
-    val allTimeDated =
-        allTime.filter { it.startedAt != PlayEvent.BASELINE_TIME }.map { it.startedAt }
+    // Plays with a guessed time count for the totals, but not for what needs a real time.
+    val dated = inPeriod.filterNot { it.hasGuessedTime }.map { it.startedAt }
+    val allTimeDated = allTime.filterNot { it.hasGuessedTime }.map { it.startedAt }
     val days =
         dated
             .map {
@@ -132,13 +136,19 @@ fun summarizeItem(
         daysPlayed = days.size,
         bucketUnit = unit,
         buckets =
-            buckets(dated, bucketStarts(period, range, unit, dated.minOrNull(), nowMs, calendar)),
+            if (dated.isEmpty()) emptyList()
+            else
+                buckets(
+                    dated,
+                    bucketStarts(period, range, unit, dated.minOrNull(), nowMs, calendar),
+                ),
         topSongs =
             if (category == StatsCategory.SONGS) emptyList()
             else summarize(inPeriod, limit = topSongs, unknownArtist = unknownArtist).songs,
         allTimePlays = allTime.size,
         firstPlayedMs = allTimeDated.minOrNull(),
         lastPlayedMs = allTimeDated.maxOrNull(),
+        estimatedPlays = inPeriod.count { it.hasGuessedTime },
     )
 }
 

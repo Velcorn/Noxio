@@ -59,10 +59,10 @@ class StatsCsvTest {
     }
 
     @Test
-    fun historyStartsWithTheMusicoletColumnsAndTwoExtras() {
+    fun historyStartsWithTheMusicoletColumnsAndThreeExtras() {
         assertEquals(
             "FILE_PATH,TITLE,ARTIST,ALBUM,ALBUM_ARTIST,COMPOSER,GENRE,YEAR,DURATION_MS," +
-                "PLAY_COUNT,PLAYED_AT,LISTENED_MS",
+                "PLAY_COUNT,PLAYED_AT,LISTENED_MS,ESTIMATED",
             history().single(),
         )
     }
@@ -72,7 +72,7 @@ class StatsCsvTest {
         val rows = history(play())
         assertEquals(
             "Music/song.mp3,Song,Artist,Album,<unknown>,<unknown>,Rock,2020,210000,1," +
-                "2023-11-14T22:13:20Z,200000",
+                "2023-11-14T22:13:20Z,200000,0",
             rows[1],
         )
     }
@@ -113,6 +113,6 @@ class StatsCsvTest {
     @Test
     fun playsFromBeforeNoxioHaveAnEmptyTime() {
         val row = history(play(startedAt = PlayEvent.BASELINE_TIME))[1]
-        assertEquals(true, row.endsWith(",1,,200000"))
+        assertEquals(true, row.endsWith(",1,,200000,1"))
     }
 }

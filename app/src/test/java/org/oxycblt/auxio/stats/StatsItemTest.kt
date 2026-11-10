@@ -217,6 +217,33 @@ class StatsItemTest {
     }
 
     @Test
+    fun `plays with a guessed time count for the totals but not for days, bars or dates`() {
+        val events =
+            listOf(
+                play("A", startedAt = at(2026, 11, 9)).copy(estimated = true),
+                play("A", startedAt = at(2026, 11, 10)).copy(estimated = true),
+                play("A", startedAt = at(2026, 11, 11)),
+            )
+        val week = look(events, StatsCategory.SONGS, songKey(events[0]))!!
+        assertEquals(3, week.plays)
+        assertEquals(2, week.estimatedPlays)
+        assertEquals(1, week.daysPlayed)
+        assertEquals(1, week.buckets.sumOf { it.plays })
+        assertEquals(at(2026, 11, 11), week.firstPlayedMs)
+        assertEquals(3, week.allTimePlays)
+    }
+
+    @Test
+    fun `a week of imported plays has no bars`() {
+        val events = listOf(play("A", startedAt = at(2026, 11, 9)).copy(estimated = true))
+        val week = look(events, StatsCategory.SONGS, songKey(events[0]))!!
+        assertEquals(1, week.plays)
+        assertEquals(0, week.daysPlayed)
+        assertTrue(week.buckets.isEmpty())
+        assertNull(week.firstPlayedMs)
+    }
+
+    @Test
     fun `an artist lists its three most played songs of the period`() {
         val events =
             List(4) { play("Four") } +

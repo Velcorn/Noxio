@@ -25,6 +25,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -311,14 +312,21 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         viewLifecycleOwner.lifecycleScope.launch {
             val parsed =
                 withContext(Dispatchers.IO) {
-                    uris.map { readText(context, it)?.let(StatsCsvImport::parse) }
+                    uris.map { uri ->
+                        readText(context, uri)?.let {
+                            statsModel.parseCsv(it, displayName(context, uri))
+                        }
+                    }
                 }
             val files = parsed.filterNotNull()
             when {
                 files.isEmpty() || files.size != parsed.size ->
                     context.showToast(R.string.err_stats_import)
-                // A most-played list has no dates, so it can only count towards all time.
-                files.any { it is StatsCsvImport.Parsed.MostPlayed } -> confirmBaseline(files)
+                // A most-played list of a week or month is placed in that week. One without a week
+                // has no
+                // dates, so it can only count towards all time.
+                files.any { it is StatsCsvImport.Parsed.MostPlayed && it.period == null } ->
+                    confirmBaseline(files)
                 else -> finishImport(files)
             }
         }
@@ -347,6 +355,15 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 .show()
         }
     }
+
+    private fun displayName(context: Context, uri: Uri): String? =
+        try {
+            context.contentResolver
+                .query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+                ?.use { if (it.moveToFirst()) it.getString(0) else null }
+        } catch (e: RuntimeException) {
+            null
+        } ?: uri.lastPathSegment
 
     private fun readText(context: Context, uri: Uri): String? =
         try {

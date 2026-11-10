@@ -29,8 +29,9 @@ import java.time.format.DateTimeFormatter
  * The file has one row per play. It starts with the ten columns of Musicolet's "Most played songs"
  * export (`FILE_PATH`, `TITLE`, `ARTIST`, `ALBUM`, `ALBUM_ARTIST`, `COMPOSER`, `GENRE`, `YEAR`,
  * `DURATION_MS` and `PLAY_COUNT`, with `<unknown>` for what is not known), so Musicolet-style tools
- * can read it, and has two extra columns: `PLAYED_AT` (ISO 8601, empty for plays from before Noxio)
- * and `LISTENED_MS`. Nothing is lost, so it is the format for backups.
+ * can read it, and has three extra columns: `PLAYED_AT` (ISO 8601, empty for plays from before
+ * Noxio), `LISTENED_MS` and `ESTIMATED` (1 for plays made up from imported counts). Nothing is
+ * lost, so it is the format for backups.
  *
  * Several artists are joined with "; ". Files are UTF-8 and use RFC 4180 quoting.
  */
@@ -38,7 +39,7 @@ object StatsCsv {
     const val UNKNOWN = "<unknown>"
     const val MUSICOLET_HEADER =
         "FILE_PATH,TITLE,ARTIST,ALBUM,ALBUM_ARTIST,COMPOSER,GENRE,YEAR,DURATION_MS,PLAY_COUNT"
-    const val HISTORY_HEADER = "$MUSICOLET_HEADER,PLAYED_AT,LISTENED_MS"
+    const val HISTORY_HEADER = "$MUSICOLET_HEADER,PLAYED_AT,LISTENED_MS,ESTIMATED"
 
     fun writeHistory(
         events: List<PlayEvent>,
@@ -58,7 +59,12 @@ object StatsCsv {
                         Instant.ofEpochMilli(event.startedAt).atZone(zone).withNano(0)
                     )
                 }
-            writer.write(row(songColumns(event, plays = 1) + listOf(time, "${event.listenedMs}")))
+            writer.write(
+                row(
+                    songColumns(event, plays = 1) +
+                        listOf(time, "${event.listenedMs}", if (event.hasGuessedTime) "1" else "0")
+                )
+            )
         }
         writer.flush()
     }

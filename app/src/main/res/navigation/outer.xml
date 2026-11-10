@@ -37,8 +37,8 @@
             android:id="@+id/audio_peferences"
             app:destination="@id/audio_preferences_fragment" />
         <action
-            android:id="@+id/stats_preferences"
-            app:destination="@id/stats_preferences_fragment" />
+            android:id="@+id/backup_preferences"
+            app:destination="@id/backup_preferences_fragment" />
     </fragment>
 
     <fragment
@@ -72,9 +72,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/stats_preferences_fragment"
-        android:name="org.oxycblt.auxio.settings.categories.StatsPreferenceFragment"
-        android:label="stats_preferences_fragment" />
+        android:id="@+id/backup_preferences_fragment"
+        android:name="org.oxycblt.auxio.settings.categories.BackupPreferenceFragment"
+        android:label="backup_preferences_fragment" />
 
     <fragment
         android:id="@+id/audio_preferences_fragment"

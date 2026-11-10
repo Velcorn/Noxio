@@ -27,9 +27,9 @@
         app:title="@string/set_library" />
 
     <Preference
-        app:icon="@drawable/ic_time_24"
-        app:key="@string/set_key_stats_settings"
-        app:summary="@string/set_stats_summary"
-        app:title="@string/set_stats" />
+        app:icon="@drawable/ic_save_24"
+        app:key="@string/set_key_backup_settings"
+        app:summary="@string/set_backup_summary"
+        app:title="@string/set_backup" />
 
 </PreferenceScreen>

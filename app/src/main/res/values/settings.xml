@@ -4,7 +4,7 @@
     <string name="set_key_ui" translatable="false">auxio_ui</string>
     <string name="set_key_personalize" translatable="false">auxio_personalize</string>
     <string name="set_key_music" translatable="false">auxio_music</string>
-    <string name="set_key_stats_settings" translatable="false">noxio_stats_settings</string>
+    <string name="set_key_backup_settings" translatable="false">noxio_backup_settings</string>
     <string name="set_key_audio" translatable="false">auxio_audio</string>
 
     <string name="set_key_theme" translatable="false">KEY_THEME2</string>
@@ -42,9 +42,13 @@
     <string name="set_key_rewind_prev" translatable="false">KEY_PREV_REWIND</string>
     <string name="set_key_repeat_pause" translatable="false">KEY_LOOP_PAUSE</string>
     <string name="set_key_remember_pause" translatable="false">auxio_remember_pause</string>
-    <string name="set_key_stats_backup" translatable="false">noxio_stats_backup</string>
+    <string name="set_key_backup_frequency" translatable="false">noxio_backup_frequency</string>
+    <string name="set_key_backup_weekday" translatable="false">noxio_backup_weekday</string>
+    <string name="set_key_backup_day" translatable="false">noxio_backup_day</string>
+    <string name="set_key_backup_hour" translatable="false">noxio_backup_hour</string>
     <string name="set_key_stats_backup_folder" translatable="false">noxio_stats_backup_folder</string>
     <string name="set_key_stats_backup_now" translatable="false">noxio_stats_backup_now</string>
+    <string name="set_key_backup_restore" translatable="false">noxio_backup_restore</string>
     <string name="set_key_launcher_icon" translatable="false">noxio_launcher_icon</string>
     <string name="set_key_sleep_shake" translatable="false">noxio_sleep_shake</string>
     <string name="set_key_equalizer" translatable="false">noxio_equalizer</string>
@@ -69,7 +73,6 @@
     <string name="set_key_album_songs_sort" translatable="false">auxio_album_sort</string>
     <string name="set_key_artist_songs_sort" translatable="false">auxio_artist_sort</string>
     <string name="set_key_artist_albums_sort" translatable="false">noxio_artist_albums_sort</string>
-    <string name="set_key_stats_week_start" translatable="false">noxio_stats_week_start</string>
     <string name="set_key_genre_songs_sort" translatable="false">auxio_genre_sort</string>
 
     <string name="set_key_library_revision" translatable="false">auxio_library_revision</string>
@@ -104,18 +107,7 @@
         <item>@integer/launcher_icon_minimal</item>
     </integer-array>
 
-    <string-array name="entries_week_start">
-        <item>@string/set_week_start_monday</item>
-        <item>@string/set_week_start_sunday</item>
-        <item>@string/set_week_start_saturday</item>
-    </string-array>
-
     <!-- The values of Calendar.MONDAY, SUNDAY and SATURDAY. -->
-    <integer-array name="values_week_start">
-        <item>@integer/week_start_monday</item>
-        <item>@integer/week_start_sunday</item>
-        <item>@integer/week_start_saturday</item>
-    </integer-array>
 
     <string-array name="entries_cover_mode">
         <item>@string/set_cover_mode_off</item>
@@ -218,9 +210,162 @@
     <integer name="cover_mode_off">0xA11C</integer>
     <integer name="cover_mode_save_space">0xA125</integer>
     <integer name="cover_mode_balanced">0xA11D</integer>
-    <integer name="week_start_monday">2</integer>
-    <integer name="week_start_sunday">1</integer>
-    <integer name="week_start_saturday">7</integer>
     <integer name="cover_mode_high_quality">0xA11E</integer>
     <integer name="cover_mode_as_is">0xA126</integer>
+
+    <string-array name="entries_backup_frequency">
+        <item>@string/set_backup_off</item>
+        <item>@string/set_backup_daily</item>
+        <item>@string/set_backup_weekly</item>
+        <item>@string/set_backup_monthly</item>
+    </string-array>
+
+    <integer-array name="values_backup_frequency">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
+
+    <string-array name="entries_backup_weekday">
+        <item>@string/set_backup_monday</item>
+        <item>@string/set_backup_tuesday</item>
+        <item>@string/set_backup_wednesday</item>
+        <item>@string/set_backup_thursday</item>
+        <item>@string/set_backup_friday</item>
+        <item>@string/set_backup_saturday</item>
+        <item>@string/set_backup_sunday</item>
+    </string-array>
+
+    <integer-array name="values_backup_weekday">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </integer-array>
+
+    <string-array name="entries_backup_day" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+    </string-array>
+
+    <integer-array name="values_backup_day">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+    </integer-array>
+
+    <string-array name="entries_backup_hour" translatable="false">
+        <item>00:00</item>
+        <item>01:00</item>
+        <item>02:00</item>
+        <item>03:00</item>
+        <item>04:00</item>
+        <item>05:00</item>
+        <item>06:00</item>
+        <item>07:00</item>
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+        <item>22:00</item>
+        <item>23:00</item>
+    </string-array>
+
+    <integer-array name="values_backup_hour">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+    </integer-array>
 </resources>

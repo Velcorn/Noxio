@@ -83,6 +83,18 @@ object StatsImage {
     private const val FIRST_TILE_Y = 410f
     private const val TILE_HEIGHT = 136f
     private const val TILE_GAP = 20f
+    private const val FOOTER_GAP = 40f
+
+    /** The smallest the footer texts get before the start is cut off. */
+    const val MIN_FOOTER_SCALE = 0.7f
+
+    /**
+     * How much the two footer texts are scaled so that [width] of text fits into [available]: 1 if
+     * it fits, never less than [MIN_FOOTER_SCALE].
+     */
+    fun footerScale(width: Float, available: Float) =
+        if (width <= available) 1f else (available / width).coerceAtLeast(MIN_FOOTER_SCALE)
+
     private const val TILE_WIDTH = (CONTENT_WIDTH - TILE_GAP) / 2
     private const val SECTION_Y = 780f
     private const val ITEM_ROW_HEIGHT = 112f
@@ -241,15 +253,33 @@ object StatsImage {
             paint,
         )
         text.alpha = 255
+        val startSize = if (small) 36f else 44f
+        val endSize = 36f
+        // Both texts share the line. When they are too long together (longer languages), both get
+        // smaller, and the start is cut off if even that is not enough.
+        val available = WIDTH - 2 * MARGIN - 88f - FOOTER_GAP
         text.typeface = Typeface.DEFAULT_BOLD
-        text.textSize = if (small) 36f else 44f
-        text.textAlign = Paint.Align.LEFT
-        canvas.drawText(start, MARGIN + 44f, HEIGHT - 120f, text)
+        text.textSize = startSize
+        val startWidth = text.measureText(start)
         text.typeface = Typeface.DEFAULT
-        text.textSize = 36f
+        text.textSize = endSize
+        val endWidth = text.measureText(end)
+        val scale = footerScale(startWidth + endWidth, available)
+
+        text.typeface = Typeface.DEFAULT
+        text.textSize = endSize * scale
         text.textAlign = Paint.Align.RIGHT
         canvas.drawText(end, WIDTH - MARGIN - 44f, HEIGHT - 120f, text)
+        val endDrawn = text.measureText(end)
+        text.typeface = Typeface.DEFAULT_BOLD
+        text.textSize = startSize * scale
         text.textAlign = Paint.Align.LEFT
+        canvas.drawText(
+            ellipsize(start, text, available - endDrawn),
+            MARGIN + 44f,
+            HEIGHT - 120f,
+            text,
+        )
     }
 
     /** A bar chart in the lower half. Every bar is at least a thin line, so none is missing. */

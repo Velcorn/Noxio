@@ -67,10 +67,10 @@ class RootPreferenceFragment : BasePreferenceFragment(R.xml.preferences_root) {
                 findNavController()
                     .navigateSafe(RootPreferenceFragmentDirections.musicPreferences())
             }
-            getString(R.string.set_key_stats_settings) -> {
-                L.d("Navigating to stats preferences")
+            getString(R.string.set_key_backup_settings) -> {
+                L.d("Navigating to backup preferences")
                 findNavController()
-                    .navigateSafe(RootPreferenceFragmentDirections.statsPreferences())
+                    .navigateSafe(RootPreferenceFragmentDirections.backupPreferences())
             }
             else -> return super.onPreferenceTreeClick(preference)
         }

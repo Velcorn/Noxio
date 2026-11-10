@@ -115,7 +115,20 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
         return StatsItemImageContent(
             category = stats.category,
             name = stats.name,
-            lines = listOfNotNull(stats.subtitle?.ifEmpty { null }, rankLine),
+            lines =
+                listOfNotNull(
+                    stats.subtitle?.ifEmpty { null },
+                    rankLine,
+                    if (stats.estimatedPlays > 0) {
+                        resources.getQuantityString(
+                            R.plurals.fmt_stats_item_estimated,
+                            stats.estimatedPlays,
+                            stats.estimatedPlays,
+                        )
+                    } else {
+                        null
+                    },
+                ),
             tiles =
                 listOf(
                     StatsItemImageContent.Tile(
@@ -131,7 +144,9 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
                         getString(R.string.lbl_stats_item_share),
                     ),
                     StatsItemImageContent.Tile(
-                        stats.daysPlayed.toString(),
+                        // Imported plays have no real day.
+                        if (stats.daysPlayed == 0 && stats.estimatedPlays > 0) "–"
+                        else stats.daysPlayed.toString(),
                         getString(R.string.lbl_stats_item_days),
                     ),
                 ),

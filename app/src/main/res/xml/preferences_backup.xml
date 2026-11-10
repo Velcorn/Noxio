@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:title="@string/set_backup">
+
+    <org.oxycblt.auxio.settings.ui.IntListPreference
+        app:defaultValue="0"
+        app:entries="@array/entries_backup_frequency"
+        app:entryValues="@array/values_backup_frequency"
+        app:key="@string/set_key_backup_frequency"
+        app:title="@string/set_backup_frequency" />
+
+    <org.oxycblt.auxio.settings.ui.IntListPreference
+        app:defaultValue="1"
+        app:entries="@array/entries_backup_weekday"
+        app:entryValues="@array/values_backup_weekday"
+        app:key="@string/set_key_backup_weekday"
+        app:title="@string/set_backup_weekday" />
+
+    <org.oxycblt.auxio.settings.ui.IntListPreference
+        app:defaultValue="1"
+        app:entries="@array/entries_backup_day"
+        app:entryValues="@array/values_backup_day"
+        app:key="@string/set_key_backup_day"
+        app:title="@string/set_backup_day" />
+
+    <org.oxycblt.auxio.settings.ui.IntListPreference
+        app:defaultValue="3"
+        app:entries="@array/entries_backup_hour"
+        app:entryValues="@array/values_backup_hour"
+        app:key="@string/set_key_backup_hour"
+        app:title="@string/set_backup_time" />
+
+    <Preference
+        app:key="@string/set_key_stats_backup_folder"
+        app:title="@string/set_stats_backup_folder" />
+
+    <Preference
+        app:key="@string/set_key_stats_backup_now"
+        app:title="@string/set_stats_backup_now" />
+
+    <Preference
+        app:key="@string/set_key_backup_restore"
+        app:summary="@string/set_backup_restore_desc"
+        app:title="@string/set_backup_restore" />
+
+</PreferenceScreen>

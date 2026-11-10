@@ -5,7 +5,7 @@
 #
 # Left out on purpose, as they only wire views together and have nothing a JVM test can check:
 #   screens and dialogs (stats/StatsFragment, stats/StatsShareDialog, stats/StatsItemDialog, playback/timer/SleepTimerDialog,
-#   settings/categories/StatsPreferenceFragment, detail/sort/ArtistAlbumSortDialog) and the dependency
+#   settings/categories/BackupPreferenceFragment, detail/sort/ArtistAlbumSortDialog) and the dependency
 #   injection module (stats/StatsModule). They still need a look on a device.
 #
 # Code that came with Auxio is not listed and only counts in the all-code report.
@@ -17,14 +17,17 @@ playback/timer/SleepTimerMath.kt
 stats/PlayRecorder.kt
 stats/PlayTracker.kt
 stats/SafeDocumentWriter.kt
-stats/StatsBackup.kt
+stats/StatsBackupWorker.kt
+backup/AppBackup.kt
+backup/BackupArchive.kt
+backup/BackupPolicy.kt
+backup/BackupSchedule.kt
 stats/StatsCsv.kt
 stats/StatsCsvImport.kt
 stats/StatsDatabase.kt
 stats/StatsFormat.kt
 stats/StatsImage.kt
 stats/StatsRepository.kt
-stats/StatsSettings.kt
 stats/StatsViewModel.kt
 ui/BlackSurface.kt
 ui/BottomBarInsets.kt

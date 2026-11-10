@@ -76,7 +76,7 @@ class StatsViewModelTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val repository = FakeRepository()
-    private val model = StatsViewModel(repository, StatsSettings(context), context)
+    private val model = StatsViewModel(repository, context)
 
     @Test
     fun itStartsOnThisWeekWithTheArtists() {

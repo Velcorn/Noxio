@@ -47,6 +47,10 @@ class StatsRepositoryExportTest {
             events.removeAll { it.startedAt == PlayEvent.BASELINE_TIME }
         }
 
+        override suspend fun deleteEstimatedBetween(fromMs: Long, toMs: Long) {
+            events.removeAll { it.estimated && it.startedAt in fromMs until toMs }
+        }
+
         override suspend fun between(fromMs: Long, toMs: Long) = events.filter {
             it.startedAt in fromMs until toMs
         }

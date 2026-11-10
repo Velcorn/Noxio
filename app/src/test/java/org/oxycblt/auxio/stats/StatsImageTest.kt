@@ -102,4 +102,16 @@ class StatsImageTest {
         assertEquals(StatsCategory.entries.size, colors.toSet().size)
         colors.forEach { (start, end) -> assertNotEquals(start, end) }
     }
+
+    @Test
+    fun footerTextsThatFitKeepTheirSize() {
+        assertEquals(1f, StatsImage.footerScale(500f, 800f))
+        assertEquals(1f, StatsImage.footerScale(800f, 800f))
+    }
+
+    @Test
+    fun footerTextsThatAreTooLongTogetherGetSmallerButNotTiny() {
+        assertEquals(0.8f, StatsImage.footerScale(1000f, 800f), 0.001f)
+        assertEquals(StatsImage.MIN_FOOTER_SCALE, StatsImage.footerScale(4000f, 800f))
+    }
 }

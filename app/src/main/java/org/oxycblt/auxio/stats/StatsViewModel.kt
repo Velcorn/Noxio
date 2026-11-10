@@ -61,7 +61,6 @@ class StatsViewModel
 @Inject
 constructor(
     private val repository: StatsRepository,
-    private val settings: StatsSettings,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
     /** Which period is shown. [offset] 0 is the current one, -1 the one before it. */
@@ -100,8 +99,7 @@ constructor(
     val ui: StateFlow<Ui?> =
         combine(mutableQuery, refresh) { query, _ -> query }
             .mapLatest {
-                val range =
-                    statsRange(it.period, it.offset, firstDayOfWeek = settings.firstDayOfWeek)
+                val range = statsRange(it.period, it.offset)
                 Ui(it, range, repository.summary(range, context.getString(R.string.def_artist)))
             }
             .flowOn(Dispatchers.IO)
@@ -164,6 +162,9 @@ constructor(
         details = Details(rank, ui.query, ui.range, stats)
         return true
     }
+
+    /** Read an imported stats file. [fileName] tells which week a Musicolet export is for. */
+    fun parseCsv(text: String, fileName: String?) = StatsCsvImport.parse(text, fileName)
 
     /** Write the full play history as CSV. Must be called off the main thread. */
     suspend fun exportCsv(out: OutputStream) = repository.exportCsv(out)

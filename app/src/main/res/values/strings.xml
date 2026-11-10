@@ -144,7 +144,11 @@
     <string name="lbl_stats_import">Import CSV</string>
     <string name="lbl_stats_all">All time</string>
     <string name="lbl_stats_import_baseline">Import as your history before Noxio?</string>
-    <string name="lbl_stats_import_baseline_desc">Play counts without dates are added to All time only, not to any week, month or year. They replace the ones of an earlier import. Several files are added together.</string>
+    <string name="lbl_stats_import_baseline_desc">Play counts without a week or month in the file name are added to All time only, not to any week, month or year. They replace the ones of an earlier import. Several files are added together.</string>
+    <plurals name="fmt_stats_item_estimated">
+        <item quantity="one">Includes %d imported play with an estimated time</item>
+        <item quantity="other">Includes %d imported plays with estimated times</item>
+    </plurals>
     <plurals name="fmt_stats_imported">
         <item quantity="one">Imported %d play</item>
         <item quantity="other">Imported %d plays</item>
@@ -152,21 +156,48 @@
     <string name="err_stats_import">This is not a stats file Noxio can read</string>
     <string name="lbl_stats_exported">Exported</string>
     <string name="err_stats_export">Could not write the file</string>
-    <string name="set_stats">Listening stats</string>
-    <string name="set_stats_summary">Week start and automatic backup</string>
-    <string name="set_week_start">Week starts on</string>
-    <string name="set_week_start_monday">Monday</string>
-    <string name="set_week_start_sunday">Sunday</string>
-    <string name="set_week_start_saturday">Saturday</string>
-    <string name="set_stats_backup">Weekly CSV backup</string>
-    <string name="set_stats_backup_desc">Keeps a CSV copy of your listening history up to date in a folder you choose. The same file, noxio-stats.csv, is replaced each time</string>
+    <string name="set_backup">Backup</string>
+    <string name="set_backup_summary">Settings, listening history and playlists</string>
+    <string name="set_backup_frequency">Automatic backup</string>
+    <string name="set_backup_frequency_desc">Saves your settings, listening history and playlists in a folder you choose. Every backup is its own file, noxio_YYYY-MM-DD.zip, and the last 5 are kept</string>
+    <string name="set_backup_off">Off</string>
+    <string name="set_backup_daily">Every day</string>
+    <string name="set_backup_weekly">Every week</string>
+    <string name="set_backup_monthly">Every month</string>
+    <string name="set_backup_weekday">Day of the week</string>
+    <string name="set_backup_day">Day of the month</string>
+    <string name="set_backup_day_plain">Day %s</string>
+    <string name="set_backup_day_desc">Day %s. A shorter month has it on its last day</string>
+    <string name="set_backup_time">Time</string>
+    <string name="set_backup_monday">Monday</string>
+    <string name="set_backup_tuesday">Tuesday</string>
+    <string name="set_backup_wednesday">Wednesday</string>
+    <string name="set_backup_thursday">Thursday</string>
+    <string name="set_backup_friday">Friday</string>
+    <string name="set_backup_saturday">Saturday</string>
+    <string name="set_backup_sunday">Sunday</string>
+    <string name="fmt_backup_next">Next backup: %s</string>
     <string name="set_stats_backup_now">Back up now</string>
-    <string name="set_stats_backup_now_desc">Replaces noxio-stats.csv in the backup folder with the current history</string>
-    <string name="lng_stats_backup_done">Backup saved to noxio-stats.csv</string>
+    <string name="set_stats_backup_now_desc">Saves a backup file in the backup folder now</string>
+    <string name="lng_stats_backup_done">Backup saved to %s</string>
     <string name="err_stats_backup">Could not write the backup. Choose the folder again</string>
     <string name="set_stats_backup_folder">Backup folder</string>
     <string name="lbl_stats_backup_no_folder">No folder chosen</string>
     <string name="fmt_stats_backup_last">Last backup: %s</string>
+    <string name="lbl_stats_backup_skipped">The last automatic backup was skipped: it would have held much less than the one before</string>
+    <string name="lbl_backup_small_title">This backup holds much less</string>
+    <string name="fmt_backup_small_desc">Plays now: %1$d, playlists: %2$d. The last good backup had plays: %3$d, playlists: %4$d. Save it anyway? It gets the ending _small and the older backups stay as they are.</string>
+    <string name="lbl_backup_small_ok">Save anyway</string>
+    <string name="set_backup_restore">Restore from backup</string>
+    <string name="set_backup_restore_desc">Puts the settings, plays and playlists of a backup file back</string>
+    <string name="lbl_backup_restore_title">Restore this backup?</string>
+    <string name="fmt_backup_restore_desc">Made on %1$s with Noxio %2$s. It holds plays: %3$d, playlists: %4$d, settings: %5$d.\n\nThe settings are replaced. Plays and playlists are added to what is there, nothing is deleted.</string>
+    <string name="lbl_backup_restore_ok">Restore</string>
+    <string name="fmt_backup_restored">Restored plays: %1$d, playlists: %2$d, settings: %3$d</string>
+    <string name="fmt_backup_missing_songs">Songs of the playlists that are not in your library: %d</string>
+    <string name="lng_backup_no_library">Playlists were not restored because the library is not loaded yet. Restore again once it is</string>
+    <string name="err_backup_unreadable">This is not a backup of Noxio</string>
+    <string name="err_backup_newer">This backup was made by a newer version of Noxio. Update the app first</string>
     <string name="lbl_stats_empty">Nothing played in this period yet. A song counts after 30 seconds of listening.</string>
     <string name="lbl_stats_under_minute">&lt;1 min</string>
     <string name="fmt_stats_row">%1$s\n%2$s</string>
@@ -181,9 +212,10 @@
     <string name="lbl_stats_item_share">Of all listening</string>
     <string name="lbl_stats_item_days">Days listened</string>
     <string name="lbl_stats_item_over_time">Plays over time</string>
-    <string name="fmt_stats_item_artist">#%1$d artist · %2$s</string>
-    <string name="fmt_stats_item_album">#%1$d album · %2$s</string>
-    <string name="fmt_stats_item_song">#%1$d song · %2$s</string>
+    <!-- The number is a place in the ranking ("#1 artist"), not a count, so it needs no plural. -->
+    <string name="fmt_stats_item_artist" tools:ignore="PluralsCandidate">#%1$d artist · %2$s</string>
+    <string name="fmt_stats_item_album" tools:ignore="PluralsCandidate">#%1$d album · %2$s</string>
+    <string name="fmt_stats_item_song" tools:ignore="PluralsCandidate">#%1$d song · %2$s</string>
     <string name="fmt_stats_item_first">First play %s</string>
     <string name="fmt_stats_item_last">Last play %s</string>
     <string name="fmt_stats_item_total">%s in total</string>

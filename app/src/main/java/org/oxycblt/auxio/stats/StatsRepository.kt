@@ -248,8 +248,21 @@ class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : S
                             dated += event
                         }
                     }
-                is StatsCsvImport.Parsed.MostPlayed ->
-                    baseline += StatsCsvImport.baselineEvents(file.rows)
+                is StatsCsvImport.Parsed.MostPlayed -> {
+                    val period = file.period
+                    if (period == null) {
+                        baseline += StatsCsvImport.baselineEvents(file.rows)
+                    } else if (
+                        period.isMonth &&
+                            dao.between(period.startMs, period.endMs).any { it.estimated }
+                    ) {
+                        // Weekly lists say more than a monthly one, they are not overwritten.
+                    } else {
+                        // A week or month imported again replaces the first import of it.
+                        dao.deleteEstimatedBetween(period.startMs, period.endMs)
+                        dated += StatsCsvImport.spreadEvents(file.rows, period)
+                    }
+                }
             }
         }
         if (baseline.isNotEmpty()) {
