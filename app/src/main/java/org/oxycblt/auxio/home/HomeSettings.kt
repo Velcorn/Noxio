@@ -70,6 +70,7 @@ class HomeSettingsImpl @Inject constructor(@ApplicationContext context: Context)
         get() = sharedPreferences.getBoolean(getString(R.string.set_key_hide_collaborators), false)
 
     override fun migrate() {
+        resetOldDefaultTabs()
         if (sharedPreferences.contains(OLD_KEY_LIB_TABS)) {
             L.d("Migrating tab setting")
             val oldTabs =
@@ -85,6 +86,33 @@ class HomeSettingsImpl @Inject constructor(@ApplicationContext context: Context)
                 putInt(getString(R.string.set_key_home_tabs), Tab.toIntCode(oldTabs))
                 remove(OLD_KEY_LIB_TABS)
             }
+        }
+    }
+
+    /**
+     * Noxio's default order is Artists, Albums, Songs, Playlists. An order saved before that, which
+     * is still Auxio's default (Songs, Albums, Artists, Playlists, with or without a Genres tab),
+     * is replaced once; an order that was set by hand is kept.
+     */
+    private fun resetOldDefaultTabs() {
+        val resetKey = getString(R.string.set_key_home_tabs_reset)
+        if (sharedPreferences.getBoolean(resetKey, false)) return
+        val tabsKey = getString(R.string.set_key_home_tabs)
+        sharedPreferences.edit {
+            if (sharedPreferences.contains(tabsKey)) {
+                val saved = Tab.fromIntCode(sharedPreferences.getInt(tabsKey, Tab.SEQUENCE_DEFAULT))
+                val auxioDefault =
+                    listOf(
+                        Tab.Visible(MusicType.SONGS),
+                        Tab.Visible(MusicType.ALBUMS),
+                        Tab.Visible(MusicType.ARTISTS),
+                        Tab.Visible(MusicType.PLAYLISTS),
+                    )
+                if (saved?.toList() == auxioDefault) {
+                    remove(tabsKey)
+                }
+            }
+            putBoolean(resetKey, true)
         }
     }
 
