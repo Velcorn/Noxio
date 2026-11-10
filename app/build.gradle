@@ -20,7 +20,8 @@ android {
         // to keep merging upstream changes painless.
         applicationId "de.devfin.noxio"
         // CI passes -PbuildNumber=<run number> so each tagged build can update the previous one
-        versionName "1.0.0-dev"
+        // CI passes -PversionName=<tag without the v> so a release shows its own version.
+        versionName((project.findProperty("versionName") ?: "1.0.0-dev").toString())
         versionCode((project.findProperty("buildNumber") ?: "1").toString().toInteger())
 
         minSdk min_sdk
