@@ -1,24 +1,22 @@
-Auxio ist ein lokaler Musik-Player mit einer schnellen, verlässlichen UI/UX, aber ohne die vielen unnötigen Funktionen, die andere Player haben. Auxio basiert auf modernen Wiedergabebibliotheken und besitzt daher eine erstklassige Musikbibliothek-Unterstützung sowie Wiedergabequalität verglichen mit anderen Playern, die veraltete Android-Funktionen nutzen. Kurz gesagt, <b>Auxio spielt Musik</b>.
+Noxio ist ein lokaler Musikplayer für Android, gemacht zum Hören durch die Nacht. Es ist ein Fork von Auxio, behält dessen schnelle, zuverlässige Wiedergabe und ergänzt, was ein Player zum Einschlafen braucht, alles mit einer Hand erreichbar.
 
-<b>Funktionen</b>
+<b>Was Noxio ergänzt</b>
 
-- auf Media3 ExoPlayer basierende Wiedergabe
-- elegante, am Material Design orientierte UI
-- Überzeugende UX, die eine einfache Bedienung über Grenzfälle stellt
-- Anpassbares Verhalten
-- Unterstützung für CD-Nummer, mehrere Künstler, Releasetypen, präzises/originales Datum, Tags-Sortierung und Release-Typ werden unterstützt (Experimentell)
-- erweitertes Künstlersystem, das Künstler und Albumkünstler unterstützt
-- untersützt SD-Karten
-- verlässliche Wiedergabelisten-Verwaltung
-- Speichern des Wiedergabezustands
-- Unterstützung für Android Auto
-- automatische lückenlose Wiedergabe
-- Vollständiger ReplayGain-Support (für MP3-, FLAC-, OGG-, OPUS- und MP4-Dateien)
-- Externer Equalizerunterstützung (z.B. Wavelet)
-- Edge-to-Edge
-- Unterstützung für eingebettete Cover
-- Suche
-- Autoplay bei Kopfhörern
-- Stylische Widgets, die ihre Größe anpassen
-- vollständig privat und offline
-- keine abgerundeten Album-Cover (wenn du willst)
+- Sleep-Timer: Play/Pause gedrückt halten, 30 Min., 60 Min. oder eine eigene Zeit wählen, letztes Lied zu Ende spielen, ausblenden, durch Schütteln neu starten. Der Countdown steht im Play-Knopf und in einer ruhigen Benachrichtigung mit +10 Min. und Stopp
+- Hörstatistik: Top-Künstler, -Alben und -Lieder pro Woche, Monat, Jahr oder gesamt, ein genauerer Blick auf jeden Eintrag und bunte Karten zum Teilen oder Speichern als Bild
+- Wiedergaben aus Musicolet importieren, auch Wochen- und Monatslisten
+- Backup von Einstellungen, Hörverlauf und Wiedergabelisten nach einem Zeitplan deiner Wahl, mit Schutz davor, dass ein leeres Backup ein gutes ersetzt, und Wiederherstellen
+- Einhändige Bedienung: Suche, Sortierung und Tabs unten, ein schwebender Zufallsknopf und Gesten statt Zurück-Knöpfen
+- Warteschlange mit Suche und Sortierung
+- Reines Schwarz, eine wellige Fortschrittsleiste, die sich ausschalten lässt, und ein minimales weißes Icon
+- Kurze Einstellungen auf vier Seiten
+
+<b>Von Auxio</b>
+
+- Wiedergabe mit Media3 ExoPlayer, lückenlos, mit voller ReplayGain-Unterstützung
+- Unterstützung für Disc-Nummern, mehrere Künstler, Veröffentlichungstypen, genaue Daten, Sortier-Tags und mehr
+- Zuverlässige Wiedergabelisten, gespeicherter Wiedergabezustand, Android Auto, Widgets
+- Unterstützung externer Equalizer
+- Vollständig privat und offline
+
+Noxio liest deine Musik und ihre Tags nur und ändert sie nie. Es ist ein privates Projekt und gehört nicht zum Auxio-Projekt.

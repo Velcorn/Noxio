@@ -1,24 +1,22 @@
-Auxio is a local music player with a fast, reliable UI/UX without the many useless features present in other music players. Built off of modern media playback libraries, Auxio has superior library support and listening quality compared to other apps that use outdated Android functionality. In short, <b>It plays music.</b>
+Noxio is a local music player for Android, built for listening through the night. It is a fork of Auxio and keeps its fast, reliable playback, and adds what a player you fall asleep to needs, with everything in reach of one hand.
 
-<b>Features</b>
+<b>What Noxio adds</b>
 
-- Playback based on Media3 ExoPlayer
-- Snappy UI derived from the latest Material Design guidelines
-- Opinionated UX that prioritizes ease of use over edge cases
-- Customizable behavior
-- Support for disc numbers, multiple artists, release types, precise/original dates, sort tags, and more
-- Advanced artist system that unifies artists and album artists
-- SD Card-aware folder management
-- Reliable playlisting functionality
-- Playback state persistence
-- Android Auto support
-- Automatic gapless playback
-- Full ReplayGain support (On MP3, FLAC, OGG, OPUS, and MP4 files)
-- External equalizer support (ex. Wavelet)
-- Edge-to-edge
-- Embedded covers support
-- Search functionality
-- Headset autoplay
-- Stylish widgets that automatically adapt to their size
+- Sleep timer: hold play/pause, pick 30 min, 60 min or your own time, finish the last song, fade out, shake the phone to restart it. The countdown shows in the play button and in a quiet notification with +10 min and Stop
+- Listening stats: top artists, albums and songs per week, month, year or all time, a closer look at each one, and colorful cards to share or save as an image
+- Import your play counts from Musicolet, weekly and monthly lists included
+- Backup of settings, listening history and playlists on a schedule you pick, with a safeguard against an empty backup replacing a good one, and restore
+- One-handed layout: search, sort and tabs at the bottom, a floating shuffle button, and gestures instead of back buttons
+- Queue with search and sort
+- Pure black theme, a wavy seek bar you can turn off, and a minimal white outline icon
+- Short settings in four screens
+
+<b>From Auxio</b>
+
+- Playback based on Media3 ExoPlayer, gapless, with full ReplayGain support
+- Support for disc numbers, multiple artists, release types, precise dates, sort tags and more
+- Reliable playlists, playback state persistence, Android Auto, widgets
+- External equalizer support
 - Completely private and offline
-- No rounded album covers (if you want them)
+
+Noxio only reads your music and its tags and never edits them. It is a personal project, not affiliated with the Auxio project.

@@ -17,8 +17,8 @@
 >
 > The fork started for the **sleep timer**. It has grown since: a one-handed UI with search, sort and the shuffle
 > button at the bottom and gestures instead of back buttons, **listening stats** with sharing and backup, and a
-> switchable minimal icon. Noxio only reads your music and its tags and never edits them. Releases are
-> pre-releases, and it is shared as is, with no promise of support or stability.
+> switchable minimal icon. Noxio only reads your music and its tags and never edits them. It is shared as is,
+> with no promise of support or stability.
 
 ## About
 
@@ -67,7 +67,7 @@ What differs from Auxio, in the black theme on a Pixel 9 sized emulator with a m
 
 <table>
 <tr><td align="center" width="20%"><img src="docs/screenshots/01-home.png" width="160" alt="Home: search, sort and tabs at the bottom"><br><sub>Home: search, sort and tabs at the bottom</sub></td><td align="center" width="20%"><img src="docs/screenshots/02-player.png" width="160" alt="Now playing"><br><sub>Now playing</sub></td><td align="center" width="20%"><img src="docs/screenshots/03-queue.png" width="160" alt="Queue with search and sort"><br><sub>Queue with search and sort</sub></td><td align="center" width="20%"><img src="docs/screenshots/04-album.png" width="160" alt="Album page, no back bar"><br><sub>Album page, no back bar</sub></td><td align="center" width="20%"><img src="docs/screenshots/05-stats.png" width="160" alt="Listening stats"><br><sub>Listening stats</sub></td></tr>
-<tr><td align="center" width="20%"><img src="docs/screenshots/06-stats-item.png" width="160" alt="A closer look at an artist"><br><sub>A closer look at an artist</sub></td><td align="center" width="20%"><img src="docs/screenshots/07-share-card.png" width="160" alt="Share card of the overview"><br><sub>Share card of the overview</sub></td><td align="center" width="20%"><img src="docs/screenshots/08-sleep-timer.png" width="160" alt="Sleep timer"><br><sub>Sleep timer</sub></td><td align="center" width="20%"><img src="docs/screenshots/09-app-icon.png" width="160" alt="Minimal app icon"><br><sub>Minimal app icon</sub></td><td align="center" width="20%"><img src="docs/screenshots/10-search.png" width="160" alt="Search, chips above the keyboard"><br><sub>Search, chips above the keyboard</sub></td></tr>
+<tr><td align="center" width="20%"><img src="docs/screenshots/06-stats-item.png" width="160" alt="A closer look at an artist, with imported plays"><br><sub>A closer look at an artist, with imported plays</sub></td><td align="center" width="20%"><img src="docs/screenshots/07-share-card.png" width="160" alt="Share card of the overview"><br><sub>Share card of the overview</sub></td><td align="center" width="20%"><img src="docs/screenshots/08-sleep-timer.png" width="160" alt="Sleep timer"><br><sub>Sleep timer</sub></td><td align="center" width="20%"><img src="docs/screenshots/09-backup.png" width="160" alt="Backup on a schedule"><br><sub>Backup on a schedule</sub></td><td align="center" width="20%"><img src="docs/screenshots/10-search.png" width="160" alt="Search, chips above the keyboard"><br><sub>Search, chips above the keyboard</sub></td></tr>
 </table>
 
 ## Minimal icon
