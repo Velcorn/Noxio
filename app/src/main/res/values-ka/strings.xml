@@ -84,7 +84,6 @@
     <string name="set_theme_day">ღია</string>
     <string name="set_theme_night">მუქი</string>
     <string name="set_black_mode">შავი თემა</string>
-    <string name="set_play_song_from_all">ყველა სიმღერის დაკვრა</string>
     <string name="lng_playlist_deleted">დასაკრავი სია წაშლილია</string>
     <string name="lng_playlist_exported">დასაკრავი სია ექსპორტირებულია</string>
     <string name="lng_playlist_created">დასაკრავი სია შექმნილია</string>

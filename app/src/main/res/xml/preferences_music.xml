@@ -36,12 +36,6 @@
             app:title="@string/set_separators" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/set_key_auto_sort_names"
-            app:summary="@string/set_intelligent_sorting_desc"
-            app:title="@string/set_intelligent_sorting" />
-
-        <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="@string/set_key_hide_collaborators"
             app:summary="@string/set_hide_collaborators_desc"

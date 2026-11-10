@@ -2,7 +2,6 @@
 <resources>
     <!-- Note: The old way of naming keys was to prefix them with KEY_. Now it's to prefix them with auxio_. -->
     <string name="set_key_ui" translatable="false">auxio_ui</string>
-    <string name="set_key_personalize" translatable="false">auxio_personalize</string>
     <string name="set_key_music" translatable="false">auxio_music</string>
     <string name="set_key_backup_settings" translatable="false">noxio_backup_settings</string>
     <string name="set_key_audio" translatable="false">auxio_audio</string>
@@ -124,39 +123,9 @@
         <item>@integer/cover_mode_as_is</item>
     </integer-array>
 
-    <string-array name="entries_play_in_list_with">
-        <item>@string/set_play_song_from_all</item>
-        <item>@string/set_play_song_from_album</item>
-        <item>@string/set_play_song_from_artist</item>
-        <item>@string/set_play_song_from_genre</item>
-        <item>@string/set_play_song_by_itself</item>
-    </string-array>
 
-    <integer-array name="values_play_in_list_with">
-        <item>@integer/play_song_from_all</item>
-        <item>@integer/play_song_from_album</item>
-        <item>@integer/play_song_from_artist</item>
-        <item>@integer/play_song_from_genre</item>
-        <item>@integer/play_song_by_itself</item>
-    </integer-array>
 
-    <string-array name="entries_play_in_parent_with">
-        <item>@string/set_play_song_none</item>
-        <item>@string/set_play_song_from_all</item>
-        <item>@string/set_play_song_from_album</item>
-        <item>@string/set_play_song_from_artist</item>
-        <item>@string/set_play_song_from_genre</item>
-        <item>@string/set_play_song_by_itself</item>
-    </string-array>
 
-    <integer-array name="values_play_in_parent_with">
-        <item>@integer/play_song_none</item>
-        <item>@integer/play_song_from_all</item>
-        <item>@integer/play_song_from_album</item>
-        <item>@integer/play_song_from_artist</item>
-        <item>@integer/play_song_from_genre</item>
-        <item>@integer/play_song_by_itself</item>
-    </integer-array>
 
     <string-array name="entries_replay_gain">
         <item>@string/set_replay_gain_mode_off</item>
@@ -176,12 +145,6 @@
     <integer name="theme_light">1</integer>
     <integer name="theme_dark">2</integer>
 
-    <integer name="play_song_none">-2147483648</integer>
-    <integer name="play_song_from_all">0xA11F</integer>
-    <integer name="play_song_from_album">0xA120</integer>
-    <integer name="play_song_from_artist">0xA121</integer>
-    <integer name="play_song_from_genre">0xA122</integer>
-    <integer name="play_song_by_itself">0xA124</integer>
 
     <integer name="replay_gain_off">0xA110</integer>
     <integer name="replay_gain_track">0xA111</integer>

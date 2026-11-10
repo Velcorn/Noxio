@@ -229,6 +229,11 @@
     <string name="lbl_sort_random">Random</string>
     <string name="lbl_sleep_finish_song">Finish last song</string>
     <string name="lbl_sleep_fade">Fade out before stopping</string>
+    <string name="lbl_sleep_shake">Shake to restart the timer</string>
+    <string name="lbl_sleep_notification_channel">Sleep timer</string>
+    <string name="fmt_sleep_notification_until">Playback stops at %s</string>
+    <string name="lbl_sleep_notification_end_of_track">Playback stops after this song</string>
+    <string name="fmt_sleep_notification_extend">+%d min</string>
     <string name="lbl_sleep_start">Start</string>
     <string name="lbl_sleep_restart">Restart</string>
     <string name="lbl_sleep_stop">Stop timer</string>
@@ -348,7 +353,7 @@
     <string name="set_root_title">Settings</string>
 
     <string name="set_ui">Appearance</string>
-    <string name="set_ui_desc">Theme, colors, app icon and covers</string>
+    <string name="set_ui_desc">Theme, colors, tabs, app icon and covers</string>
     <string name="set_theme">Theme</string>
     <string name="set_theme_auto">Automatic</string>
     <string name="set_theme_day">Light</string>
@@ -361,9 +366,6 @@
     <string name="set_wavy_seek_bar">Wavy seek bar</string>
     <string name="set_wavy_seek_bar_desc">Let the seek bar of the player wave while playing. Turn it off for less motion</string>
 
-    <string name="set_personalize">Home and player</string>
-    <string name="set_personalize_desc">Library tabs</string>
-    <string name="set_display">Display</string>
     <string name="set_lib_tabs">Library tabs</string>
     <string name="set_lib_tabs_desc">Change visibility and order of library tabs</string>
     <!-- Skip to next (song) -->
@@ -371,19 +373,8 @@
     <string name="set_launcher_icon">App icon</string>
     <string name="set_launcher_icon_default">Default</string>
     <string name="set_launcher_icon_minimal">Minimal, white without a background</string>
-    <string name="set_behavior">Behavior</string>
-    <string name="set_play_in_list_with">When playing from the library</string>
-    <string name="set_play_in_parent_with">When playing from item details</string>
-    <string name="set_play_song_none">Play from shown item</string>
-    <string name="set_play_song_from_all">Play from all songs</string>
-    <string name="set_play_song_from_album">Play from album</string>
-    <string name="set_play_song_from_artist">Play from artist</string>
-    <string name="set_play_song_from_genre">Play from genre</string>
-    <string name="set_play_song_by_itself">Play song by itself</string>
     <string name="set_keep_shuffle">Remember shuffle</string>
     <string name="set_keep_shuffle_desc">Keep shuffle on when playing a new song</string>
-    <string name="set_task_exit">Always exit on close</string>
-    <string name="set_task_exit_desc">Stop playback when removed from recents, even if playing</string>
 
     <string name="set_content">Content</string>
     <string name="set_content_desc">Music sources, scanning and tags</string>
@@ -404,8 +395,6 @@
     <string name="set_separators_plus">Plus (+)</string>
     <string name="set_separators_and">Ampersand (&amp;)</string>
     <string name="set_separators_warning">Warning: Using this setting may result in some tags being incorrectly interpreted as having multiple values. You can resolve this by prefixing unwanted separator characters with a backslash (\\).</string>
-    <string name="set_intelligent_sorting">Intelligent sorting</string>
-    <string name="set_intelligent_sorting_desc">Correctly sort names that begin with numbers or words like \"the\" (works best with english-language music)</string>
     <string name="set_hide_collaborators">Hide collaborators</string>
     <string name="set_hide_collaborators_desc">Only show artists that are directly credited on an album (works best on well-tagged libraries)</string>
     <string name="set_images">Images</string>
@@ -419,19 +408,10 @@
     <string name="set_square_covers_desc">Crop all album covers to a 1:1 aspect ratio</string>
 
     <string name="set_audio">Playback</string>
-    <string name="set_audio_desc">Starting, skipping, equalizer and ReplayGain</string>
-    <string name="set_playback">Playback</string>
-    <string name="set_headset_autoplay">Headset autoplay</string>
-    <string name="set_headset_autoplay_desc">Always start playing when a headset is connected (may not work on all devices)</string>
+    <string name="set_audio_desc">Shuffle, skipping, equalizer and ReplayGain</string>
     <string name="set_rewind_prev">Rewind before skipping back</string>
     <string name="set_rewind_prev_desc">Rewind before skipping to the previous song</string>
-    <string name="set_repeat_pause">Pause on repeat</string>
-    <string name="set_repeat_pause_desc">Pause when a song repeats</string>
-    <string name="set_remember_pause">Remember pause</string>
-    <string name="set_sleep_shake">Shake to reset sleep timer</string>
-    <string name="set_sleep_shake_desc">Shake the device to restart a running sleep timer, also while it fades out</string>
     <string name="set_equalizer_desc">Open the system equalizer</string>
-    <string name="set_remember_pause_desc">Remain playing/paused when skipping or editing queue</string>
     <string name="set_replay_gain">Volume normalization</string>
     <string name="set_replay_gain_mode">ReplayGain strategy</string>
     <string name="set_replay_gain_mode_off">Off</string>

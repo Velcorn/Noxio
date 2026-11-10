@@ -35,7 +35,6 @@
     <string name="set_theme_auto">Automático</string>
     <string name="set_accent">Esquema de cores</string>
     <string name="set_audio">Áudio</string>
-    <string name="set_personalize">Personalizar</string>
     <string name="set_keep_shuffle">Memorizar música misturada</string>
     <!-- Error Namespace | Error Labels -->
     <!-- Description Namespace | Accessibility Strings -->
@@ -69,8 +68,6 @@
         <item quantity="many">%d Álbuns</item>
         <item quantity="other">%d Álbuns</item>
     </plurals>
-    <string name="set_play_song_none">Reproduzir a partir do item mostrado</string>
-    <string name="set_play_song_from_album">Reproduzir do álbum</string>
     <string name="desc_artist_image">Imagem do artista para %s</string>
     <string name="def_genre">Gênero desconhecido</string>
     <string name="def_track">Nenhuma faixa</string>
@@ -89,8 +86,6 @@
     <string name="lbl_date">Data</string>
     <string name="set_cover_mode_balanced">Rápido</string>
     <string name="set_cover_mode_high_quality">Qualidade alta</string>
-    <string name="set_play_song_from_artist">Reproduzir do artista</string>
-    <string name="set_repeat_pause">Pausar na repetição</string>
     <string name="err_bad_location">Esta pasta não é compatível</string>
     <string name="desc_song_handle">Mover esta música da fila</string>
     <string name="desc_music_location_delete">Remover pasta</string>
@@ -160,19 +155,14 @@
     <string name="lbl_observing">A monitorizar a biblioteca de música</string>
     <string name="lbl_equalizer">Equalizador</string>
     <string name="info_app_desc">Um reprodutor de música simples e racional para Android.</string>
-    <string name="set_display">Mostrar</string>
     <string name="set_lib_tabs">Abas da biblioteca</string>
     <string name="set_lib_tabs_desc">Altere a visibilidade e a ordem das abas da biblioteca</string>
     <string name="set_cover_mode">Capas de álbuns</string>
     <string name="set_cover_mode_off">Desligado</string>
     <string name="set_round_mode">Modo redondo</string>
-    <string name="set_headset_autoplay">Reprodução automática dos auscultadores</string>
-    <string name="set_headset_autoplay_desc">Iniciar música quando os auscultadores forem conectados (pode não funcionar em todos os aparelhos)</string>
     <string name="set_replay_gain_mode">Estratégia do ganho de repetição</string>
     <string name="set_replay_gain_mode_album">Preferir álbum</string>
     <string name="set_pre_amp_desc">O pré-amplificador é aplicado ao ajuste existente durante a reprodução</string>
-    <string name="set_play_song_from_all">Reproduzir de todas as músicas</string>
-    <string name="set_repeat_pause_desc">Pausar quando uma música é repetida</string>
     <string name="desc_shuffle">Ativar ou desativar a reprodução aleatória</string>
     <string name="desc_remove_song">Remover esta música de fila</string>
     <string name="cdc_aac">Codificação de Audio Avançada (AAC)</string>
@@ -211,15 +201,12 @@
     <string name="set_hide_collaborators_desc">Mostrar apenas artistas que foram creditados diretamente no álbum (funciona melhor em músicas com metadados completos)</string>
     <string name="set_replay_gain_mode_track">Preferir faixa</string>
     <string name="set_pre_amp">Pré-amplificação da normalização de volume</string>
-    <string name="set_play_in_parent_with">Ao tocar a partir dos detalhes do item</string>
-    <string name="set_play_song_from_genre">Tocar a partir do gênero</string>
     <string name="set_rewind_prev_desc">Retrocede a música antes de voltar para a anterior</string>
     <string name="set_reindex">Recarregar música</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="set_rescan">Procurar músicas novamente</string>
     <string name="desc_auxio_icon">Ícone do Auxio</string>
     <string name="lbl_shuffle_shortcut_long">Misturar tudo</string>
-    <string name="set_play_in_list_with">Ao tocar da biblioteca</string>
     <string name="lbl_singles">Singles</string>
     <string name="lbl_single">Single</string>
     <string name="set_reindex_desc">Recarrega a biblioteca de músicas usando metadados salvos em cache quando possível</string>
@@ -231,21 +218,15 @@
     <string name="set_replay_gain">Normalização de volume</string>
     <string name="lbl_sort_dsc">Descendente</string>
     <string name="set_ui_desc">Mudar o tema e cores da app</string>
-    <string name="set_personalize_desc">Personalize os controlos e o comportamento do interface do utilizador</string>
     <string name="set_content_desc">Controlar como a música e as imagens são carregadas</string>
     <string name="set_music">Música</string>
     <string name="set_images">Imagens</string>
     <string name="set_audio_desc">Configurar o som e comportamento da reprodução</string>
-    <string name="set_playback">Reprodução</string>
     <string name="set_library">Biblioteca</string>
     <string name="set_separators_and">E comercial (&amp;)</string>
-    <string name="set_behavior">Comportamento</string>
-    <string name="set_intelligent_sorting">Classificação inteligente</string>
-    <string name="set_intelligent_sorting_desc">Ignore palavras como \"the\" ao classificar por nome (funciona melhor com músicas em inglês)</string>
     <string name="lbl_sort_direction">Direção</string>
     <string name="desc_selection_image">Seleção de imagem</string>
     <string name="lbl_selection">Seleção</string>
-    <string name="set_play_song_by_itself">Tocar música sozinha</string>
     <string name="lbl_playlists">Listas de reprodução</string>
     <string name="fmt_def_playlist">Lista de reprodução %d</string>
     <string name="lbl_playlist">Lista de reprodução</string>
@@ -286,8 +267,6 @@
     <string name="lbl_supporters">Apoiadores</string>
     <string name="lng_playlist_exported">Lista de reprodução exportada</string>
     <string name="lng_supporters_promo">Doe para o projeto para ter o seu nome adicionado aqui!</string>
-    <string name="set_remember_pause">Lembrar pausa</string>
-    <string name="set_remember_pause_desc">Continuar a reproduzir/pausado quando ao pular ou editar a fila</string>
     <string name="lbl_empty_playlist">Lista de reprodução vazia</string>
     <string name="lbl_import_playlist">Importar lista de reprodução</string>
     <string name="def_album_count">Sem álbuns</string>
@@ -345,8 +324,6 @@
     <string name="lbl_no_folders">Sem pastas</string>
     <string name="desc_add_folder">Adicionar pasta</string>
     <string name="lng_play_next">Música vai ser reproduzida a seguir</string>
-    <string name="set_task_exit">Sempre sair ao fechar</string>
-    <string name="set_task_exit_desc">Interrompa a reprodução ao ser removido dos recentes, mesmo que esteja em reprodução</string>
     <string name="set_saf_multithread">Exploração de ficheiros multithread</string>
     <string name="set_saf_multithread_desc">Mais rápido, mas tem falhas em alguns dispositivos</string>
     <string name="err_share_too_large">É grande demais para partilhar</string>

@@ -103,16 +103,7 @@
     <string name="set_black_mode">Thema nigre</string>
     <string name="set_black_mode_desc">Usar un thema nigre pur</string>
     <string name="set_round_mode">Modo ronde</string>
-    <string name="set_personalize">Personalisar</string>
-    <string name="set_personalize_desc">Personalisar le controlos e comportamento del interfacie de usator</string>
-    <string name="set_display">Schermo</string>
-    <string name="set_play_song_from_genre">Reproducer ab le genere</string>
     <string name="set_lib_tabs">Schedas del bibliotheca</string>
-    <string name="set_behavior">Comportamento</string>
-    <string name="set_play_in_list_with">Al reproducer ab le bibliotheca</string>
-    <string name="set_play_in_parent_with">Al reproducer ab le detalios de elemento</string>
-    <string name="set_play_song_none">Reproducer ab le elemento mostrate</string>
-    <string name="set_play_song_from_artist">Reproducer ab artista</string>
     <string name="set_keep_shuffle_desc">Mantener le reproduction aleatori al reproducer un nove canto</string>
     <string name="def_genre">Genere incognite</string>
     <string name="fmt_lib_genre_count">Generes cargate: %d</string>
@@ -120,7 +111,6 @@
     <string name="lbl_library_counts">Statisticas del bibliotheca</string>
     <string name="set_library">Bibliotheca</string>
     <string name="lbl_copied">Copiate</string>
-    <string name="set_play_song_from_all">Reproducer ab tote le cantos</string>
     <string name="set_content">Contento</string>
     <string name="set_music">Musica</string>
     <string name="set_audio">Audio</string>
@@ -129,8 +119,6 @@
     <string name="set_cover_mode">Coperrturas de album</string>
     <string name="set_cover_mode_off">Disactivate</string>
     <string name="set_cover_mode_balanced">Rapide</string>
-    <string name="set_playback">Reproduction</string>
-    <string name="set_remember_pause">Rememorar le pausa</string>
     <string name="set_locations">Dossieres de musica</string>
     <string name="set_reindex">Actualisar le musica</string>
     <string name="err_index_failed">Falleva le carga del musica</string>
@@ -176,7 +164,6 @@
     <string name="fmt_lib_artist_count">Artistas cargate: %d</string>
     <string name="fmt_lib_total_duration">Duration total: %s</string>
     <string name="lbl_shuffle_shortcut_short">Aleatori</string>
-    <string name="set_repeat_pause">Pausar in le repetition</string>
     <string name="lbl_indexer">Cargamento del musica</string>
     <string name="lng_playlist_renamed">Lista de reproduction renominate</string>
     <string name="lng_playlist_exported">Lista de reproduction exportate</string>

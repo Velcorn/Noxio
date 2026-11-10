@@ -18,12 +18,17 @@
  
 package org.oxycblt.auxio.playback.timer
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -92,6 +97,7 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
         }
         binding.sleepFinishSong.isChecked = sleepTimer.finishSong
         binding.sleepFade.isChecked = sleepTimer.fade
+        binding.sleepShake.isChecked = sleepTimer.shakeToReset
 
         binding.sleep30.setOnClickListener { select(Choice.SHORT) }
         binding.sleep60.setOnClickListener { select(Choice.LONG) }
@@ -123,6 +129,9 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
             sleepTimer.finishSong = checked
         }
         binding.sleepFade.setOnCheckedChangeListener { _, checked -> sleepTimer.fade = checked }
+        binding.sleepShake.setOnCheckedChangeListener { _, checked ->
+            sleepTimer.shakeToReset = checked
+        }
         binding.sleepStart.setOnClickListener { start() }
         binding.sleepRestart.setOnClickListener { sleepTimer.reset() }
         binding.sleepStop.setOnClickListener {
@@ -218,6 +227,31 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
             }
         sleepTimer.finishSong = requireBinding().sleepFinishSong.isChecked
         sleepTimer.fade = requireBinding().sleepFade.isChecked
+        sleepTimer.shakeToReset = requireBinding().sleepShake.isChecked
+        pendingMode = mode
+        // The countdown also shows in a notification of its own, which needs the permission to
+        // post notifications. The timer starts either way.
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            startPending()
+        }
+    }
+
+    private var pendingMode: SleepTimerMode? = null
+
+    private val notificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { startPending() }
+
+    private fun startPending() {
+        val mode = pendingMode ?: return
+        pendingMode = null
         sleepTimer.start(mode)
         dismiss()
     }

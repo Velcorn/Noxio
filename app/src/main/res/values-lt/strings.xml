@@ -74,7 +74,6 @@
     <string name="lbl_shuffle_shortcut_long">Maišyti viską</string>
     <string name="lbl_cancel">Atšaukti</string>
     <string name="lbl_code">Šaltinio kodas</string>
-    <string name="set_display">Rodinys</string>
     <string name="set_replay_gain_mode">„ReplayGain“ strategija</string>
     <string name="lbl_singles">Singlai</string>
     <string name="lbl_ok">Gerai</string>
@@ -114,7 +113,6 @@
     <string name="lbl_album_live">Gyvas albumas</string>
     <string name="lbl_album_remix">Remikso albumas</string>
     <string name="lbl_live_group">Gyvai</string>
-    <string name="set_headset_autoplay_desc">Visada pradėti leisti, kai ausinės prijungtos (gali neveikti visuose įrenginiuose).</string>
     <string name="cdc_ogg">Ogg garsas</string>
     <string name="lbl_author_name">Aleksandras Keiphartas (angl. Alexander Capehart)</string>
     <string name="set_replay_gain_mode_track">Pageidauti takelį</string>
@@ -146,9 +144,6 @@
     <string name="set_keep_shuffle_desc">Laikyti maišymą įjungtą, kai leidžiama nauja daina.</string>
     <string name="set_rewind_prev">Persukti prieš praleidžiant atgal</string>
     <string name="set_rewind_prev_desc">Persukti atgal prieš praleidžiant į ankstesnę dainą.</string>
-    <string name="set_repeat_pause">Pauzė ant kartojimo</string>
-    <string name="set_play_in_list_with">Kai leidžiant iš bibliotekos</string>
-    <string name="set_play_in_parent_with">Kai leidžiant iš elemento informacijos</string>
     <string name="desc_music_location_delete">Šalinti aplanką</string>
     <string name="lbl_genre">Žanras</string>
     <string name="lng_search_library">Ieškokite savo bibliotekoje…</string>
@@ -156,14 +151,9 @@
     <string name="set_observing">Automatinis įkėlimas iš naujo</string>
     <string name="desc_exit">Stabdyti įrašo perklausą</string>
     <string name="def_track">Be takelio</string>
-    <string name="set_headset_autoplay">Automatinis ausinių leidimas</string>
     <string name="desc_queue_bar">Atverti eilę</string>
     <string name="desc_clear_search">Valyti paieškos užklausą</string>
     <string name="desc_remove_song">Šalinti šią dainą</string>
-    <string name="set_play_song_from_all">Leisti iš visų dainų</string>
-    <string name="set_play_song_none">Leisti iš parodyto elemento</string>
-    <string name="set_play_song_from_album">Leisti iš albumo</string>
-    <string name="set_play_song_from_artist">Leisti iš atlikėjo</string>
     <string name="fmt_sample_rate">%d Hz</string>
     <string name="set_observing_desc">Įkelti iš naujo muzikos biblioteką, kai ji pasikeičia (privalomas nuolatinis pranešimas).</string>
     <string name="fmt_lib_song_count">Įkeltos dainos: %d</string>
@@ -171,12 +161,10 @@
     <string name="fmt_lib_album_count">Įkelti albumai: %d</string>
     <string name="fmt_lib_artist_count">Įkelti atlikėjai: %d</string>
     <string name="fmt_indexing">Įkeliama jūsų muzikos biblioteka… (%1$d / %2$d)</string>
-    <string name="set_personalize">Suasmeninti</string>
     <string name="set_pre_amp_warning">Įspėjimas: keičiant išankstinį stiprintuvą į didelę teigiamą reikšmę, kai kuriuose garso takeliuose gali atsirasti tarpų.</string>
     <string name="desc_album_cover">Albumo viršelis, skirtas „%s“</string>
     <string name="desc_artist_image">Atlikėjo vaizdas, skirtas %s</string>
     <string name="def_playback">Nėra leidžiama muzika</string>
-    <string name="set_repeat_pause_desc">Pristabdyti, kai daina kartojasi.</string>
     <string name="set_content">Turinys</string>
     <string name="set_locations">Muzikos šaltiniai</string>
     <string name="set_reindex">Atnaujinti muziką</string>
@@ -221,23 +209,17 @@
     <string name="set_rescan">Perskenuoti muziką</string>
     <string name="set_rescan_desc">Išvalyti žymių podėlį ir pilnai įkelti iš naujo muzikos biblioteką (lėčiau, bet labiau užbaigta).</string>
     <string name="fmt_selected">%d pasirinkta</string>
-    <string name="set_play_song_from_genre">Leisti iš žanro</string>
     <string name="lbl_wiki">Viki</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="lbl_reset">Atkurti</string>
     <string name="set_library">Biblioteka</string>
-    <string name="set_behavior">Elgsena</string>
     <string name="set_ui_desc">Pakeiskite programos temą ir spalvas.</string>
     <string name="set_content_desc">Valdykite, kaip muzika ir vaizdai yra įkelti.</string>
     <string name="set_audio_desc">Konfigūruokite garso ir įrašo perklausos elgseną.</string>
-    <string name="set_personalize_desc">Tinkinkite NS valdymo elementus ir elgseną.</string>
     <string name="set_music">Muzika</string>
     <string name="set_images">Vaizdai</string>
-    <string name="set_playback">Įrašo perklausa</string>
     <string name="set_replay_gain">Garsumo normalizavimas</string>
     <string name="lbl_sort_dsc">Mažėjantis</string>
-    <string name="set_intelligent_sorting_desc">Teisingai surikiuoti pavadinimus, kurie prasideda skaičiais arba žodžiais kaip „the“ (geriausiai veikia su anglų kalbos muzika).</string>
-    <string name="set_intelligent_sorting">Išmanusis rikiavimas</string>
     <string name="lbl_playlist">Grojaraštis</string>
     <string name="lbl_playlists">Grojaraščiai</string>
     <string name="desc_playlist_image">Grojaraščio vaizdas, skirtas „%s“</string>
@@ -262,7 +244,6 @@
     <string name="lbl_parent_detail">Peržiūrėti</string>
     <string name="set_square_covers_desc">Apkarpyti visus albumų viršelius iki 1:1 kraštinių koeficiento.</string>
     <string name="set_square_covers">Priversti kvadratinių albumų viršelius</string>
-    <string name="set_play_song_by_itself">Leisti dainą pačią</string>
     <string name="lbl_sort_mode">Rikiuoti pagal</string>
     <string name="lbl_sort_direction">Kryptis</string>
     <string name="desc_selection_image">Pasirinkimo vaizdas</string>
@@ -294,8 +275,6 @@
     <string name="lbl_path_style_absolute">Absoliutinis</string>
     <string name="lbl_path_style_relative">Santykinis</string>
     <string name="lbl_windows_paths">Naudoti „Windows“ suderinamus kelius</string>
-    <string name="set_remember_pause">Prisiminti pauzę</string>
-    <string name="set_remember_pause_desc">Išlaikyti leidžiamą / pristabdymą praleidžiant arba redaguojant eilę.</string>
     <string name="set_replay_gain_mode_off">Išjungta</string>
     <string name="lng_tasker_start">Paleidžia „Auxio“ naudojant anksčiau išsaugotą būseną. Jei nėra išsaugotos būsenos, visos dainos bus išmaišytos. Įrašo perklausa bus pradėta iš karto. \n \nĮSPĖJIMAS: būkite atsargūs valdydami šią paslaugą, jei ją užversite ir vėl bandysite naudoti, tikriausiai sutriks programa.</string>
     <string name="lbl_start_playback">Pradėti įrašo perklausą</string>
@@ -347,8 +326,6 @@
         <item quantity="many">%d sekundžių</item>
         <item quantity="other">%d sekundžių</item>
     </plurals>
-    <string name="set_task_exit">Visada išeiti užveriant</string>
-    <string name="set_task_exit_desc">Sustabdyti įrašo perklausą, kai pašalinama iš naujausių, net jei leidžiama.</string>
     <string name="fmt_lib_total_size">Bendras dydis: %s</string>
     <string name="set_saf_multithread">Daugiasriegiškumo failų naršymas</string>
     <string name="set_saf_multithread_desc">Spartesnis, bet neveikia kai kuriuose įrenginiuose.</string>

@@ -14,6 +14,7 @@ list/recycler/BottomAlignment.kt
 playback/service/SleepTimerController.kt
 playback/timer/SleepTimer.kt
 playback/timer/SleepTimerMath.kt
+playback/timer/SleepTimerNotification.kt
 stats/PlayRecorder.kt
 stats/PlayTracker.kt
 stats/SafeDocumentWriter.kt

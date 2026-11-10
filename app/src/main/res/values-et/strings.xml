@@ -167,9 +167,6 @@
     <string name="fmt_sample_rate">%d Hz</string>
     <string name="fmt_indexing">Laadime sinu muusikakogu… (%1$d/%2$d)</string>
     <string name="lng_tasker_start">Auxio käivitub varem salvestatud olekus. Kui sellist olekut ei leidu, siis segatakse kõikide lugude järjekord ning taasesitus algab koheselt. \n \nHOIATUS: Ole selle teenuse kasutamisel hoolikas - kui sa ta sulged ja siis proovid uuesti kasutada, siis rakendus ilmselt jookseb kokku.</string>
-    <string name="set_personalize">Kohanda endale sobivaks</string>
-    <string name="set_personalize_desc">Seadista kasutajaliidese juhtnuppe ning käitumist</string>
-    <string name="set_display">Ekraan</string>
     <string name="set_lib_tabs">Muusikakogu kaardid</string>
     <string name="set_lib_tabs_desc">Muuda muusikakogu kaartide nähtavust ja järjekorda</string>
     <string name="set_images">Pildid</string>
@@ -181,15 +178,8 @@
     <string name="set_audio">Heli</string>
     <string name="set_square_covers_desc">Kadreeri kaanepildid 1:1 küljesuhte alusel</string>
     <string name="set_audio_desc">Seadista heli ja taasesitust</string>
-    <string name="set_playback">Taasesitus</string>
-    <string name="set_headset_autoplay">Automaatne esitus kõrvaklappidest</string>
-    <string name="set_headset_autoplay_desc">Kõrvaklappide ühendamisel alusta koheselt meedia mängimist (ei pruugi toimida kõikide seadmetega)</string>
-    <string name="set_repeat_pause">Kordamisel tee paus</string>
     <string name="set_rewind_prev">Enne tagasi hüppamist keri tagasi</string>
     <string name="set_rewind_prev_desc">Enne eelmise palani tagasi hüppamist keri jooksev pala tagasi</string>
-    <string name="set_repeat_pause_desc">Pala kordamisel tee esituse paus</string>
-    <string name="set_remember_pause">Jäta paus meelde</string>
-    <string name="set_remember_pause_desc">Esitusjärjekorras vahelejätmisel või selle muutmisel jää senisesse olekusse (mängimine või paus)</string>
     <string name="set_replay_gain">Helivaljuse normaliseerimine</string>
     <string name="set_replay_gain_mode">Esitusvaljuse tundlikkuse seadistamise strateegia</string>
     <string name="set_replay_gain_mode_off">Pole kasutusel</string>
@@ -197,21 +187,11 @@
     <string name="set_replay_gain_mode_album">Eelista albumikohast esitusvaljuse tundlikkust</string>
     <string name="set_replay_gain_mode_dynamic">Kui album juba on esitamisel, siis eelista albumikohast esitusvaljuse tundlikkust</string>
     <string name="set_pre_amp">Esitusvaljuse tundlikkuse eelvõimendus</string>
-    <string name="set_play_in_list_with">Esitamisel muusikakogust</string>
-    <string name="set_play_song_none">Esita näidatud palast</string>
-    <string name="set_play_song_from_genre">Esita žanrist</string>
     <string name="set_content_desc">Halda muusika ja piltide laadimist</string>
     <string name="set_music">Muusika</string>
     <string name="set_observing">Muusikakogu automaatne uuendamine</string>
     <string name="set_exclude_non_music">Välista failid, kus pole muusikat</string>
-    <string name="set_intelligent_sorting_desc">Järjesta muusikat nii, et arvesse ei lähe numbrid ja artiklid nagu „the“ (toimib kõige paremini ingliskeelse muusika puhul)</string>
     <string name="set_hide_collaborators">Peida kaasautorid</string>
-    <string name="set_play_song_from_album">Esita albumist</string>
-    <string name="set_behavior">Käitumine</string>
-    <string name="set_play_in_parent_with">Esitamisel pala detailsest vaatest</string>
-    <string name="set_play_song_from_all">Esita kõikidest paladest</string>
-    <string name="set_play_song_from_artist">Esita esitajast</string>
-    <string name="set_play_song_by_itself">Esita samast palast</string>
     <string name="set_keep_shuffle">Jäta meelde segatud loend</string>
     <string name="set_keep_shuffle_desc">Uue pala esitamisel jäta meelde segatud loendi olek</string>
     <string name="set_content">Sisu</string>
@@ -225,7 +205,6 @@
     <string name="set_separators_desc">Seadista tähemärke, mis eraldavad siltides mitut väärtust</string>
     <string name="set_separators_slash">Kaldkriips (/)</string>
     <string name="set_separators_warning">Hoiatus: selle seadistuse kasutamisel ei pruugi mitu väärtust siltides olla alati korralikult tuvastatud; seda olukorda saad proovida lahendada täiendava prefiksi lisamisega kurakaldkriipsu näol (\\).</string>
-    <string name="set_intelligent_sorting">Nutikas järjestamine</string>
     <string name="set_hide_collaborators_desc">Näita vaid esitajaid, kes on otsesõnu nimetatud albumi autoriteks (eeldab, et muusikakogu on korralikult sildistatud)</string>
     <string name="set_pre_amp_desc">Eelvõimenduse väärtus lisatakse taasesituse ajal olemasolevale valjuse seadistusele</string>
     <string name="set_pre_amp_with">Kohandamine siltide alusel</string>
@@ -340,8 +319,6 @@
         <item quantity="other">%d sekundit</item>
     </plurals>
     <string name="fmt_lib_total_size">Maht kokku: %s</string>
-    <string name="set_task_exit">Sulgemisel alati lõpeta rakenduse töö</string>
-    <string name="set_task_exit_desc">Viimatikasutatud rakenduste loendist eemaldamisel lõpeta taasesitus, seda ka siis kui just on kuulamine pooleli</string>
     <string name="set_saf_multithread">Mitmelõimeline failide analüüs</string>
     <string name="set_saf_multithread_desc">Kiirem, aga ei pruugi mõnes seadmes toimida</string>
     <string name="err_share_too_large">See on jagamiseks liiga mahukas</string>

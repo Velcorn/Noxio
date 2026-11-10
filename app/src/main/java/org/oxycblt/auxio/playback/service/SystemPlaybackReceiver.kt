@@ -137,6 +137,14 @@ private constructor(
                 L.d("Received sleep timer reset event")
                 sleepTimer.reset()
             }
+            PlaybackActions.ACTION_STOP_SLEEP_TIMER -> {
+                L.d("Received sleep timer stop event")
+                sleepTimer.cancel()
+            }
+            PlaybackActions.ACTION_EXTEND_SLEEP_TIMER -> {
+                L.d("Received sleep timer extend event")
+                sleepTimer.extend(SleepTimer.EXTEND_MINUTES)
+            }
             WidgetProvider.ACTION_WIDGET_UPDATE -> {
                 L.d("Received widget update event")
                 widgetComponent.update()
@@ -177,6 +185,8 @@ private constructor(
                 addAction(PlaybackActions.ACTION_SKIP_NEXT)
                 addAction(PlaybackActions.ACTION_EXIT)
                 addAction(PlaybackActions.ACTION_RESET_SLEEP_TIMER)
+                addAction(PlaybackActions.ACTION_STOP_SLEEP_TIMER)
+                addAction(PlaybackActions.ACTION_EXTEND_SLEEP_TIMER)
                 addAction(WidgetProvider.ACTION_WIDGET_UPDATE)
             }
     }

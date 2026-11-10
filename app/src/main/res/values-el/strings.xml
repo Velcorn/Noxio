@@ -33,7 +33,6 @@
     <string name="set_theme_night">Σκοτεινό</string>
     <string name="set_accent">Χρώματα</string>
     <string name="set_audio">Ήχος</string>
-    <string name="set_personalize">Συμπεριφορά</string>
     <!-- Description Namespace | Accessibility Strings -->
     <string name="desc_track_number">Κομμάτι %d</string>
     <string name="desc_play_pause">Αναπαραγωγή/παύση</string>
@@ -106,7 +105,6 @@
     <string name="lbl_shuffle_shortcut_long">Tυχαία αναπαραγωγή όλων</string>
     <string name="lbl_shuffle_shortcut_short">Tυχαία αναπαραγωγή</string>
     <string name="lbl_ok">Οκ</string>
-    <string name="set_display">Προβολή</string>
     <string name="lbl_save">Αποθήκευση</string>
     <string name="lbl_bitrate">Pυθμός μεταβίβασης δεδομένων</string>
     <string name="set_black_mode">Μάυρο θέμα</string>

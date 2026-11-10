@@ -77,7 +77,7 @@ interface SleepTimer {
     /** Whether the song that is playing when the time is up is played to its end first. */
     var finishSong: Boolean
     /** Whether shaking the device restarts a running minutes timer. */
-    val shakeToReset: Boolean
+    var shakeToReset: Boolean
 
     /** Start a timer with the given [mode], replacing any running timer. */
     fun start(mode: SleepTimerMode)
@@ -91,6 +91,12 @@ interface SleepTimer {
      */
     fun finishTrack()
 
+    /**
+     * Give a running minutes timer [minutes] more, for example from the notification. The
+     * remembered duration that a restart goes back to is not changed. No-op otherwise.
+     */
+    fun extend(minutes: Int)
+
     /** Stop the timer without affecting playback. */
     fun cancel()
 
@@ -99,6 +105,8 @@ interface SleepTimer {
         const val MAX_MINUTES = 12 * 60
         const val DEFAULT_CUSTOM_MINUTES = 45
         const val DEFAULT_MINUTES = 30
+        /** How much the notification's button adds to a running timer. */
+        const val EXTEND_MINUTES = 10
     }
 }
 
@@ -137,8 +145,11 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
         get() = sharedPreferences.getBoolean(KEY_FINISH_SONG, true)
         set(value) = sharedPreferences.edit { putBoolean(KEY_FINISH_SONG, value) }
 
-    override val shakeToReset: Boolean
+    override var shakeToReset: Boolean
         get() = sharedPreferences.getBoolean(context.getString(R.string.set_key_sleep_shake), true)
+        set(value) = sharedPreferences.edit {
+            putBoolean(context.getString(R.string.set_key_sleep_shake), value)
+        }
 
     override fun start(mode: SleepTimerMode) {
         val fixed =
@@ -172,6 +183,16 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
         val current = mutableState.value as? SleepTimerState.Active ?: return
         if (current.mode is SleepTimerMode.Minutes) {
             mutableState.value = SleepTimerState.Active(SleepTimerMode.EndOfTrack, 0L, current.fade)
+        }
+    }
+
+    override fun extend(minutes: Int) {
+        val current = mutableState.value as? SleepTimerState.Active ?: return
+        if (current.mode is SleepTimerMode.Minutes) {
+            // Never more than the longest timer from now.
+            val latest = SystemClock.elapsedRealtime() + SleepTimer.MAX_MINUTES * 60_000L
+            mutableState.value =
+                current.copy(endsAt = minOf(current.endsAt + minutes * 60_000L, latest))
         }
     }
 

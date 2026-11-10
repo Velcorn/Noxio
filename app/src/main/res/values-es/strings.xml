@@ -20,9 +20,6 @@
     <string name="lbl_playback">En reproducción</string>
     <string name="lbl_play">Reproducir</string>
     <string name="lbl_shuffle">Modo aleatorio</string>
-    <string name="set_play_song_from_all">Reproducir todo</string>
-    <string name="set_play_song_from_album">Reproducir por álbum</string>
-    <string name="set_play_song_from_artist">Reproducir por artista</string>
     <string name="lbl_queue">Cola</string>
     <string name="lbl_play_next">Reproducir siguiente</string>
     <string name="lbl_queue_add">Añadir a la cola</string>
@@ -44,7 +41,6 @@
     <string name="set_accent">Combinación de colores</string>
     <string name="set_black_mode">Tema negro</string>
     <string name="set_black_mode_desc">Usar un tema completamente negro</string>
-    <string name="set_display">Pantalla</string>
     <string name="set_lib_tabs">Pestañas de la biblioteca</string>
     <string name="set_lib_tabs_desc">Cambiar visibilidad y orden de las pestañas de la biblioteca</string>
     <string name="set_round_mode">Modo redondeado</string>
@@ -54,14 +50,10 @@
     <string name="set_replay_gain_mode_track">Preferir pista</string>
     <string name="set_replay_gain_mode_album">Preferir álbum</string>
     <string name="set_replay_gain_mode_dynamic">Preferir el álbum si se está en reproducción</string>
-    <string name="set_personalize">Personalizar</string>
-    <string name="set_play_in_list_with">Cuando se está reproduciendo de la biblioteca</string>
     <string name="set_keep_shuffle">Recordar mezcla</string>
     <string name="set_keep_shuffle_desc">Mantener mezcla activada cuando se reproduce una nueva canción</string>
     <string name="set_rewind_prev">Rebobinar antes de saltar al anterior</string>
     <string name="set_rewind_prev_desc">Rebobinar antes de saltar a la canción anterior</string>
-    <string name="set_repeat_pause">Pausar al repetir</string>
-    <string name="set_repeat_pause_desc">Pausar cuando se repite una canción</string>
     <string name="set_content">Contenido</string>
     <string name="set_reindex">Actualizar música</string>
     <string name="set_reindex_desc">Recargar la biblioteca musical, utilizando las etiquetas en caché cuando sea posible</string>
@@ -130,7 +122,6 @@
     <string name="lbl_library_counts">Estadísticas de la biblioteca</string>
     <string name="set_pre_amp_without">Ajuste sin etiquetas</string>
     <string name="set_pre_amp_warning">Advertencia: Cambiar el pre-amp a un valor alto puede resultar en picos en algunas pistas de audio.</string>
-    <string name="set_play_song_none">Reproducir desde el elemento que se muestra</string>
     <string name="cdc_flac">Códec de audio sin pérdida libre (FLAC)</string>
     <string name="cdc_aac">Codificación de sonido avanzado (AAC)</string>
     <string name="fmt_indexing">Cargando tu biblioteca de música… (%1$d/%2$d)</string>
@@ -145,12 +136,10 @@
     <string name="lbl_observing">Monitorizando la fonoteca</string>
     <string name="lng_observing">Monitorizando cambios en la fonoteca…</string>
     <string name="cdc_ogg">Audio Ogg</string>
-    <string name="set_play_in_parent_with">Cuando se reproduce desde los detalles</string>
     <string name="lbl_date_added">Fecha de adición</string>
     <string name="lbl_props">Propiedades de la canción</string>
     <string name="lbl_sample_rate">Tasa de muestreo</string>
     <string name="lbl_cancel">Cancelar</string>
-    <string name="set_headset_autoplay">Reproducción automática con auriculares</string>
     <string name="set_locations">Fuentes de música</string>
     <string name="set_locations_desc">Gestionar de dónde se cargará la música</string>
     <string name="clr_dynamic">Dinámico</string>
@@ -166,7 +155,6 @@
     <string name="lbl_mixtapes">Mixtapes (recopilación de canciones)</string>
     <string name="lbl_mixtape">Mixtape (recopilación de canciones)</string>
     <string name="lbl_remix_group">Remezclas</string>
-    <string name="set_headset_autoplay_desc">Siempre empezar la reproducción cuando se conecten auriculares (puede no funcionar en todos los dispositivos)</string>
     <string name="set_pre_amp">Pre-amp ReplayGain</string>
     <string name="set_pre_amp_desc">El pre-amp se aplica al ajuste existente durante la reproducción</string>
     <string name="set_pre_amp_with">Ajuste con etiquetas</string>
@@ -218,26 +206,20 @@
     <string name="set_rescan_desc">Borrar la caché de las etiquetas y recargar completamente la biblioteca musical (más lento, pero más completo)</string>
     <string name="set_rescan">Volver a escanear la música</string>
     <string name="fmt_selected">%d seleccionados</string>
-    <string name="set_play_song_from_genre">Reproducir desde el género</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="lbl_reset">Restablecer</string>
-    <string name="set_behavior">Comportamiento</string>
     <string name="set_replay_gain">Normalización del volumen</string>
     <string name="set_content_desc">Controla cómo se cargan la música y las imágenes</string>
     <string name="set_music">Música</string>
     <string name="set_images">Imágenes</string>
     <string name="set_audio_desc">Configurar el comportamiento del sonido y la reproducción</string>
-    <string name="set_playback">Reproducción</string>
     <string name="set_ui_desc">Cambiar el tema y los colores de la aplicación</string>
-    <string name="set_personalize_desc">Personalizar los controles y el comportamiento de la interfaz de usuario</string>
     <string name="set_library">Biblioteca</string>
     <string name="lbl_sort_dsc">Descendente</string>
     <string name="lbl_playlists">Listas de reproducción</string>
     <string name="desc_playlist_image">Imagen de la lista de reproducción para %s</string>
     <string name="lbl_playlist">Lista de reproducción</string>
-    <string name="set_intelligent_sorting">Ignorar artículos al ordenar</string>
-    <string name="set_intelligent_sorting_desc">Ordenar correctamente los sustantivos que comienzan con números o palabras como \"the\" (funciona mejor con música en inglés)</string>
     <string name="lbl_new_playlist">Nueva lista de reproducción</string>
     <string name="fmt_def_playlist">Lista de reproducción %d</string>
     <string name="lbl_playlist_add">Añadir a la lista de reproducción</string>
@@ -259,7 +241,6 @@
     <string name="set_square_covers_desc">Recorta todas las portadas de los álbumes a una relación de aspecto 1:1</string>
     <string name="lbl_song">Canción</string>
     <string name="lbl_parent_detail">Vista</string>
-    <string name="set_play_song_by_itself">Reproducir la canción por sí misma</string>
     <string name="lbl_sort_mode">Ordenar por</string>
     <string name="lbl_sort_direction">Dirección</string>
     <string name="desc_selection_image">Selección de imágenes</string>
@@ -291,8 +272,6 @@
     <string name="lbl_replaygain_album">Ajuste del álbum de ganancia de reproducción</string>
     <string name="lbl_author">Autor</string>
     <string name="lng_supporters_promo">¡Haz una donación al proyecto para que tu nombre aparezca aquí!</string>
-    <string name="set_remember_pause">Recordar la pausa</string>
-    <string name="set_remember_pause_desc">Permanecer en reproducción/pausa al saltar o editar la cola</string>
     <string name="set_replay_gain_mode_off">Apagar</string>
     <string name="lbl_start_playback">Iniciar reproducción</string>
     <string name="lng_tasker_start">Inicia Auxio utilizando el estado previamente guardado. Si no hay ningún estado guardado, todas las canciones se reproducirán aleatoriamente. La reproducción comenzará inmediatamente. \n \nADVERTENCIA: Ten cuidado al controlar este servicio, si lo cierras y luego intentas usarlo de nuevo, probablemente se bloqueará la aplicación.</string>
@@ -348,6 +327,4 @@
     <string name="set_saf_multithread_desc">Más rápido, pero falla en algunos dispositivos</string>
     <string name="err_share_too_large">Demasiado grande para compartir</string>
     <string name="err_share_failed">Incapaz de compartir esto</string>
-    <string name="set_task_exit">Salir siempre al cerrar</string>
-    <string name="set_task_exit_desc">Detiene la reproducción cuando se elimina de los recientes, incluso si reproduce</string>
 </resources>

@@ -89,11 +89,8 @@
     <string name="set_black_mode_desc">Use um tema escuro totalmente preto.</string>
     <string name="set_round_mode">Modo redondo</string>
     <string name="set_round_mode_desc">Ativar cantos arredondados em elementos adicionais da interface do utilizador (requer que as capas dos álbuns sejam arredondadas)</string>
-    <string name="set_personalize">Personalizar</string>
-    <string name="set_personalize_desc">Personalize os controlos e o comportamento do interface do utilizador</string>
     <string name="set_theme_night">Escuro</string>
     <string name="set_accent">Esquema de cores</string>
-    <string name="set_behavior">Comportamento</string>
     <string name="lbl_export_playlist">Exportar lista de reprodução</string>
     <string name="lbl_share">Partilhar</string>
     <string name="lbl_size">Tamanho</string>
@@ -128,18 +125,12 @@
     <string name="lbl_replaygain_album">Ajuste do álbum ReplayGain</string>
     <string name="lbl_author_name">Desenvolvido por Alexander Capehart</string>
     <string name="lbl_supporters">Apoiadores</string>
-    <string name="set_display">Mostrar</string>
     <string name="set_square_covers">Forçar capas em formato quadrado</string>
     <string name="set_square_covers_desc">Recortar à capa dos álbuns numa proporção de 1:1</string>
     <string name="set_audio_desc">Configurar o som e comportamento da reprodução</string>
-    <string name="set_playback">Reprodução</string>
     <string name="set_rewind_prev">Retroceder antes de voltar</string>
     <string name="set_rewind_prev_desc">Retrocede a música antes de voltar para a anterior</string>
-    <string name="set_repeat_pause">Pausar na repetição</string>
-    <string name="set_repeat_pause_desc">Pausar quando uma música é repetida</string>
     <string name="set_locations">Fontes musicais</string>
-    <string name="set_remember_pause">Lembrar pausa</string>
-    <string name="set_remember_pause_desc">Continuar a reproduzir/pausado quando ao pular ou editar a fila</string>
     <string name="set_replay_gain_mode">Estratégia do ganho de repetição</string>
     <string name="set_replay_gain_mode_dynamic">Prefira o álbum se estiver a tocar</string>
     <string name="fmt_db_pos">+%.1f dB</string>
@@ -169,8 +160,6 @@
     <string name="lbl_disc">Disco</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="set_exclude_non_music_desc">Ignorar ficheiros de áudio que não são música, tal como podcasts</string>
-    <string name="set_intelligent_sorting">Classificação inteligente</string>
-    <string name="set_intelligent_sorting_desc">Ignore palavras como \"the\" ao classificar por nome (funciona melhor com músicas em inglês)</string>
     <string name="set_images">Imagens</string>
     <string name="set_audio">Áudio</string>
     <string name="set_pre_amp">Pré-amplificação da normalização de volume</string>
@@ -209,11 +198,6 @@
         <item quantity="many">%d artistas</item>
         <item quantity="other">%d artistas</item>
     </plurals>
-    <string name="set_play_in_list_with">Ao tocar da biblioteca</string>
-    <string name="set_play_in_parent_with">Ao tocar a partir dos detalhes do item</string>
-    <string name="set_play_song_from_artist">Reproduzir do artista</string>
-    <string name="set_play_song_from_genre">Tocar a partir do gênero</string>
-    <string name="set_play_song_by_itself">Tocar música sozinha</string>
     <string name="set_keep_shuffle">Memorizar música misturada</string>
     <string name="set_keep_shuffle_desc">Mantenha a reprodução aleatória ao reproduzir uma nova música</string>
     <string name="set_separators_semicolon">Ponto-e-vírgula (;)</string>
@@ -244,9 +228,6 @@
     <string name="lbl_mixes">Misturas DJ</string>
     <string name="lbl_appears_on">Só aparecer</string>
     <string name="lbl_mixtape">Mixtape</string>
-    <string name="set_play_song_none">Reproduzir a partir do item mostrado</string>
-    <string name="set_play_song_from_all">Reproduzir de todas as músicas</string>
-    <string name="set_play_song_from_album">Reproduzir do álbum</string>
     <string name="set_content">Conteúdo</string>
     <string name="set_content_desc">Controlar como a música e as imagens são carregadas</string>
     <string name="set_music">Música</string>
@@ -258,8 +239,6 @@
     <string name="set_separators_comma">Vírgula (,)</string>
     <string name="set_separators_and">E comercial (&amp;)</string>
     <string name="set_cover_mode_high_quality">Qualidade alta</string>
-    <string name="set_headset_autoplay">Reprodução automática dos auscultadores</string>
-    <string name="set_headset_autoplay_desc">Iniciar música quando os auscultadores forem conectados (pode não funcionar em todos os aparelhos)</string>
     <string name="set_replay_gain_mode_track">Preferir faixa</string>
     <string name="set_pre_amp_warning">Aviso: Alterar o pré-amplificador para um valor positivo alto pode resultar em picos em algumas faixas de áudio.</string>
     <string name="set_library">Biblioteca</string>
@@ -321,8 +300,6 @@
     <string name="lng_grant_storage_required">Conceda permissões de armazenamento externo para ativar esta opção.</string>
     <string name="lng_include_folders">Músicas fora das pastas selecionadas serão ignoradas.</string>
     <string name="lng_exclude_folders">As músicas dentro das pastas selecionadas serão ignoradas.</string>
-    <string name="set_task_exit">Sempre sair ao fechar</string>
-    <string name="set_task_exit_desc">Interrompa a reprodução ao ser removido dos aplicativos recentes, mesmo que esteja em reprodução</string>
     <string name="set_cover_mode_as_is">Como é</string>
     <string name="set_load_from">Carregar de</string>
     <string name="set_file_picker">Seletor de arquivos</string>

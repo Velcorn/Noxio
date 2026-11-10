@@ -107,8 +107,9 @@ class MusicSettingsImpl @Inject constructor(@ApplicationContext private val cont
             }
         }
 
+    // Noxio has no setting for this any more, it is always on.
     override val intelligentSorting: Boolean
-        get() = sharedPreferences.getBoolean(getString(R.string.set_key_auto_sort_names), true)
+        get() = true
 
     override val useFileTreeCache: Boolean
         get() = sharedPreferences.getBoolean(getString(R.string.set_key_fs_cache), false)

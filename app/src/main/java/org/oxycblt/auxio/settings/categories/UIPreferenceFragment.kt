@@ -46,6 +46,11 @@ class UIPreferenceFragment : BasePreferenceFragment(R.xml.preferences_ui) {
     private val musicModel: MusicViewModel by activityViewModels()
 
     override fun onOpenDialogPreference(preference: WrappedDialogPreference) {
+        if (preference.key == getString(R.string.set_key_home_tabs)) {
+            L.d("Navigating to home tab dialog")
+            findNavController().navigateSafe(UIPreferenceFragmentDirections.tabSettings())
+            return
+        }
         if (preference.key == getString(R.string.set_key_accent)) {
             L.d("Navigating to accent dialog")
             findNavController().navigateSafe(UIPreferenceFragmentDirections.accentSettings())

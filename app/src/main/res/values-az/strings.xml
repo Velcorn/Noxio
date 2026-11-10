@@ -153,20 +153,8 @@
     <string name="set_black_mode_desc">Saf-qaranlıq temadan istifadə et</string>
     <string name="set_round_mode">Dairəvi rejim</string>
     <string name="set_round_mode_desc">İstifadəçi isterfeysində əlavə elementlərdə dairəvi küncləri aktivləşdir (albom qapaqlarının dairəvi olmasını tələb edir)</string>
-    <string name="set_personalize">Fərdiləşdir</string>
-    <string name="set_personalize_desc">İstifadəçi interfeys nəzarət və davranışını fərdiləşdir</string>
     <string name="set_lib_tabs">Musiqi kitabxanası teblərı</string>
     <string name="set_lib_tabs_desc">Musiqi kitabxanası teblərinin görünürlüyünü və sırasını dəyiş</string>
-    <string name="set_display">Displey</string>
-    <string name="set_behavior">Davranış</string>
-    <string name="set_play_in_list_with">Musiqi kitabxanasından səsləndiriləndə</string>
-    <string name="set_play_in_parent_with">Element detallarından səsləndiriləndə</string>
-    <string name="set_play_song_none">Görünən elementdən səsləndir</string>
-    <string name="set_play_song_from_all">Bütün mahnılardan səsləndir</string>
-    <string name="set_play_song_from_album">Albomdan səsləndir</string>
-    <string name="set_play_song_from_artist">İfaçıdan səsləndir</string>
-    <string name="set_play_song_from_genre">Janrdan səsləndir</string>
-    <string name="set_play_song_by_itself">Sadəcə mahnını səsləndir</string>
     <string name="set_keep_shuffle">Qarışdırmağı yadda saxla</string>
     <string name="set_keep_shuffle_desc">Yeni mahnı səsləndiriləndə qarışdırmağı davam et</string>
     <string name="set_content">Məzmun</string>
@@ -186,8 +174,6 @@
     <string name="set_separators_plus">Üstəgəl (+)</string>
     <string name="set_separators_and">\"Və\" işarəsi (&amp;)</string>
     <string name="set_separators_warning">Xəbərdarlıq: Bu parametrdən istifadə bəzi teqlərin birdən çox dəyərə malik olduğu kimi yanlış şərh edilməsi ilə nəticələnə bilər. Arzuolunmaz ayırıcı simvolları əks sleş (\\) ilə prefiks etməklə bunu həll edə bilərsiniz.</string>
-    <string name="set_intelligent_sorting">Ağıllı çeşidləmə</string>
-    <string name="set_intelligent_sorting_desc">Rəqəmlərlə və ya \"the\" kimi artikllarla başlayan adları düzgün çeşidləyin (İngilis dilli musiqi ilə ən yaxşı işləyir)</string>
     <string name="set_hide_collaborators">Digər ifaçılar və əməkdaşları gizlə</string>
     <string name="set_hide_collaborators_desc">Yalnız birbaşa albomda qeyd olunan ifaçıları göstər (yaxşı teqlənmiş musiqi kitabxanalarında ən yaxşı işləyir)</string>
     <string name="set_images">Şəkillər</string>
@@ -201,13 +187,6 @@
     <string name="set_square_covers_desc">Bütün albom qapaqlarını 1:1 aspekt nisbətinə kəs</string>
     <string name="set_audio">Audio</string>
     <string name="set_audio_desc">Səs və oxutma davranışını konfiqurasiya et</string>
-    <string name="set_playback">Səsləndirmə</string>
-    <string name="set_headset_autoplay">Qulaqlıqla avtomatik səsləndirmə</string>
-    <string name="set_headset_autoplay_desc">Qulaqlıq qoşulduqda həmişə səsləndirməni başla (bütün cihazlarda işləməyə bilər)</string>
-    <string name="set_repeat_pause">Təkrarda mahnını dayandır</string>
-    <string name="set_repeat_pause_desc">Mahnı təkrarlananda onu dayandır</string>
-    <string name="set_remember_pause">Dayandırmağı yadda saxla</string>
-    <string name="set_remember_pause_desc">Növbəni dəyişdirərkən və ya atlayarkən səsləndirmədə/dayandırmada qalın</string>
     <string name="set_replay_gain">Səs həcmini normallaşdırma</string>
     <string name="set_system_database">Sistem</string>
     <string name="set_grant_storage_anyway">Yaddaş icazəsi tövsiyə olunur</string>
@@ -344,6 +323,4 @@
     <string name="set_saf_multithread_desc">Daha sürətli, lakin bəzi cihazlarda uğursuz</string>
     <string name="err_share_too_large">Bu fayl paylaşmaq üçün çox böyükdür</string>
     <string name="err_share_failed">Bunu paylaşmaq mümkün deyil</string>
-    <string name="set_task_exit">Bağlandıqda həmişə çıxış et</string>
-    <string name="set_task_exit_desc">Mahnı son siyahıdan çıxarıldıqda səsləndirməni dayandır</string>
 </resources>

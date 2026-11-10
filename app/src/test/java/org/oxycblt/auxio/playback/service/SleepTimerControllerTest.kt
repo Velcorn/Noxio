@@ -79,6 +79,8 @@ class SleepTimerControllerTest {
             mutable.value = active.copy(mode = SleepTimerMode.EndOfTrack)
         }
 
+        override fun extend(minutes: Int) {}
+
         override fun cancel() {
             mutable.value = SleepTimerState.Off
         }

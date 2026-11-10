@@ -109,8 +109,6 @@
     <string name="set_audio_desc">ضبط سلوك وصوت التشغيل</string>
     <string name="set_rewind_prev">إعادة التشغيل قبل الانتقال للوراء</string>
     <string name="set_rewind_prev_desc">إعادة التشغيل قبل الانتقال إلى الأغنية السابقة</string>
-    <string name="set_remember_pause_desc">البقاء على التشغيل/الإيقاف عند الانتقال أو تعديل قائمة التشغيل</string>
-    <string name="set_remember_pause">تذكر الإيقاف المؤقت</string>
     <string name="set_rescan_desc">مسح ذاكرة التخزين المؤقت للعلامات وإعادة تحميل كامل مكتبة الموسيقى (أبطأ ولكن أكثر اكتمالًا)</string>
     <string name="err_import_failed">غير قادر على استيراد قائمة التشغيل من هذا الملف</string>
     <string name="err_no_app">لم يتم العثور على تطبيق يمكنه التعامل مع هذه المهمة</string>
@@ -142,14 +140,8 @@
     <string name="lng_supporters_promo">تبرع إلى المشروع لإضافة اسمك هنا!</string>
     <string name="set_lib_tabs">علامات تبويب المكتبة</string>
     <string name="set_lib_tabs_desc">تغيير مرئية وترتيب علامات تبويب المكتبة</string>
-    <string name="set_play_song_none">تشغيل من العنصر المعروض</string>
-    <string name="set_play_song_from_album">تشغيل من الألبوم</string>
-    <string name="set_play_song_from_artist">تشغيل من الفنان</string>
-    <string name="set_play_song_from_genre">تشغيل من النوع</string>
-    <string name="set_play_song_by_itself">تشغيل الأغنية بمفردها</string>
     <string name="set_music">الصوتية</string>
     <string name="set_separators_warning">تحذير: استخدام هذا الإعداد قد يؤدي إلى تفسير بعض العلامات بشكل غير صحيح بأن لديها قيم متعددة. يمكنك حل هذه المشكلة عن طريق إضافة شريط مائل مسبوق بشرطة مائلة عكسية (\\).</string>
-    <string name="set_playback">استعادة</string>
     <string name="lbl_eps">ألبومات ممتدة</string>
     <string name="lbl_ep">البوم مصغر</string>
     <string name="lbl_ep_live">ألبوم موسيقي مباشر</string>
@@ -167,19 +159,14 @@
     <string name="lbl_single">أغنية فردية</string>
     <string name="lbl_singles">أغاني فردية</string>
     <string name="set_separators_plus">الرمز زائد (+)</string>
-    <string name="set_intelligent_sorting">الفرز الذكي</string>
     <string name="clr_red">أحمر</string>
     <string name="clr_deep_blue">ازرق غامق</string>
     <string name="set_observing">إعادة التحميل التلقائي</string>
     <string name="set_separators_desc">ضبط الأحرف التي تشير إلى قيم علامات متعددة</string>
-    <string name="set_headset_autoplay_desc">البدء التلقائي في التشغيل عند توصيل سماعة الرأس (قد لا يعمل على جميع الأجهزة)</string>
     <string name="lbl_soundtracks">موسيقى تصويرية</string>
     <string name="set_content_desc">تحكم في كيفية تحميل الصوتية والصور</string>
     <string name="set_keep_shuffle_desc">حافظ على خاصية الخلط عند تشغيل أغنية جديدة</string>
-    <string name="set_headset_autoplay">سماعة الرأس تشغيل تلقائي</string>
     <string name="set_replay_gain">توحيد مستوى الصوت</string>
-    <string name="set_repeat_pause">إيقاف مؤقت عند التكرار</string>
-    <string name="set_repeat_pause_desc">إيقاف مؤقت عند تكرار الأغنية</string>
     <string name="desc_track_number">المسار %d</string>
     <string name="lbl_compilation_remix">تجميعة ريميكس</string>
     <string name="def_album_count">لا توجد ألبومات</string>
@@ -192,10 +179,6 @@
     <string name="set_pre_amp_without">ضبط بدون علامات</string>
     <string name="lbl_empty_playlist">قائمة تشغيل فارغة</string>
     <string name="set_round_mode">الوضع الدائري</string>
-    <string name="set_play_in_list_with">عند التشغيل من المكتبة</string>
-    <string name="set_play_song_from_all">تشغيل من جميع الأغاني</string>
-    <string name="set_behavior">السلوك</string>
-    <string name="set_play_in_parent_with">عند التشغيل من تفاصيل العنصر</string>
     <string name="set_exclude_non_music_desc">تجاهل ملفات الصوت التي ليست موسيقى، مثل البودكاست</string>
     <string name="set_separators">فواصل القيم المتعددة</string>
     <string name="set_observing_desc">أعد تحميل مكتبة الصوتية عندما تتغير (يتطلب إشعار دائم)</string>
@@ -227,7 +210,6 @@
     <string name="set_theme">السمة</string>
     <string name="set_theme_day">فاتح</string>
     <string name="set_round_mode_desc">تفعيل الزوايا المستديرة على عناصر واجهة المستخدم الإضافية (يتطلب أن تكون أغلفة الألبومات مستديرة)</string>
-    <string name="set_personalize">تخصيص</string>
     <string name="set_replay_gain_mode_dynamic">تفضيل الألبوم إذا كان أحد الألبومات يُشغّل</string>
     <string name="set_replay_gain_mode_track">تفضيل المسار</string>
     <string name="set_pre_amp">مكبر الصوت المسبق لـ ReplayGain</string>
@@ -241,7 +223,6 @@
     <string name="def_date">لا يوجد تاريخ</string>
     <string name="def_song_count">لا أغاني</string>
     <string name="clr_pink">لون القرنفل</string>
-    <string name="set_intelligent_sorting_desc">الفرز الصحيح للأسماء التي تبدأ بأرقام أو بكلمات مثل \"the\" (يعمل بشكل أفضل مع الموسيقى باللغة الإنجليزية)</string>
     <string name="set_cover_mode_off">إيقاف</string>
     <string name="clr_brown">بني</string>
     <string name="fmt_lib_song_count">الأغاني التي تم تحميلها: %d</string>
@@ -255,12 +236,10 @@
     <string name="fmt_disc_no_subtitle">%2$s – القرص %1$d</string>
     <string name="fmt_db_pos">+%.1f ديسيبل</string>
     <string name="fmt_sample_rate">%d هرتز</string>
-    <string name="set_display">عرض</string>
     <string name="lbl_ep_remix">البوم موسيقي ريميكس</string>
     <string name="lbl_soundtrack">صوت تصويري</string>
     <string name="lng_playlist_renamed">تم إعادة تسمية قائمة التشغيل</string>
     <string name="set_black_mode">سمة اللون الأسود</string>
-    <string name="set_personalize_desc">تخصيص عناصر التحكم وسلوك واجهة المستخدم</string>
     <string name="lng_playlist_added">تمت إضافته إلى قائمة التشغيل</string>
     <string name="set_root_title">إعدادات</string>
     <string name="set_separators_semicolon">الفاصلة المنقوطة (؛)</string>
@@ -351,8 +330,6 @@
         <item quantity="other">%d ثانية</item>
     </plurals>
     <string name="fmt_lib_total_size">الحجم الكلي: %s</string>
-    <string name="set_task_exit">أنهي دائمًا عند الإغلاق</string>
-    <string name="set_task_exit_desc">أوقف التشغيل عند الإزالة من الحديثة، حتى في حالة التشغيل</string>
     <string name="err_share_too_large">هذا كبير جدًا للمشاركة</string>
     <string name="err_share_failed">غير قادر على مشاركة هذا</string>
     <string name="lng_play_next">الصوتية التالي</string>

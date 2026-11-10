@@ -34,7 +34,6 @@
     <string name="set_theme_night">Gelap</string>
     <string name="set_accent">Warna</string>
     <string name="set_audio">Audio</string>
-    <string name="set_personalize">Personalisasi</string>
     <string name="set_keep_shuffle">Ingat daftar putar acak</string>
     <!-- Error Namespace | Error Labels -->
     <!-- Hint Namespace | EditText Hints -->
@@ -56,10 +55,7 @@
     <string name="lbl_save">Simpan</string>
     <string name="set_black_mode">Tema hitam</string>
     <string name="set_black_mode_desc">Gunakan tema gelap hitam pekat</string>
-    <string name="set_display">Tampilan</string>
     <string name="set_lib_tabs_desc">Atur tab pustaka yang ditampilkan dan urutannya</string>
-    <string name="set_headset_autoplay">Putar otomatis headset</string>
-    <string name="set_headset_autoplay_desc">Selalu mulai memutar ketika headset tersambung (mungkin tidak berfungsi pada semua perangkat)</string>
     <string name="set_replay_gain_mode">Strategi ReplayGain</string>
     <string name="lbl_size">Ukuran</string>
     <string name="lbl_sample_rate">Tingkat sampel</string>
@@ -86,13 +82,9 @@
     <string name="set_pre_amp_desc">Pre-amp diterapkan ke penyesuaian yang ada selama pemutaran</string>
     <string name="set_pre_amp_with">Penyesuaian dengan tag</string>
     <string name="set_pre_amp_warning">Peringatan: Mengubah pre-amp ke nilai positif yang tinggi dapat mengakibatkan puncak pada beberapa trek audio.</string>
-    <string name="set_play_song_none">Putar dari item yang ditampilkan</string>
-    <string name="set_play_song_from_all">Putar dari semua lagu</string>
     <string name="set_keep_shuffle_desc">Tetap mengacak saat memutar lagu baru</string>
-    <string name="set_repeat_pause">Jeda pada pengulangan</string>
     <string name="set_rewind_prev">Putar balik sebelum melompat ke belakang</string>
     <string name="set_rewind_prev_desc">Putar mundur sebelum melompat ke lagu sebelumnya</string>
-    <string name="set_repeat_pause_desc">Jeda saat lagu diulang</string>
     <string name="set_content">Konten</string>
     <string name="set_reindex">Muat ulang musik</string>
     <string name="set_reindex_desc">Muat ulang perpustakaan musik, menggunakan tag yang di-cache jika memungkinkan</string>
@@ -123,16 +115,12 @@
     <string name="fmt_lib_album_count">Album yang dimuat: %d</string>
     <string name="fmt_lib_artist_count">Artis yang dimuat: %d</string>
     <string name="set_replay_gain_mode_dynamic">Utamakan album jika ada yang diputar</string>
-    <string name="set_play_in_list_with">Saat diputar dari pustaka</string>
-    <string name="set_play_song_from_album">Putar dari album</string>
     <string name="desc_change_repeat">Ubah mode pengulangan</string>
     <string name="desc_artist_image">Gambar artis untuk %s</string>
-    <string name="set_play_in_parent_with">Saat diputar dari keterangan item</string>
     <string name="desc_remove_song">Hapus lagu antrian ini</string>
     <string name="desc_clear_search">Hapus kueri pencarian</string>
     <string name="set_pre_amp_without">Penyesuaian tanpa tag</string>
     <string name="set_locations">Sumber musik</string>
-    <string name="set_play_song_from_artist">Putar dari artis</string>
     <string name="desc_skip_prev">Loncat ke lagu terakhir</string>
     <string name="def_date">Tidak ada tanggal</string>
     <string name="err_index_failed">Pemuatan musik gagal</string>
@@ -165,7 +153,6 @@
     <string name="set_replay_gain">Normalisasi volume</string>
     <string name="set_observing">Muat ulang otomatis</string>
     <string name="set_observing_desc">Selalu muat ulang pustaka musik saat terjadi perubahan (membutuhkan notifikasi tetap)</string>
-    <string name="set_behavior">Perilaku</string>
     <string name="set_round_mode">Mode bundar</string>
     <string name="set_round_mode_desc">Aktifkan sudut yang bundar pada elemen UI tambahan (mewajibkan sampul album bersudut bundar)</string>
     <string name="set_separators_comma">Koma (,)</string>
@@ -174,7 +161,6 @@
     <string name="set_cover_mode_high_quality">Kualitas tinggi</string>
     <string name="set_separators_semicolon">Titik koma (;)</string>
     <string name="lbl_wiki">Wiki</string>
-    <string name="set_play_song_from_genre">Putar dari aliran</string>
     <string name="lbl_genre">Aliran</string>
     <string name="set_cover_mode">Sampul album</string>
     <string name="set_cover_mode_off">Nonaktif</string>
@@ -184,14 +170,12 @@
     <string name="lbl_observing">Memantau pustaka musik</string>
     <string name="lng_observing">Memantau perubahan pada pustaka musik Anda…</string>
     <string name="set_ui_desc">Ubah tema dan warna aplikasi</string>
-    <string name="set_personalize_desc">Atur UI dan tingkah laku</string>
     <string name="set_content_desc">Atur bagaimana musik dan gambar dimuat</string>
     <string name="set_music">Musik</string>
     <string name="set_exclude_non_music_desc">Abaikan berkas audio yang bukan musik, seperti siniar</string>
     <string name="set_separators_slash">Garis miring (/)</string>
     <string name="set_images">Gambar</string>
     <string name="set_library">Pustaka</string>
-    <string name="set_playback">Pemutaran</string>
     <string name="set_separators_and">Ampersand (&amp;)</string>
     <string name="lbl_compilations">Kompilasi</string>
     <string name="lbl_compilation_remix">Kompilasi remix</string>
@@ -249,8 +233,6 @@
     <string name="lng_supporters_promo">Donasi ke proyek ini agar nama Anda ditambahkan kesini!</string>
     <string name="set_separators">Pemisah nilai ganda</string>
     <string name="set_audio_desc">Konfigurasikan suara dan perilaku pemutaran</string>
-    <string name="set_remember_pause">Ingat jeda</string>
-    <string name="set_remember_pause_desc">Tetap memainkan/menjeda ketika melewati atau mengatur antrean</string>
     <string name="err_export_failed">Tidak dapat mengekspor daftar putar ke berkas ini</string>
     <string name="desc_queue_bar">Buka antrean</string>
     <string name="desc_selection_image">Pemilihan gambar</string>
@@ -277,9 +259,7 @@
     <string name="lbl_path">Jalur</string>
     <string name="lbl_selection">Pilihan</string>
     <string name="lng_playlist_renamed">Nama daftar putar diubah</string>
-    <string name="set_play_song_by_itself">Putar lagu dengan sendirinya</string>
     <string name="set_separators_desc">Konfigurasi karakter yang menunjukkan nilai tag multipel</string>
-    <string name="set_intelligent_sorting">Penyortiran cerdas</string>
     <string name="set_hide_collaborators_desc">Hanya tampilkan artis yang secara langsung dikreditkan pada sebuah album (bekerja paling baik pada pustaka yang diberi tag dengan baik)</string>
     <string name="set_hide_collaborators">Sembunyikan kolaborator</string>
     <string name="fmt_editing">Mengedit %s</string>
@@ -293,7 +273,6 @@
     <string name="lbl_export_playlist">Ekspor daftar putar</string>
     <string name="lbl_path_style_relative">Relatif</string>
     <string name="lbl_error_info">Informasi kesalahan</string>
-    <string name="set_intelligent_sorting_desc">Sortir nama yang dimulai dengan nomor atau kata seperti \"the\" dengan benar (bekerja paling baik dengan lagu berbahasa Inggris)</string>
     <string name="lbl_more">Lebih banyak</string>
     <string name="lng_empty_songs">Lagu-lagu Anda akan muncul di sini.</string>
     <string name="lbl_start_playback">Mulai pemutaran</string>

@@ -175,4 +175,56 @@ class SleepTimerTest {
         timer.lastCustomMinutes = null
         assertNull(timer.lastCustomMinutes)
     }
+
+    @Test
+    fun extendingGivesARunningTimerMoreMinutesButKeepsItsDuration() {
+        timer.start(SleepTimerMode.Minutes(30))
+        val endsAt = active().endsAt
+        timer.extend(10)
+        assertEquals(endsAt + 10 * 60_000L, active().endsAt)
+        assertEquals(SleepTimerMode.Minutes(30), active().mode)
+        assertEquals(30, timer.lastMode.minutes)
+    }
+
+    @Test
+    fun extendingNeverGoesPastTheLongestTimer() {
+        timer.start(SleepTimerMode.Minutes(SleepTimer.MAX_MINUTES))
+        timer.extend(10)
+        assertEquals(
+            SystemClock.elapsedRealtime() + SleepTimer.MAX_MINUTES * 60_000L,
+            active().endsAt,
+        )
+    }
+
+    @Test
+    fun extendingDoesNothingWithoutAMinutesTimer() {
+        timer.extend(10)
+        assertEquals(SleepTimerState.Off, timer.state.value)
+        timer.start(SleepTimerMode.EndOfTrack)
+        timer.extend(10)
+        assertEquals(SleepTimerMode.EndOfTrack, active().mode)
+        assertEquals(0L, active().endsAt)
+    }
+
+    @Test
+    fun shakeToResetCanBeTurnedOffAndStaysOff() {
+        assertEquals(true, timer.shakeToReset)
+        timer.shakeToReset = false
+        assertEquals(
+            false,
+            SleepTimerImpl(ApplicationProvider.getApplicationContext<Context>()).shakeToReset,
+        )
+    }
+
+    @Test
+    fun theNotificationCountsDownToTheWallClockTimeOfTheEnd() {
+        assertEquals(
+            1_000_000L + 60_000L,
+            SleepTimerNotification.wallClockOf(
+                elapsedRealtime = 5_060_000L,
+                nowElapsed = 5_000_000L,
+                nowWallClock = 1_000_000L,
+            ),
+        )
+    }
 }

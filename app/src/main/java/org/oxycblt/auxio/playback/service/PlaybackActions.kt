@@ -28,4 +28,6 @@ object PlaybackActions {
     const val ACTION_SKIP_NEXT = BuildConfig.APPLICATION_ID + ".action.NEXT"
     const val ACTION_EXIT = BuildConfig.APPLICATION_ID + ".action.EXIT"
     const val ACTION_RESET_SLEEP_TIMER = BuildConfig.APPLICATION_ID + ".action.RESET_SLEEP_TIMER"
+    const val ACTION_STOP_SLEEP_TIMER = BuildConfig.APPLICATION_ID + ".action.STOP_SLEEP_TIMER"
+    const val ACTION_EXTEND_SLEEP_TIMER = BuildConfig.APPLICATION_ID + ".action.EXTEND_SLEEP_TIMER"
 }

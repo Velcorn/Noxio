@@ -68,12 +68,13 @@ class PlaybackSettingsTest {
             putBoolean(key(R.string.set_key_remember_pause), true)
             putBoolean(key(R.string.set_key_task_exit), true)
         }
-        assertTrue(settings.headsetAutoplay)
         assertFalse(settings.keepShuffle)
         assertFalse(settings.rewindWithPrev)
-        assertTrue(settings.pauseOnRepeat)
-        assertTrue(settings.rememberPause)
-        assertTrue(settings.exitOnTaskRemoval)
+        // Noxio has no settings for these any more, whatever is stored, they stay off.
+        assertFalse(settings.headsetAutoplay)
+        assertFalse(settings.pauseOnRepeat)
+        assertFalse(settings.rememberPause)
+        assertFalse(settings.exitOnTaskRemoval)
     }
 
     @Test
@@ -83,8 +84,9 @@ class PlaybackSettingsTest {
             putInt(key(R.string.set_key_play_in_parent_with), PlaySong.FromGenre(null).intCode)
             putInt(key(R.string.set_key_replay_gain), IntegerTable.REPLAY_GAIN_MODE_ALBUM)
         }
-        assertEquals(PlaySong.FromAlbum, settings.playInListWith)
-        assertEquals(PlaySong.FromGenre(null), settings.inParentPlaybackMode)
+        // Noxio has no settings for what plays any more: always the list a song was tapped in.
+        assertEquals(PlaySong.FromAll, settings.playInListWith)
+        assertNull(settings.inParentPlaybackMode)
         assertEquals(ReplayGainMode.ALBUM, settings.replayGainMode)
     }
 
@@ -101,8 +103,14 @@ class PlaybackSettingsTest {
             putInt("auxio_detail_playback_mode", IntegerTable.MUSIC_MODE_GENRES)
         }
         settings.migrate()
-        assertEquals(PlaySong.FromAlbum, settings.playInListWith)
-        assertEquals(PlaySong.FromGenre(null), settings.inParentPlaybackMode)
+        assertEquals(
+            PlaySong.FromAlbum.intCode,
+            preferences.getInt(key(R.string.set_key_play_in_list_with), 0),
+        )
+        assertEquals(
+            PlaySong.FromGenre(null).intCode,
+            preferences.getInt(key(R.string.set_key_play_in_parent_with), 0),
+        )
         // The old settings are gone, so this does not happen again.
         assertFalse(preferences.contains("auxio_library_playback_mode"))
         assertFalse(preferences.contains("auxio_detail_playback_mode"))
@@ -120,7 +128,10 @@ class PlaybackSettingsTest {
         for ((old, new) in pairs) {
             preferences.edit { putInt("auxio_library_playback_mode", old) }
             settings.migrate()
-            assertEquals(new, settings.playInListWith)
+            assertEquals(
+                new.intCode,
+                preferences.getInt(key(R.string.set_key_play_in_list_with), 0),
+            )
         }
     }
 

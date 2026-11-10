@@ -1,7 +1,7 @@
 # Noxio roadmap
 
 ## Next
-- [ ] Sleep timer: built and unit tested (timer state, fade curve, shake detection), needs on-device testing (centered moon with countdown, 30 / custom / 60 min, end of track, fade-out, shake to reset)
+- [ ] Sleep timer: built and unit tested (timer state, fade curve, shake detection), needs on-device testing (small moon next to ⋯ with countdown, own notification with live countdown, +10 min and Stop, 30 / custom / 60 min, finish last song, fade-out, shake to restart)
 - [x] Equalizer moved from the now playing toolbar to Settings > Playback
 - [x] Icon: Crescent and Sparkle (adaptive icon on pure black, themed icon layer, splash, notification glyph)
 - [x] Minimal launcher icon (white, no background), switchable in Settings > Appearance; needs a check on a device
@@ -21,7 +21,7 @@
 - [x] Listening stats: tap an artist, album or song for a closer look (plays, time, share of all listening, days listened, top songs or plays over time, first play and total) that can be shared or saved as an image; needs a check on a device
 - [x] Default and minimal icon without a background layer, so Kvaesitso no longer cuts them to its icon shape (seen with the pentagon and triangle shapes on an emulator); needs a check on a device
 - [x] Black theme: menus, dialogs, sheets, app bar and status bar pure black; grey shuffle and repeat in the notification; wavy seek bar on by default, can be turned off
-- [x] Settings regrouped into five screens (Appearance, Home and player, Playback, Library, Backup); the week start setting is gone, weeks start on Monday
+- [x] Settings in four screens (Appearance with the library tabs, Playback, Library, Backup); week start, what plays from the library or a detail page, headset autoplay, pause on repeat, remember pause, always exit on close and intelligent sorting removed
 - [x] About page: Noxio links, Auxio credit and fork notice, upstream donate and supporters removed; needs a check on a device
 - [x] Unit tests for the stats and sleep timer logic, coverage badge, CI (format, Android lint, tests), tagged dev releases
 

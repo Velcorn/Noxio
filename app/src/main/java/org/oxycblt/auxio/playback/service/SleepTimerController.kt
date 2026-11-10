@@ -44,6 +44,7 @@ import org.oxycblt.auxio.playback.timer.ShakeDetector
 import org.oxycblt.auxio.playback.timer.SleepFade
 import org.oxycblt.auxio.playback.timer.SleepTimer
 import org.oxycblt.auxio.playback.timer.SleepTimerMode
+import org.oxycblt.auxio.playback.timer.SleepTimerNotification
 import org.oxycblt.auxio.playback.timer.SleepTimerState
 import timber.log.Timber as L
 
@@ -67,6 +68,7 @@ class SleepTimerController(
     private val onPauseAtEndChanged: (Boolean) -> Unit,
 ) : SensorEventListener {
     private var job: Job? = null
+    private val notification = SleepTimerNotification(context)
 
     private val sensorManager = context.getSystemService(SensorManager::class.java)
     private var listeningForShake = false
@@ -79,6 +81,7 @@ class SleepTimerController(
     fun release() {
         scope.cancel()
         stopListeningForShake()
+        notification.release()
         // The service is going away, don't leave a timer armed for the next one.
         sleepTimer.cancel()
         onPauseAtEndChanged(false)
@@ -99,6 +102,7 @@ class SleepTimerController(
         // Any state change (cancel, reset, new timer) puts the volume back, so a reset during a
         // fade-out brings the music back.
         player.volume = 1f
+        notification.show(state)
         when (state) {
             SleepTimerState.Off -> {
                 onPauseAtEndChanged(false)

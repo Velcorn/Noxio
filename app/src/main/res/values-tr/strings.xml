@@ -34,7 +34,6 @@
     <string name="set_theme_night">Koyu</string>
     <string name="set_accent">Ana Renk</string>
     <string name="set_audio">Ses</string>
-    <string name="set_personalize">Kişiselleştir</string>
     <!-- Error Namespace | Error Labels -->
     <!-- Hint Namespace | EditText Hints -->
     <string name="lng_search_library">Kitaplığınız taranıyor…</string>
@@ -78,7 +77,6 @@
     <string name="set_black_mode">Siyah tema</string>
     <string name="lbl_library_counts">Kitaplık istatistikleri</string>
     <string name="set_black_mode_desc">Saf siyah koyu tema kullan</string>
-    <string name="set_display">Görüntü</string>
     <string name="set_lib_tabs">Kitaplık sekmeleri</string>
     <string name="set_lib_tabs_desc">Kitaplık sekmelerinin görünürlüğünü ve sırasını değiştirin</string>
     <string name="set_pre_amp_desc">Ön amfi, oynatma sırasında mevcut ayara uygulanır</string>
@@ -86,9 +84,6 @@
     <string name="set_pre_amp_without">Etiketsiz ayarla</string>
     <string name="set_pre_amp_with">Etiket ile ayarla</string>
     <string name="set_pre_amp_warning">Uyarı: Ön amfinin yüksek bir pozitif değere değiştirilmesi bazı ses parçalarında pik yapmaya neden olabilir.</string>
-    <string name="set_play_song_none">Gösterilen öğeden çal</string>
-    <string name="set_play_song_from_all">Tüm şarkılardan çal</string>
-    <string name="set_play_song_from_album">Albümden çal</string>
     <string name="set_locations">Müzik kaynakları</string>
     <string name="desc_album_cover">%s albümünün kapağı</string>
     <string name="desc_artist_image">%s sanatçısının resmi</string>
@@ -104,9 +99,6 @@
     <string name="clr_lime">Misket limonu</string>
     <string name="clr_yellow">Sarı</string>
     <string name="clr_orange">Turuncu</string>
-    <string name="set_play_in_list_with">Kitaplıktan çalarken</string>
-    <string name="set_play_in_parent_with">Öğe ayrıntılarından çalarken</string>
-    <string name="set_play_song_from_artist">Sanatçıdan çal</string>
     <string name="fmt_lib_artist_count">Yüklenen sanatçılar: %d</string>
     <string name="fmt_lib_genre_count">Yüklenen türler: %d</string>
     <string name="fmt_sample_rate">%d Hz</string>
@@ -131,13 +123,10 @@
     <string name="fmt_lib_song_count">Yüklenen şarkılar: %d</string>
     <string name="fmt_lib_album_count">Yüklenen albümler: %d</string>
     <string name="set_replay_gain_mode_dynamic">Çalan bir albüm varsa tercih et</string>
-    <string name="set_headset_autoplay">Kulaklıkta otomatik çalma</string>
-    <string name="set_headset_autoplay_desc">Bir kulaklık takıldığında müzik çalmaya başlar (bütün cihazlarda çalışmayabilir)</string>
     <string name="set_replay_gain_mode_track">Parçayı tercih et</string>
     <string name="set_replay_gain_mode_album">Albümü tercih et</string>
     <string name="set_rewind_prev">Öncekine geçmeden önce başa sar</string>
     <string name="set_rewind_prev_desc">Önceki şarkıya geçmeden önce şimdiki şarkıyı başa sar</string>
-    <string name="set_repeat_pause_desc">Bir şarkı tekrarlandığında duraklat</string>
     <string name="set_content">İçerik</string>
     <string name="set_keep_shuffle">Karıştırmayı hatırla</string>
     <string name="set_keep_shuffle_desc">Yeni bir şarkı çalarken karışık çalmayı açık tut</string>
@@ -162,7 +151,6 @@
     <string name="clr_teal">Deniz mavisi</string>
     <string name="set_round_mode_desc">Ek arayüz öğelerinde yuvarlatılmış köşeleri etkinleştirir (Albüm kapaklarının yuvarlatılmış olmasını gerektirir)</string>
     <string name="set_round_mode">Yuvarlak mod</string>
-    <string name="set_repeat_pause">Tekrarda duraklat</string>
     <string name="lbl_indexing">Müzik yükleniyor</string>
     <string name="lbl_observing">Müzik kitaplığı denetleniyor</string>
     <string name="lng_observing">Müzik kitaplığı değişiklikler için denetleniyor…</string>
@@ -218,7 +206,6 @@
     <string name="set_rescan">Müzikleri yeniden tara</string>
     <string name="set_separators_slash">Eğik çizgi (/)</string>
     <string name="desc_queue_bar">Çalma sırasını aç</string>
-    <string name="set_play_song_from_genre">Türden çal</string>
     <string name="set_exclude_non_music_desc">Podcast\'ler gibi müzik olmayan ses dosyalarını yok say</string>
     <string name="set_separators_warning">Uyarı: Bu ayarın kullanılması bazı etiketlerin yanlışlıkla birden fazla değere sahip olarak yorumlanmasına neden olabilir. Bunu istenmeyen ayırıcı karakterlerin önüne ters eğik çizgi (\\) koyarak çözebilirsiniz.</string>
     <string name="set_exclude_non_music">Müzik olmayanları hariç tut</string>
@@ -229,18 +216,13 @@
     <string name="set_music">Müzik</string>
     <string name="set_images">Resimler</string>
     <string name="set_audio_desc">Sesi ve oynatma davranışını yapılandırın</string>
-    <string name="set_playback">Oynatma</string>
     <string name="set_library">Kütüphane</string>
     <string name="lbl_sort_dsc">Azalan</string>
     <string name="set_ui_desc">Uygulamanın temasını ve renklerini değiştirin</string>
-    <string name="set_personalize_desc">Arayüz kontrollerini ve davranışını özelleştirin</string>
-    <string name="set_behavior">Davranış</string>
     <string name="set_replay_gain">Ses normalleştirmesi</string>
     <string name="desc_playlist_image">%s için çalma listesi resmi</string>
     <string name="lbl_playlist">Çalma Listesi</string>
     <string name="lbl_playlists">Çalma Listeleri</string>
-    <string name="set_intelligent_sorting">Akıllı sıralama</string>
-    <string name="set_intelligent_sorting_desc">Sıralama yaparken \"the\" gibi kelimeleri yok sayın (en iyi ingilizce müzikle çalışır)</string>
     <string name="lbl_new_playlist">Yeni çalma listesi</string>
     <string name="lbl_delete">Sil</string>
     <string name="lbl_rename">Yeniden Adlandır</string>
@@ -249,7 +231,6 @@
     <string name="lbl_sort_direction">Yön</string>
     <string name="desc_selection_image">Seçim görüntüsü</string>
     <string name="lbl_selection">Seçim</string>
-    <string name="set_play_song_by_itself">Şarkıyı kendi kendine çal</string>
     <string name="fmt_def_playlist">Çalma listesi %d</string>
     <string name="lng_playlist_created">Çalma listesi oluşturuldu</string>
     <string name="def_disc">Disk yok</string>
@@ -281,8 +262,6 @@
     <string name="lng_playlist_exported">Çalma listesi dışa aktarıldı</string>
     <string name="lbl_supporters">Destekçiler</string>
     <string name="lng_supporters_promo">İsminizin buraya eklenmesi için projeye bağış yapabilirsiniz!</string>
-    <string name="set_remember_pause">Durmayı hatırla</string>
-    <string name="set_remember_pause_desc">Şarkı durduğunda sonraki şarkılara geçildiği zaman veya çalma sırasını düzenlerken durmaya devam et</string>
     <string name="set_replay_gain_mode_off">Kapalı</string>
     <string name="err_import_failed">Bu dosyadan bir çalma listesi yüklenemiyor</string>
     <string name="cdc_unknown">Bilinmeyen biçim</string>
@@ -346,10 +325,8 @@
         <item quantity="other">%d saniye</item>
     </plurals>
     <string name="err_share_too_large">Bu paylaşmak için çok büyük</string>
-    <string name="set_task_exit_desc">Oynatılıyor olsa bile, son uygulamalardan kaldırıldığında oynatmayı durdur</string>
     <string name="set_saf_multithread">Çoklu İş Parçacıklı Dosya Gezintisi</string>
     <string name="set_saf_multithread_desc">Daha hızlıdır, ancak bazı cihazlarda hata verebilir</string>
     <string name="err_share_failed">Bu paylaşılamıyor</string>
-    <string name="set_task_exit">Kapatıldığında her zaman çık</string>
     <string name="fmt_lib_total_size">Toplam boyut: %s</string>
 </resources>

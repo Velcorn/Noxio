@@ -34,7 +34,6 @@
     <string name="set_theme_night">Sötét</string>
     <string name="set_accent">Színséma</string>
     <string name="set_audio">Hang</string>
-    <string name="set_personalize">Testreszabás</string>
     <!-- Error Namespace | Error Labels -->
     <!-- Hint Namespace | EditText Hints -->
     <string name="lng_search_library">Keresés a könyvtárban…</string>
@@ -89,7 +88,6 @@
     <string name="lbl_size">Méret</string>
     <string name="lbl_bitrate">Bitráta</string>
     <string name="set_separators_warning">Figyelem: Ennek a beállításnak a használata azt eredményezheti, hogy egyes címkék helytelenül több értéket tartalmaznak. Ezt úgy oldhatja fel, hogy a nem kívánt elválasztó karakterek elé egy backslash-t (\\) helyez.</string>
-    <string name="set_repeat_pause_desc">Szünet, amikor egy dal ismétlődik</string>
     <string name="set_replay_gain_mode">Visszajátszás stratégia</string>
     <string name="set_replay_gain_mode_album">Inkább album</string>
     <string name="set_replay_gain_mode_track">Inkább hangsáv</string>
@@ -123,21 +121,16 @@
     <string name="lng_indexing">Zenei könyvtár betöltése…</string>
     <string name="lng_playlist_added">Lejátszólistához adva</string>
     <string name="set_rewind_prev">Visszatekerés visszaugrás előtt</string>
-    <string name="set_repeat_pause">Ismétlés szünet</string>
     <string name="fmt_deletion_info">%s törlése? Ez nem fordítható vissza.</string>
     <string name="lbl_soundtracks">Hangsáv</string>
     <string name="set_keep_shuffle_desc">Új dal lejátszásakor a keverési mód bekapcsolva tartása</string>
-    <string name="set_intelligent_sorting_desc">A számokkal vagy \"the\" típusú szavakkal kezdődő nevek helyes rendezése (legjobban angol nyelvű zenékkel működik)</string>
     <string name="lbl_shuffle_shortcut_long">Az összes keverése</string>
     <string name="set_pre_amp">Visszajátszás előerősítő</string>
     <string name="set_pre_amp_desc">Az előerősítő a lejátszás során a létező beállítással kerül alkalmazásra</string>
     <string name="desc_song_handle">Helyezze át ezt a dalt</string>
     <string name="desc_artist_image">%s előadó fotója</string>
     <string name="fmt_lib_total_duration">Teljes időtartam: %s</string>
-    <string name="set_personalize_desc">UI vezérlők és viselkedés testreszabása</string>
     <string name="set_lib_tabs_desc">A könyvtárfülek láthatóságának és sorrendjének módosítása</string>
-    <string name="set_play_in_parent_with">A tétel részleteiből történő lejátszáskor</string>
-    <string name="set_play_song_from_album">Lejátszás albumból</string>
     <string name="set_content_desc">A zene és a képek betöltésének vezérlése</string>
     <string name="set_images">Képek</string>
     <string name="lbl_duration">Időtartam</string>
@@ -147,12 +140,10 @@
     <string name="lng_observing">Zenekönyvtár változás figyelése…</string>
     <string name="set_ui_desc">Az app téma és színeinek módosítása</string>
     <string name="set_round_mode">Lekerekítés</string>
-    <string name="set_behavior">Viselkedés</string>
     <string name="set_keep_shuffle">Emlékezzen a keverésre</string>
     <string name="set_replay_gain_mode_dynamic">Inkább album, ha egyet játszik</string>
     <string name="set_reindex">Zene frissítése</string>
     <string name="lbl_cancel">Mégse</string>
-    <string name="set_headset_autoplay_desc">A lejátszás mindig akkor indul el, ha a fejhallgató csatlakoztatva van (nem minden eszközön működik)</string>
     <string name="set_observing">Automatikus újratöltés</string>
     <string name="clr_cyan">Cián</string>
     <string name="lbl_rename_playlist">Lejátszólista átnevezés</string>
@@ -161,8 +152,6 @@
     <string name="lbl_save">Ment</string>
     <string name="lbl_reset">Alaphelyzet</string>
     <string name="lbl_author_name">Fejlesztő Alexander Capehart</string>
-    <string name="set_play_song_from_all">Lejátszás az összes dalból</string>
-    <string name="set_play_song_from_genre">Lejátszás műfajból</string>
     <string name="set_content">Tartalom</string>
     <string name="set_observing_desc">A zenei könyvtár újratöltése, ha változik (állandó értesítést igényel)</string>
     <string name="set_locations">Zene könyvtárak</string>
@@ -179,7 +168,6 @@
     <string name="set_cover_mode_balanced">Gyors</string>
     <string name="set_exclude_non_music">A nem zenei anyagok kizárása</string>
     <string name="cdc_ogg">Ogg audio</string>
-    <string name="set_display">Megjelenítés</string>
     <string name="lbl_track">Hangsáv</string>
     <string name="lbl_disc">Lemez</string>
     <string name="lng_playlist_created">Lejátszólista létrehozva</string>
@@ -188,8 +176,6 @@
     <string name="set_lib_tabs">Könyvtár fülek</string>
     <string name="cdc_flac">Free Lossless Audio Codec (FLAC)</string>
     <string name="set_pre_amp_with">Beállítás címkékkel</string>
-    <string name="set_play_in_list_with">A könyvtárból történő lejátszáskor</string>
-    <string name="set_play_song_none">Lejátszás a megjelenő elemről</string>
     <string name="fmt_bitrate">%d kbps</string>
     <string name="fmt_lib_genre_count">Betöltött műfaj: %d</string>
     <string name="lbl_indexer">Zene betöltés</string>
@@ -222,21 +208,17 @@
     <string name="lbl_library_counts">Könyvtár statisztika</string>
     <string name="lng_playlist_renamed">Playlista átnevezve</string>
     <string name="lng_playlist_deleted">Playlista törölve</string>
-    <string name="set_play_song_from_artist">Lejátszás előadótól</string>
     <string name="set_music">Zene</string>
     <string name="set_exclude_non_music_desc">A nem zenei fájlok, például podcastok figyelmen kívül hagyása</string>
     <string name="set_separators_desc">Több címkeértéket jelölő karakterek konfigurálása</string>
     <string name="set_separators_comma">Vessző (,)</string>
     <string name="set_separators_semicolon">Pontosvessző (;)</string>
     <string name="set_separators_and">És jel (&amp;)</string>
-    <string name="set_intelligent_sorting">Intelligens rendezés</string>
     <string name="set_hide_collaborators">Közreműködők elrejtése</string>
     <string name="set_hide_collaborators_desc">Csak az albumon közvetlenül feltüntetett előadók megjelenítése (a jól címkézett könyvtárakban működik a legjobban)</string>
     <string name="set_cover_mode_off">Ki</string>
     <string name="set_cover_mode_high_quality">Magas minőség</string>
     <string name="set_audio_desc">Hang és lejátszási viselkedés konfigurálása</string>
-    <string name="set_playback">Lejátszás</string>
-    <string name="set_headset_autoplay">Fejhallgató auto. lejátszás</string>
     <string name="set_pre_amp_without">Beállítás címkék nélkül</string>
     <string name="set_locations_desc">Kezelje, hogy honnan töltsön be zenét</string>
     <string name="set_rescan">Zene újraolvasása</string>
@@ -263,7 +245,6 @@
     <string name="set_square_covers_desc">Az összes albumborító 1:1 arányra vágása</string>
     <string name="lbl_song">Dal</string>
     <string name="lbl_parent_detail">Megnéz</string>
-    <string name="set_play_song_by_itself">Dal lejátszása önmagában</string>
     <string name="lbl_sort_direction">Irány</string>
     <string name="lbl_sort_mode">Rendezés</string>
     <string name="lbl_selection">Kiválasztás</string>
@@ -281,8 +262,6 @@
     <string name="lbl_donate">Adományozás</string>
     <string name="lbl_supporters">Támogatók</string>
     <string name="lng_supporters_promo">Adományozzon a projektnek, hogy itt legyen a neved!</string>
-    <string name="set_remember_pause">Szünet megjegyzése</string>
-    <string name="set_remember_pause_desc">A lejátszás/szünet megmarad a várólista kihagyásakor vagy szerkesztésekor</string>
     <string name="lbl_path">Cím</string>
     <string name="def_album_count">Nincsenek albumok</string>
     <string name="lbl_export_playlist">Lejátszási lista exportálása</string>

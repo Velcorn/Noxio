@@ -3,75 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:title="@string/set_audio">
 
-    <PreferenceCategory android:title="@string/set_behavior">
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="@string/set_key_keep_shuffle"
+        app:summary="@string/set_keep_shuffle_desc"
+        app:title="@string/set_keep_shuffle" />
 
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/play_song_from_all"
-            app:entries="@array/entries_play_in_list_with"
-            app:entryValues="@array/values_play_in_list_with"
-            app:key="@string/set_key_play_in_list_with"
-            app:title="@string/set_play_in_list_with"
-            app:useSimpleSummaryProvider="true" />
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="@string/set_key_rewind_prev"
+        app:summary="@string/set_rewind_prev_desc"
+        app:title="@string/set_rewind_prev" />
 
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/play_song_none"
-            app:entries="@array/entries_play_in_parent_with"
-            app:entryValues="@array/values_play_in_parent_with"
-            app:key="@string/set_key_play_in_parent_with"
-            app:title="@string/set_play_in_parent_with"
-            app:useSimpleSummaryProvider="true" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/set_key_keep_shuffle"
-            app:summary="@string/set_keep_shuffle_desc"
-            app:title="@string/set_keep_shuffle" />
-
-        <SwitchPreferenceCompat
-            app:key="@string/set_key_headset_autoplay"
-            app:summary="@string/set_headset_autoplay_desc"
-            app:title="@string/set_headset_autoplay" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/set_playback">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/set_key_rewind_prev"
-            app:summary="@string/set_rewind_prev_desc"
-            app:title="@string/set_rewind_prev" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/set_key_repeat_pause"
-            app:summary="@string/set_repeat_pause_desc"
-            app:title="@string/set_repeat_pause" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/set_key_remember_pause"
-            app:summary="@string/set_remember_pause_desc"
-            app:title="@string/set_remember_pause" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/set_key_sleep_shake"
-            app:summary="@string/set_sleep_shake_desc"
-            app:title="@string/set_sleep_shake" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/set_key_task_exit"
-            app:summary="@string/set_task_exit_desc"
-            app:title="@string/set_task_exit" />
-
-        <Preference
-            app:key="@string/set_key_equalizer"
-            app:summary="@string/set_equalizer_desc"
-            app:title="@string/lbl_equalizer" />
-
-    </PreferenceCategory>
+    <Preference
+        app:key="@string/set_key_equalizer"
+        app:summary="@string/set_equalizer_desc"
+        app:title="@string/lbl_equalizer" />
 
     <PreferenceCategory android:title="@string/set_replay_gain">
 

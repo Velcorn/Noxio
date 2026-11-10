@@ -40,8 +40,8 @@
         android:layout_marginStart="@dimen/spacing_medium"
         android:layout_marginEnd="@dimen/spacing_medium"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/playback_sleep_timer"
-        app:layout_constraintEnd_toStartOf="@+id/playback_more"
+        app:layout_constraintBottom_toTopOf="@+id/playback_seek_bar"
+        app:layout_constraintEnd_toStartOf="@+id/playback_sleep_timer"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playback_toolbar"
@@ -93,12 +93,12 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/lbl_sleep_timer"
         app:icon="@drawable/ic_sleep_timer_24"
-        app:iconSize="@dimen/size_icon_medium"
+        app:iconSize="@dimen/size_icon_small"
         app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small"
-        app:layout_constraintBottom_toTopOf="@+id/playback_seek_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playback_info_container" />
+        app:layout_constraintBottom_toBottomOf="@+id/playback_info_container"
+        app:layout_constraintEnd_toStartOf="@+id/playback_more"
+        app:layout_constraintTop_toTopOf="@+id/playback_info_container" />
+
     <org.oxycblt.auxio.playback.ui.StyledSeekBar
         android:id="@+id/playback_seek_bar"
         android:layout_width="match_parent"
@@ -107,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playback_sleep_timer" />
+        app:layout_constraintTop_toBottomOf="@+id/playback_info_container" />
 
     <org.oxycblt.auxio.playback.ui.ForcedLTRFrameLayout
         android:id="@+id/playback_controls_container"

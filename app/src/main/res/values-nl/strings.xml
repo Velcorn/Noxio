@@ -16,9 +16,6 @@
     <string name="lbl_sort_asc">Oplopend</string>
     <string name="lbl_play">Speel af</string>
     <string name="lbl_shuffle">Shuffle</string>
-    <string name="set_play_song_from_all">Speel van alle nummers</string>
-    <string name="set_play_song_from_album">Speel vanaf album</string>
-    <string name="set_play_song_from_artist">Speel van artiest</string>
     <string name="lbl_playback">Nu afspelen</string>
     <string name="lbl_queue">Wachtrij</string>
     <string name="lbl_play_next">Speel volgende</string>
@@ -40,10 +37,7 @@
     <string name="set_theme_day">Licht</string>
     <string name="set_theme_night">Donker</string>
     <string name="set_accent">Kleuren schema</string>
-    <string name="set_display">Scherm</string>
     <string name="set_audio">Audio</string>
-    <string name="set_personalize">Personaliseer</string>
-    <string name="set_play_in_list_with">Bij het afspelen vanuit de bibliotheek</string>
     <string name="set_keep_shuffle">Onthoud shuffle</string>
     <string name="set_keep_shuffle_desc">Houd shuffle aan bij het afspelen van een nieuw nummer</string>
     <string name="set_rewind_prev">Terugspoelen voor het overslaan</string>
@@ -100,7 +94,6 @@
     <string name="def_artist">Onbekende artiest</string>
     <string name="set_black_mode">Zwart thema</string>
     <string name="set_black_mode_desc">Gebruik een puur zwart thema</string>
-    <string name="set_repeat_pause">Pauze op herhaling</string>
     <string name="fmt_disc_no">Schijf %d</string>
     <string name="fmt_disc_no_subtitle">Schijf %1$d – %2$s</string>
     <string name="fmt_bitrate">%d kbps</string>
@@ -124,24 +117,19 @@
     <string name="fmt_lib_total_duration">Totale duur: %s</string>
     <string name="lbl_shuffle_shortcut_long">Shuffle alles</string>
     <string name="lbl_ok">OK</string>
-    <string name="set_headset_autoplay_desc">Start altijd met afspelen wanneer een headset is aangesloten (werkt mogelijk niet op alle apparaten)</string>
     <string name="desc_shuffle">Schakel shuffle aan of uit</string>
     <string name="set_reindex_desc">Laad de muziekbibliotheek opnieuw, indien mogelijk met behulp van gecashte tags</string>
     <string name="fmt_indexing">Uw muziekbibliotheek wordt geladen… (%1$d/%2$d)</string>
-    <string name="set_repeat_pause_desc">Pauze wanneer een nummer wordt herhaald</string>
     <string name="set_reindex">Muziek opnieuw laden</string>
     <string name="set_pre_amp_with">Aanpassing met tags</string>
     <string name="set_pre_amp_without">Aanpassing zonder tags</string>
     <string name="def_playback">Geen muziek wordt afgespeeld</string>
-    <string name="set_play_in_parent_with">Bij het afspelen van item details</string>
     <string name="set_round_mode">Ronde modus</string>
     <string name="set_round_mode_desc">Schakel afgeronde hoeken in voor extra UI-elementen (vereist dat albumhoezen zijn afgerond)</string>
     <string name="lbl_library_counts">Bibliotheek statistieken</string>
     <string name="set_lib_tabs_desc">Verander de zichtbaarheid en volgorde van bibliotheek tabbladen</string>
-    <string name="set_headset_autoplay">Headset automatisch afspelen</string>
     <string name="set_replay_gain_mode">ReplayGain strategie</string>
     <string name="set_pre_amp_warning">Waarschuwing: Als u de voorversterker op een hoge positieve waarde zet, kan dit bij sommige audiotracks tot pieken leiden.</string>
-    <string name="set_play_song_none">Speel vanaf getoond item</string>
     <string name="desc_remove_song">Verwijder dit nummer</string>
     <string name="desc_song_handle">Verplaats dit nummer</string>
     <string name="desc_tab_handle">Verplaats dit tabblad</string>
@@ -175,7 +163,6 @@
     <string name="lng_playlist_created">Afspeellijst gemaakt</string>
     <string name="lng_playlist_added">Toegevoegd aan afspeellijst</string>
     <string name="set_ui_desc">Wijzig het thema en de kleuren van de app</string>
-    <string name="set_personalize_desc">Pas UI elementen en gedrag aan</string>
     <string name="set_content_desc">Bepaal hoe muziek en afbeeldingen worden geladen</string>
     <string name="set_music">Muziek</string>
     <string name="set_observing">Automatisch herladen</string>
@@ -184,10 +171,8 @@
     <string name="set_separators_plus">Plus (+)</string>
     <string name="set_separators_warning">Waarschuwing: Het gebruik van deze instelling kan ertoe leiden dat sommige tags verkeerd geïnterpreteerd worden als tags met meerdere waarden. U kunt dit oplossen door ongewenste scheidingstekens vooraf te laten gaan door een backslash (\\).</string>
     <string name="set_hide_collaborators_desc">Toon alleen artiesten die rechtstreeks op een album worden genoemd (werkt het beste op goed getagde bibliotheken)</string>
-    <string name="set_intelligent_sorting_desc">Sorteer namen die beginnen met cijfers of woorden zoals \"de\" correct (werkt het beste met Engelstalige muziek)</string>
     <string name="desc_exit">Stop afspelen</string>
     <string name="lng_indexing">Uw muziekbibliotheek laden…</string>
-    <string name="set_behavior">Gedrag</string>
     <string name="lbl_compilation_remix">Remix compilatie</string>
     <string name="lbl_soundtrack">Soundtrack</string>
     <string name="lbl_mixtape">Mixtape</string>
@@ -239,7 +224,6 @@
     <string name="lbl_delete">Verwijder</string>
     <string name="set_separators">Meerdere waarden scheidingstekens</string>
     <string name="set_hide_collaborators">Verberg bijdragers</string>
-    <string name="set_play_song_from_genre">Speel vanuit genre</string>
     <string name="lbl_date_added">Datum toegevoegd</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="fmt_def_playlist">Afspeellijst %d</string>
@@ -247,7 +231,6 @@
         <item quantity="one">%d artiest</item>
         <item quantity="other">%d artiesten</item>
     </plurals>
-    <string name="set_intelligent_sorting">Intelligent sorteren</string>
     <string name="lbl_appears_on">Verschijnt op</string>
     <string name="lbl_playlists">Afspeellijsten</string>
     <string name="lbl_share">Deel</string>
@@ -256,7 +239,6 @@
     <string name="set_exclude_non_music">Sluit niet-muziek uit</string>
     <string name="set_exclude_non_music_desc">Negeer audiobestanden die geen muziek zijn, zoals podcasts</string>
     <string name="set_cover_mode">Albumhoezen</string>
-    <string name="set_playback">Afspelen</string>
     <string name="set_rescan">Scan muziek opnieuw</string>
     <string name="set_rescan_desc">Wis de tag-cache en laad de muziekbibliotheek opnieuw (langzamer, maar vollediger)</string>
     <string name="def_disc">Geen schijf</string>
@@ -283,8 +265,6 @@
     <string name="lbl_copied">Gekopieerd</string>
     <string name="lbl_parent_detail">Bekijk</string>
     <string name="lbl_selection">Selectie</string>
-    <string name="set_remember_pause">Onthoud pauze</string>
-    <string name="set_remember_pause_desc">Blijf afspelen/pauzeren tijdens het overslaan of bewerken van wachtrijen</string>
     <string name="lbl_empty_playlist">Lege afspeellijst</string>
     <string name="lbl_import_playlist">Importeer afspeellijst</string>
     <string name="lbl_import">Importeer</string>
@@ -292,7 +272,6 @@
     <string name="err_import_failed">Kan geen afspeellijst uit dit bestand importeren</string>
     <string name="lbl_path_style_relative">Relatief</string>
     <string name="lng_playlist_imported">Afspeellijst geïmporteerd</string>
-    <string name="set_play_song_by_itself">Speel nummer zelf af</string>
     <string name="lbl_export_playlist">Exporteer afspeellijst</string>
     <string name="lbl_export">Exporteer</string>
     <string name="lbl_path">Pad</string>

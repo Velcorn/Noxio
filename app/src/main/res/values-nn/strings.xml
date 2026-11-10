@@ -135,13 +135,7 @@
     <string name="set_black_mode_desc">Nøyt ei heilsvart mørk drakt</string>
     <string name="set_round_mode">Avrunda hjørne</string>
     <string name="set_round_mode_desc">Slå på avrunda hjørne på fleire grensesnedselement (krev at albumomslag er òg avrunda)</string>
-    <string name="set_display">Skjerm</string>
     <string name="set_lib_tabs">Samlingsfaner</string>
-    <string name="set_behavior">Framferd</string>
-    <string name="set_play_in_list_with">Ved avspeling frå samlinga</string>
-    <string name="set_play_song_from_album">Spela frå album</string>
-    <string name="set_play_song_from_genre">Spela frå sjanger</string>
-    <string name="set_play_song_by_itself">Spela songen for seg sjølv</string>
     <string name="set_keep_shuffle">Hugsa blandingsmodus</string>
     <string name="set_content">Innhald</string>
     <string name="set_music">Musikk</string>
@@ -150,8 +144,6 @@
     <string name="set_separators">Fleirverdi-inndelarar</string>
     <string name="set_separators_desc">Still inn teikn for inndeling av fleire verdiar på etiketten</string>
     <string name="set_separators_comma">Komma (,)</string>
-    <string name="set_intelligent_sorting">Intelligent sortering</string>
-    <string name="set_intelligent_sorting_desc">Sorterer namn som byrjar med siffer eller ord som «the» rett (fungerer best med engelskspråkig musikk)</string>
     <string name="set_hide_collaborators">Gøym medverkande</string>
     <string name="set_hide_collaborators_desc">Syn berre artistar som er direkte krediterte på albumet (fungerer best med velmerkt samling)</string>
     <string name="set_images">Bilete</string>
@@ -162,13 +154,8 @@
     <string name="set_square_covers">Påtvinga firkanta albumomslag</string>
     <string name="set_square_covers_desc">Avskjer alle albumomslag til 1:1-sidehøve</string>
     <string name="set_audio_desc">Stilla inn ljod- og avspelingsframferd</string>
-    <string name="set_playback">Avspeling</string>
-    <string name="set_headset_autoplay">Automatisk avspeling med hovudsett</string>
     <string name="set_rewind_prev">Spol atter før spor vert hoppa over</string>
     <string name="set_rewind_prev_desc">Spol atter før Auxio hoppar til førre song</string>
-    <string name="set_repeat_pause">Pausa ved tvitaking</string>
-    <string name="set_remember_pause">Hugs pausemodus</string>
-    <string name="set_remember_pause_desc">Vert spelande/pausa ved sporbytting eller købrigding</string>
     <string name="set_replay_gain">Volumnormalisering</string>
     <string name="set_replay_gain_mode">ReplayGain-strategi</string>
     <string name="set_replay_gain_mode_off">Av</string>
@@ -227,13 +214,7 @@
     <string name="set_ui_desc">Brigd drakta og programfargane</string>
     <string name="set_theme_day">Ljos</string>
     <string name="set_theme_night">Mørk</string>
-    <string name="set_personalize">Tilpass</string>
-    <string name="set_personalize_desc">Tilpass grensesnedskontrollar og framferd</string>
     <string name="set_lib_tabs_desc">Brigd synleik og rekkjefylgje på samlingsfaner</string>
-    <string name="set_play_song_none">Spela frå synt element</string>
-    <string name="set_play_in_parent_with">Ved avspeling frå elementsdetaljar</string>
-    <string name="set_play_song_from_all">Spela frå alle songar</string>
-    <string name="set_play_song_from_artist">Spela frå artist</string>
     <string name="set_content_desc">Styr korleis musikk og bilete vert innladde</string>
     <string name="set_observing_desc">Lad inn musikksamlinga på nytt når ho vert brigd (krev vedvarande varsel)</string>
     <string name="set_keep_shuffle_desc">Varetak blanding når ein ny song vert spela</string>
@@ -244,8 +225,6 @@
     <string name="set_separators_and">Og-teikn (&amp;)</string>
     <string name="set_separators_warning">Varing: Om denne funksjonen er påslegen, kan enkelte etikettar verta feiltolka som om dei har fleire verdiar. Dette kan verta løyst ved å leggja eit omvendt skråstrek (\\) bak skiljeteiknet som ikkje skal skilja verdiar.</string>
     <string name="set_audio">Ljod</string>
-    <string name="set_headset_autoplay_desc">Byrja alltid avspeling når hovudtelefonar vert kopla til (fungerer kanskje ikkje på alle einingar)</string>
-    <string name="set_repeat_pause_desc">Pausa når ein song vert tviteken</string>
     <string name="set_pre_amp_warning">Varing: Å brigda førestyrkinga til høge positive verdiar kan føra til renging ved høge ljodtrykk på somme spor.</string>
     <string name="set_locations">Musikkkjelder</string>
     <string name="set_reindex_desc">Lad inn musikksamlinga på nytt og nøyt hurtiglagra etikettar når mogleg</string>
@@ -340,8 +319,6 @@
         <item quantity="other">%d sekund</item>
     </plurals>
     <string name="fmt_lib_total_size">Total storleik: %s</string>
-    <string name="set_task_exit">Avslutta alltid på stenging</string>
-    <string name="set_task_exit_desc">Avslutta avspeling når fjerna frå nylege appar, endå om Auxio spelar av musikk</string>
     <string name="set_saf_multithread">Fleirtrådsfilutforsking</string>
     <string name="set_saf_multithread_desc">Snøggare, men mislukkast på somme einingar</string>
     <string name="err_share_too_large">Dette er for stort å dela</string>

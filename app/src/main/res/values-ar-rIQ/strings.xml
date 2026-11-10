@@ -22,9 +22,6 @@
     <string name="lbl_playback">يتم التشغيل الان</string>
     <string name="lbl_play">تشغيل</string>
     <string name="lbl_shuffle">عشوائي</string>
-    <string name="set_play_song_from_all">تشغيل من جميع الاغاني</string>
-    <string name="set_play_song_from_album">تشغيل من البوم</string>
-    <string name="set_play_song_from_artist">تشغيل من فنان</string>
     <string name="lbl_queue">طابور</string>
     <string name="lbl_play_next">شغل التالي</string>
     <string name="lbl_queue_add">أضف إلى الطابور</string>
@@ -47,7 +44,6 @@
     <string name="set_accent">نظام الألوان</string>
     <string name="set_black_mode">السمة السوداء</string>
     <string name="set_black_mode_desc">استخدام سمة اللون الاسود النقي</string>
-    <string name="set_display">عرض</string>
     <string name="set_lib_tabs">تبويتات المكتبة</string>
     <string name="set_lib_tabs_desc">تغيير ظهور وترتيب تبويتات المكتبة</string>
     <string name="set_round_mode">وضع دائري</string>
@@ -57,14 +53,10 @@
     <string name="set_replay_gain_mode_track">تفضيل المقطع</string>
     <string name="set_replay_gain_mode_album">تفضيل الالبوم</string>
     <string name="set_replay_gain_mode_dynamic">ديناميكي</string>
-    <string name="set_personalize">تخصيص</string>
-    <string name="set_play_in_list_with">عند التشغيل من المكتبة</string>
     <string name="set_keep_shuffle">تذكر الخلط</string>
     <string name="set_keep_shuffle_desc">إبقاء وضع الخلط عند تشغيل اغنية جديدة</string>
     <string name="set_rewind_prev">تشجيع قبل التخطي للخلف</string>
     <string name="set_rewind_prev_desc">ترجيع قبل التخطي إلى الاغنية السابقة</string>
-    <string name="set_repeat_pause">ايقاف مؤقت عند التكرار</string>
-    <string name="set_repeat_pause_desc">ايقاف مؤقت عند تكرار تشغيل اغنية</string>
     <string name="set_content">محتوى</string>
     <!-- Error Namespace | Error Labels -->
     <string name="err_index_failed">فشل تحميل الموسيقى</string>
@@ -207,9 +199,6 @@
     <string name="lbl_github">سجل مشكلة على GitHub</string>
     <string name="lbl_email">أرسل ايميل</string>
     <string name="lbl_donate">تبرع</string>
-    <string name="set_play_in_parent_with">عند التشغيل من خصائص العنصر</string>
-    <string name="set_play_song_none">تشغيل من العناصر المعروظة</string>
-    <string name="set_play_song_from_genre">تشغيل من النوع</string>
     <string name="set_content_desc">تحكم بكيفية تحميل الاموسيقى والصور</string>
     <string name="set_observing">التحميل التلقائي</string>
     <string name="set_exclude_non_music_desc">تجاوز الملفات الصوتية الغير موسيقية, مثل البودكاست</string>
@@ -232,13 +221,10 @@
     <string name="lng_playlist_imported">تم استيراد قائمة التشغيل</string>
     <string name="lng_playlist_exported">تم تصدير قائمة التشغيل</string>
     <string name="lng_supporters_promo">تبرع للمشروع لتتم اضافة اسمك هنا!</string>
-    <string name="set_play_song_by_itself">تشغيل اغنية محددة</string>
     <string name="set_separators_plus">زائد(+)</string>
     <string name="lbl_import_playlist">استيراد قائمة تشغيل</string>
     <string name="lbl_empty_playlist">قائمة تشغيل فارغة</string>
-    <string name="set_personalize_desc">تخصيص ادوات تحكم الواجهه و سلوكها</string>
     <string name="lbl_path">المسار</string>
-    <string name="set_intelligent_sorting">الترتيب الذكي</string>
     <string name="set_separators_slash">الشارحة(/)</string>
     <string name="lbl_start_playback">بدء التشغيل</string>
     <string name="lbl_path_style_relative">نسبي</string>
@@ -247,20 +233,16 @@
     <string name="lbl_author">المؤلف</string>
     <string name="set_music">الموسيقى</string>
     <string name="lng_empty_playlists">قوائم التشغيل الخاصة بك ستضهر هنا.</string>
-    <string name="set_behavior">السلوك</string>
     <string name="set_separators_comma">فاصلة (,)</string>
     <string name="lng_empty_albums">الالبومات الخاصة بك ستضهر هنا.</string>
     <string name="lng_empty_genres">الفئات الخاصة بك ستضهر هنا.</string>
     <string name="set_observing_desc">اعادة تحميل مكتبة الموسيقى عند حصول تغيير(يتطلب تنبيه ثابت)</string>
     <string name="set_separators_warning">تحذير: استخدام هذا الاعداد قد ينتج عنه ان يتم تفسير بعض العلامات بشكل خاطئ مثل ان تحتوي على قيم متعددة. يمكن ان يتم حل هذا بتقديم الفواصل الغير مرغوبةبالشارحة الخلفية(\\).</string>
-    <string name="set_remember_pause">تذكر الايقاف</string>
-    <string name="set_headset_autoplay">تشغيل تلقائي لسماعة الرأس</string>
     <string name="set_square_covers">اجبار استخدام غلاف البوم مربع</string>
     <string name="set_audio_desc">تحديد الصوت وسلوك العرض</string>
     <string name="set_images">صور</string>
     <string name="set_hide_collaborators_desc">اظهر فقط الفنانينالذين ذكرو مباشرة في الالبوم(يعمل بشكل افضل على المكتبات التي تم اضافة العلامات لها بشكل جيد)</string>
     <string name="set_square_covers_desc">قص غلاف البوم بنسبة ١:١</string>
-    <string name="set_playback">التشغيل</string>
     <string name="set_pre_amp_warning">تحذير: تغيير التضخيم المسبق الى ايجابي عالي قد ينتج عنه قمم في بعض الملفات الصوتية</string>
     <string name="desc_playlist_image">صور قائمة التشغيل %s</string>
     <string name="desc_selection_image">اختيار الصور</string>
@@ -278,9 +260,7 @@
     <string name="set_hide_collaborators">اخفاء المتعاونين</string>
     <string name="set_with_hidden">اظهار الملفات المخفية</string>
     <string name="set_with_hidden_desc">اظهار الملفات المخفية</string>
-    <string name="set_intelligent_sorting_desc">تحديد ترتيب ذكي تنازلي</string>
     <string name="set_cover_mode_as_is">على وضعه</string>
-    <string name="set_headset_autoplay_desc">دائما ابدا التشغيل بشكل تلقائي عند ربط سماعة الرأس(قد لا يعمل مع كل الاجهزة)</string>
     <string name="set_library">مكتبة</string>
     <string name="set_replay_gain_mode_off">ايقاف</string>
     <string name="set_pre_amp_without">تغيير مع الاشارات</string>
@@ -293,7 +273,6 @@
     <string name="set_cover_mode_save_space">توفير مساحه</string>
     <string name="set_cover_mode_balanced">متوازن</string>
     <string name="set_locations">مجلد موسيقى</string>
-    <string name="set_remember_pause_desc">استمر بالتشغيل/الايقاف عند تخطي او تعديل الطابور</string>
     <string name="desc_exit">ايقاف التشغيل</string>
     <string name="desc_queue_bar">فتح الطابور</string>
 </resources>

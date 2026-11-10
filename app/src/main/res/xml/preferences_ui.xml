@@ -35,6 +35,11 @@
         app:summary="@string/set_wavy_seek_bar_desc"
         app:title="@string/set_wavy_seek_bar" />
 
+    <org.oxycblt.auxio.settings.ui.WrappedDialogPreference
+        app:key="@string/set_key_home_tabs"
+        app:summary="@string/set_lib_tabs_desc"
+        app:title="@string/set_lib_tabs" />
+
     <PreferenceCategory android:title="@string/set_launcher">
 
         <org.oxycblt.auxio.settings.ui.IntListPreference

@@ -70,26 +70,16 @@ interface PlaybackSettings : Settings<PlaybackSettings.Listener> {
 
 class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Context) :
     Settings.Impl<PlaybackSettings.Listener>(context), PlaybackSettings {
+    // Noxio has no setting for these any more: a song plays from the list it was tapped in.
     override val playInListWith: PlaySong
-        get() =
-            PlaySong.fromIntCode(
-                sharedPreferences.getInt(
-                    getString(R.string.set_key_play_in_list_with),
-                    Int.MIN_VALUE,
-                )
-            ) ?: PlaySong.FromAll
+        get() = PlaySong.FromAll
 
     override val inParentPlaybackMode: PlaySong?
-        get() =
-            PlaySong.fromIntCode(
-                sharedPreferences.getInt(
-                    getString(R.string.set_key_play_in_parent_with),
-                    Int.MIN_VALUE,
-                )
-            )
+        get() = null
 
+    // Noxio has no setting for these any more, they are always off.
     override val headsetAutoplay: Boolean
-        get() = sharedPreferences.getBoolean(getString(R.string.set_key_headset_autoplay), false)
+        get() = false
 
     override val replayGainMode: ReplayGainMode
         get() =
@@ -118,13 +108,13 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
         get() = sharedPreferences.getBoolean(getString(R.string.set_key_rewind_prev), true)
 
     override val pauseOnRepeat: Boolean
-        get() = sharedPreferences.getBoolean(getString(R.string.set_key_repeat_pause), false)
+        get() = false
 
     override val rememberPause: Boolean
-        get() = sharedPreferences.getBoolean(getString(R.string.set_key_remember_pause), false)
+        get() = false
 
     override val exitOnTaskRemoval: Boolean
-        get() = sharedPreferences.getBoolean(getString(R.string.set_key_task_exit), false)
+        get() = false
 
     override fun migrate() {
         // MusicMode was converted to PlaySong in 3.2.0

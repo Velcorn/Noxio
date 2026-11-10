@@ -422,6 +422,6 @@ class PlaybackPanelFragment :
         const val COUNTDOWN_TICK_MS = 1000L
 
         /** The size of the countdown that takes the place of the moon icon. */
-        const val COUNTDOWN_TEXT_SP = 24f
+        const val COUNTDOWN_TEXT_SP = 18f
     }
 }

@@ -32,7 +32,6 @@
     <string name="set_theme_night">Ciemny</string>
     <string name="set_accent">Kolor akcentów</string>
     <string name="set_audio">Dźwięk</string>
-    <string name="set_personalize">Interfejs</string>
     <string name="desc_track_number">Utwór %d</string>
     <string name="desc_play_pause">Odtwórz albo zapauzuj</string>
     <string name="lng_search_library">Szukaj w bibliotece…</string>
@@ -78,7 +77,6 @@
     <string name="lbl_props">Szczegóły utworu</string>
     <string name="lbl_sample_rate">Częstotliwość próbkowania</string>
     <string name="lbl_shuffle_shortcut_short">Losowo</string>
-    <string name="set_headset_autoplay">Autoodtwarzanie w słuchawkach</string>
     <string name="clr_teal">Morski</string>
     <string name="fmt_db_pos">+%.1f dB</string>
     <string name="lbl_format">Format</string>
@@ -120,9 +118,6 @@
     <string name="def_track">Brak utworu</string>
     <string name="lbl_equalizer">Korektor</string>
     <string name="lbl_size">Rozmiar</string>
-    <string name="set_play_song_from_all">Odtwórz wszystkie utwory</string>
-    <string name="set_play_song_from_album">Odtwórz album</string>
-    <string name="set_headset_autoplay_desc">Automatycznie odtwórz muzykę po podłączeniu słuchawek (może nie działać na wszystkich urządzeniach)</string>
     <string name="set_reindex">Odśwież muzykę</string>
     <string name="set_reindex_desc">Odśwież bibliotekę muzyczną używając tagów z pamięci cache, jeśli są dostępne</string>
     <string name="desc_remove_song">Usuń utwór z kolejki</string>
@@ -142,7 +137,6 @@
     <string name="set_round_mode_desc">Włącz zaokrąglone narożniki na dodatkowych elementach interfejsu (wymaga zaokrąglenia okładek albumów)</string>
     <string name="set_replay_gain_mode">Ustawienie ReplayGain</string>
     <string name="set_replay_gain_mode_dynamic">Preferuj album, jeśli jest odtwarzany</string>
-    <string name="set_play_in_list_with">Odtwarzanie z widoku biblioteki</string>
     <string name="set_separators_comma">Przecinek (,)</string>
     <string name="set_separators_semicolon">Średnik (;)</string>
     <string name="set_separators_slash">Ukośnik (/)</string>
@@ -163,7 +157,6 @@
     <string name="set_lib_tabs">Karty w bibliotece</string>
     <string name="set_lib_tabs_desc">Zmień widoczność i kolejność kart w bibliotece</string>
     <string name="set_black_mode_desc">Używaj czarnego motywu</string>
-    <string name="set_display">Elementy</string>
     <string name="clr_dynamic">Material You</string>
     <string name="fmt_bitrate">%d kb/s</string>
     <string name="set_locations">Źródła muzyczne</string>
@@ -178,16 +171,12 @@
     <string name="err_no_app">Nie znaleziono odpowiedniej aplikacji</string>
     <string name="lbl_library_counts">Statystyki biblioteki</string>
     <string name="fmt_lib_artist_count">Zaimportowani artyści: %d</string>
-    <string name="set_repeat_pause">Zatrzymaj odtwarzanie przy powtórzeniu</string>
     <string name="desc_clear_search">Wyczyść zapytanie wyszukiwania</string>
     <string name="desc_genre_image">Okładka gatunku %s</string>
     <string name="lng_widget">Podgląd i sterowanie odtwarzanianiem muzyki</string>
     <string name="set_pre_amp_with">Regulacja w oparciu o tagi</string>
     <string name="set_pre_amp_without">Regulacja bez tagów</string>
     <string name="set_pre_amp_desc">Wzmocnienie dźwięku przez preamplifier jest nakładane na wcześniej ustawione wzmocnienie podczas odtwarzania</string>
-    <string name="set_play_in_parent_with">Odtwarzanie z widoku szczegółowego</string>
-    <string name="set_play_song_none">Odtwórz tylko wybrane</string>
-    <string name="set_repeat_pause_desc">Zatrzymaj odtwarzanie, kiedy utwór się powtórzy</string>
     <string name="set_separators">Znaki oddzielające wartości</string>
     <string name="set_separators_desc">Wybierz znaki oddzielające poszczególne wartości w metadanych</string>
     <string name="err_bad_location">Ten folder nie jest wspierany</string>
@@ -203,7 +192,6 @@
     <string name="set_keep_shuffle_desc">Kontynuuj odtwarzanie losowe po wybraniu nowego utworu</string>
     <string name="fmt_lib_song_count">Zaimportowane utwory: %d</string>
     <string name="set_exclude_non_music_desc">Ignoruj pliki audio które nie są utworami muzycznymi (np. podcasty)</string>
-    <string name="set_play_song_from_artist">Odtwórz od wykonawcy</string>
     <string name="set_exclude_non_music">Wyklucz inne pliki dźwiękowe</string>
     <string name="set_cover_mode">Okładki albumów</string>
     <string name="set_cover_mode_off">Wyłączone</string>
@@ -214,17 +202,13 @@
     <string name="set_hide_collaborators">Ukryj wykonawców uczestniczących</string>
     <string name="set_content_desc">Zarządzaj importowaniem muzyki i obrazów</string>
     <string name="set_library">Biblioteka</string>
-    <string name="set_personalize_desc">Dostosuj elementy i funkcje interfejsu</string>
     <string name="set_hide_collaborators_desc">Pokaż tylko artystów bezpośrednio przypisanych do albumu (działa najlepiej w przypadku dobrze otagowanych bibliotek)</string>
-    <string name="set_playback">Odtwarzanie</string>
     <string name="set_images">Obrazy</string>
     <string name="set_audio_desc">Zarządzaj dźwiękiem i odtwarzaniem muzyki</string>
     <string name="fmt_selected">Wybrano %d</string>
     <string name="set_replay_gain">Normalizacja głośności</string>
     <string name="lbl_reset">Resetuj</string>
     <string name="lbl_wiki">Wiki</string>
-    <string name="set_behavior">Funkcje</string>
-    <string name="set_play_song_from_genre">Odtwórz z gatunku</string>
     <string name="set_rescan_desc">Wyczyść pamięć cache z tagami i zaimportuj ponownie bibliotekę (wolniej, ale dokładniej)</string>
     <string name="set_rescan">Zaimportuj ponownie bibliotekę</string>
     <plurals name="fmt_artist_count">
@@ -239,8 +223,6 @@
     <string name="lbl_playlists">Listy odtwarzania</string>
     <string name="lbl_playlist">Playlista</string>
     <string name="desc_playlist_image">Obraz listy odtwarzania dla %s</string>
-    <string name="set_intelligent_sorting">Inteligentne sortowanie</string>
-    <string name="set_intelligent_sorting_desc">Ignoruj słowa takie jak „the” oraz liczby w tytule podczas sortowania (działa najlepiej z utworami w języku angielskim)</string>
     <string name="lbl_new_playlist">Nowa playlista</string>
     <string name="lbl_playlist_add">Dodaj do listy odtwarzania</string>
     <string name="lng_playlist_created">Utworzono playlistę</string>
@@ -261,7 +243,6 @@
     <string name="set_square_covers_desc">Przytnij okładki do formatu 1:1</string>
     <string name="set_square_covers">Wymuś kwadratowe okładki</string>
     <string name="lbl_song">Utwór</string>
-    <string name="set_play_song_by_itself">Odtwórz tylko utwór</string>
     <string name="lbl_parent_detail">Widok</string>
     <string name="lbl_sort_mode">Sortuj według</string>
     <string name="lbl_sort_direction">Kierunek</string>
@@ -295,8 +276,6 @@
     <string name="lbl_replaygain_track">Dopasowanie głośności utworu (ReplayGain)</string>
     <string name="lbl_replaygain_album">Dopasowanie głośności albumu (ReplayGain)</string>
     <string name="lng_supporters_promo">Wesprzyj projekt darowizną, aby Twoje imię pojawiło się tutaj!</string>
-    <string name="set_remember_pause_desc">Pozostań w trakcie odtwarzania/zatrzymania podczas pomijania lub edytowania kolejki</string>
-    <string name="set_remember_pause">Zapamiętaj pauzę</string>
     <string name="lbl_start_playback">Zacznij odtwarzanie</string>
     <string name="err_import_failed">Nie udało się zaimportować listy odtwarzania z tego pliku</string>
     <string name="lbl_windows_paths">Używaj ścieżek kompatybilnych z Windows</string>
@@ -348,8 +327,6 @@
         <item quantity="other">%d sekund</item>
     </plurals>
     <string name="fmt_lib_total_size">Całkowita wielkość: %s</string>
-    <string name="set_task_exit">Zawsze wychodź po zamknięciu</string>
-    <string name="set_task_exit_desc">Zatrzymaj odtwarzanie po usunięciu aplikacji z pamięci, nawet jeśli jest w trakcie odtwarzania</string>
     <string name="set_saf_multithread">Wielowątkowe przeglądanie plików</string>
     <string name="set_saf_multithread_desc">Działa szybciej, ale na niektórych urządzeniach nie działa</string>
     <string name="err_share_too_large">Ten plik jest zbyt duży, aby go udostępnić</string>

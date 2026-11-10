@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="clr_grey">Siva</string>
-    <string name="set_intelligent_sorting">Pametno sortiranje</string>
     <string name="lbl_compilations">Zbirke</string>
     <string name="lbl_albums">Albumi</string>
     <string name="lbl_compilation_remix">Zbirka remiksov</string>
@@ -21,9 +20,7 @@
     <string name="set_hide_collaborators_desc">Prikaži samo izvajalce, ki so neposredno navedeni na albumu (najbolje deluje v dobro označenih knjižnicah)</string>
     <string name="set_lib_tabs">Zavihki knjižnice</string>
     <string name="clr_deep_purple">Temna vijolična</string>
-    <string name="set_play_song_by_itself">Predvajaj pesem samostojno</string>
     <string name="set_replay_gain_mode_album">Prednost albumu</string>
-    <string name="set_play_song_none">Predvajaj iz prikazanega elementa</string>
     <string name="set_observing">Samodejno ponovno nalaganje</string>
     <string name="lbl_eps">Podaljšane</string>
     <string name="lbl_props">Lastnosti pesmi</string>
@@ -42,7 +39,6 @@
     <string name="set_replay_gain_mode_dynamic">Prednost albumu če se album predvaja</string>
     <string name="lbl_playlists">Seznami predvajanja</string>
     <string name="lng_search_library">Išči v knjižnici…</string>
-    <string name="set_play_in_parent_with">Ko se predvaja iz podrobnosti elementa</string>
     <string name="set_reindex">Ponovno naloži glasbo</string>
     <string name="lbl_remix_group">Remiksi</string>
     <string name="set_pre_amp_warning">Opozorilo: Sprememba pred-ojačevalca na visoko pozitivno vrednost lahko privede do preseganja na nekaterih avdio posnetkih.</string>
@@ -64,18 +60,15 @@
     <string name="lbl_compilation">Zbirka</string>
     <string name="set_hide_collaborators">Skrij soustvarjalce</string>
     <string name="set_keep_shuffle_desc">Obdrži naključno predvajanje pri predvajanju nove pesmi</string>
-    <string name="set_behavior">Obnašanje</string>
     <string name="set_cover_mode_off">Izklopljeno</string>
     <string name="cdc_mp4">MPEG-4 Audio</string>
     <string name="lbl_save">Shrani</string>
     <string name="desc_queue_bar">Odpri čakalno vrsto</string>
     <string name="lbl_mixtapes">Mešanice</string>
     <string name="lbl_artist">Izvajalec</string>
-    <string name="set_intelligent_sorting_desc">Pravilno razvrsti imena, ki se začnejo z številkami ali besedami, kot so \'the\' (najbolje deluje z angleško glasbo)</string>
     <string name="clr_teal">Zelenkasto modra</string>
     <string name="lng_playlist_created">Seznam predavanja ustvarjen</string>
     <string name="fmt_lib_total_duration">Celoten čas predvajanja: %s</string>
-    <string name="set_repeat_pause">Pavza ob ponavljanju</string>
     <string name="set_locations">Mape za glasbo</string>
     <string name="set_keep_shuffle">Zapomni si naključno predvajanje</string>
     <string name="lbl_artist_details">Pojdi na izvajalca</string>
@@ -92,7 +85,6 @@
     <string name="desc_remove_song">Odstrani to pesem</string>
     <string name="def_disc">Ni diska</string>
     <string name="lbl_search">Išči</string>
-    <string name="set_headset_autoplay_desc">Vedno začnite predvajati, ko se slušalke priključijo (morda ne deluje na vseh napravah)</string>
     <string name="lbl_soundtracks">Glasbene podlage</string>
     <string name="lbl_shuffle_shortcut_long">Premešaj vse</string>
     <string name="lbl_queue_add">Dodaj v čakalno vrsto</string>
@@ -103,13 +95,11 @@
     <string name="set_audio_desc">Prilagodi zvok in obnašanje predvajanja</string>
     <string name="set_content_desc">Nadzorujte kako se glasba in slike nalagajo</string>
     <string name="set_ui">Izgled in občutek</string>
-    <string name="set_repeat_pause_desc">Začasna prekinitev ob ponavljanju</string>
     <string name="lbl_play">Predvajaj</string>
     <string name="lbl_indexing">Nalaganje glasbe</string>
     <string name="lbl_date">Datum</string>
     <string name="set_rescan_desc">Izprazni predpomnilnik oznak in popolnoma ponovno naloži glasbeno knjižnico (počasneje, vendar bolj popolno)</string>
     <string name="set_pre_amp_desc">Pred-ojačevalec se uporablja na obstoječi prilagoditvi med predvajanjem</string>
-    <string name="set_play_song_from_album">Predvajaj iz albuma</string>
     <string name="set_music">Glasba</string>
     <string name="err_bad_location">Ta mapa ni podprta</string>
     <string name="lbl_author_name">Razvil Alexander Capehart</string>
@@ -117,7 +107,6 @@
     <string name="lbl_copied">Kopirano</string>
     <string name="err_index_failed">Nalaganje glasbe ni uspelo</string>
     <string name="lbl_album">Album</string>
-    <string name="set_play_in_list_with">Ko se predvaja iz knjižnice</string>
     <string name="set_cover_mode_high_quality">Visoka kvaliteta</string>
     <string name="set_pre_amp_without">Prilagoditev brez oznak</string>
     <string name="lbl_playlist_add">Dodaj na seznam predvajanja</string>
@@ -136,7 +125,6 @@
         <item quantity="few">%d izvajalci</item>
         <item quantity="other">%d izvajalcev</item>
     </plurals>
-    <string name="set_display">Prikaz</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="cdc_ogg">Ogg Audio</string>
     <string name="lbl_filter_all">Vse</string>
@@ -157,7 +145,6 @@
     <string name="cdc_flac">Brezplačni format brez izgub zvoka (FLAC)</string>
     <string name="def_genre">Neznan žanr</string>
     <string name="fmt_db_pos">+%.1f dB</string>
-    <string name="set_personalize">Prilagodi</string>
     <string name="fmt_editing">Urejanje %s</string>
     <plurals name="fmt_album_count">
         <item quantity="one">%d album</item>
@@ -203,13 +190,10 @@
     <string name="set_theme_night">Temno</string>
     <string name="desc_shuffle">Vklopite ali izklopite naključno predvajanje</string>
     <string name="lbl_genre">Žanr</string>
-    <string name="set_playback">Predvajanje</string>
     <string name="lbl_ok">Vredu</string>
     <string name="lbl_single">Singl</string>
     <string name="lng_playlist_deleted">Seznam predvajanja odstranjen</string>
-    <string name="set_play_song_from_all">Predvajaj iz vseh pesmi</string>
     <string name="set_pre_amp_with">Prilagoditev z oznakami</string>
-    <string name="set_headset_autoplay">Predvajanje ob priključitvi slušalk</string>
     <string name="set_separators_comma">Vejica (,)</string>
     <string name="desc_auxio_icon">Auxio ikona</string>
     <string name="desc_track_number">Skladba %d</string>
@@ -244,8 +228,6 @@
     <string name="clr_brown">Rjava</string>
     <string name="set_replay_gain_mode">ReplayGain strategija</string>
     <string name="lbl_code">Izvorna koda</string>
-    <string name="set_play_song_from_artist">Predvajaj iz izvajalca</string>
-    <string name="set_personalize_desc">Prilagoditev kontrol uporabniškega vmesnika in obnašanja</string>
     <string name="lbl_sample_rate">Hitrost vzorčenja</string>
     <string name="lbl_queue">Čakalna vrsta</string>
     <string name="set_separators">Ločila za več vrednosti</string>
@@ -265,7 +247,6 @@
     <string name="def_track">Ni skladbe</string>
     <string name="set_separators_warning">Opozorilo: Uporaba te nastavitve lahko povzroči, da se nekatere oznake napačno interpretirajo kot oznake z več vrednostmi. To lahko rešite tako, da neželene ločevalne znake predhodno označite z vzvratno poševnico (\\).</string>
     <string name="clr_deep_green">Temno zelena</string>
-    <string name="set_play_song_from_genre">Predvajaj iz žanra</string>
     <string name="lbl_duration">Trajanje</string>
     <string name="clr_lime">Limeta</string>
     <string name="lbl_appears_on">Sodeloval pri</string>
@@ -284,8 +265,6 @@
     <string name="lng_playlist_exported">Seznam predvajanja uspešno izvožen</string>
     <string name="lng_supporters_promo">Donirajte projektu, da se vaše ime doda tukaj!</string>
     <string name="def_album_count">Ni albumov</string>
-    <string name="set_remember_pause">Zapomni si pavzo</string>
-    <string name="set_remember_pause_desc">Predvajaj/pavza med preskakovanjem ali urejanjem čakalne vrste</string>
     <string name="lbl_empty_playlist">Prazen seznam predvajanja</string>
     <string name="lbl_import_playlist">Uvozite seznam predvajanja</string>
     <string name="err_import_failed">Ni mogoče uvoziti seznama predvajanja iz te datoteke</string>

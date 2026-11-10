@@ -20,7 +20,6 @@
     <string name="set_theme">テーマ</string>
     <string name="set_black_mode_desc">漆黒のテーマを使用</string>
     <string name="set_keep_shuffle">シャフルを記憶</string>
-    <string name="set_repeat_pause_desc">曲の繰り返し時にポーズ</string>
     <string name="desc_clear_search">検索クエリを解除</string>
     <string name="lbl_date">日付け</string>
     <string name="set_cover_mode_high_quality">高クオリティ</string>
@@ -49,7 +48,6 @@
     <string name="lbl_playback">再生中</string>
     <string name="set_accent">カラースキーム</string>
     <string name="set_black_mode">黒基調</string>
-    <string name="set_play_song_none">表示されたアイテムから再生</string>
     <string name="desc_exit">再生停止</string>
     <string name="clr_red">赤</string>
     <string name="lbl_date_added">追加した日付け</string>
@@ -65,8 +63,6 @@
     <string name="lng_indexing">音楽ライブラリを読み込んでいます…</string>
     <string name="set_root_title">設定</string>
     <string name="set_ui_desc">アプリのテーマと色を変更</string>
-    <string name="set_personalize">個人仕様</string>
-    <string name="set_display">ディスプレイ</string>
     <string name="set_music">音楽</string>
     <string name="set_exclude_non_music_desc">音楽でないオーディオファイルを無視</string>
     <string name="set_separators_comma">カンマ (,)</string>
@@ -133,14 +129,7 @@
     <string name="lbl_code">ソースコード</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="lbl_version">バージョン</string>
-    <string name="set_headset_autoplay_desc">ヘッドセット接続時に常時再生開始 (動作しない機種あり)</string>
-    <string name="set_headset_autoplay">ヘッドセット自動再生</string>
     <string name="set_replay_gain">音量の均一化</string>
-    <string name="set_play_song_from_all">すべての曲から再生</string>
-    <string name="set_play_song_from_album">アルバムから再生</string>
-    <string name="set_play_song_from_artist">アーティストから再生</string>
-    <string name="set_play_in_list_with">ライブラリからの再生時</string>
-    <string name="set_play_in_parent_with">アイテム詳細からの再生時</string>
     <string name="set_exclude_non_music">音楽以外を除外</string>
     <string name="err_no_app">このタスクを実行できるアプリが見つかりません</string>
     <string name="set_content">コンテンツ</string>
@@ -161,13 +150,10 @@
     <string name="lbl_queue">再生待ち</string>
     <string name="lbl_library_counts">ライブラリ統計</string>
     <string name="lng_observing">音楽ライブラリの変更を監視しています…</string>
-    <string name="set_behavior">挙動</string>
     <string name="set_content_desc">音楽と画像の読み込み方法をコントロール</string>
     <string name="set_images">画像</string>
     <string name="set_cover_mode_off">オフ</string>
     <string name="set_audio">オーディオ</string>
-    <string name="set_playback">再生</string>
-    <string name="set_repeat_pause">ポーズと繰り返し</string>
     <string name="set_library">ライブラリ</string>
     <string name="set_pre_amp_without">タグ無しで調整</string>
     <string name="set_separators_semicolon">セミコロン (;)</string>
@@ -199,7 +185,6 @@
     <plurals name="fmt_song_count">
         <item quantity="other">%d 曲</item>
     </plurals>
-    <string name="set_play_song_from_genre">ジャンルから再生</string>
     <string name="set_keep_shuffle_desc">新しい曲の再生時にシャフルを保持</string>
     <string name="clr_dynamic">ダイナミック</string>
     <string name="def_playback">再生中の音楽がありません</string>
@@ -211,8 +196,6 @@
     <string name="set_round_mode_desc">追加の UI 要素で角丸を有効にします (アルバム カバーを丸める必要があります)</string>
     <string name="set_ui">外観</string>
     <string name="set_separators_desc">複数のタグ値を表す文字を構成する</string>
-    <string name="set_intelligent_sorting">ソート時に記事を無視する</string>
-    <string name="set_intelligent_sorting_desc">名前で並べ替えるときに「the」などの単語を無視する (英語の音楽に最適)</string>
     <string name="set_cover_mode_balanced">初期 (高速読み込み)</string>
     <string name="set_replay_gain_mode_dynamic">再生中の場合はアルバムを優先</string>
     <string name="set_separators">複数値セパレータ</string>
@@ -228,7 +211,6 @@
     <string name="set_rescan_desc">タグ キャッシュをクリアし、音楽ライブラリを完全にリロードします (遅くなりますが、より完全になります)</string>
     <string name="set_pre_amp">ReplayGain プリアンプ</string>
     <string name="fmt_list">%1$s、%2$s</string>
-    <string name="set_personalize_desc">UI コントロールと動作をカスタマイズする</string>
     <string name="lbl_playlist">プレイリスト</string>
     <string name="lbl_playlists">プレイリスト</string>
     <string name="desc_playlist_image">%s のプレイリスト イメージ</string>
@@ -278,7 +260,6 @@
     <string name="set_cover_mode_as_is">そのまま</string>
     <string name="def_album">不明なアルバム</string>
     <string name="cnt_mp4">%sを含むMPEG-4</string>
-    <string name="set_play_song_by_itself">曲を単独で再生</string>
     <string name="lbl_report">報告</string>
     <string name="lbl_sort_direction">順列</string>
     <string name="lbl_parent_detail">表示</string>
@@ -297,8 +278,6 @@
     <string name="lng_empty_playlists">プレイリストはここに表示されます</string>
     <string name="set_with_hidden">非表示のファイルを含む</string>
     <string name="set_with_hidden_desc">非表示のオーディオファイルを含める（例：.cache）</string>
-    <string name="set_remember_pause">再開時に一時停止を記憶</string>
-    <string name="set_remember_pause_desc">キューをスキップまたは編集しても、再生/一時停止を維持する</string>
     <string name="cdc_unknown">不明</string>
     <string name="set_cover_mode_save_space">スペースの節約</string>
     <string name="cdc_alac">アップルロスレスオーディオコーデック（ALAC）</string>

@@ -28,7 +28,6 @@
     <string name="set_theme_night">स्वचलित</string>
     <string name="set_accent">एक्सेंट</string>
     <string name="set_audio">ऑडियो</string>
-    <string name="set_personalize">चाल चलन</string>
     <!-- Error Namespace | Error Labels -->
     <!-- Description Namespace | Accessibility Strings -->
     <string name="desc_play_pause">चलाएं/रोकें</string>
@@ -60,7 +59,6 @@
     <string name="lbl_new_playlist">नई प्लेलिस्ट</string>
     <string name="lbl_play_next">अगला चलाएं</string>
     <string name="set_lib_tabs">लायब्रेरी टैब्स</string>
-    <string name="set_play_song_from_album">एल्बम से चलाएं</string>
     <string name="set_content">सामग्री</string>
     <string name="fmt_selected">%d चयनित</string>
     <string name="lbl_format">प्रारूप</string>
@@ -79,8 +77,6 @@
     <string name="clr_dynamic">गतिशील</string>
     <string name="set_ui">लुक और फील</string>
     <string name="set_round_mode_desc">अतिरिक्त UI तत्वों पर गोल कोनों को सक्षम करें (एल्बम कवर को गोल करने की आवश्यकता है)</string>
-    <string name="set_play_song_none">दिखाए गए आइटम से चलाएँ</string>
-    <string name="set_play_in_list_with">लाइब्रेरी से चलाते समय</string>
     <string name="set_observing_desc">संगीत लाइब्रेरी को फिर से लोड करें जब भी यह बदलता है (स्थाई नोटीफिकेशन की आवश्यकता होती है)</string>
     <string name="set_exclude_non_music_desc">ऑडियो फ़ाइलों को अनदेखा करें जो संगीत नहीं हैं, जैसे कि पॉडकास्ट</string>
     <string name="lbl_compilation_live">लाइव संकलन</string>
@@ -90,15 +86,12 @@
     <string name="lbl_playlist">प्लेलिस्ट</string>
     <string name="lbl_playlists">प्लेलिस्टें</string>
     <string name="set_round_mode">गोल मोड</string>
-    <string name="set_play_song_from_all">सभी गीतों से चलाएं</string>
     <string name="fmt_deletion_info">%s हटाएँ? इसे पूर्ववत नहीं किया जा सकता।</string>
     <string name="fmt_lib_song_count">लोड किए गए गाने: %d</string>
     <string name="lbl_sort_dsc">अवरोही</string>
     <string name="set_lib_tabs_desc">लायब्रेरी टैब की दृश्यता और क्रम बदलें</string>
     <string name="set_music">संगीत</string>
-    <string name="set_personalize_desc">UI नियंत्रण और व्यवहार अनुकूलित करें</string>
     <string name="fmt_lib_artist_count">कलाकार लोड किए गए: %d</string>
-    <string name="set_play_in_parent_with">आइटम विवरण से चलाते समय</string>
     <string name="lbl_album_live">लाइव एल्बम</string>
     <string name="lbl_album_remix">रीमिक्स एल्बम</string>
     <string name="lbl_ep_live">लाइव EP</string>
@@ -129,7 +122,6 @@
     <string name="lbl_live_group">रहना</string>
     <string name="lbl_rename_playlist">प्लेलिस्ट का नाम बदलें</string>
     <string name="lbl_delete">हटाएँ</string>
-    <string name="set_behavior">व्यवहार</string>
     <plurals name="fmt_artist_count">
         <item quantity="one">%d कलाकार</item>
         <item quantity="other">%d कलाकार</item>
@@ -151,9 +143,6 @@
     <string name="lbl_sample_rate">सैंपल रेट</string>
     <string name="lbl_song_detail">गुणधर्म देखें</string>
     <string name="lbl_props">गीत के गुणधर्म</string>
-    <string name="set_display">डिस्पले</string>
-    <string name="set_play_song_from_artist">कलाकार से चलाएं</string>
-    <string name="set_play_song_from_genre">शैली से चलाएं</string>
     <string name="set_keep_shuffle">फेरबदल याद रखें</string>
     <string name="set_keep_shuffle_desc">नया गाना बजाते समय फेरबदल करते रहें</string>
     <string name="set_separators">मल्टी-मूल्य विभाजक</string>
@@ -188,11 +177,8 @@
     <string name="clr_deep_green">गहरा हरा</string>
     <string name="clr_purple">बैंगनी</string>
     <string name="set_locations">संगीत फ़ोल्डर</string>
-    <string name="set_repeat_pause">दोहराने पर विराम</string>
     <string name="set_cover_mode_off">बंद</string>
     <string name="set_square_covers_desc">सभी एल्बम को 1: 1 पहलू अनुपात में कवर करें</string>
-    <string name="set_playback">प्लेबैक</string>
-    <string name="set_repeat_pause_desc">जब कोई गीत दोहराया जाता है तो रुक जाएं</string>
     <string name="set_pre_amp">रीप्लेगेन प्री-एम्प</string>
     <string name="set_pre_amp_with">टैग के साथ समायोजन</string>
     <string name="err_index_failed">संगीत लोड करना विफल रहा</string>
@@ -238,7 +224,6 @@
     <string name="def_disc">डिस्क नहीं</string>
     <string name="cdc_flac">निःशुल्क दोषरहित ऑडियो कोडेक (FLAC)</string>
     <string name="cdc_mp3">MPEG-1 ऑडियो</string>
-    <string name="set_headset_autoplay">हेडसेट ऑटोप्ले</string>
     <string name="set_square_covers">वर्गीकृत एल्बम कवर फोर्स करें</string>
     <string name="set_audio_desc">ध्वनि और प्लेबैक व्यवहार कॉन्फ़िगर करें</string>
     <string name="set_pre_amp_warning">चेतावनी: प्री-एम्प को उच्च सकारात्मक मान में बदलने से कुछ ऑडियो ट्रैक पर आवाज फट सकती है।</string>
@@ -255,15 +240,11 @@
     <string name="clr_brown">भूरा</string>
     <string name="clr_yellow">पीला</string>
     <string name="clr_lime">नींबू रंग</string>
-    <string name="set_headset_autoplay_desc">हेडसेट कनेक्ट होने पर हमेशा चलाना शुरू करें (सभी उपकरणों पर काम नहीं करेगा)</string>
     <string name="desc_track_number">ट्रैक %d</string>
     <string name="desc_skip_next">अगले गाने पर जाएं</string>
     <string name="desc_auxio_icon">ऑक्सियो आइकन</string>
     <string name="cdc_ogg">Ogg ऑडियो</string>
     <string name="clr_pink">गुलाबी</string>
-    <string name="set_intelligent_sorting">बुद्धिमान छंटाई</string>
-    <string name="set_intelligent_sorting_desc">संख्याओं या \"the\" जैसे शब्दों से शुरू होने वाले नामों को सही ढंग से क्रमबद्ध करें (अंग्रेजी भाषा के संगीत के साथ सबसे अच्छा काम करता है)</string>
-    <string name="set_play_song_by_itself">इसी गीत को चलाएं</string>
     <string name="lbl_sort_direction">दिशा</string>
     <string name="lbl_sort_mode">के अनुसार क्रमबद्ध करें</string>
     <string name="lbl_selection">संग्रह</string>
@@ -295,8 +276,6 @@
     <string name="lbl_author">लेखक</string>
     <string name="lbl_donate">दान करें</string>
     <string name="lng_supporters_promo">अपना नाम यहां जुड़वाने के लिए परियोजना में दान करें!</string>
-    <string name="set_remember_pause">विराम याद रखें</string>
-    <string name="set_remember_pause_desc">कतार छोड़ते या संपादित करते समय चलता/रोका रखिए</string>
     <string name="set_replay_gain_mode_off">बंद</string>
     <string name="lbl_start_playback">प्लेबैक शुरू करें</string>
     <string name="lng_tasker_start">पहले से सहेजे गए स्टेट का उपयोग करके Auxio को शुरू करता है। यदि कोई सहेजा हुआ स्टेट उपलब्ध नहीं है, तो सभी गाने शफल पर चलेंगे और प्लेबैक तुरंत शुरू हो जाएगा। \n \nचेतावनी: इस सेवा को नियंत्रित करते समय सावधान रहें, यदि आप इसे बंद करके फिर से उपयोग करने का प्रयास करते हैं, तो संभवतः ऐप क्रैश हो जाएगा।</string>

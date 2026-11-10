@@ -93,21 +93,9 @@
     <string name="set_black_mode_desc">ਸ਼ਾਹ-ਕਾਲ਼ਾ ਥੀਮ ਵਰਤੋ</string>
     <string name="set_round_mode">ਗੋਲ ਮੋਡ</string>
     <string name="set_round_mode_desc">ਵਾਧੂ UI ਤੱਤਾਂ \'ਤੇ ਗੋਲ ਕੋਨਿਆਂ ਨੂੰ ਸਮਰੱਥ ਬਣਾਓ (ਗੋਲਾਕਾਰ ਕਰਨ ਲਈ ਐਲਬਮ ਕਵਰਾਂ ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ )</string>
-    <string name="set_personalize">ਵਿਅਕਤੀਗਤ ਬਣਾਓ</string>
-    <string name="set_personalize_desc">UI ਨਿਯੰਤਰਣ ਅਤੇ ਵਿਵਹਾਰ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ</string>
     <string name="set_lib_tabs">ਲਾਇਬ੍ਰੇਰੀ ਟੈਬਾਂ</string>
-    <string name="set_display">ਡਿਸਪਲੇ</string>
     <string name="set_lib_tabs_desc">ਲਾਇਬ੍ਰੇਰੀ ਟੈਬਾਂ ਦੀ ਦਿੱਖ ਅਤੇ ਕ੍ਰਮ ਬਦਲੋ</string>
-    <string name="set_behavior">ਵਿਵਹਾਰ</string>
-    <string name="set_play_in_list_with">ਜਦੋਂ ਲਾਇਬ੍ਰੇਰੀ ਤੋਂ ਚਲਾਉਂਦੇ ਹਾਂ</string>
-    <string name="set_play_in_parent_with">ਜਦੋਂ ਆਈਟਮ ਦੇ ਵੇਰਵਿਆਂ ਤੋਂ ਚਲਾਉਂਦੇ ਹਾਂ</string>
-    <string name="set_play_song_none">ਦਿਖਾਈ ਗਈ ਆਈਟਮ ਤੋਂ ਚਲਾਓ</string>
-    <string name="set_play_song_from_all">ਸਾਰੇ ਗੀਤਾਂ ਤੋਂ ਚਲਾਓ</string>
-    <string name="set_play_song_from_album">ਐਲਬਮ ਤੋਂ ਚਲਾਓ</string>
-    <string name="set_play_song_from_artist">ਕਲਾਕਾਰ ਤੋਂ ਖੇਡੋ</string>
-    <string name="set_play_song_from_genre">ਸ਼ੈਲੀ ਤੋਂ ਖੇਡੋ</string>
     <string name="set_keep_shuffle">ਸ਼ਫਲ ਯਾਦ ਰੱਖੋ</string>
-    <string name="set_repeat_pause_desc">ਗੀਤ ਦੁਹਰਾਉਣ ਤੇ ਰੋਕੋ</string>
     <string name="set_replay_gain">ਵਾਲੀਅਮ ਨਾਰਮਲਾਈਜ਼ੇਸ਼ਨ</string>
     <string name="set_replay_gain_mode">ਰੀਪਲੇਅ-ਗੇਨ ਰਣਨੀਤੀ</string>
     <string name="set_replay_gain_mode_track">ਟਰੈਕ ਨੂੰ ਤਰਜੀਹ</string>
@@ -135,7 +123,6 @@
     <string name="set_exclude_non_music_desc">ਉਹਨਾਂ ਆਡੀਓ ਫਾਈਲਾਂ ਨੂੰ ਅਣਡਿੱਠ ਕਰੋ ਜੋ ਸੰਗੀਤ ਨਹੀਂ ਹਨ, ਜਿਵੇਂ ਕਿ ਪੌਡਕਾਸਟ</string>
     <string name="set_separators_plus">ਪਲੱਸ (+)</string>
     <string name="set_separators_warning">ਚੇਤਾਵਨੀ: ਇਸ ਸੈਟਿੰਗ ਦੀ ਵਰਤੋਂ ਕਰਨ ਦੇ ਨਤੀਜੇ ਵਜੋਂ ਕੁਝ ਟੈਗਸ ਨੂੰ ਕਈ ਮੁੱਲਾਂ ਦੇ ਰੂਪ ਵਿੱਚ ਗਲਤ ਤਰੀਕੇ ਨਾਲ ਸਮਝਿਆ ਜਾ ਸਕਦਾ ਹੈ। ਤੁਸੀਂ ਬੈਕਸਲੈਸ਼ (\\) ਦੇ ਨਾਲ ਅਣਚਾਹੇ ਵੱਖ ਕਰਨ ਵਾਲੇ ਅੱਖਰਾਂ ਨੂੰ ਅਗੇਤਰ ਲਗਾ ਕੇ ਇਸਦਾ ਹੱਲ ਕਰ ਸਕਦੇ ਹੋ।</string>
-    <string name="set_headset_autoplay_desc">ਹੈੱਡਸੈੱਟ ਕਨੈਕਟ ਹੋਣ \'ਤੇ ਹਮੇਸ਼ਾ ਚਲਾਉਣਾ ਸ਼ੁਰੂ ਕਰੋ (ਹੋ ਸਕਦਾ ਹੈ ਕਿ ਸਾਰੀਆਂ ਡਿਵਾਈਸਾਂ \'ਤੇ ਕੰਮ ਨਾ ਕਰੇ)</string>
     <string name="set_keep_shuffle_desc">ਨਵਾਂ ਗੀਤ ਚਲਾਉਣ ਵੇਲੇ ਸ਼ਫਲ ਚਾਲੂ ਰੱਖੋ</string>
     <string name="set_content">ਸਮੱਗਰੀ</string>
     <string name="set_content_desc">ਸੰਗੀਤ ਅਤੇ ਚਿੱਤਰਾਂ ਨੂੰ ਲੋਡ ਕਰਨ ਦੇ ਤਰੀਕੇ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰੋ</string>
@@ -151,8 +138,6 @@
     <string name="set_separators_and">ਐਂਪਰਸੈਂਡ (&amp;)</string>
     <string name="set_hide_collaborators">ਸਹਿਯੋਗੀਆਂ ਨੂੰ ਲੁਕਾਓ</string>
     <string name="set_audio_desc">ਆਵਾਜ਼ ਅਤੇ ਪਲੇਬੈਕ ਵਿਵਹਾਰ ਦੀ ਸੰਰਚਨਾ ਕਰੋ</string>
-    <string name="set_playback">ਪਲੇਅਬੈਕ</string>
-    <string name="set_headset_autoplay">ਹੈੱਡਸੈੱਟ ਆਟੋਪਲੇ</string>
     <string name="set_images">ਚਿੱਤਰ</string>
     <string name="set_cover_mode">ਐਲਬਮ ਕਵਰ</string>
     <string name="set_cover_mode_off">ਬੰਦ</string>
@@ -160,7 +145,6 @@
     <string name="set_cover_mode_high_quality">ਉੱਚ ਕੁਆਲਿਟੀ</string>
     <string name="set_audio">ਆਡੀਓ</string>
     <string name="set_rewind_prev_desc">ਪਿਛਲੇ ਗੀਤ \'ਤੇ ਜਾਣ ਤੋਂ ਪਹਿਲਾਂ ਰੀਵਾਈਂਡ ਕਰੋ</string>
-    <string name="set_repeat_pause">ਦੁਹਰਾਉਣ \'ਤੇ ਰੁਕੋ</string>
     <string name="set_library">ਲਾਇਬ੍ਰੇਰੀ</string>
     <string name="set_locations">ਸੰਗੀਤ ਫੋਲਡਰ</string>
     <string name="desc_queue_bar">ਕਤਾਰ ਖੋਲ੍ਹੋ</string>
@@ -192,8 +176,6 @@
     <string name="lbl_rename">ਨਾਂ ਬਦਲੋ</string>
     <string name="lbl_rename_playlist">ਪਲੇਅ-ਲਿਸਟ ਦਾ ਨਾਂ ਬਦਲੋ</string>
     <string name="lbl_confirm_delete_playlist">ਪਲੇਅ-ਲਿਸਟ ਮਿਟਾਓ?</string>
-    <string name="set_intelligent_sorting">ਸੂਝ-ਬੂਝ ਨਾਲ ਲੜੀਬੱਧ</string>
-    <string name="set_intelligent_sorting_desc">ਉਹਨਾਂ ਨਾਵਾਂ ਨੂੰ ਠੀਕ ਤਰ੍ਹਾਂ ਲੜੀਬੱਧ ਕਰੋ ਜੋ ਨੰਬਰਾਂ ਜਾਂ ਸ਼ਬਦਾਂ ਨਾਲ ਸ਼ੁਰੂ ਹੁੰਦੇ ਹਨ ਜਿਵੇਂ ਕਿ \"ਦਾ\" (ਅੰਗਰੇਜ਼ੀ-ਭਾਸ਼ਾ ਦੇ ਸੰਗੀਤ ਦੇ ਨਾਲ ਸਭ ਤੋਂ ਵਧੀਆ ਕੰਮ ਕਰਦਾ ਹੈ)</string>
     <string name="fmt_deletion_info">%s ਹਟਾਉਣਾ ਹੈ? ਇਸ ਨੂੰ ਅਣਕੀਤਾ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।</string>
     <string name="clr_deep_blue">ਗੂੜ੍ਹਾ ਨੀਲਾ</string>
     <plurals name="fmt_artist_count">
@@ -256,7 +238,6 @@
     <string name="set_square_covers_desc">ਸਾਰੇ ਐਲਬਮ ਕਵਰਾਂ ਨੂੰ 1:1 ਦੇ ਆਕਾਰ ਅਨੁਪਾਤ ਤੱਕ ਕਾਂਟ-ਛਾਂਟ ਕਰੋ</string>
     <string name="lbl_song">ਗੀਤ</string>
     <string name="lbl_parent_detail">ਵੇਖੋ</string>
-    <string name="set_play_song_by_itself">ਇਸੇ ਗੀਤ ਨੂੰ ਚਲਾਓ</string>
     <string name="lbl_sort_mode">ਸੌਰਟ ਕਰੋ</string>
     <string name="lbl_sort_direction">ਦਿਸ਼ਾ</string>
     <string name="lbl_selection">ਚੋਣ</string>
@@ -288,8 +269,6 @@
     <string name="lbl_donate">ਦਾਨ ਕਰੋ</string>
     <string name="lbl_supporters">ਸਮਰਥਕ</string>
     <string name="lng_supporters_promo">ਆਪਣਾ ਨਾਮ ਇੱਥੇ ਜੋੜਨ ਲਈ ਪ੍ਰੋਜੈਕਟ ਨੂੰ ਦਾਨ ਕਰੋ!</string>
-    <string name="set_remember_pause_desc">ਕਤਾਰ ਨੂੰ ਛੱਡਣ ਜਾਂ ਸੰਪਾਦਿਤ ਕਰਨ ਵੇਲੇ ਚਲਾਉਂਦੇ/ਰੋਕੇ ਰਹੋ</string>
-    <string name="set_remember_pause">ਵਿਰਾਮ ਯਾਦ ਰੱਖੋ</string>
     <string name="set_replay_gain_mode_off">ਬੰਦ</string>
     <string name="lbl_start_playback">ਪਲੇਬੈਕ ਸ਼ੁਰੂ ਕਰੋ</string>
     <string name="lng_tasker_start">ਪਹਿਲਾਂ ਸੁਰੱਖਿਅਤ ਕੀਤੀ ਸਥਿਤੀ ਦੀ ਵਰਤੋਂ ਕਰਕੇ Auxio ਨੂੰ ਸ਼ੁਰੂ ਕਰਦਾ ਹੈ। ਜੇਕਰ ਕੋਈ ਰੱਖਿਅਤ ਸਥਿਤੀ ਉਪਲਬਧ ਨਹੀਂ ਹੈ, ਤਾਂ ਸਾਰੇ ਗੀਤ ਸ਼ਫਲ ਤੇ ਚੱਲਣਗੇ ਅਤੇ ਪਲੇਬੈਕ ਤੁਰੰਤ ਸ਼ੁਰੂ ਹੋ ਜਾਵੇਗਾ। \n \nਚੇਤਾਵਨੀ: ਇਸ ਸੇਵਾ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰਨ ਵਿੱਚ ਸਾਵਧਾਨ ਰਹੋ, ਜੇਕਰ ਤੁਸੀਂ ਇਸਨੂੰ ਬੰਦ ਕਰਦੇ ਹੋ ਅਤੇ ਫਿਰ ਇਸਨੂੰ ਦੁਬਾਰਾ ਵਰਤਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦੇ ਹੋ, ਤਾਂ ਤੁਸੀਂ ਸ਼ਾਇਦ ਐਪ ਨੂੰ ਕ੍ਰੈਸ਼ ਕਰ ਦਿਓਗੇ।</string>

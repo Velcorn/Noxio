@@ -120,6 +120,14 @@
                 android:minHeight="@dimen/size_touchable_small"
                 android:text="@string/lbl_sleep_fade" />
 
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/sleep_shake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:minHeight="@dimen/size_touchable_small"
+                android:text="@string/lbl_sleep_shake" />
+
             <org.oxycblt.auxio.ui.RippleFixMaterialButton
                 android:id="@+id/sleep_start"
                 android:layout_width="match_parent"

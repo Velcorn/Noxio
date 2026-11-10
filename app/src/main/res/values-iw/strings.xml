@@ -75,18 +75,7 @@
     <string name="set_black_mode">ערכת נושא שחורה</string>
     <string name="set_black_mode_desc">שימוש בערכת נושא שחורה לגמרי</string>
     <string name="set_round_mode">מצב מעוגל</string>
-    <string name="set_personalize">התאמה אישית</string>
-    <string name="set_personalize_desc">התאמת רכיבי והתנהגות הממשק</string>
-    <string name="set_display">תצוגה</string>
     <string name="set_lib_tabs">לשוניות ספרייה</string>
-    <string name="set_behavior">התנהגות</string>
-    <string name="set_play_in_list_with">כאשר מנוגן מהספרייה</string>
-    <string name="set_play_in_parent_with">כאשר מנוגן מפרטי הפריט</string>
-    <string name="set_play_song_none">ניגון מהפריט המוצג</string>
-    <string name="set_play_song_from_all">ניגון מכל השירים</string>
-    <string name="set_play_song_from_album">ניגון מאלבום</string>
-    <string name="set_play_song_from_artist">ניגון מהאומן</string>
-    <string name="set_play_song_from_genre">ניגון מז\'אנר</string>
     <string name="set_keep_shuffle">זכירת ערבוב</string>
     <string name="set_keep_shuffle_desc">המשך ערבוב בעת הפעלת שיר חדש</string>
     <string name="set_content">תוכן</string>
@@ -104,11 +93,8 @@
     <string name="set_cover_mode_off">כבוי</string>
     <string name="set_cover_mode_balanced">מהיר</string>
     <string name="set_audio">שמע</string>
-    <string name="set_playback">ניגון</string>
-    <string name="set_headset_autoplay">ניגון אוטומטי באוזניות</string>
     <string name="set_rewind_prev">הרצה לאחור לפני דילוג אחורה</string>
     <string name="set_rewind_prev_desc">הרצה לאחור לפני דילוג לשיר הקודם</string>
-    <string name="set_repeat_pause">עצירה בעת חזרה</string>
     <string name="set_replay_gain">נורמליזציית עוצמת הקול</string>
     <string name="set_replay_gain_mode_album">העדפת אלבום</string>
     <string name="set_pre_amp">מגבר ReplayGain</string>
@@ -139,11 +125,8 @@
     <string name="set_separators_slash">קו נטוי (/)</string>
     <string name="set_separators_warning">אזהרה: השימוש בהגדרה זו עלול לגרום לחלק מהתגיות להיות מפורשות באופן שגוי כבעלות מספר ערכים. ניתן לפתור זאת על ידי הכנסת קו נטוי אחורי (\\) לפני תווים מפרידים לא רצויים.</string>
     <string name="set_cover_mode_high_quality">איכות גבוהה</string>
-    <string name="set_intelligent_sorting_desc">התעלמות ממספרים או מילים כמו \"The\" (\"ה׳ היידוע\") בעת סידור על פי שם (עובד באופן מיטבי עם מוזיקה בשפה האנגלית)</string>
     <string name="set_images">תמונות</string>
     <string name="set_audio_desc">הגדרת הצליל והניגון</string>
-    <string name="set_headset_autoplay_desc">תמיד להתחיל לנגן ברגע שמחוברות אזניות (עלול לא לעבוד בכל המערכות)</string>
-    <string name="set_repeat_pause_desc">השהייה עם חזרה על שיר</string>
     <string name="set_replay_gain_mode_track">העדפת רצועה</string>
     <string name="set_replay_gain_mode">אסטרטגיית ReplayGain</string>
     <string name="set_replay_gain_mode_dynamic">העדפת אלבום אם אחד מופעל</string>
@@ -233,7 +216,6 @@
     <string name="clr_yellow">צהוב</string>
     <string name="fmt_deletion_info">למחוק את %s? פעולה זו לא ניתן לביטול.</string>
     <string name="lbl_song">שיר</string>
-    <string name="set_intelligent_sorting">מיון חכם</string>
     <string name="lbl_parent_detail">הצגה</string>
     <string name="set_square_covers">הכרחת עטיפות אלבום מרובעות</string>
     <string name="set_rescan_desc">ריקון מטמון התגיות וטעינת ספריית המוזיקה מחדש במלואה (איטי יותר, אך יותר שלם)</string>
@@ -241,7 +223,6 @@
     <string name="lbl_sort_direction">כיוון</string>
     <string name="set_square_covers_desc">חיתוך כל עטיפות האלבומים ליחס של 1:1</string>
     <string name="lbl_appears_on">מופיע~ה ב-</string>
-    <string name="set_play_song_by_itself">ניגון השיר בלבד</string>
     <string name="set_pre_amp_warning">אזהרה: שינוי המגבר לערך חיובי גבוה עלול לגרום לעיוות (דיסטורשן) בחלק מרצועות האודיו.</string>
     <string name="clr_indigo">אינדיגו</string>
     <string name="cdc_mp3">אודיו MPEG-1</string>
@@ -286,7 +267,6 @@
     <string name="lbl_export_playlist">יצא רשימת השמעה</string>
     <string name="err_export_failed">אין יכולת לייצא רשימת השמעה מהקובץ הנ”ל</string>
     <string name="lbl_start_playback">התחל השמעה</string>
-    <string name="set_remember_pause">זכור השהיה</string>
     <string name="set_replay_gain_mode_off">כבוי</string>
     <string name="lbl_more">עוד</string>
     <string name="lbl_donate">תרומה</string>
@@ -298,7 +278,6 @@
     <string name="lbl_author">יוצר</string>
     <string name="lng_supporters_promo">תרמו לפרויקט כדי להוסיף את שמכם כאן!</string>
     <string name="lng_tasker_start">מפעיל Auxio במצב שנשמר קודם לכן. אם אין מצב שמור זמין, כל השירים יתערבבו. השמעה תתחיל מידית.\n\nאזהרה: היזהר בשליטה בשירות זה, אם תסגרו אותו ואחר כך תנסו להשתמש בו שוב, ייתכן שתקרסו את האפליקציה.</string>
-    <string name="set_remember_pause_desc">הישאר בניגון/בהשהיה בעת דילוג או עריכה של התור</string>
     <string name="cdc_alac">קודק אודיו Apple ללא אובדן נתונים (ALAC)</string>
     <string name="lbl_feedback">משוב</string>
     <string name="lbl_supporters">תומכים</string>

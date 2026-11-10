@@ -13,8 +13,6 @@
     <string name="lbl_sort_asc">Aufsteigend</string>
     <string name="lbl_play">Abspielen</string>
     <string name="lbl_shuffle">Zufällig</string>
-    <string name="set_play_song_from_all">Von allen Lieder abspielen</string>
-    <string name="set_play_song_from_album">Von Album abspielen</string>
     <string name="lbl_playback">Aktuelle Wiedergabe</string>
     <string name="lbl_queue">Warteschlange</string>
     <string name="lbl_play_next">Als Nächstes abspielen</string>
@@ -35,12 +33,9 @@
     <string name="set_theme_day">Hell</string>
     <string name="set_theme_night">Dunkel</string>
     <string name="set_accent">Farbgestaltung</string>
-    <string name="set_display">Anzeige</string>
     <string name="set_round_mode">Abgerundete Cover</string>
     <string name="set_round_mode_desc">Abgerundete Ecken für weitere UI-Elemente aktivieren (benötigt abgerundete Album-Cover)</string>
     <string name="set_audio">Wiedergabe</string>
-    <string name="set_headset_autoplay">Kopfhörer: automatische Wiedergabe</string>
-    <string name="set_headset_autoplay_desc">Beginne die Wiedergabe immer, wenn Kopfhörer verbunden sind (funktioniert nicht auf allen Geräten)</string>
     <string name="set_replay_gain_mode">ReplayGain-Strategie</string>
     <string name="set_pre_amp">ReplayGain-Vorverstärkung</string>
     <string name="set_pre_amp_desc">Die Vorverstärkung wird während der Wiedergabe auf die existierende Einstellung angewendet</string>
@@ -48,8 +43,6 @@
     <string name="set_pre_amp_without">Abgleich ohne Metadaten</string>
     <string name="set_replay_gain_mode_track">Titel bevorzugen</string>
     <string name="set_replay_gain_mode_album">Album bevorzugen</string>
-    <string name="set_personalize">Startseite und Player</string>
-    <string name="set_play_in_list_with">Wenn ein Lied aus der Bibliothek abgespielt wird</string>
     <string name="set_keep_shuffle">Zufällig-Einstellung merken</string>
     <string name="set_keep_shuffle_desc">Zufällig anlassen, wenn ein neues Lied abgespielt wird</string>
     <string name="set_rewind_prev" ns0:ignore="Typos">Zurückspulen, bevor das Lied zurück geändert wird</string>
@@ -105,8 +98,6 @@
     <string name="lbl_date">Jahr</string>
     <string name="set_black_mode">Schwarzes Farbschema</string>
     <string name="set_black_mode_desc">Ein rein schwarzes dunkles Farbschema verwenden</string>
-    <string name="set_repeat_pause">Pause bei Wiederholung</string>
-    <string name="set_repeat_pause_desc">Pausieren, wenn ein Song wiederholt wird</string>
     <string name="desc_shuffle">Zufällig an- oder ausschalten</string>
     <string name="desc_song_handle">Lied in der Warteschlange verschieben</string>
     <string name="desc_music_location_delete">Verzechnis entfernen</string>
@@ -136,8 +127,6 @@
     <string name="fmt_lib_total_duration">Gesamtdauer: %s</string>
     <string name="lbl_cancel">Abbrechen</string>
     <string name="set_pre_amp_warning">Warnung: Das Erhöhen der Vorverstärkung zu einem hohen positiven Wert könnte zu einer Übersteuerung bei einigen Audiospuren führen.</string>
-    <string name="set_play_in_parent_with">Wenn ein Lied aus den Elementdetails abgespielt wird</string>
-    <string name="set_play_song_none">Vom dargestellten Element abspielen</string>
     <string name="set_locations">Musikquellen</string>
     <string name="set_locations_desc">Verwalten, von wo die Musik geladen werden soll</string>
     <string name="def_track">Kein Titel</string>
@@ -198,7 +187,6 @@
     <string name="set_separators_comma">Komma (,)</string>
     <string name="set_separators_slash">Schrägstrich (/)</string>
     <string name="set_separators_plus">Plus (+)</string>
-    <string name="set_play_song_from_artist">Vom Künstler abspielen</string>
     <string name="set_separators_warning">Achtung: Verwenden dieser Einstellung könnte dazu führen, dass einige Tags fälschlicherweise interpretiert werden, als hätten sie mehrere Werte. Das kann gelöst werden, indem vor ungewollte Trenner ein Backslash (\\) eingefügt wird.</string>
     <string name="set_exclude_non_music">Nicht-Musik ausschließen</string>
     <string name="set_exclude_non_music_desc">Audio-Dateien, die keine Musik sind (wie Podcasts), ignorieren</string>
@@ -215,26 +203,20 @@
     <string name="set_rescan">Musik neu scannen</string>
     <string name="set_rescan_desc">Tag-Cache leeren und die Musik-Bibliothek vollständig neu laden (langsamer, aber vollständiger)</string>
     <string name="fmt_selected">%d ausgewählt</string>
-    <string name="set_play_song_from_genre">Vom Genre abspielen</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="lbl_reset">Zurücksetzen</string>
-    <string name="set_behavior">Verhalten</string>
-    <string name="set_ui_desc">Thema, Farben, App-Icon und Cover</string>
-    <string name="set_personalize_desc">Bibliothek-Tabs</string>
+    <string name="set_ui_desc">Thema, Farben, Tabs, App-Icon und Cover</string>
     <string name="set_content_desc">Musikquellen, Einlesen und Tags</string>
     <string name="set_music">Musik</string>
     <string name="set_images">Bilder</string>
     <string name="set_library">Bibliothek</string>
-    <string name="set_playback">Wiedergabe</string>
-    <string name="set_audio_desc">Start, Überspringen, Equalizer und ReplayGain</string>
+    <string name="set_audio_desc">Zufallswiedergabe, Überspringen, Equalizer und ReplayGain</string>
     <string name="set_replay_gain">Lautstärkenormalisierung</string>
     <string name="lbl_sort_dsc">Absteigend</string>
     <string name="desc_playlist_image">Wiedergabelistenbild für %s</string>
     <string name="lbl_playlist">Wiedergabeliste</string>
     <string name="lbl_playlists">Wiedergabelisten</string>
-    <string name="set_intelligent_sorting">Intelligente Sortierung</string>
-    <string name="set_intelligent_sorting_desc">Korrekte Sortierung von Namen, die mit Nummern oder Wörtern wie „the“ beginnen (funktioniert am besten mit englischsprachiger Musik)</string>
     <string name="lbl_new_playlist">Neue Wiedergabeliste</string>
     <string name="lng_playlist_added">Zur Wiedergabeliste hinzugefügt</string>
     <string name="lbl_playlist_add">Zur Wiedergabeliste hinzufügen</string>
@@ -256,7 +238,6 @@
     <string name="set_square_covers_desc">Alle Album-Cover auf ein Seitenverhältnis von 1:1 zuschneiden</string>
     <string name="lbl_song">Lied</string>
     <string name="lbl_parent_detail">Ansehen</string>
-    <string name="set_play_song_by_itself">Lied selbst spielen</string>
     <string name="lbl_sort_direction">Richtung</string>
     <string name="lbl_sort_mode">Sortieren nach</string>
     <string name="desc_selection_image">Auswahl-Bild</string>
@@ -288,8 +269,6 @@
     <string name="lbl_import">Importieren</string>
     <string name="lng_playlist_imported">Wiedergabeliste importiert</string>
     <string name="lng_playlist_exported">Wiedergabeliste exportiert</string>
-    <string name="set_remember_pause">Pause merken</string>
-    <string name="set_remember_pause_desc">Wiedergabe/Pause beim Springen oder Bearbeiten der Warteschlange beibehalten</string>
     <string name="set_replay_gain_mode_off">Aus</string>
     <string name="lbl_start_playback">Wiedergabe starten</string>
     <string name="lng_tasker_start">Startet Noxio mit dem vorher gespeicherten Zustand. Wenn kein gespeicherter Zustand vorhanden ist, werden alle Lieder zufällig abgespielt. Die Wiedergabe startet sofort. \n \nACHTUNG: Sei vorsichtig bei der Steuerung dieses Dienstes. Wenn du ihn schließt und dann erneut versuchst, ihn zu nutzen, stürzt die App wahrscheinlich ab.</string>
@@ -340,8 +319,6 @@
         <item quantity="other">%d Sekunden</item>
     </plurals>
     <string name="fmt_lib_total_size">Gesamte Größe: %s</string>
-    <string name="set_task_exit">Beim Schließen immer beenden</string>
-    <string name="set_task_exit_desc">Wiedergabe stoppen, wenn App geschlossen wird, auch beim Abspielen</string>
     <string name="set_saf_multithread">Datei-Erkundung mit mehreren Threads</string>
     <string name="set_saf_multithread_desc">Schneller, funktioniert aber nicht auf allen Geräte</string>
     <string name="err_share_too_large">Zu groß zum Teilen</string>
@@ -445,6 +422,11 @@
     <string name="lbl_sort_random">Zufällig</string>
     <string name="lbl_sleep_finish_song">Letztes Lied zu Ende spielen</string>
     <string name="lbl_sleep_fade">Vor dem Stoppen ausblenden</string>
+    <string name="lbl_sleep_shake">Schütteln startet den Timer neu</string>
+    <string name="lbl_sleep_notification_channel">Sleep-Timer</string>
+    <string name="fmt_sleep_notification_until">Die Wiedergabe stoppt um %s</string>
+    <string name="lbl_sleep_notification_end_of_track">Die Wiedergabe stoppt nach diesem Lied</string>
+    <string name="fmt_sleep_notification_extend">+%d Min.</string>
     <string name="lbl_sleep_start">Starten</string>
     <string name="lbl_sleep_restart">Neu starten</string>
     <string name="lbl_sleep_stop">Timer stoppen</string>
@@ -461,8 +443,6 @@
     <string name="set_launcher_icon">App-Icon</string>
     <string name="set_launcher_icon_default">Standard</string>
     <string name="set_launcher_icon_minimal">Minimal, weiß ohne Hintergrund</string>
-    <string name="set_sleep_shake">Schütteln setzt den Sleep-Timer zurück</string>
-    <string name="set_sleep_shake_desc">Schüttle das Gerät, um einen laufenden Sleep-Timer neu zu starten, auch während er ausblendet</string>
     <string name="set_equalizer_desc">Den Equalizer des Systems öffnen</string>
     <string name="lbl_rescan">Neu einlesen</string>
     <string name="lbl_rescan_confirm">Jede Datei wird von Grund auf neu gelesen. Bei einer großen Bibliothek kann das einige Minuten dauern, und die Bibliothek kann bis dahin unvollständig aussehen. Nutze „Musik neu laden“, wenn sich nur wenige Dateien geändert haben.</string>
