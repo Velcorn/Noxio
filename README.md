@@ -11,12 +11,14 @@
 </p>
 
 > [!WARNING]
-> **I'm not an Android developer.** Noxio is a personal project, and most of its changes are vibe-coded with
-> an AI assistant for my own use. Expect rough edges, and review anything you rely on.
+> **I'm not an Android developer.** Noxio is a personal project, and nearly all of its code is written with an
+> AI assistant for my own use. The logic has unit tests; the screens have no automated tests and are only checked
+> by hand, on an emulator and on my own phone, so expect rough edges and review anything you rely on.
 >
-> The main reason this fork exists is the **sleep timer**. **Listening stats** (a barebones, Spotify
-> Wrapped-style summary) are a nice to have. Anything else is a small tweak I wanted for myself.
-> It is shared as is, with no promise of support or stability.
+> The fork started for the **sleep timer**. It has grown since: a one-handed UI with search, sort and the shuffle
+> button at the bottom and gestures instead of back buttons, **listening stats** with sharing and backup, and a
+> switchable minimal icon. Noxio only reads your music and its tags and never edits them. Releases are
+> pre-releases, and it is shared as is, with no promise of support or stability.
 
 ## About
 
@@ -32,9 +34,9 @@ upstream issues should not be reported against it.
 | | Auxio | Noxio |
 | --- | --- | --- |
 | Sleep timer | none | Moon icon above the seek bar. End of track, 30 min, custom minutes or 60 min, with fade-out. Remembers your last choice. Restart it from the notification or by shaking the device. |
-| Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. The artists, albums and songs switch is at the top and you can also swipe between them, while the range and period controls are at the bottom, in reach of the thumb. Colorful cards you can share as an image, CSV export and import with an optional weekly backup to a folder (one file that is replaced each time, with a "Back up now" button). Musicolet's "Most played songs" lists import as your history from before Noxio, counted in All time only. Stored on the device only. |
+| Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. The artists, albums and songs switch is at the top and you can also swipe between them, while the range and period controls are at the bottom, in reach of the thumb. Tap an artist, album or song for a closer look at it: plays, listening time, its share of all your listening and the days you listened in that period, the top songs of an artist or album, or the plays of a song over time, with the first play and the total. Colorful cards you can share as an image, the overview as well as a single artist, album or song, CSV export and import with an optional weekly backup to a folder (one file that is replaced each time, with a "Back up now" button). Musicolet's "Most played songs" lists import as your history from before Noxio, counted in All time only. Stored on the device only. |
 | Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use, and the playing strip moves to the bottom while the queue is open. Optional wavy seek bar (Settings > Appearance), off by default |
-| Navigation | Tabs and search at the top, five tabs including Genres | Search row and tabs at the bottom of the home screen (Artists, Albums, Songs, Playlists, no Genres tab), the player above the navigation, a floating shuffle button. Short lists sit at the bottom edge instead of the top |
+| Navigation | Tabs and search at the top, five tabs including Genres | Search row and tabs at the bottom of the home screen (Artists, Albums, Songs, Playlists, no Genres tab), the player above the navigation, a floating shuffle button. Short lists sit at the bottom edge instead of the top. No screen has a back button (search, settings, about, listening stats and the detail pages included), the back gesture does that |
 | Queue | Reorder by dragging, remove by swiping | Search row under the playing strip: filter the queue and jump to a song, sort the whole queue in the same sort dialog as the other lists (name, artist, album, date, duration, ascending or descending, or random). The current song keeps playing |
 | Detail pages | Header with Play and Shuffle pills, sort in the list header | Album, genre, playlist and artist pages share the home screen's bottom row (a filter field on artists and playlists, sort, more) and its floating shuffle button; there is no back bar, the back gesture does that. Artist pages have Albums and Songs tabs you can swipe between, each with its own sort, and the search filters the list shown. Playlists can be searched and sorted; a sort is saved as the new order of the playlist right away. Lists are sorted ascending by default |
 | Search | Filter chips at the top, every type is searched | Filter chips at the bottom, above the keyboard. Only the types that have a tab on the home screen are shown and searched |
@@ -73,7 +75,9 @@ Besides the default icon, Noxio has a minimal version: the crescent, the play bu
 outlines with no background at all, drawn like the icons of [Arcticons](https://github.com/Donnnno/Arcticons) so it
 sits straight on your wallpaper and does not stand out in a launcher that uses that pack. Switch to it in Settings >
 Appearance > App icon. Any launcher shows the choice, since it is the app's own launcher icon, and launchers that
-support themed icons (like Kvaesitso) tint the single-color layer with your theme colors.
+support themed icons (like Kvaesitso) tint the single-color layer with your theme colors. The icon has no
+background layer at all, so a launcher that cuts icons to a shape (Kvaesitso does, whatever the icon pack) leaves
+its lines whole.
 
 ## Branches
 

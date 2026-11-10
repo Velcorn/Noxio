@@ -29,6 +29,8 @@ data class RankedItem(
     val subtitle: String?,
     val plays: Int,
     val listenedMs: Long,
+    /** Tells the item apart from the others of its kind, for [summarizeItem]. */
+    val key: String = "",
 )
 
 /** The summarized listening history of one period. */
@@ -98,7 +100,7 @@ fun summarize(
     limit: Int = 10,
     unknownArtist: String = "Unknown artist",
 ): ListeningStats {
-    class Tally(val name: String, val subtitle: String?) {
+    class Tally(val key: String, val name: String, val subtitle: String?) {
         var plays = 0
         var listenedMs = 0L
     }
@@ -107,7 +109,7 @@ fun summarize(
         tallies
             .sortedWith(compareByDescending<Tally> { it.plays }.thenByDescending { it.listenedMs })
             .take(limit)
-            .map { RankedItem(it.name, it.subtitle, it.plays, it.listenedMs) }
+            .map { RankedItem(it.name, it.subtitle, it.plays, it.listenedMs, it.key) }
 
     fun count(
         tallies: MutableMap<String, Tally>,
@@ -116,7 +118,7 @@ fun summarize(
         subtitle: String?,
         event: PlayEvent,
     ) {
-        val tally = tallies.getOrPut(key) { Tally(name, subtitle) }
+        val tally = tallies.getOrPut(key) { Tally(key, name, subtitle) }
         tally.plays++
         tally.listenedMs += event.listenedMs
     }
@@ -125,21 +127,12 @@ fun summarize(
     val artists = LinkedHashMap<String, Tally>()
     val albums = LinkedHashMap<String, Tally>()
     for (event in events) {
-        val artistNames = event.artists.split(PlayEvent.ARTIST_SEPARATOR).filter { it.isNotBlank() }
-        val artistLine = artistNames.joinToString(", ")
-
-        // Songs are matched by their text rather than their UID, so a retagged file or an
-        // imported play still counts towards the same song.
-        val songKey = event.title + PlayEvent.ARTIST_SEPARATOR + artistLine + event.album
-        count(songs, songKey, event.title, artistLine, event)
-        for (artist in artistNames.ifEmpty { listOf(unknownArtist) }.distinct()) {
+        val artistLine = artistLine(event)
+        count(songs, songKey(event), event.title, artistLine, event)
+        for (artist in artistKeys(event, unknownArtist)) {
             count(artists, artist, artist, null, event)
         }
-        // Albums are keyed together with their artist, so two "Greatest Hits" stay separate.
-        if (event.album.isNotBlank()) {
-            val albumKey = event.album + PlayEvent.ARTIST_SEPARATOR + artistLine
-            count(albums, albumKey, event.album, artistLine, event)
-        }
+        albumKey(event)?.let { count(albums, it, event.album, artistLine, event) }
     }
     return ListeningStats(
         plays = events.size,
@@ -149,6 +142,34 @@ fun summarize(
         albums = rank(albums.values),
     )
 }
+
+private fun artistNames(event: PlayEvent) =
+    event.artists.split(PlayEvent.ARTIST_SEPARATOR).filter { it.isNotBlank() }
+
+/** The artists of a play as one line, for example "A, B". */
+internal fun artistLine(event: PlayEvent) = artistNames(event).joinToString(", ")
+
+/**
+ * What tells the song of a play apart from other songs. Songs are matched by their text rather than
+ * their UID, so a retagged file or an imported play still counts towards the same song.
+ */
+internal fun songKey(event: PlayEvent) =
+    event.title + PlayEvent.ARTIST_SEPARATOR + artistLine(event) + event.album
+
+/**
+ * What tells the album of a play apart from other albums, or null if the play has no album. Albums
+ * are keyed together with their artist, so two "Greatest Hits" stay separate.
+ */
+internal fun albumKey(event: PlayEvent) =
+    if (event.album.isNotBlank()) {
+        event.album + PlayEvent.ARTIST_SEPARATOR + artistLine(event)
+    } else {
+        null
+    }
+
+/** The artists a play counts for: its own, or [unknownArtist] if it has none. */
+internal fun artistKeys(event: PlayEvent, unknownArtist: String) =
+    artistNames(event).ifEmpty { listOf(unknownArtist) }.distinct()
 
 interface StatsRepository {
     /**
@@ -178,6 +199,19 @@ interface StatsRepository {
      * @return How many plays were added.
      */
     suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int
+
+    /**
+     * Look closer at one artist, album or song of the stats, see [summarizeItem].
+     *
+     * @return Null if nothing was played of it.
+     */
+    suspend fun itemStats(
+        category: StatsCategory,
+        key: String,
+        period: StatsPeriod,
+        range: LongRange,
+        unknownArtist: String = "Unknown artist",
+    ): ItemStats? = null
 }
 
 class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : StatsRepository {
@@ -190,6 +224,14 @@ class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : S
         summarize(dao.between(range.first, range.last + 1), unknownArtist = unknownArtist)
 
     override suspend fun exportCsv(out: OutputStream) = StatsCsv.writeHistory(dao.all(), out)
+
+    override suspend fun itemStats(
+        category: StatsCategory,
+        key: String,
+        period: StatsPeriod,
+        range: LongRange,
+        unknownArtist: String,
+    ) = summarizeItem(dao.all(), category, key, period, range, unknownArtist)
 
     override suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
         // Skip dated plays that are already there, so importing a backup twice is harmless.

@@ -130,13 +130,6 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
         )
 
         binding.searchNormalToolbar.apply {
-            // Initialize the current filtering mode.
-            setNavigationOnClickListener {
-                // Keyboard is no longer needed.
-                hideKeyboard()
-                findNavController().navigateUp()
-            }
-
             setOnMenuItemClickListener(this@SearchFragment)
         }
 

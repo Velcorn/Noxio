@@ -43,6 +43,19 @@ class StatsViewModelTest {
     private class FakeRepository : StatsRepository {
         var imported = 0
         var summaries = mutableListOf<LongRange>()
+        var item: ItemStats? = null
+        var itemKey: String? = null
+
+        override suspend fun itemStats(
+            category: StatsCategory,
+            key: String,
+            period: StatsPeriod,
+            range: LongRange,
+            unknownArtist: String,
+        ): ItemStats? {
+            itemKey = key
+            return item
+        }
 
         override suspend fun record(event: PlayEvent) = 1L
 
@@ -165,6 +178,43 @@ class StatsViewModelTest {
 
         runBlocking { model.importCsv(emptyList()) }
         waitFor { repository.summaries.size == 3 }
+        collector.cancel()
+    }
+
+    @Test
+    fun aCloserLookIsKeptWithItsRankAndPeriod() {
+        val row = RankedItem("Song", "Artist", 2, 2L, key = "the key")
+        // Nothing is shown yet, so there is no period to look at.
+        assertFalse(runBlocking { model.loadDetails(1, row) })
+
+        val collector = CoroutineScope(Dispatchers.Unconfined).launch { model.ui.collect {} }
+        waitFor { model.ui.value != null }
+        // Not played at all.
+        assertFalse(runBlocking { model.loadDetails(1, row) })
+        assertEquals(null, model.details)
+
+        val stats =
+            ItemStats(
+                category = StatsCategory.ARTISTS,
+                name = "Song",
+                subtitle = "Artist",
+                plays = 2,
+                listenedMs = 2L,
+                share = 0.5f,
+                daysPlayed = 1,
+                bucketUnit = ItemStats.BucketUnit.DAY,
+                buckets = emptyList(),
+                topSongs = emptyList(),
+                allTimePlays = 2,
+                firstPlayedMs = null,
+                lastPlayedMs = null,
+            )
+        repository.item = stats
+        assertTrue(runBlocking { model.loadDetails(3, row) })
+        assertEquals("the key", repository.itemKey)
+        assertEquals(3, model.details!!.rank)
+        assertEquals(stats, model.details!!.stats)
+        assertEquals(model.ui.value!!.range, model.details!!.range)
         collector.cancel()
     }
 

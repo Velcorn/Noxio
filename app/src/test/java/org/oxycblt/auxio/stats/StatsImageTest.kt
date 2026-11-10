@@ -63,6 +63,39 @@ class StatsImageTest {
         assertEquals(StatsImage.HEIGHT, StatsImage.render(context, long).height)
     }
 
+    private fun itemContent(rows: Int, bars: Int, name: String = "Lil Peep") =
+        StatsItemImageContent(
+            category = StatsCategory.SONGS,
+            name = name,
+            lines = listOf("Artist", "#1 song · November 2026"),
+            tiles = List(4) { StatsItemImageContent.Tile("$it", "Label $it") },
+            sectionTitle = "Plays over time",
+            rows = List(rows) { StatsImageContent.Row("Song $it", null, "$it plays", "$it min") },
+            bars =
+                List(bars) {
+                    StatsItemImageContent.Bar(it / 30f, if (it % 7 == 0) "$it" else null)
+                },
+            footerStart = "First play Mar 5, 2026",
+            footerEnd = "12 plays in total",
+        )
+
+    @Test
+    fun theImageOfAnItemHasTheSameSize() {
+        for (content in listOf(itemContent(rows = 3, bars = 0), itemContent(rows = 0, bars = 31))) {
+            val bitmap = StatsImage.renderItem(context, content)
+            assertEquals(StatsImage.WIDTH, bitmap.width)
+            assertEquals(StatsImage.HEIGHT, bitmap.height)
+        }
+    }
+
+    @Test
+    fun anItemWithNothingButANameStillRenders() {
+        val bare =
+            itemContent(rows = 0, bars = 0, name = "N".repeat(500))
+                .copy(lines = emptyList(), tiles = emptyList(), footerStart = "", footerEnd = "")
+        assertEquals(StatsImage.HEIGHT, StatsImage.renderItem(context, bare).height)
+    }
+
     @Test
     fun everyCategoryHasItsOwnColors() {
         val colors = StatsCategory.entries.map { StatsImage.gradientOf(context, it) }

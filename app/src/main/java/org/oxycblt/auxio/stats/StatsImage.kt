@@ -44,6 +44,32 @@ data class StatsImageContent(
     data class Row(val name: String, val subtitle: String?, val plays: String, val time: String)
 }
 
+/** What goes onto the image of a single artist, album or song. */
+data class StatsItemImageContent(
+    val category: StatsCategory,
+    val name: String,
+    /** Up to two lines under the name, for example the artist and the period. */
+    val lines: List<String>,
+    /** Up to four numbers with what they are, shown as tiles. */
+    val tiles: List<Tile>,
+    /** The heading of the lower half, which has either [rows] or [bars]. */
+    val sectionTitle: String,
+    val rows: List<StatsImageContent.Row>,
+    val bars: List<Bar>,
+    val footerStart: String,
+    val footerEnd: String,
+) {
+    data class Tile(val value: String, val label: String)
+
+    /**
+     * A bar of the chart.
+     *
+     * @param fraction Its height, from 0 to 1.
+     * @param label What is written under it. Null for nothing.
+     */
+    data class Bar(val fraction: Float, val label: String?)
+}
+
 /** Draws the shareable card as a portrait bitmap. The size does not depend on screen density. */
 object StatsImage {
     const val WIDTH = 1080
@@ -53,12 +79,122 @@ object StatsImage {
     private const val FIRST_ROW_Y = 400f
     private const val ROW_HEIGHT = 150f
 
+    private const val CONTENT_WIDTH = WIDTH - 2 * MARGIN
+    private const val FIRST_TILE_Y = 410f
+    private const val TILE_HEIGHT = 136f
+    private const val TILE_GAP = 20f
+    private const val TILE_WIDTH = (CONTENT_WIDTH - TILE_GAP) / 2
+    private const val SECTION_Y = 780f
+    private const val ITEM_ROW_HEIGHT = 112f
+    private const val BAR_HEIGHT = 230f
+
     fun render(context: Context, content: StatsImageContent): Bitmap {
         val bitmap = createBitmap(WIDTH, HEIGHT)
         val canvas = Canvas(bitmap)
-        val (start, end) = gradientOf(context, content.category)
-
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        val text = TextPaint(Paint.ANTI_ALIAS_FLAG)
+        drawBackground(context, canvas, paint, text, content.category)
+
+        text.alpha = 255
+        text.textSize = 96f
+        canvas.drawText(content.title, MARGIN, 250f, text)
+
+        text.typeface = Typeface.DEFAULT
+        text.textSize = 40f
+        text.alpha = 230
+        canvas.drawText(content.rangeLabel, MARGIN, 312f, text)
+
+        content.rows.forEachIndexed { index, row ->
+            drawRow(canvas, paint, text, index, FIRST_ROW_Y + index * ROW_HEIGHT, row)
+        }
+
+        drawFooter(canvas, paint, text, content.totalTime, content.totalPlays)
+        return bitmap
+    }
+
+    /** Draw the card of a single artist, album or song. */
+    fun renderItem(context: Context, content: StatsItemImageContent): Bitmap {
+        val bitmap = createBitmap(WIDTH, HEIGHT)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        val text = TextPaint(Paint.ANTI_ALIAS_FLAG)
+        drawBackground(context, canvas, paint, text, content.category)
+
+        // A long name is written smaller before it is cut off.
+        text.alpha = 255
+        text.textSize = 96f
+        if (text.measureText(content.name) > CONTENT_WIDTH) {
+            text.textSize = 68f
+        }
+        canvas.drawText(ellipsize(content.name, text, CONTENT_WIDTH), MARGIN, 250f, text)
+
+        text.typeface = Typeface.DEFAULT
+        text.textSize = 40f
+        text.alpha = 230
+        content.lines.take(2).forEachIndexed { index, line ->
+            canvas.drawText(ellipsize(line, text, CONTENT_WIDTH), MARGIN, 312f + index * 54f, text)
+        }
+        text.alpha = 255
+
+        content.tiles.take(4).forEachIndexed { index, tile ->
+            val left = MARGIN + (index % 2) * (TILE_WIDTH + TILE_GAP)
+            val top = FIRST_TILE_Y + (index / 2) * (TILE_HEIGHT + TILE_GAP)
+            paint.color = 0x33FFFFFF
+            canvas.drawRoundRect(
+                RectF(left, top, left + TILE_WIDTH, top + TILE_HEIGHT),
+                36f,
+                36f,
+                paint,
+            )
+            text.typeface = Typeface.DEFAULT_BOLD
+            text.textSize = 54f
+            canvas.drawText(
+                ellipsize(tile.value, text, TILE_WIDTH - 72f),
+                left + 36f,
+                top + 66f,
+                text,
+            )
+            text.typeface = Typeface.DEFAULT
+            text.textSize = 30f
+            text.alpha = 204
+            canvas.drawText(
+                ellipsize(tile.label, text, TILE_WIDTH - 72f),
+                left + 36f,
+                top + 108f,
+                text,
+            )
+            text.alpha = 255
+        }
+
+        if (content.rows.isNotEmpty() || content.bars.isNotEmpty()) {
+            text.typeface = Typeface.DEFAULT_BOLD
+            text.textSize = 34f
+            text.alpha = 217
+            canvas.drawText(content.sectionTitle.uppercase(), MARGIN, SECTION_Y, text)
+            text.alpha = 255
+        }
+        content.rows.take(3).forEachIndexed { index, row ->
+            drawRow(canvas, paint, text, index, SECTION_Y + 44f + index * ITEM_ROW_HEIGHT, row)
+        }
+        if (content.rows.isEmpty()) {
+            drawBars(canvas, paint, text, content.bars)
+        }
+
+        if (content.footerStart.isNotEmpty() || content.footerEnd.isNotEmpty()) {
+            drawFooter(canvas, paint, text, content.footerStart, content.footerEnd, small = true)
+        }
+        return bitmap
+    }
+
+    /** The gradient, the two circles and the name of the app. Leaves [text] white and bold. */
+    private fun drawBackground(
+        context: Context,
+        canvas: Canvas,
+        paint: Paint,
+        text: TextPaint,
+        category: StatsCategory,
+    ) {
+        val (start, end) = gradientOf(context, category)
         paint.shader =
             LinearGradient(
                 0f,
@@ -77,28 +213,26 @@ object StatsImage {
         canvas.drawCircle(WIDTH - 120f, 140f, 320f, paint)
         canvas.drawCircle(80f, HEIGHT - 60f, 260f, paint)
 
-        val text = TextPaint(Paint.ANTI_ALIAS_FLAG)
         text.color = WHITE
-
         text.typeface = Typeface.DEFAULT_BOLD
         text.textSize = 34f
         text.alpha = 217
         canvas.drawText("NOXIO", MARGIN, 120f, text)
+    }
 
-        text.alpha = 255
-        text.textSize = 96f
-        canvas.drawText(content.title, MARGIN, 250f, text)
-
-        text.typeface = Typeface.DEFAULT
-        text.textSize = 40f
-        text.alpha = 230
-        canvas.drawText(content.rangeLabel, MARGIN, 312f, text)
-
-        content.rows.forEachIndexed { index, row ->
-            drawRow(canvas, paint, text, index, row)
-        }
-
-        // Footer with the totals.
+    /**
+     * The rounded strip at the bottom with one text at each end.
+     *
+     * @param small Whether both texts are written in the smaller size, as they are longer.
+     */
+    private fun drawFooter(
+        canvas: Canvas,
+        paint: Paint,
+        text: TextPaint,
+        start: String,
+        end: String,
+        small: Boolean = false,
+    ) {
         paint.color = 0x33FFFFFF
         canvas.drawRoundRect(
             RectF(MARGIN, HEIGHT - 190f, WIDTH - MARGIN, HEIGHT - 80f),
@@ -108,14 +242,51 @@ object StatsImage {
         )
         text.alpha = 255
         text.typeface = Typeface.DEFAULT_BOLD
-        text.textSize = 44f
+        text.textSize = if (small) 36f else 44f
         text.textAlign = Paint.Align.LEFT
-        canvas.drawText(content.totalTime, MARGIN + 44f, HEIGHT - 120f, text)
+        canvas.drawText(start, MARGIN + 44f, HEIGHT - 120f, text)
         text.typeface = Typeface.DEFAULT
         text.textSize = 36f
         text.textAlign = Paint.Align.RIGHT
-        canvas.drawText(content.totalPlays, WIDTH - MARGIN - 44f, HEIGHT - 120f, text)
-        return bitmap
+        canvas.drawText(end, WIDTH - MARGIN - 44f, HEIGHT - 120f, text)
+        text.textAlign = Paint.Align.LEFT
+    }
+
+    /** A bar chart in the lower half. Every bar is at least a thin line, so none is missing. */
+    private fun drawBars(
+        canvas: Canvas,
+        paint: Paint,
+        text: TextPaint,
+        bars: List<StatsItemImageContent.Bar>,
+    ) {
+        if (bars.isEmpty()) return
+        val top = SECTION_Y + 50f
+        val bottom = top + BAR_HEIGHT
+        val slot = CONTENT_WIDTH / bars.size
+        val width = (slot * 0.7f).coerceAtMost(90f)
+        text.typeface = Typeface.DEFAULT
+        text.textSize = 28f
+        text.textAlign = Paint.Align.CENTER
+        text.alpha = 204
+        bars.forEachIndexed { index, bar ->
+            val center = MARGIN + slot * (index + 0.5f)
+            val height = (BAR_HEIGHT * bar.fraction.coerceIn(0f, 1f)).coerceAtLeast(6f)
+            paint.color = if (bar.fraction > 0f) WHITE else 0x55FFFFFF
+            canvas.drawRoundRect(
+                RectF(center - width / 2, bottom - height, center + width / 2, bottom),
+                width / 4,
+                width / 4,
+                paint,
+            )
+            if (bar.label != null) {
+                // The labels at the two ends are kept inside the image.
+                val half = text.measureText(bar.label) / 2
+                val x = center.coerceIn(MARGIN + half, WIDTH - MARGIN - half)
+                canvas.drawText(bar.label, x, bottom + 44f, text)
+            }
+        }
+        text.alpha = 255
+        text.textAlign = Paint.Align.LEFT
     }
 
     private fun drawRow(
@@ -123,9 +294,9 @@ object StatsImage {
         paint: Paint,
         text: TextPaint,
         index: Int,
+        top: Float,
         row: StatsImageContent.Row,
     ) {
-        val top = FIRST_ROW_Y + index * ROW_HEIGHT
         val first = index == 0
 
         paint.color = if (first) WHITE else 0x38FFFFFF
@@ -140,7 +311,9 @@ object StatsImage {
         text.color = WHITE
         text.textAlign = Paint.Align.LEFT
         text.textSize = 44f
-        canvas.drawText(ellipsize(row.name, text, 560f), MARGIN + 120f, top + 36f, text)
+        // A name without a second line sits in the middle of its row, next to the number.
+        val nameY = if (row.subtitle.isNullOrEmpty()) top + 55f else top + 36f
+        canvas.drawText(ellipsize(row.name, text, 560f), MARGIN + 120f, nameY, text)
         if (!row.subtitle.isNullOrEmpty()) {
             text.typeface = Typeface.DEFAULT
             text.textSize = 32f

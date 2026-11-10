@@ -20,7 +20,11 @@ package org.oxycblt.auxio.stats
 
 import android.content.Context
 import android.text.format.DateUtils
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import org.oxycblt.auxio.R
 
 /** Text formatting shared by the stats screen and the image that can be shared from it. */
@@ -40,6 +44,52 @@ object StatsFormat {
             context.getString(R.string.fmt_stats_time_hm, hours, minutes)
         } else {
             context.getString(R.string.fmt_stats_time_m, minutes)
+        }
+    }
+
+    /** A day such as "Nov 8, 2026". */
+    fun date(context: Context, ms: Long): String =
+        DateUtils.formatDateTime(
+            context,
+            ms,
+            DateUtils.FORMAT_SHOW_DATE or
+                DateUtils.FORMAT_SHOW_YEAR or
+                DateUtils.FORMAT_ABBREV_MONTH,
+        )
+
+    /** A part of the whole such as "23%". Anything played shows as at least 1%. */
+    fun percent(share: Float, locale: Locale = Locale.getDefault()): String =
+        NumberFormat.getPercentInstance(locale).format(share.coerceIn(0.01f, 1f).toDouble())
+
+    /**
+     * What is written under the bars of the chart of an item, see [ItemStats.buckets]. A week names
+     * its days and a year its months. A month only numbers each seventh day, and all time names its
+     * two ends, as there is no room for more.
+     *
+     * @return A label for each bar, null where there is none.
+     */
+    fun bucketLabels(
+        period: StatsPeriod,
+        unit: ItemStats.BucketUnit,
+        starts: List<Long>,
+        locale: Locale = Locale.getDefault(),
+    ): List<String?> {
+        fun format(pattern: String, ms: Long) = SimpleDateFormat(pattern, locale).format(Date(ms))
+        return starts.mapIndexed { index, start ->
+            when (period) {
+                StatsPeriod.WEEK -> format("EEE", start)
+                StatsPeriod.MONTH -> if (index % 7 == 0) (index + 1).toString() else null
+                // The first letter of the month. The narrow form of the pattern is not known
+                // everywhere.
+                StatsPeriod.YEAR -> format("LLL", start).take(1).uppercase(locale)
+                StatsPeriod.ALL ->
+                    if (index == 0 || index == starts.lastIndex) {
+                        val pattern = if (unit == ItemStats.BucketUnit.YEAR) "yyyy" else "LLL yyyy"
+                        format(pattern, start)
+                    } else {
+                        null
+                    }
+            }
         }
     }
 

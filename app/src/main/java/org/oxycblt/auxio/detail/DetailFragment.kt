@@ -25,7 +25,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.transition.MaterialSharedAxis
 import kotlin.math.abs
@@ -120,7 +119,6 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
         }
 
         binding.detailNormalToolbar.apply {
-            setNavigationOnClickListener { findNavController().navigateUp() }
             setOnMenuItemClickListener(this@DetailFragment)
             setOnOverflowMenuClick { onOpenParentMenu() }
         }

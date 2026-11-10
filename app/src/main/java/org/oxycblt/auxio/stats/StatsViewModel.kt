@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.R
 
 /** What the ranked list on the stats screen is about. */
@@ -78,6 +79,19 @@ constructor(
     /** Whether the card shows the top 10 instead of the top 5. */
     private val mutableExpanded = MutableStateFlow(false)
     val expanded: StateFlow<Boolean> = mutableExpanded.asStateFlow()
+
+    /** A closer look at one row of the card, with the period it was shown for. */
+    data class Details(
+        /** The place of the row in the list, 1 for the first. */
+        val rank: Int,
+        val query: Query,
+        val range: LongRange,
+        val stats: ItemStats,
+    )
+
+    /** What [loadDetails] found last, for the dialog that shows it. */
+    var details: Details? = null
+        private set
 
     /** Bumped when the history changed outside of the player, for example after an import. */
     private val refresh = MutableStateFlow(0)
@@ -127,6 +141,29 @@ constructor(
             StatsCategory.ALBUMS -> ui.stats.albums
             StatsCategory.SONGS -> ui.stats.songs
         }
+
+    /**
+     * Take a closer look at the row [item] of the current category and keep it in [details].
+     *
+     * @param rank Its place in the list, 1 for the first.
+     * @return Whether there is something to show.
+     */
+    suspend fun loadDetails(rank: Int, item: RankedItem): Boolean {
+        val ui = ui.value ?: return false
+        val category = category.value
+        val stats =
+            withContext(Dispatchers.IO) {
+                repository.itemStats(
+                    category,
+                    item.key,
+                    ui.query.period,
+                    ui.range,
+                    context.getString(R.string.def_artist),
+                )
+            } ?: return false
+        details = Details(rank, ui.query, ui.range, stats)
+        return true
+    }
 
     /** Write the full play history as CSV. Must be called off the main thread. */
     suspend fun exportCsv(out: OutputStream) = repository.exportCsv(out)

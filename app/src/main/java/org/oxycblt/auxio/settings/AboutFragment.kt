@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.BuildConfig
@@ -60,7 +59,6 @@ class AboutFragment : ViewBindingFragment<FragmentAboutBinding>() {
         super.onBindingCreated(binding, savedInstanceState)
 
         // --- UI SETUP ---
-        binding.aboutBack.setOnClickListener { findNavController().navigateUp() }
         // There is no top bar, so the content starts under the status bar, and the bar at the
         // bottom is lifted above the navigation.
         binding.aboutContents.setOnApplyWindowInsetsListener { view, insets ->

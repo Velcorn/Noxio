@@ -70,6 +70,22 @@ class StatsRepositoryExportTest {
     private val repository = StatsRepositoryImpl(Dao())
 
     @Test
+    fun aCloserLookAtAnItemGoesThroughTheWholeHistory() = runBlocking {
+        repository.record(play("A", PlayEvent.BASELINE_TIME))
+        repository.record(play("A", 1_700_000_000_000))
+        repository.record(play("B", 1_700_000_100_000))
+        val range = 1_700_000_000_000..1_700_000_050_000
+        val stats =
+            repository.itemStats(StatsCategory.ARTISTS, "Artist", StatsPeriod.WEEK, range, "?")!!
+        assertEquals(1, stats.plays)
+        assertEquals(3, stats.allTimePlays)
+        assertEquals(
+            null,
+            repository.itemStats(StatsCategory.ARTISTS, "Nobody", StatsPeriod.WEEK, range, "?"),
+        )
+    }
+
+    @Test
     fun aBackupCanBeReadBackIntoAnEmptyRepository() = runBlocking {
         repository.record(play("A", 1_700_000_000_000))
         repository.record(play("B", 1_700_000_100_000))

@@ -18,6 +18,7 @@
  
 package org.oxycblt.auxio.stats
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -38,6 +39,34 @@ import org.oxycblt.auxio.util.showToast
 import org.oxycblt.auxio.util.systemBarInsetsCompat
 import timber.log.Timber as L
 
+/** Hand an image of the stats to another app. */
+internal fun shareStatsImage(context: Context, image: Bitmap) {
+    try {
+        val directory = File(context.cacheDir, "shared").apply { mkdirs() }
+        val file = File(directory, "noxio-stats.png")
+        file.outputStream().use { image.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        val uri =
+            FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file)
+        ShareCompat.IntentBuilder(context).setType("image/png").addStream(uri).startChooser()
+    } catch (e: Exception) {
+        L.e("Failed to share stats image: $e")
+        context.showToast(R.string.err_share_failed)
+    }
+}
+
+/** Write an image of the stats to the place the user chose. */
+internal fun saveStatsImage(context: Context, image: Bitmap, uri: Uri) {
+    try {
+        context.contentResolver.openOutputStream(uri)?.use {
+            image.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
+        context.showToast(R.string.lbl_stats_image_saved)
+    } catch (e: IOException) {
+        L.e("Failed to save stats image: $e")
+        context.showToast(R.string.err_share_failed)
+    }
+}
+
 /**
  * Previews the card of the stats screen as an image and lets the user share it or save it. The
  * numbers come from the [StatsViewModel] of the stats screen.
@@ -49,8 +78,9 @@ class StatsShareDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBi
     private var bitmap: Bitmap? = null
     private val saveLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("image/png")) { uri ->
-            if (uri != null) {
-                save(uri)
+            val image = bitmap
+            if (uri != null && image != null) {
+                saveStatsImage(requireContext(), image, uri)
             }
         }
 
@@ -74,7 +104,9 @@ class StatsShareDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBi
         bitmap = image
         binding.sharePreview.setImageBitmap(image)
 
-        binding.shareSend.setOnClickListener { share() }
+        binding.shareSend.setOnClickListener {
+            bitmap?.let { shareStatsImage(requireContext(), it) }
+        }
         binding.shareSave.setOnClickListener {
             saveLauncher.launch("noxio-${statsModel.category.value.name.lowercase()}.png")
         }
@@ -111,40 +143,6 @@ class StatsShareDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBi
             totalTime = StatsFormat.listened(context, ui.stats.listenedMs),
             totalPlays = StatsFormat.plays(context, ui.stats.plays),
         )
-    }
-
-    private fun share() {
-        val context = requireContext()
-        val image = bitmap ?: return
-        try {
-            val directory = File(context.cacheDir, "shared").apply { mkdirs() }
-            val file = File(directory, "noxio-stats.png")
-            file.outputStream().use { image.compress(Bitmap.CompressFormat.PNG, 100, it) }
-            val uri =
-                FileProvider.getUriForFile(
-                    context,
-                    BuildConfig.APPLICATION_ID + ".fileprovider",
-                    file,
-                )
-            ShareCompat.IntentBuilder(context).setType("image/png").addStream(uri).startChooser()
-        } catch (e: Exception) {
-            L.e("Failed to share stats image: $e")
-            context.showToast(R.string.err_share_failed)
-        }
-    }
-
-    private fun save(uri: Uri) {
-        val context = requireContext()
-        val image = bitmap ?: return
-        try {
-            context.contentResolver.openOutputStream(uri)?.use {
-                image.compress(Bitmap.CompressFormat.PNG, 100, it)
-            }
-            context.showToast(R.string.lbl_stats_image_saved)
-        } catch (e: IOException) {
-            L.e("Failed to save stats image: $e")
-            context.showToast(R.string.err_share_failed)
-        }
     }
 
     companion object {

@@ -24,6 +24,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +36,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialFadeThrough
@@ -64,6 +64,9 @@ import org.oxycblt.auxio.util.systemBarInsetsCompat
 @AndroidEntryPoint
 class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     private val statsModel: StatsViewModel by viewModels()
+    private var swipeDetector: HorizontalSwipeDetector? = null
+    /** When the last swipe between categories ended, so it does not also count as a tap. */
+    private var lastSwipeAt = 0L
     private val exportLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
             if (uri != null) {
@@ -89,7 +92,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     override fun onBindingCreated(binding: FragmentStatsBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
 
-        binding.statsBack.setOnClickListener { findNavController().navigateUp() }
         binding.statsMenu.setOnClickListener { view ->
             PopupMenu(requireContext(), view).apply {
                 menuInflater.inflate(R.menu.toolbar_stats, menu)
@@ -169,8 +171,10 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     private fun setupSwipeBetweenCategories(binding: FragmentStatsBinding) {
         val detector =
             HorizontalSwipeDetector(requireContext()) { forward ->
+                lastSwipeAt = SystemClock.uptimeMillis()
                 neighbourCategory(statsModel.category.value, forward)?.let(statsModel::setCategory)
             }
+        swipeDetector = detector
         // Reading the touches does not take them from the scrolling.
         @SuppressLint("ClickableViewAccessibility")
         binding.statsContents.setOnTouchListener { _, event ->
@@ -240,8 +244,36 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                     StatsFormat.plays(context, item.plays),
                     StatsFormat.listened(context, item.listenedMs),
                 )
+            // A tap looks closer at the row. Rows take the touches now, so they pass them on to
+            // the swipe between categories themselves.
+            @SuppressLint("ClickableViewAccessibility")
+            row.root.setOnTouchListener { _, event ->
+                swipeDetector?.onTouchEvent(event)
+                false
+            }
+            row.root.setOnClickListener {
+                if (SystemClock.uptimeMillis() - lastSwipeAt > SWIPE_TAP_GAP_MS) {
+                    openDetails(index + 1, item)
+                }
+            }
             binding.statsList.addView(row.root)
         }
+    }
+
+    private fun openDetails(rank: Int, item: RankedItem) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (
+                statsModel.loadDetails(rank, item) &&
+                    childFragmentManager.findFragmentByTag(StatsItemDialog.TAG) == null
+            ) {
+                StatsItemDialog().show(childFragmentManager, StatsItemDialog.TAG)
+            }
+        }
+    }
+
+    override fun onDestroyBinding(binding: FragmentStatsBinding) {
+        super.onDestroyBinding(binding)
+        swipeDetector = null
     }
 
     /** Color the selected category in the pill with its own gradient color. */
@@ -345,5 +377,6 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
     private companion object {
         const val COLLAPSED_ROWS = 5
         const val EXPANDED_ROWS = 10
+        const val SWIPE_TAP_GAP_MS = 300L
     }
 }

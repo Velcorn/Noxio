@@ -11,6 +11,9 @@
 - [x] Genre tab removed (saved tab orders are read without it); listening stats bottom-oriented with swipe between artists, albums and songs; needs a check on a device
 - [x] No three-dot buttons on list rows, long press opens the item menu (selecting several songs by long press is gone for now); all bottom sheets pure black
 - [x] Themed-icon launchers (Kvaesitso) no longer clip the crescent; stats backup has a Back up now button and says that one file is replaced; search chips stay above the playback bar
+- [x] No back buttons left (search, settings, about, listening stats, detail pages), gestures only; needs a check on a device
+- [x] Listening stats: tap an artist, album or song for a closer look (plays, time, share of all listening, days listened, top songs or plays over time, first play and total) that can be shared or saved as an image; needs a check on a device
+- [x] Minimal icon without a background layer, so Kvaesitso no longer cuts it to its icon shape (seen with the pentagon and triangle shapes on an emulator); needs a check on a device
 - [x] Black theme: menus, dialogs, sheets, app bar and status bar pure black; grey shuffle and repeat in the notification; optional wavy seek bar
 - [x] Settings regrouped into five screens (Appearance, Home and player, Playback, Library, Listening stats)
 - [x] About page: Noxio links, Auxio credit and fork notice, upstream donate and supporters removed; needs a check on a device

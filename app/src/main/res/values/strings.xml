@@ -176,12 +176,22 @@
         <item quantity="one">%d play</item>
         <item quantity="other">%d plays</item>
     </plurals>
+    <string name="lbl_stats_item_plays">Plays</string>
+    <string name="lbl_stats_item_time">Listening time</string>
+    <string name="lbl_stats_item_share">Of all listening</string>
+    <string name="lbl_stats_item_days">Days listened</string>
+    <string name="lbl_stats_item_over_time">Plays over time</string>
+    <string name="fmt_stats_item_artist">#%1$d artist · %2$s</string>
+    <string name="fmt_stats_item_album">#%1$d album · %2$s</string>
+    <string name="fmt_stats_item_song">#%1$d song · %2$s</string>
+    <string name="fmt_stats_item_first">First play %s</string>
+    <string name="fmt_stats_item_last">Last play %s</string>
+    <string name="fmt_stats_item_total">%s in total</string>
     <string name="lbl_sleep_end_of_track">End of track</string>
     <string name="lbl_sleep_custom">Custom</string>
     <string name="lbl_sleep_minutes">Minutes</string>
     <string name="lbl_sleep_unit">min</string>
     <string name="lbl_sort_random">Random</string>
-    <string name="desc_back">Back</string>
     <string name="lbl_sleep_finish_song">Finish last song</string>
     <string name="lbl_sleep_fade">Fade out before stopping</string>
     <string name="lbl_sleep_start">Start</string>

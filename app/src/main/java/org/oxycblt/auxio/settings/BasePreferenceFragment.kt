@@ -24,7 +24,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.XmlRes
 import androidx.core.view.updatePadding
-import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
@@ -76,7 +75,6 @@ abstract class BasePreferenceFragment(@XmlRes private val screen: Int) :
             androidx.preference.R.id.recycler_view
         view.findViewById<AuxioToolbar>(R.id.preferences_toolbar).apply {
             title = preferenceScreen.title
-            setNavigationOnClickListener { findNavController().navigateUp() }
         }
 
         preferenceManager.onDisplayPreferenceDialogListener = this

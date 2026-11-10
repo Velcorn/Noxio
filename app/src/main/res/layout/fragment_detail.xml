@@ -131,8 +131,7 @@
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"
-                        app:menu="@menu/toolbar_detail"
-                        app:navigationIcon="@drawable/ic_back_24" />
+                        app:menu="@menu/toolbar_detail" />
 
                     <org.oxycblt.auxio.ui.AuxioToolbar
                         android:id="@+id/detail_selection_toolbar"

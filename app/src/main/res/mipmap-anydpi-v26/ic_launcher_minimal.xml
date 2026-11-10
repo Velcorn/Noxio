@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- No background: only the white silhouette is drawn, the launcher shows it on the wallpaper. -->
+<!-- Only the white lines are drawn, the launcher shows them on the wallpaper.
+     There is no background layer on purpose, not even a transparent one: a launcher that cuts
+     icons to a shape (Kvaesitso does, also with an icon pack) only leaves an icon alone when it
+     has no background, and would otherwise cut pieces off the lines. -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@android:color/transparent"/>
     <foreground android:drawable="@drawable/ic_launcher_minimal_white"/>
     <monochrome android:drawable="@drawable/ic_launcher_monochrome"/>
 </adaptive-icon>
