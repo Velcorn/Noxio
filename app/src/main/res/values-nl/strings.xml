@@ -124,8 +124,6 @@
     <string name="set_pre_amp_with">Aanpassing met tags</string>
     <string name="set_pre_amp_without">Aanpassing zonder tags</string>
     <string name="def_playback">Geen muziek wordt afgespeeld</string>
-    <string name="set_round_mode">Ronde modus</string>
-    <string name="set_round_mode_desc">Schakel afgeronde hoeken in voor extra UI-elementen (vereist dat albumhoezen zijn afgerond)</string>
     <string name="lbl_library_counts">Bibliotheek statistieken</string>
     <string name="set_lib_tabs_desc">Verander de zichtbaarheid en volgorde van bibliotheek tabbladen</string>
     <string name="set_replay_gain_mode">ReplayGain strategie</string>
@@ -165,11 +163,6 @@
     <string name="set_ui_desc">Wijzig het thema en de kleuren van de app</string>
     <string name="set_content_desc">Bepaal hoe muziek en afbeeldingen worden geladen</string>
     <string name="set_music">Muziek</string>
-    <string name="set_observing">Automatisch herladen</string>
-    <string name="set_separators_semicolon">Puntkomma (;)</string>
-    <string name="set_separators_comma">Komma (,)</string>
-    <string name="set_separators_plus">Plus (+)</string>
-    <string name="set_separators_warning">Waarschuwing: Het gebruik van deze instelling kan ertoe leiden dat sommige tags verkeerd geïnterpreteerd worden als tags met meerdere waarden. U kunt dit oplossen door ongewenste scheidingstekens vooraf te laten gaan door een backslash (\\).</string>
     <string name="set_hide_collaborators_desc">Toon alleen artiesten die rechtstreeks op een album worden genoemd (werkt het beste op goed getagde bibliotheken)</string>
     <string name="desc_exit">Stop afspelen</string>
     <string name="lng_indexing">Uw muziekbibliotheek laden…</string>
@@ -178,13 +171,10 @@
     <string name="lbl_mixtape">Mixtape</string>
     <string name="lbl_mix">DJ-mix</string>
     <string name="lbl_remix_group">Remixen</string>
-    <string name="set_separators_slash">Schuine streep (/)</string>
     <string name="set_replay_gain">Volume normalisatie</string>
     <string name="lbl_playlist">Afspeellijst</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="lbl_reset">Reset</string>
-    <string name="set_images">Afbeeldingen</string>
-    <string name="set_cover_mode_balanced">Snel</string>
     <string name="set_library">Bibliotheek</string>
     <string name="lbl_ep_live">Live EP</string>
     <string name="lbl_ep_remix">Remix EP</string>
@@ -197,10 +187,7 @@
     <string name="lbl_confirm_delete_playlist">Verwijder afspeellijst?</string>
     <string name="desc_queue_bar">Open de wachtrij</string>
     <string name="fmt_deletion_info">%s verwijderen? Dit kan niet ongedaan worden gemaakt.</string>
-    <string name="set_cover_mode_off">Uit</string>
-    <string name="set_cover_mode_high_quality">Hoge kwaliteit</string>
     <string name="lbl_genre">Genre</string>
-    <string name="set_separators_and">Ampersand (&amp;)</string>
     <string name="lbl_sort_dsc">Aflopend</string>
     <string name="desc_playlist_image">Afspeellijst afbeelding voor %s</string>
     <string name="def_song_count">Geen nummers</string>
@@ -220,9 +207,7 @@
     <string name="lng_observing">Uw muziekbibliotheek controleren op wijzigingen…</string>
     <string name="lng_playlist_renamed">Afspeellijst hernoemd</string>
     <string name="lbl_rename">Hernoem</string>
-    <string name="set_separators_desc">Configureer tekens die meerdere tag waarden aanduiden</string>
     <string name="lbl_delete">Verwijder</string>
-    <string name="set_separators">Meerdere waarden scheidingstekens</string>
     <string name="set_hide_collaborators">Verberg bijdragers</string>
     <string name="lbl_date_added">Datum toegevoegd</string>
     <string name="fmt_list">%1$s, %2$s</string>
@@ -235,10 +220,8 @@
     <string name="lbl_playlists">Afspeellijsten</string>
     <string name="lbl_share">Deel</string>
     <string name="lng_playlist_deleted">Afspeellijst verwijderd</string>
-    <string name="set_observing_desc">Laad de muziekbibliotheek opnieuw wanneer deze wordt gewijzigd (vereist permanente melding)</string>
     <string name="set_exclude_non_music">Sluit niet-muziek uit</string>
     <string name="set_exclude_non_music_desc">Negeer audiobestanden die geen muziek zijn, zoals podcasts</string>
-    <string name="set_cover_mode">Albumhoezen</string>
     <string name="set_rescan">Scan muziek opnieuw</string>
     <string name="set_rescan_desc">Wis de tag-cache en laad de muziekbibliotheek opnieuw (langzamer, maar vollediger)</string>
     <string name="def_disc">Geen schijf</string>
@@ -259,8 +242,6 @@
     <string name="lbl_donate">Doneer</string>
     <string name="lbl_supporters">Supporters</string>
     <string name="lng_supporters_promo">Doneer aan het project om uw naam hier te krijgen!</string>
-    <string name="set_square_covers">Forceer vierkante albumhoezen</string>
-    <string name="set_square_covers_desc">Snijd alle albumhoezen bij tot een verhouding van 1:1</string>
     <string name="lbl_error_info">Fout informatie</string>
     <string name="lbl_copied">Gekopieerd</string>
     <string name="lbl_selection">Selectie</string>
@@ -278,14 +259,12 @@
     <string name="lbl_windows_paths">Gebruik Windows-compatibele paden</string>
     <string name="lbl_report">Rapporteer</string>
     <string name="lng_playlist_exported">Afspeellijst geëxporteerd</string>
-    <string name="set_cover_mode_as_is">Zoals</string>
     <string name="lbl_more">Meer</string>
     <string name="lng_tasker_start">Begint Auxio met de vorige redde staat. Als er geen gerede staat beschikbaar is, worden alle liedjes geschud. Playback zal onmiddellijk beginnen.\n\nWees voorzichtig met het controleren van deze dienst, als je het sluit en het weer probeert te gebruiken, zal je waarschijnlijk de app crashen.</string>
     <string name="cdc_alac">Appel Lossless Audio Codec (ALAC)</string>
     <string name="cdc_unknown">Onbekend</string>
     <string name="lng_empty_songs">Je nummers zullen hier worden weergegeven.</string>
     <string name="lng_empty_playlists">Je afspeellijsten zullen hier worden weergegeven.</string>
-    <string name="set_with_hidden">Inclusief verborgen bestanden</string>
     <string name="lbl_github">Meld een probleem met GitHub</string>
     <string name="lbl_email">Stuur een e-mail</string>
     <string name="lng_empty_albums">Je albums zullen hier worden weergegeven.</string>
@@ -293,8 +272,6 @@
     <string name="lng_empty_genres">Je genres zullen hier worden weergegeven.</string>
     <string name="def_album">Onbekend album</string>
     <string name="cnt_mp4">MPEG-4 bevat %s</string>
-    <string name="set_cover_mode_save_space">Ruimte besparen</string>
     <string name="lbl_feedback">Feedback</string>
     <string name="lbl_start_playback">Afspelen</string>
-    <string name="set_with_hidden_desc">Inclusief audiobestanden die verborgen zijn (excl. .cache)</string>
 </resources>

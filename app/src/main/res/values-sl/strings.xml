@@ -21,7 +21,6 @@
     <string name="set_lib_tabs">Zavihki knjižnice</string>
     <string name="clr_deep_purple">Temna vijolična</string>
     <string name="set_replay_gain_mode_album">Prednost albumu</string>
-    <string name="set_observing">Samodejno ponovno nalaganje</string>
     <string name="lbl_eps">Podaljšane</string>
     <string name="lbl_props">Lastnosti pesmi</string>
     <string name="desc_change_repeat">Spremenite način ponavljanja</string>
@@ -48,7 +47,6 @@
     <string name="lbl_cancel">Prekliči</string>
     <string name="fmt_def_playlist">Seznam predvajanja %d</string>
     <string name="desc_skip_prev">Preskoči na zadnjo pesem</string>
-    <string name="set_observing_desc">Ponovno naloži glasbeno knjižnico vsakič, ko se zazna sprememba (zahteva vztrajno obvestilo)</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d pesem</item>
         <item quantity="two">%d pesmi</item>
@@ -60,7 +58,6 @@
     <string name="lbl_compilation">Zbirka</string>
     <string name="set_hide_collaborators">Skrij soustvarjalce</string>
     <string name="set_keep_shuffle_desc">Obdrži naključno predvajanje pri predvajanju nove pesmi</string>
-    <string name="set_cover_mode_off">Izklopljeno</string>
     <string name="cdc_mp4">MPEG-4 Audio</string>
     <string name="lbl_save">Shrani</string>
     <string name="desc_queue_bar">Odpri čakalno vrsto</string>
@@ -107,7 +104,6 @@
     <string name="lbl_copied">Kopirano</string>
     <string name="err_index_failed">Nalaganje glasbe ni uspelo</string>
     <string name="lbl_album">Album</string>
-    <string name="set_cover_mode_high_quality">Visoka kvaliteta</string>
     <string name="set_pre_amp_without">Prilagoditev brez oznak</string>
     <string name="lbl_playlist_add">Dodaj na seznam predvajanja</string>
     <string name="lbl_date_added">Datum vnosa</string>
@@ -115,10 +111,8 @@
     <string name="lbl_album_live">Album v živo</string>
     <string name="desc_no_cover">Naslovnica albuma</string>
     <string name="lbl_rename">Preimenuj</string>
-    <string name="set_separators_plus">Plus (+)</string>
     <string name="fmt_selected">%d Izbrano</string>
     <string name="def_artist">Neznan izvajatelj</string>
-    <string name="set_images">Slike</string>
     <plurals name="fmt_artist_count">
         <item quantity="one">%d izvajalec</item>
         <item quantity="two">%d izvajalca</item>
@@ -128,17 +122,14 @@
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="cdc_ogg">Ogg Audio</string>
     <string name="lbl_filter_all">Vse</string>
-    <string name="set_separators_slash">Poševnica (/)</string>
     <string name="lng_playlist_added">Dodano na seznam predvajanja</string>
     <string name="lbl_single_live">Singl v živo</string>
     <string name="def_song_count">Ni pesmi</string>
     <string name="lbl_ep">Podaljšano</string>
     <string name="lbl_songs">Pesmi</string>
-    <string name="set_square_covers_desc">Prireži vse naslovnice albumov v razmerje 1:1</string>
     <string name="clr_indigo">Indigo modra</string>
     <string name="fmt_db_neg">-%.1f dB</string>
     <string name="lbl_indexer">Nalaganje glasbe</string>
-    <string name="set_separators_and">In (&amp;)</string>
     <string name="lbl_song_count">Število pesmi</string>
     <string name="lbl_sort">Sortiraj</string>
     <string name="clr_purple">Vijolična</string>
@@ -161,7 +152,6 @@
     <string name="lbl_about">O aplikaciji</string>
     <string name="fmt_disc_no">Disk %d</string>
     <string name="fmt_disc_no_subtitle">Disk %1$d – %2$s</string>
-    <string name="set_round_mode_desc">Omogočite zaobljene robove na dodatnih elementih uporabniškega vmesnika (zahteva zaobljene naslovnice albumov)</string>
     <string name="desc_album_cover">Naslovnica albuma za %s</string>
     <string name="lbl_live_group">V živo</string>
     <string name="set_lib_tabs_desc">Spremenite vidnost in vrstni red zavihkov knjižnice</string>
@@ -181,7 +171,6 @@
     <string name="lbl_confirm_delete_playlist">Odstrani seznam predvajanja?</string>
     <string name="clr_blue">Modra</string>
     <string name="clr_deep_blue">Temno modra</string>
-    <string name="set_round_mode">Zaobljen način</string>
     <string name="fmt_lib_artist_count">Naloženih izvajalcev: %d</string>
     <string name="set_audio">Zvok</string>
     <string name="clr_red">Rdeča</string>
@@ -193,7 +182,6 @@
     <string name="lbl_single">Singl</string>
     <string name="lng_playlist_deleted">Seznam predvajanja odstranjen</string>
     <string name="set_pre_amp_with">Prilagoditev z oznakami</string>
-    <string name="set_separators_comma">Vejica (,)</string>
     <string name="desc_auxio_icon">Auxio ikona</string>
     <string name="desc_track_number">Skladba %d</string>
     <string name="lbl_filter">Filtriraj</string>
@@ -210,9 +198,7 @@
     <string name="lbl_error_info">Informacije napake</string>
     <string name="lbl_shuffle_shortcut_short">Premešaj</string>
     <string name="cdc_aac">Napredno avdio kodiranje (AAC)</string>
-    <string name="set_square_covers">Prisilite uporabo kvadratnih naslovnic albumov</string>
     <string name="lbl_compilation_live">Zbirka pesmi v živo</string>
-    <string name="set_cover_mode">Naslovnice albumov</string>
     <string name="clr_yellow">Rumena</string>
     <string name="clr_green">Zelena</string>
     <string name="lbl_version">Različica</string>
@@ -220,8 +206,6 @@
     <string name="lbl_size">Velikost</string>
     <string name="lbl_sort_dsc">Padajoče</string>
     <string name="lbl_ep_remix">Podaljšan remiks</string>
-    <string name="set_separators_semicolon">Podpičje (;)</string>
-    <string name="set_cover_mode_balanced">Hitro</string>
     <string name="lng_playlist_renamed">Seznam predvajanja preimenovan</string>
     <string name="desc_play_pause">Predvajaj ali začasno ustavi</string>
     <string name="clr_brown">Rjava</string>
@@ -229,7 +213,6 @@
     <string name="lbl_code">Izvorna koda</string>
     <string name="lbl_sample_rate">Hitrost vzorčenja</string>
     <string name="lbl_queue">Čakalna vrsta</string>
-    <string name="set_separators">Ločila za več vrednosti</string>
     <string name="set_replay_gain">Normalizacija glasnosti</string>
     <string name="lbl_singles">Singli</string>
     <string name="lng_widget">Pregled in nadzor predvajanja glasbe</string>
@@ -242,9 +225,7 @@
     <string name="lbl_bitrate">Bitna hitrost</string>
     <string name="fmt_deletion_info">Odstraniti %s? Tega ni mogoče razveljaviti.</string>
     <string name="set_root_title">Nastavitve</string>
-    <string name="set_separators_desc">Konfigurirajte znake, ki označujejo več vrednosti zaporedoma</string>
     <string name="def_track">Ni skladbe</string>
-    <string name="set_separators_warning">Opozorilo: Uporaba te nastavitve lahko povzroči, da se nekatere oznake napačno interpretirajo kot oznake z več vrednostmi. To lahko rešite tako, da neželene ločevalne znake predhodno označite z vzvratno poševnico (\\).</string>
     <string name="clr_deep_green">Temno zelena</string>
     <string name="lbl_duration">Trajanje</string>
     <string name="clr_lime">Limeta</string>

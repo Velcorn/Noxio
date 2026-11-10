@@ -23,18 +23,6 @@
         app:summary="@string/set_black_mode_desc"
         app:title="@string/set_black_mode" />
 
-    <SwitchPreferenceCompat
-        app:defaultValue="true"
-        app:key="@string/set_key_round_mode"
-        app:summary="@string/set_round_mode_desc"
-        app:title="@string/set_round_mode" />
-
-    <SwitchPreferenceCompat
-        app:defaultValue="true"
-        app:key="@string/set_key_wavy_seek_bar"
-        app:summary="@string/set_wavy_seek_bar_desc"
-        app:title="@string/set_wavy_seek_bar" />
-
     <org.oxycblt.auxio.settings.ui.WrappedDialogPreference
         app:key="@string/set_key_home_tabs"
         app:summary="@string/set_lib_tabs_desc"
@@ -49,23 +37,6 @@
             app:key="@string/set_key_launcher_icon"
             app:title="@string/set_launcher_icon"
             app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/set_images">
-
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/cover_mode_balanced"
-            app:entries="@array/entries_cover_mode"
-            app:entryValues="@array/values_cover_mode"
-            app:key="@string/set_key_cover_mode"
-            app:title="@string/set_cover_mode" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/set_key_square_covers"
-            app:summary="@string/set_square_covers_desc"
-            app:title="@string/set_square_covers" />
 
     </PreferenceCategory>
 

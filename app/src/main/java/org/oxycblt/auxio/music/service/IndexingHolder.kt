@@ -172,6 +172,7 @@ private constructor(
 
     private fun startTracking() {
         stopTracking()
+        if (!musicSettings.shouldBeObserving) return
         val fs =
             when (musicSettings.locationMode) {
                 LocationMode.MEDIA_STORE ->

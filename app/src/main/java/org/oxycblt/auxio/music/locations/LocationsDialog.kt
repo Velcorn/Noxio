@@ -230,7 +230,6 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
         musicSettings.safQuery.let { query ->
             includeLocationAdapter.addAll(query.source)
             excludeLocationAdapter.addAll(query.exclude)
-            binding.locationsWithHiddenSwitch.isChecked = query.withHidden
             binding.locationsMultithreadSwitch.isChecked = query.multithread
         }
         // Load MediaStore data
@@ -382,10 +381,6 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
             locationsFilterAdd.isEnabled = isEnabled
             locationsFilterRecycler.isEnabled = isEnabled
 
-            locationsWithHiddenTitle.isEnabled = isEnabled
-            locationsWithHiddenDesc.isEnabled = isEnabled
-            locationsWithHidden.isEnabled = isEnabled
-
             locationsExcludeNonMusicTitle.isEnabled = isEnabled
             locationsExcludeNonMusicDesc.isEnabled = isEnabled
             locationsExcludeNonMusic.isEnabled = isEnabled
@@ -474,9 +469,6 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
 
                 // Config section
                 configDivider.isVisible = isExtrasExpanded
-                locationsWithHiddenTitle.isVisible = isExtrasExpanded
-                locationsWithHiddenDesc.isVisible = isExtrasExpanded
-                locationsWithHidden.isVisible = isExtrasExpanded
 
                 locationsExcludeNonMusicTitle.isVisible = false
                 locationsExcludeNonMusicDesc.isVisible = false
@@ -510,9 +502,6 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
 
                 // Config section
                 configDivider.isVisible = isExtrasExpanded
-                locationsWithHiddenTitle.isVisible = false
-                locationsWithHiddenDesc.isVisible = false
-                locationsWithHidden.isVisible = false
 
                 locationsExcludeNonMusicTitle.isVisible = isExtrasExpanded
                 locationsExcludeNonMusicDesc.isVisible = isExtrasExpanded
@@ -542,7 +531,7 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
                 SAF.Query(
                     source = includeLocationAdapter.locations,
                     exclude = excludeLocationAdapter.locations,
-                    withHidden = binding.locationsWithHiddenSwitch.isChecked,
+                    withHidden = false,
                     multithread = binding.locationsMultithreadSwitch.isChecked,
                 )
 

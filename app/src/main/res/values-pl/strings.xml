@@ -122,9 +122,7 @@
     <string name="set_reindex_desc">Odśwież bibliotekę muzyczną używając tagów z pamięci cache, jeśli są dostępne</string>
     <string name="desc_remove_song">Usuń utwór z kolejki</string>
     <string name="set_replay_gain_mode_album">Preferuj album</string>
-    <string name="set_observing">Automatyczne odświeżanie</string>
     <string name="cdc_flac">FLAC</string>
-    <string name="set_separators_and">Et (&amp;)</string>
     <string name="err_index_failed">Nie udało się zaimportować utworów</string>
     <string name="lbl_compilation_remix">Kompilacja remiksów</string>
     <string name="lbl_compilation_live">Kompilacja koncertowa</string>
@@ -133,14 +131,8 @@
     <string name="desc_skip_prev">Przejdź do ostatniego utworu</string>
     <string name="desc_skip_next">Przejdź do następnego utworu</string>
     <string name="lbl_author_name">Autorstwa Alexandra Capeharta</string>
-    <string name="set_round_mode">Zaokrąglone krawędzie</string>
-    <string name="set_round_mode_desc">Włącz zaokrąglone narożniki na dodatkowych elementach interfejsu (wymaga zaokrąglenia okładek albumów)</string>
     <string name="set_replay_gain_mode">Ustawienie ReplayGain</string>
     <string name="set_replay_gain_mode_dynamic">Preferuj album, jeśli jest odtwarzany</string>
-    <string name="set_separators_comma">Przecinek (,)</string>
-    <string name="set_separators_semicolon">Średnik (;)</string>
-    <string name="set_separators_slash">Ukośnik (/)</string>
-    <string name="set_separators_plus">Plus (+)</string>
     <string name="desc_exit">Zatrzymaj odtwarzanie</string>
     <string name="cdc_mp4">MPEG-4</string>
     <string name="cdc_ogg">Ogg</string>
@@ -148,7 +140,6 @@
     <string name="desc_music_location_delete">Usuń folder</string>
     <string name="desc_queue_bar">Pokaż kolejkę</string>
     <string name="cdc_aac">AAC</string>
-    <string name="set_observing_desc">Automatycznie odśwież bibliotekę po wykryciu zmian (wymaga stałego powiadomienia)</string>
     <string name="desc_song_handle">Zmień pozycję utworu w kolejce</string>
     <string name="desc_tab_handle">Przesuń kartę</string>
     <string name="desc_artist_image">Wizerunek wykonawcy dla %s</string>
@@ -177,8 +168,6 @@
     <string name="set_pre_amp_with">Regulacja w oparciu o tagi</string>
     <string name="set_pre_amp_without">Regulacja bez tagów</string>
     <string name="set_pre_amp_desc">Wzmocnienie dźwięku przez preamplifier jest nakładane na wcześniej ustawione wzmocnienie podczas odtwarzania</string>
-    <string name="set_separators">Znaki oddzielające wartości</string>
-    <string name="set_separators_desc">Wybierz znaki oddzielające poszczególne wartości w metadanych</string>
     <string name="err_bad_location">Ten folder nie jest wspierany</string>
     <string name="def_playback">Utwory nie są odtwarzane</string>
     <string name="fmt_indexing">Importuję bibliotekę muzyczną… (%1$d/%2$d)</string>
@@ -193,17 +182,11 @@
     <string name="fmt_lib_song_count">Zaimportowane utwory: %d</string>
     <string name="set_exclude_non_music_desc">Ignoruj pliki audio które nie są utworami muzycznymi (np. podcasty)</string>
     <string name="set_exclude_non_music">Wyklucz inne pliki dźwiękowe</string>
-    <string name="set_cover_mode">Okładki albumów</string>
-    <string name="set_cover_mode_off">Wyłączone</string>
-    <string name="set_cover_mode_balanced">Niska jakość</string>
-    <string name="set_cover_mode_high_quality">Wysoka jakość</string>
-    <string name="set_separators_warning">Ostrzeżenie: Użycie tego ustawienia może spowodować nieprawidłową interpretację niektórych tagów jako posiadających wiele wartości. Można to rozwiązać, poprzedzając niepożądane znaki separatora znakiem odwrotnego ukośnika (\\).</string>
     <string name="set_ui_desc">Dostosuj motyw i kolory aplikacji</string>
     <string name="set_hide_collaborators">Ukryj wykonawców uczestniczących</string>
     <string name="set_content_desc">Zarządzaj importowaniem muzyki i obrazów</string>
     <string name="set_library">Biblioteka</string>
     <string name="set_hide_collaborators_desc">Pokaż tylko artystów bezpośrednio przypisanych do albumu (działa najlepiej w przypadku dobrze otagowanych bibliotek)</string>
-    <string name="set_images">Obrazy</string>
     <string name="set_audio_desc">Zarządzaj dźwiękiem i odtwarzaniem muzyki</string>
     <string name="fmt_selected">Wybrano %d</string>
     <string name="set_replay_gain">Normalizacja głośności</string>
@@ -240,8 +223,6 @@
     <string name="lng_playlist_deleted">Usunięto playlistę</string>
     <string name="def_disc">Brak nr. płyty</string>
     <string name="fmt_editing">Edytowanie %s</string>
-    <string name="set_square_covers_desc">Przytnij okładki do formatu 1:1</string>
-    <string name="set_square_covers">Wymuś kwadratowe okładki</string>
     <string name="lbl_song">Utwór</string>
     <string name="lbl_sort_mode">Sortuj według</string>
     <string name="lbl_sort_direction">Kierunek</string>
@@ -285,7 +266,6 @@
     <string name="cdc_unknown">Nieznany</string>
     <string name="def_album">Nieznany album</string>
     <string name="cdc_alac">Apple Lossless Audio Codec (ALAC)</string>
-    <string name="set_cover_mode_save_space">Oszczędzanie miejsca</string>
     <string name="lng_empty_songs">Tutaj pojawią się dodane utwory.</string>
     <string name="lng_empty_albums">Tutaj pojawią się dodane albumy.</string>
     <string name="lng_empty_artists">Tutaj pojawią się dodani artyści.</string>
@@ -298,9 +278,6 @@
     <string name="lng_grant_storage_required">Aby włączyć tę opcję, należy przyznać uprawnienia do pamięci zewnętrznej.</string>
     <string name="lng_include_folders">Muzyka spoza wybranych folderów zostanie pominięta.</string>
     <string name="lng_exclude_folders">Muzyka znajdująca się w wybranych folderach zostanie pominięta.</string>
-    <string name="set_with_hidden">Uwzględniaj ukryte pliki</string>
-    <string name="set_with_hidden_desc">Uwzględniaj pliki audio, które są ukryte (np. .cache)</string>
-    <string name="set_cover_mode_as_is">Bez zmiany</string>
     <string name="set_load_from">Ładuj z</string>
     <string name="set_file_picker">Selektor plików</string>
     <string name="set_system_database">System</string>

@@ -75,16 +75,14 @@ class UISettingsImpl @Inject constructor(@ApplicationContext context: Context) :
         }
 
     override val roundMode: Boolean
-        get() = sharedPreferences.getBoolean(getString(R.string.set_key_round_mode), true)
+        get() = true
 
     override fun migrate() {
-        // Noxio 1.1.2 makes the wavy seek bar the default again. Before, opening the settings
-        // stored it as off, so it is turned on once for everyone; it can be turned off again.
-        if (!sharedPreferences.getBoolean(KEY_WAVY_DEFAULT_ON, false)) {
-            sharedPreferences.edit {
-                putBoolean(getString(R.string.set_key_wavy_seek_bar), true)
-                putBoolean(KEY_WAVY_DEFAULT_ON, true)
-            }
+        // These appearance choices are fixed now; discard the old switches and migration flag.
+        sharedPreferences.edit {
+            remove("auxio_round_covers")
+            remove("noxio_wavy_seek_bar")
+            remove("noxio_wavy_default_on")
         }
         if (sharedPreferences.contains(OLD_KEY_ACCENT3)) {
             L.d("Migrating $OLD_KEY_ACCENT3")
@@ -105,15 +103,7 @@ class UISettingsImpl @Inject constructor(@ApplicationContext context: Context) :
         }
     }
 
-    override fun onSettingChanged(key: String, listener: UISettings.Listener) {
-        if (key == getString(R.string.set_key_round_mode)) {
-            L.d("Dispatching round mode setting change")
-            listener.onRoundModeChanged()
-        }
-    }
-
     private companion object {
         const val OLD_KEY_ACCENT3 = "auxio_accent"
-        const val KEY_WAVY_DEFAULT_ON = "noxio_wavy_default_on"
     }
 }

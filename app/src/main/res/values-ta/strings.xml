@@ -12,11 +12,7 @@
     <string name="set_root_title">அமைப்புகள்</string>
     <string name="set_ui">பார்த்து உணருங்கள்</string>
     <string name="set_theme_night">இருண்ட</string>
-    <string name="set_separators">பல மதிப்பு பிரிப்பான்கள்</string>
-    <string name="set_separators_plus">பிளச் (+)</string>
-    <string name="set_separators_and">உம்மைக் குறி (&amp;)</string>
     <string name="set_hide_collaborators">ஒத்துழைப்பாளர்களை மறைக்கவும்</string>
-    <string name="set_images">படங்கள்</string>
     <string name="set_audio">ஆடியோ</string>
     <string name="set_rescan_desc">குறிச்சொல் தற்காலிக சேமிப்பை அழித்து, இசை நூலகத்தை முழுமையாக மீண்டும் ஏற்றவும் (மெதுவாக, ஆனால் இன்னும் முழுமையானது)</string>
     <string name="def_date">தேதி இல்லை</string>
@@ -169,8 +165,6 @@
     <string name="set_accent">வண்ணத் திட்டம்</string>
     <string name="set_black_mode">கருப்பு கருப்பொருள்</string>
     <string name="set_black_mode_desc">தூய கருப்பு இருண்ட கருப்பொருள் பயன்படுத்தவும்</string>
-    <string name="set_round_mode">சுற்று பயன்முறை</string>
-    <string name="set_round_mode_desc">கூடுதல் இடைமுகம் கூறுகளில் வட்டமான மூலைகளை இயக்கவும் (ஆல்பம் கவர்கள் வட்டமிட வேண்டும்)</string>
     <string name="set_lib_tabs">நூலக தாவல்கள்</string>
     <string name="set_lib_tabs_desc">நூலக தாவல்களின் தெரிவுநிலை மற்றும் வரிசையை மாற்றவும்</string>
     <string name="set_keep_shuffle">கலக்கு நினைவில் கொள்ளுங்கள்</string>
@@ -178,22 +172,9 @@
     <string name="set_content">உள்ளடக்கம்</string>
     <string name="set_content_desc">இசை மற்றும் படங்கள் எவ்வாறு ஏற்றப்படுகின்றன என்பதைக் கட்டுப்படுத்தவும்</string>
     <string name="set_music">இசை</string>
-    <string name="set_observing">தானியங்கி மறுஏற்றம்</string>
-    <string name="set_observing_desc">இசை நூலகத்தை மாற்றும்போதெல்லாம் மீண்டும் ஏற்றவும் (தொடர்ச்சியான அறிவிப்பு தேவை)</string>
     <string name="set_exclude_non_music">இசை அல்லாதவை</string>
     <string name="set_exclude_non_music_desc">பாட்காச்ட்கள் போன்ற இசை இல்லாத ஆடியோ கோப்புகளை புறக்கணிக்கவும்</string>
-    <string name="set_separators_desc">பல குறிச்சொல் மதிப்புகளைக் குறிக்கும் எழுத்துக்களை உள்ளமைக்கவும்</string>
-    <string name="set_separators_comma">கமா (,)</string>
-    <string name="set_separators_semicolon">அரைப்புள்ளி (;)</string>
-    <string name="set_separators_slash">(பழம்) குறைத்தல்</string>
-    <string name="set_separators_warning">எச்சரிக்கை: இந்த அமைப்பைப் பயன்படுத்துவதால் சில குறிச்சொற்கள் பல மதிப்புகளைக் கொண்டிருப்பதாக தவறாக விளக்கலாம். பின்சாய்வுக்கோடான (\\) மூலம் தேவையற்ற பிரிப்பான் எழுத்துக்களை முன்னொட்டு செய்வதன் மூலம் இதை நீங்கள் தீர்க்கலாம்.</string>
     <string name="set_hide_collaborators_desc">ஒரு ஆல்பத்தில் நேரடியாக வரவு வைக்கப்படும் கலைஞர்களை மட்டுமே காண்பி (நன்கு குறியிடப்பட்ட நூலகங்களில் சிறப்பாக செயல்படுகிறது)</string>
-    <string name="set_cover_mode">ஆல்பம் கவர்கள்</string>
-    <string name="set_cover_mode_off">அணை</string>
-    <string name="set_cover_mode_balanced">வேகமாக</string>
-    <string name="set_cover_mode_high_quality">உயர் தகுதி</string>
-    <string name="set_square_covers">படை சதுர ஆல்பம் கவர்கள்</string>
-    <string name="set_square_covers_desc">அனைத்து ஆல்பத்தையும் 1: 1 விகித விகிதத்திற்கு பயிர்</string>
     <string name="set_audio_desc">ஒலி மற்றும் பின்னணி நடத்தை உள்ளமைக்கவும்</string>
     <string name="set_rewind_prev">பின்வாங்குவதற்கு முன் முன்னாடி</string>
     <string name="set_rewind_prev_desc">முந்தைய பாடலைத் தவிர்ப்பதற்கு முன் முன்னாடி</string>
@@ -275,7 +256,6 @@
     </plurals>
     <string name="lbl_ep_live">நிகழ்நிலை ஈபி</string>
     <string name="fmt_db_neg">-%.1f டெசிபெல்</string>
-    <string name="set_cover_mode_as_is">மாறாமல்</string>
     <string name="cnt_mp4">%s கொண்ட MPEG-4</string>
     <string name="def_album">தெரியாத ஆல்பம்</string>
     <string name="lng_empty_albums">உங்களுடைய ஆல்பங்கள் இங்கே காணப்படும்.</string>
@@ -283,9 +263,6 @@
     <string name="set_excluded_locations">மறுக்கப்பட்ட கோப்புறைகள்</string>
     <string name="set_excluded_locations_desc">இசை ஏற்றத்தில் இருந்து விலக்க வேண்டிய கோப்புறைகளை நிர்வகிக்கவும்</string>
     <string name="cdc_unknown">தெரியாதவை</string>
-    <string name="set_with_hidden">மறைக்கப்பட்ட கோப்புகளை உட்படுத்து</string>
-    <string name="set_with_hidden_desc">மறைக்கப்பட்ட ஒலி கோப்புகளை உட்படுத்தவும் (உதா. .cache)</string>
-    <string name="set_cover_mode_save_space">இடத்தை சேமிக்கவும்</string>
     <string name="lng_empty_songs">உங்களுடைய பாடல்கள் இங்கே காணப்படும்.</string>
     <string name="lng_empty_genres">உங்களுடைய இசை வகைகள் இங்கே காணப்படும்.</string>
     <string name="lng_empty_artists">உங்களுடைய கலைஞர்கள் இங்கே காணப்படும்.</string>

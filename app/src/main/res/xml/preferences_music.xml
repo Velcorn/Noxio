@@ -26,17 +26,6 @@
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
-            app:key="@string/set_key_observing"
-            app:summary="@string/set_observing_desc"
-            app:title="@string/set_observing" />
-
-        <org.oxycblt.auxio.settings.ui.WrappedDialogPreference
-            app:key="@string/set_key_separators"
-            app:summary="@string/set_separators_desc"
-            app:title="@string/set_separators" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
             app:key="@string/set_key_hide_collaborators"
             app:summary="@string/set_hide_collaborators_desc"
             app:title="@string/set_hide_collaborators" />

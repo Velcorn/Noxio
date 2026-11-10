@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lbl_about">Аб праграме</string>
-    <string name="set_round_mode">Скругленыя вокладкі</string>
     <string name="lbl_code">Зыходны код</string>
     <string name="lbl_licenses">Ліцэнзіі</string>
     <string name="lbl_library_counts">Бібліятэчная статыстыка</string>
@@ -10,9 +9,6 @@
     <string name="lng_observing">Адсочванне змяненняў у вашай музычнай бібліятэцы…</string>
     <string name="lng_queue_added">Дададзены ў чаргу</string>
     <string name="lbl_author_name">Распрацавана Аляксандрам Кейпхартам</string>
-    <string name="set_separators_comma">Коска (,)</string>
-    <string name="set_separators_plus">Плюс (+)</string>
-    <string name="set_separators_and">Амперсанд (&amp;)</string>
     <string name="set_ui">Афармленне</string>
     <string name="lbl_retry">Паўтарыць</string>
     <string name="lng_search_library">Пошук у вашай бібліятэцы…</string>
@@ -88,7 +84,6 @@
     <string name="lbl_save">Захаваць</string>
     <string name="lbl_version">Версія</string>
     <string name="set_black_mode_desc">Выкарыстоўвайце чыста чорную цёмную тэму</string>
-    <string name="set_cover_mode_high_quality">Падвышанай якасці (павольная загрузка)</string>
     <string name="set_replay_gain_mode_dynamic">Аддайце перавагу альбому, калі ён гучыць</string>
     <string name="set_pre_amp_without">Карэкціроўка без тэгаў</string>
     <string name="set_locations">Тэчкі з музыкай</string>
@@ -192,7 +187,6 @@
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="cdc_flac">Свабодны аўдыё кодэк без страты якасці (FLAC)</string>
     <string name="set_exclude_non_music">Выключыць іншыя гукавыя файлы</string>
-    <string name="set_round_mode_desc">Ўключыць закругленыя вуглы на дадатковых элементах інтэрфейсу (патрабуецца закругленне вокладак альбомаў)</string>
     <string name="set_lib_tabs">Ўкладкі бібліятэкі</string>
     <string name="set_lib_tabs_desc">Змяніць бачнасць і парадак укладак бібліятэкі</string>
     <string name="set_content_desc">Кіруйце загрузкай музыкі і малюнкаў</string>
@@ -201,20 +195,9 @@
     <string name="set_keep_shuffle_desc">Ўключайце перамешванне падчас прайгравання новай песні</string>
     <string name="set_content">Кантэнт</string>
     <string name="set_music">Музыка</string>
-    <string name="set_observing">Аўтаматычная перазагрузка</string>
-    <string name="set_observing_desc">Перазагружаць музычную бібліятэку кожны раз, калі яна змяняецца (патрабуецца пастаяннае апавяшчэнне)</string>
-    <string name="set_separators_desc">Наладзьце сімвалы, якія абазначаюць некалькі значэнняў тэгаў</string>
-    <string name="set_separators">Шматзначныя раздзяляльнікі</string>
-    <string name="set_separators_warning">Папярэджанне: выкарыстанне гэтай налады можа прывесці да таго, што некаторыя тэгі будуць памылкова інтэрпрэтавацца як тыя, што маюць некалькі значэнняў. Вы можаце вырашыць гэта, дадаўшы да непажаданых сімвалаў-падзельнікаў зваротную касую рысу (\\).</string>
-    <string name="set_separators_slash">Касая рыса (/)</string>
-    <string name="set_images">Малюнкі</string>
-    <string name="set_separators_semicolon">Кропка з коскай (;)</string>
     <string name="set_hide_collaborators">Схаваць суаўтараў</string>
     <string name="set_hide_collaborators_desc">Паказваць толькі тых выканаўцаў, якія непасрэдна згадваюцца ў альбоме (лепш за ўсё працуе на добра пазначаных бібліятэках)</string>
-    <string name="set_cover_mode">Вокладкі альбомаў</string>
     <string name="desc_tab_handle">Перамясціць гэту ўкладку</string>
-    <string name="set_cover_mode_off">Адключаны</string>
-    <string name="set_cover_mode_balanced">Зыходныя (хуткая загрузка)</string>
     <string name="set_audio">Аўдыё</string>
     <string name="lbl_ep_live">Канцэртны міні-альбом</string>
     <string name="lbl_ep_remix">Міні-альбом рэміксаў</string>
@@ -240,8 +223,6 @@
     <string name="def_disc">Няма дыска</string>
     <string name="lbl_appears_on">З\'яўляецца на</string>
     <string name="fmt_editing">Рэдагаванне %s</string>
-    <string name="set_square_covers">Выкарыстоўваць квадратныя вокладкі альбомаў</string>
-    <string name="set_square_covers_desc">Абрэзаць усе вокладкі альбомаў да суадносін бакоў 1:1</string>
     <string name="lbl_song">Песня</string>
     <string name="lbl_sort_mode">Сартаваць па</string>
     <string name="lbl_sort_direction">Напрамак</string>
@@ -289,6 +270,5 @@
     <string name="lng_empty_songs">Вашыя песні будуць адлюстроўвацца тут.</string>
     <string name="lng_empty_artists">Тут з\'явяцца вашыя выканаўцы.</string>
     <string name="lng_empty_playlists">Тут будуць адлюстроўвацца вашыя плэйлісты.</string>
-    <string name="set_cover_mode_save_space">Эканомія месца</string>
     <string name="lbl_github">Паведаміць аб праблеме на GitHub</string>
 </resources>

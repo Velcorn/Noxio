@@ -56,11 +56,6 @@ class MusicPreferenceFragment : BasePreferenceFragment(R.xml.preferences_music) 
 
     override fun onOpenDialogPreference(preference: WrappedDialogPreference) {
         when (preference.key) {
-            getString(R.string.set_key_separators) -> {
-                L.d("Navigating to separator dialog")
-                findNavController()
-                    .navigateSafe(MusicPreferenceFragmentDirections.separatorsSettings())
-            }
             getString(R.string.set_key_music_dirs) -> {
                 L.d("Navigating to music locations dialog")
                 findNavController()
@@ -80,17 +75,6 @@ class MusicPreferenceFragment : BasePreferenceFragment(R.xml.preferences_music) 
             else -> return super.onPreferenceTreeClick(preference)
         }
         return true
-    }
-
-    override fun onSetupPreference(preference: Preference) {
-        if (preference.key == getString(R.string.set_key_with_hidden)) {
-            L.d("Configuring ignore hidden files setting")
-            preference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-                L.d("Ignore hidden files setting changed, reloading music")
-                musicModel.refresh()
-                true
-            }
-        }
     }
 
     /** A rescan reads everything again and takes long, so it has to be confirmed. */

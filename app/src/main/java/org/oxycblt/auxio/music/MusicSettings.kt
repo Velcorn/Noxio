@@ -56,7 +56,7 @@ interface MusicSettings : Settings<MusicSettings.Listener> {
     val shouldBeObserving: Boolean
 
     /** A [String] of characters representing the desired characters to denote multi-value tags. */
-    var separators: String
+    val separators: String
 
     /** Whether to enable more advanced sorting by articles and numbers. */
     val intelligentSorting: Boolean
@@ -93,19 +93,13 @@ class MusicSettingsImpl @Inject constructor(@ApplicationContext private val cont
             }
         }
 
+    // Manual Refresh and Rescan remain available; background watching is disabled.
     override val shouldBeObserving: Boolean
-        get() = sharedPreferences.getBoolean(getString(R.string.set_key_observing), false)
+        get() = false
 
-    override var separators: String
-        // Differ from convention and store a string of separator characters instead of an int
-        // code. This makes it easier to use and more extendable.
-        get() = sharedPreferences.getString(getString(R.string.set_key_separators), "") ?: ""
-        set(value) {
-            sharedPreferences.edit {
-                putString(getString(R.string.set_key_separators), value)
-                apply()
-            }
-        }
+    // Keep native multi-value tags intact without splitting punctuation in names.
+    override val separators: String
+        get() = ""
 
     // Noxio has no setting for this any more, it is always on.
     override val intelligentSorting: Boolean
@@ -145,14 +139,12 @@ class MusicSettingsImpl @Inject constructor(@ApplicationContext private val cont
                         )
                     )
                     .toUnopenedLocations()
-            val withHidden =
-                sharedPreferences.getBoolean(getString(R.string.set_key_with_hidden), false)
             val multithread =
                 sharedPreferences.getBoolean(getString(R.string.set_key_saf_multithread), true)
             return SAF.Query(
                 source = locations,
                 exclude = excludedLocations,
-                withHidden = withHidden,
+                withHidden = false,
                 multithread = multithread,
             )
         }
@@ -160,7 +152,8 @@ class MusicSettingsImpl @Inject constructor(@ApplicationContext private val cont
             sharedPreferences.edit {
                 putString(getString(R.string.set_key_music_locations), value.source.stringify())
                 putString(getString(R.string.set_key_excluded_locations), value.exclude.stringify())
-                putBoolean(getString(R.string.set_key_with_hidden), value.withHidden)
+                // Hidden files stay excluded, even if an older backup or caller enables them.
+                remove("auxio_with_hidden")
                 putBoolean(context.getString(R.string.set_key_saf_multithread), value.multithread)
                 apply()
             }
@@ -231,19 +224,13 @@ class MusicSettingsImpl @Inject constructor(@ApplicationContext private val cont
                 listener.onMusicLocationsChanged()
             }
             getString(R.string.set_key_excluded_locations),
-            getString(R.string.set_key_with_hidden),
             context.getString(R.string.set_key_saf_multithread),
             getString(R.string.set_key_filter_mode),
             getString(R.string.set_key_filtered_locations),
             getString(R.string.set_key_exclude_non_music),
-            getString(R.string.set_key_separators),
             getString(R.string.set_key_auto_sort_names) -> {
                 L.d("Dispatching indexing setting change for $key")
                 listener.onIndexingSettingChanged()
-            }
-            getString(R.string.set_key_observing) -> {
-                L.d("Dispatching observing setting change")
-                listener.onObservingChanged()
             }
         }
     }

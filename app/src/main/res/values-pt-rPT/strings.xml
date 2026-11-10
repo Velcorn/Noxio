@@ -84,8 +84,6 @@
     <string name="lbl_library_counts">Estatísticas da biblioteca</string>
     <string name="desc_no_cover">Capa do álbum</string>
     <string name="lbl_date">Data</string>
-    <string name="set_cover_mode_balanced">Rápido</string>
-    <string name="set_cover_mode_high_quality">Qualidade alta</string>
     <string name="err_bad_location">Esta pasta não é compatível</string>
     <string name="desc_song_handle">Mover esta música da fila</string>
     <string name="desc_music_location_delete">Remover pasta</string>
@@ -96,13 +94,10 @@
     <string name="lbl_bitrate">Taxa de bits</string>
     <string name="set_pre_amp_warning">Aviso: Alterar o pré-amplificador para um valor positivo alto pode resultar em picos em algumas faixas de áudio.</string>
     <string name="set_pre_amp_with">Ajustar com etiquetas</string>
-    <string name="set_separators_slash">Barra (/)</string>
-    <string name="set_separators_plus">Mais (+)</string>
     <string name="cdc_ogg">Áudio Ogg</string>
     <string name="lbl_date_added">Data adicionada</string>
     <string name="lbl_sample_rate">Taxa de amostragem</string>
     <string name="lbl_save">Salvar</string>
-    <string name="set_separators">Separadores multi-valor</string>
     <string name="lbl_size">Tamanho</string>
     <string name="lbl_song_detail">Propriedades</string>
     <string name="lbl_props">Propriedades da música</string>
@@ -128,15 +123,10 @@
     <string name="lbl_genre">Gênero</string>
     <string name="set_keep_shuffle_desc">Mantenha a reprodução aleatória ao reproduzir uma nova música</string>
     <string name="desc_skip_next">Pular para a próxima música</string>
-    <string name="set_separators_warning">Aviso: Usar essa configuração pode resultar em algumas etiquetas serem interpretadas incorretamente como tendo múltiplos valores. Pode resolver isso pré-definindo caracteres de separador indesejados com uma barra invertida (\\).</string>
     <string name="cdc_mp3">Áudio MPEG-1</string>
-    <string name="set_observing">Recarregamento automático</string>
     <string name="set_locations">Fontes de música</string>
     <string name="set_exclude_non_music">Excluir não-música</string>
     <string name="set_exclude_non_music_desc">Ignorar ficheiros de áudio que não são música, tal como podcasts</string>
-    <string name="set_separators_desc">Configurar caracteres que denotam múltiplos valores de etiqueta</string>
-    <string name="set_separators_comma">Vírgula (,)</string>
-    <string name="set_separators_semicolon">Ponto-e-vírgula (;)</string>
     <string name="desc_skip_prev">Pular para a última música</string>
     <string name="desc_change_repeat">Alterar o modo de repetição</string>
     <string name="desc_queue_bar">Abra a fila</string>
@@ -157,9 +147,6 @@
     <string name="info_app_desc">Um reprodutor de música simples e racional para Android.</string>
     <string name="set_lib_tabs">Abas da biblioteca</string>
     <string name="set_lib_tabs_desc">Altere a visibilidade e a ordem das abas da biblioteca</string>
-    <string name="set_cover_mode">Capas de álbuns</string>
-    <string name="set_cover_mode_off">Desligado</string>
-    <string name="set_round_mode">Modo redondo</string>
     <string name="set_replay_gain_mode">Estratégia do ganho de repetição</string>
     <string name="set_replay_gain_mode_album">Preferir álbum</string>
     <string name="set_pre_amp_desc">O pré-amplificador é aplicado ao ajuste existente durante a reprodução</string>
@@ -182,7 +169,6 @@
     <string name="fmt_indexing">A carregar a sua biblioteca de músicas… (%1$d/%2$d)</string>
     <string name="set_rewind_prev">Retroceder antes de voltar</string>
     <string name="desc_exit">Parar reprodução</string>
-    <string name="set_round_mode_desc">Ativar cantos arredondados em elementos adicionais da interface do utilizador (requer que as capas dos álbuns sejam arredondadas)</string>
     <string name="fmt_selected">%d selecionado</string>
     <string name="lbl_mixes">Misturas DJ</string>
     <string name="lbl_mix">Mixagem de DJ</string>
@@ -193,7 +179,6 @@
     <string name="lbl_single_live">Single ao vivo</string>
     <string name="lbl_single_remix">Single remix</string>
     <string name="lng_observing">A Monitorizar alterações na sua biblioteca de músicas…</string>
-    <string name="set_observing_desc">Recarrega a biblioteca de músicas sempre que ela mudar (requer notificação fixa)</string>
     <string name="lbl_reset">Repor</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="lng_widget">Vêr e controlar a reprodução da música</string>
@@ -220,10 +205,8 @@
     <string name="set_ui_desc">Mudar o tema e cores da app</string>
     <string name="set_content_desc">Controlar como a música e as imagens são carregadas</string>
     <string name="set_music">Música</string>
-    <string name="set_images">Imagens</string>
     <string name="set_audio_desc">Configurar o som e comportamento da reprodução</string>
     <string name="set_library">Biblioteca</string>
-    <string name="set_separators_and">E comercial (&amp;)</string>
     <string name="lbl_sort_direction">Direção</string>
     <string name="desc_selection_image">Seleção de imagem</string>
     <string name="lbl_selection">Seleção</string>
@@ -240,7 +223,6 @@
     <string name="lbl_rename">Renomear</string>
     <string name="lng_playlist_added">Adicionado à lista de reprodução</string>
     <string name="def_song_count">Nenhuma música</string>
-    <string name="set_square_covers_desc">Recortar à capa dos álbuns numa proporção de 1:1</string>
     <string name="fmt_editing">A editar %s</string>
     <string name="lbl_sort_mode">Ordenar por</string>
     <string name="lbl_song">Música</string>
@@ -249,7 +231,6 @@
     <string name="lbl_report">Relatório</string>
     <string name="lbl_new_playlist">Nova lista de reprodução</string>
     <string name="lbl_error_info">Informações de erro</string>
-    <string name="set_square_covers">Forçar capas em formato quadrado</string>
     <string name="lng_playlist_renamed">Lista de reprodução renomeada</string>
     <string name="lbl_rename_playlist">Renomear lista de reprodução</string>
     <string name="fmt_deletion_info">Excluir %s? Não pode ser desfeito.</string>
@@ -283,9 +264,7 @@
     <string name="lbl_start_playback">Iniciar reprodução</string>
     <string name="def_album">Álbum desconhecido</string>
     <string name="lbl_feedback">Opinião</string>
-    <string name="set_with_hidden">Ignorar ficheiros ocultos</string>
     <string name="cdc_alac">Apple Lossless Audio Codec (ALAC)</string>
-    <string name="set_cover_mode_save_space">Gravar espaço</string>
     <string name="cnt_mp4">MPEG-4 contendo %s</string>
     <string name="cdc_unknown">Desconhecido</string>
     <string name="lbl_more">Mais</string>
@@ -294,7 +273,6 @@
     <string name="lng_empty_artists">Os seus artistas aparecerão aqui.</string>
     <string name="lng_empty_genres">Os seus gêneros aparecerão aqui.</string>
     <string name="lng_empty_playlists">As suas listas de reprodução aparecerão aqui.</string>
-    <string name="set_with_hidden_desc">Ignorar ficheiros e pastas que estão ocultos (por exemplo, .cache)</string>
     <string name="lbl_email">Envie um e-mail</string>
     <string name="lbl_github">Crie um problema no GitHub</string>
     <string name="lng_file_picker">Carrega músicas a partir das pastas que selecionou. Mais lento, porém mais confiável. Requer a app do gestão de ficheiros original instalado.</string>
@@ -303,7 +281,6 @@
     <string name="lng_grant_storage_required">Conceda as permissões de armazenamento externo para ativar esta opção.</string>
     <string name="lng_include_folders">As músicas fora das pastas selecionadas serão ignoradas.</string>
     <string name="lng_exclude_folders">As músicas dentro das pastas selecionadas serão ignoradas.</string>
-    <string name="set_cover_mode_as_is">Qualidade original</string>
     <string name="set_load_from">Carregar de</string>
     <string name="set_file_picker">Seletor de ficheiros</string>
     <string name="set_system_database">Sistema</string>

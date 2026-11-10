@@ -55,8 +55,6 @@
     <string name="set_black_mode_desc">다크 테마에 검정색 사용</string>
     <string name="set_lib_tabs">라이브러리 탭</string>
     <string name="set_lib_tabs_desc">라이브러리 탭 순서 및 표시할 탭 변경</string>
-    <string name="set_round_mode">둥근 UI 모드</string>
-    <string name="set_round_mode_desc">앨범 커버를 포함한 기타 UI의 가장자리를 둥글게 표시합니다.</string>
     <string name="set_audio">소리</string>
     <string name="set_replay_gain_mode">ReplayGain 계획</string>
     <string name="set_replay_gain_mode_track">트랙 선호</string>
@@ -157,13 +155,6 @@
     <string name="lng_indexing">음악 라이브러리 불러오는 중…</string>
     <string name="set_locations">음악 폴더</string>
     <string name="set_locations_desc">음악을 불러오는 위치 관리</string>
-    <string name="set_separators">다중 값 구분 기호</string>
-    <string name="set_separators_desc">태그 값이 여러 개일 때 태그를 구분할 기호를 설정합니다.</string>
-    <string name="set_separators_comma">콤마 (,)</string>
-    <string name="set_separators_semicolon">세미콜론 (;)</string>
-    <string name="set_separators_slash">슬래시 (/)</string>
-    <string name="set_separators_plus">플러스 (+)</string>
-    <string name="set_separators_and">앰퍼샌드 (&amp;)</string>
     <string name="cdc_mp3">MPEG-1 오디오</string>
     <string name="lbl_date_added">추가한 날짜</string>
     <string name="desc_queue_bar">대기열 열기</string>
@@ -179,11 +170,6 @@
     <string name="set_exclude_non_music">음악이 아닌 항목 제외</string>
     <string name="fmt_bitrate">%d kbps</string>
     <string name="cdc_aac">Advanced Audio Coding (AAC)</string>
-    <string name="set_cover_mode">앨범 커버</string>
-    <string name="set_cover_mode_off">끔</string>
-    <string name="set_cover_mode_balanced">빠름</string>
-    <string name="set_cover_mode_high_quality">고품질</string>
-    <string name="set_observing_desc">음악 라이브러리가 변경될 때마다 새로고침 (고정 알림 필요)</string>
     <string name="lbl_indexing">음악 불러오는 중</string>
     <string name="lbl_indexer">음악 불러오는 중</string>
     <string name="lbl_observing">음악 라이브러리 모니터링 중</string>
@@ -197,10 +183,8 @@
     <string name="lbl_mixtapes">믹스테이프</string>
     <string name="lbl_mixtape">믹스테이프</string>
     <string name="lbl_remix_group">리믹스</string>
-    <string name="set_observing">자동 새로고침</string>
     <string name="fmt_indexing">음악 라이브러리를 불러오는 중… (%1$d/%2$d)</string>
     <string name="lbl_genre">장르</string>
-    <string name="set_separators_warning">경고: 이 설정을 사용하면 몇몇 태그가 다중 값을 가진 것으로 잘못 나타날 수 있습니다. 태그에서 구분 기호 앞에 백슬래시(\\)를 붙이면 구분 기호로 인식하지 않습니다.</string>
     <string name="lng_observing">음악 라이브러리 변경 사항 모니터링 중…</string>
     <string name="set_exclude_non_music_desc">팟캐스트 등 음악이 아닌 오디오 파일 무시</string>
     <string name="set_hide_collaborators">공동 작업자 숨기기</string>
@@ -219,7 +203,6 @@
     <string name="set_ui_desc">앱 테마 및 색상 변경</string>
     <string name="set_music">음악</string>
     <string name="set_library">라이브러리</string>
-    <string name="set_images">이미지</string>
     <string name="set_content_desc">음악 및 이미지 불러오기 방식 설정</string>
     <string name="lbl_sort_dsc">내림차순</string>
     <string name="lbl_playlist">재생 목록</string>
@@ -243,8 +226,6 @@
     <string name="lng_playlist_deleted">재생 목록을 삭제했습니다.</string>
     <string name="fmt_editing">%s 편집 중</string>
     <string name="lbl_song">노래</string>
-    <string name="set_square_covers">정사각형 앨범 커버 강제</string>
-    <string name="set_square_covers_desc">모든 앨범 커버를 가로세로 1:1 비율로 자릅니다.</string>
     <string name="lbl_sort_direction">방향</string>
     <string name="lbl_sort_mode">정렬 기준</string>
     <string name="desc_selection_image">선택 이미지</string>

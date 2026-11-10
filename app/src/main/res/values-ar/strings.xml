@@ -140,7 +140,6 @@
     <string name="set_lib_tabs">علامات تبويب المكتبة</string>
     <string name="set_lib_tabs_desc">تغيير مرئية وترتيب علامات تبويب المكتبة</string>
     <string name="set_music">الصوتية</string>
-    <string name="set_separators_warning">تحذير: استخدام هذا الإعداد قد يؤدي إلى تفسير بعض العلامات بشكل غير صحيح بأن لديها قيم متعددة. يمكنك حل هذه المشكلة عن طريق إضافة شريط مائل مسبوق بشرطة مائلة عكسية (\\).</string>
     <string name="lbl_eps">ألبومات ممتدة</string>
     <string name="lbl_ep">البوم مصغر</string>
     <string name="lbl_ep_live">ألبوم موسيقي مباشر</string>
@@ -148,7 +147,6 @@
     <string name="lbl_indexing">يحمّل الصوتية</string>
     <string name="lbl_single_live">أغنية فردية مباشرة</string>
     <string name="lbl_single_remix">اغنية فردية ريميكس</string>
-    <string name="set_images">الصور</string>
     <string name="set_reindex_desc">إعادة تحميل مكتبة الموسيقى، باستخدام العلامات المخزنة مؤقتًا عند الإمكان</string>
     <string name="err_bad_location">هذا المجلد غير مدعوم</string>
     <string name="clr_cyan">ازرق سماوي</string>
@@ -157,11 +155,8 @@
     <string name="set_accent">نظام الألوان</string>
     <string name="lbl_single">أغنية فردية</string>
     <string name="lbl_singles">أغاني فردية</string>
-    <string name="set_separators_plus">الرمز زائد (+)</string>
     <string name="clr_red">أحمر</string>
     <string name="clr_deep_blue">ازرق غامق</string>
-    <string name="set_observing">إعادة التحميل التلقائي</string>
-    <string name="set_separators_desc">ضبط الأحرف التي تشير إلى قيم علامات متعددة</string>
     <string name="lbl_soundtracks">موسيقى تصويرية</string>
     <string name="set_content_desc">تحكم في كيفية تحميل الصوتية والصور</string>
     <string name="set_keep_shuffle_desc">حافظ على خاصية الخلط عند تشغيل أغنية جديدة</string>
@@ -177,19 +172,8 @@
     <string name="set_replay_gain_mode">استراتيجية الريبلاي جين</string>
     <string name="set_pre_amp_without">ضبط بدون علامات</string>
     <string name="lbl_empty_playlist">قائمة تشغيل فارغة</string>
-    <string name="set_round_mode">الوضع الدائري</string>
     <string name="set_exclude_non_music_desc">تجاهل ملفات الصوت التي ليست موسيقى، مثل البودكاست</string>
-    <string name="set_separators">فواصل القيم المتعددة</string>
-    <string name="set_observing_desc">أعد تحميل مكتبة الصوتية عندما تتغير (يتطلب إشعار دائم)</string>
     <string name="set_exclude_non_music">استبعاد الملفات غير الموسيقية</string>
-    <string name="set_separators_and">اشارة مع (&amp;)</string>
-    <string name="set_separators_comma">الفاصلة (،)</string>
-    <string name="set_separators_slash">شرطة مائلة (/)</string>
-    <string name="set_cover_mode">أغطية الألبومات</string>
-    <string name="set_cover_mode_balanced">سريع</string>
-    <string name="set_cover_mode_high_quality">عالية الجودة</string>
-    <string name="set_square_covers">فرض أغطية ألبومات مربعة</string>
-    <string name="set_square_covers_desc">قص جميع أغطية الألبومات إلى نسبة جانب 1:1</string>
     <string name="set_audio">صوت</string>
     <string name="set_pre_amp_warning">تحذير: تغيير مكبر الصوت المسبق إلى قيمة إيجابية عالية قد يؤدي إلى ظهور ذروات صوتية على بعض المسارات الصوتية.</string>
     <string name="set_library">مكتبة</string>
@@ -208,7 +192,6 @@
     <string name="set_ui_desc">غيّر سمة وألوان التطبيق</string>
     <string name="set_theme">السمة</string>
     <string name="set_theme_day">فاتح</string>
-    <string name="set_round_mode_desc">تفعيل الزوايا المستديرة على عناصر واجهة المستخدم الإضافية (يتطلب أن تكون أغلفة الألبومات مستديرة)</string>
     <string name="set_replay_gain_mode_dynamic">تفضيل الألبوم إذا كان أحد الألبومات يُشغّل</string>
     <string name="set_replay_gain_mode_track">تفضيل المسار</string>
     <string name="set_pre_amp">مكبر الصوت المسبق لـ ReplayGain</string>
@@ -222,7 +205,6 @@
     <string name="def_date">لا يوجد تاريخ</string>
     <string name="def_song_count">لا أغاني</string>
     <string name="clr_pink">لون القرنفل</string>
-    <string name="set_cover_mode_off">إيقاف</string>
     <string name="clr_brown">بني</string>
     <string name="fmt_lib_song_count">الأغاني التي تم تحميلها: %d</string>
     <string name="fmt_lib_album_count">الألبومات المحملة: %d</string>
@@ -241,7 +223,6 @@
     <string name="set_black_mode">سمة اللون الأسود</string>
     <string name="lng_playlist_added">تمت إضافته إلى قائمة التشغيل</string>
     <string name="set_root_title">إعدادات</string>
-    <string name="set_separators_semicolon">الفاصلة المنقوطة (؛)</string>
     <string name="lbl_import">استورد</string>
     <string name="lbl_export">صدّر</string>
     <string name="lbl_export_playlist">صدّر قائمة التشغيل</string>
@@ -286,7 +267,6 @@
     <string name="lbl_report">إبلاغ</string>
     <string name="lng_tasker_start">يبدأ Auxio باستخدام الحالة المحفوظة مسبقًا. إذا لم تتوفر حالة محفوظة، فسيتم خلط جميع الأغاني. سيبدأ التشغيل على الفور. \n\nتحذير: احرص على التحكم في هذه الخدمة، إذا قمت بإغلاقها ثم حاول استخدامها مرة أخرى، فمن المحتمل أن ينهار التطبيق.</string>
     <string name="lbl_windows_paths">استخدم مسارات متوافقة مع Windows</string>
-    <string name="set_cover_mode_save_space">وفر المساحة</string>
     <plurals name="fmt_album_count">
         <item quantity="zero">لا ألبوم</item>
         <item quantity="one">ألبوم</item>
@@ -297,9 +277,6 @@
     </plurals>
     <string name="cnt_mp4">MPEG-4 تحتوي على %s</string>
     <string name="cdc_alac">ترميز Apple صوتي دون خسارة (ALAC)</string>
-    <string name="set_cover_mode_as_is">كما هي</string>
-    <string name="set_with_hidden_desc">ضمّن ملفات الصوت المخفية (مثال: ذاكرة التخزين المؤقت)</string>
-    <string name="set_with_hidden">ضمّن الملفات المخفية</string>
     <string name="set_excluded_locations_desc">تحديد المجلدات التي لا تُحمّل منها الموسيقى</string>
     <string name="set_excluded_locations">المجلدات المستثناة</string>
     <string name="set_fs_cache">استخدم ذاكرة التخزين المؤقت لنظام الملفات</string>

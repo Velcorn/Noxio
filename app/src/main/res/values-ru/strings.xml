@@ -43,8 +43,6 @@
     <string name="set_black_mode_desc">Использовать полностью чёрный цвет</string>
     <string name="set_lib_tabs">Вкладки</string>
     <string name="set_lib_tabs_desc">Изменить видимость и порядок вкладок</string>
-    <string name="set_round_mode">Скруглённые обложки</string>
-    <string name="set_round_mode_desc">Скруглить края на некоторых элементах интерфейса</string>
     <string name="set_audio">Звук</string>
     <string name="set_replay_gain_mode">Выравнивание громкости</string>
     <string name="set_replay_gain_mode_track">По треку</string>
@@ -140,7 +138,6 @@
     <string name="cdc_aac">AAC</string>
     <string name="set_locations_desc">Укажите, откуда надо загружать музыку</string>
     <string name="fmt_bitrate">%d кбит/с</string>
-    <string name="set_observing">Автоматическая перезагрузка</string>
     <string name="cdc_mp3">MPEG-1</string>
     <string name="cdc_flac">FLAC</string>
     <string name="fmt_lib_total_duration">Общая продолжительность: %s</string>
@@ -161,7 +158,6 @@
     <string name="lbl_single_live">Концертный сингл</string>
     <string name="lbl_single_remix">Ремикс сингл</string>
     <string name="lbl_compilations">Сборники</string>
-    <string name="set_observing_desc">Перезагружать библиотеку при изменении (требует постоянное уведомление)</string>
     <string name="fmt_db_neg">−%.1f дБ</string>
     <string name="fmt_lib_genre_count">Жанров загружено: %d</string>
     <string name="def_track">Нет трека</string>
@@ -180,23 +176,12 @@
     <string name="set_hide_collaborators">Скрыть соавторов</string>
     <string name="set_hide_collaborators_desc">Показывать только тех исполнителей, которые напрямую указаны в альбоме</string>
     <string name="set_exclude_non_music">Исключить другие звуковые файлы</string>
-    <string name="set_separators">Многозначные разделители</string>
-    <string name="set_separators_slash">Косая черта (/)</string>
-    <string name="set_separators_desc">Настройка символов, обозначающих несколько значений тегов</string>
-    <string name="set_separators_comma">Запятая (,)</string>
-    <string name="set_separators_semicolon">Точка с запятой (;)</string>
-    <string name="set_separators_plus">Плюс (+)</string>
-    <string name="set_separators_and">Амперсанд (&amp;)</string>
     <string name="lbl_mixes">DJ Миксы</string>
     <string name="desc_exit">Остановить воспроизведение</string>
     <string name="set_exclude_non_music_desc">Игнорировать аудиофайлы, которые не являются музыкой. Например, подкасты</string>
-    <string name="set_cover_mode">Обложки альбомов</string>
     <string name="lbl_mix">DJ Микс</string>
     <string name="set_pre_amp_with">Изменение по тегам</string>
     <string name="set_pre_amp_without">Изменения без тегов</string>
-    <string name="set_cover_mode_off">Отключены</string>
-    <string name="set_cover_mode_balanced">Исходные (Быстрая загрузка)</string>
-    <string name="set_cover_mode_high_quality">Повышенного качества (Медленная загрузка)</string>
     <string name="lbl_compilation_live">Сборник концертных записей</string>
     <string name="set_rescan">Пересканировать музыку</string>
     <string name="set_rescan_desc">Очистить кэш тегов и полностью обновить библиотеку (медленно, но более точно)</string>
@@ -207,14 +192,12 @@
         <item quantity="many">%d исполнителей</item>
         <item quantity="other">%d исполнителей</item>
     </plurals>
-    <string name="set_separators_warning">Предупреждение: Использование этой настройки может привести к тому, что некоторые теги будут неправильно интерпретироваться как имеющие несколько значений. Вы можете решить эту проблему, добавив к нежелательным символам-разделителям обратную косую черту (\\).</string>
     <string name="fmt_selected">%d выбрано</string>
     <string name="lbl_wiki">Вики</string>
     <string name="lbl_reset">Сбросить</string>
     <string name="fmt_list">%1$s,%2$s</string>
     <string name="set_replay_gain">Выравнивание громкости</string>
     <string name="set_music">Музыка</string>
-    <string name="set_images">Изображения</string>
     <string name="set_library">Библиотека</string>
     <string name="set_ui_desc">Настройка темы и цветов приложения</string>
     <string name="set_content_desc">Управляйте загрузкой музыки и изображений</string>
@@ -240,8 +223,6 @@
     <string name="fmt_editing">Редактирование %s</string>
     <string name="def_disc">Нет диска</string>
     <string name="lbl_share">Поделиться</string>
-    <string name="set_square_covers">Использовать квадратные обложки альбомов</string>
-    <string name="set_square_covers_desc">Обрезать все обложки альбомов до соотношения сторон 1:1</string>
     <string name="lbl_song">Трек</string>
     <string name="lbl_sort_mode">Сортировать по</string>
     <string name="lbl_sort_direction">Направление</string>
@@ -289,11 +270,7 @@
     <string name="lng_empty_songs">Ваши песни будут отображаться здесь.</string>
     <string name="lng_empty_albums">Ваши альбомы будут отображаться здесь.</string>
     <string name="lng_empty_genres">Здесь будут отображаться ваши жанры.</string>
-    <string name="set_cover_mode_save_space">Экономия места</string>
     <string name="lbl_github">Сообщить о проблеме на GitHub</string>
-    <string name="set_with_hidden">Включать скрытые файлы</string>
-    <string name="set_with_hidden_desc">Показывать скрытые аудио (например, те, что в .cache)</string>
-    <string name="set_cover_mode_as_is">Как есть</string>
     <string name="lng_play_next">Следующая песня</string>
     <string name="lng_file_picker">Загружать музыку из выбранных папок. Медленнее, но более надёжно. Для этого требуется установленный стандартный файловый менеджер.</string>
     <string name="lng_system_database">Загружать музыку, которую ОС Android обнаруживает автоматически. Быстрее, но менее надёжно. Не поддерживаются функции, зависящие от файловой системы, такие как cover.jpg.</string>

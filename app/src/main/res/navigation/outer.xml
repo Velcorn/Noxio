@@ -56,9 +56,6 @@
         android:name="org.oxycblt.auxio.settings.categories.MusicPreferenceFragment"
         android:label="personalize_preferences_fragment">
         <action
-            android:id="@+id/separators_settings"
-            app:destination="@id/separators_dialog" />
-        <action
             android:id="@+id/music_locations_settings"
             app:destination="@id/music_locations_dialog" />
     </fragment>
@@ -97,11 +94,6 @@
         android:name="org.oxycblt.auxio.music.locations.LocationsDialog"
         android:label="music_locations_dialog"
         tools:layout="@layout/dialog_music_locations" />
-    <dialog
-        android:id="@+id/separators_dialog"
-        android:name="org.oxycblt.auxio.music.interpret.SeparatorsDialog"
-        android:label="separators_dialog"
-        tools:layout="@layout/dialog_separators" />
 
     <fragment
         android:id="@+id/about_fragment"

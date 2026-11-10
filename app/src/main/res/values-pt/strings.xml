@@ -86,8 +86,6 @@
     <string name="set_ui">Aparência e sensação</string>
     <string name="set_black_mode">Tema preto</string>
     <string name="set_black_mode_desc">Use um tema escuro totalmente preto.</string>
-    <string name="set_round_mode">Modo redondo</string>
-    <string name="set_round_mode_desc">Ativar cantos arredondados em elementos adicionais da interface do utilizador (requer que as capas dos álbuns sejam arredondadas)</string>
     <string name="set_theme_night">Escuro</string>
     <string name="set_accent">Esquema de cores</string>
     <string name="lbl_export_playlist">Exportar lista de reprodução</string>
@@ -124,8 +122,6 @@
     <string name="lbl_replaygain_album">Ajuste do álbum ReplayGain</string>
     <string name="lbl_author_name">Desenvolvido por Alexander Capehart</string>
     <string name="lbl_supporters">Apoiadores</string>
-    <string name="set_square_covers">Forçar capas em formato quadrado</string>
-    <string name="set_square_covers_desc">Recortar à capa dos álbuns numa proporção de 1:1</string>
     <string name="set_audio_desc">Configurar o som e comportamento da reprodução</string>
     <string name="set_rewind_prev">Retroceder antes de voltar</string>
     <string name="set_rewind_prev_desc">Retrocede a música antes de voltar para a anterior</string>
@@ -139,7 +135,6 @@
     <string name="lbl_sort_direction">Direção</string>
     <string name="lbl_sort_asc">Ascendente</string>
     <string name="lbl_sort_dsc">Descendente</string>
-    <string name="set_cover_mode_off">Desligado</string>
     <string name="set_reindex">Recarregar música</string>
     <string name="lbl_eps">Miniálbuns</string>
     <string name="lbl_ep">EP</string>
@@ -159,7 +154,6 @@
     <string name="lbl_disc">Disco</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="set_exclude_non_music_desc">Ignorar ficheiros de áudio que não são música, tal como podcasts</string>
-    <string name="set_images">Imagens</string>
     <string name="set_audio">Áudio</string>
     <string name="set_pre_amp">Pré-amplificação da normalização de volume</string>
     <string name="set_pre_amp_desc">O pré-amplificador é aplicado ao ajuste existente durante a reprodução</string>
@@ -199,14 +193,8 @@
     </plurals>
     <string name="set_keep_shuffle">Memorizar música misturada</string>
     <string name="set_keep_shuffle_desc">Mantenha a reprodução aleatória ao reproduzir uma nova música</string>
-    <string name="set_separators_semicolon">Ponto-e-vírgula (;)</string>
-    <string name="set_separators_slash">Barra (/)</string>
-    <string name="set_separators_plus">Mais (+)</string>
-    <string name="set_separators_warning">Aviso: Usar essa configuração pode resultar em algumas etiquetas serem interpretadas incorretamente como tendo múltiplos valores. Pode resolver isso pré-definindo caracteres de separador indesejados com uma barra invertida (\\).</string>
     <string name="set_hide_collaborators">Ocultar colaboradores</string>
     <string name="set_hide_collaborators_desc">Mostrar apenas artistas que foram creditados diretamente no álbum (funciona melhor em músicas com metadados completos)</string>
-    <string name="set_cover_mode">Capas de álbuns</string>
-    <string name="set_cover_mode_balanced">Rápido</string>
     <string name="def_genre">Gênero desconhecido</string>
     <string name="def_date">Sem data</string>
     <string name="cdc_flac">Codec de Audio Gratuito Sem Perdas (FLAC)</string>
@@ -230,14 +218,7 @@
     <string name="set_content">Conteúdo</string>
     <string name="set_content_desc">Controlar como a música e as imagens são carregadas</string>
     <string name="set_music">Música</string>
-    <string name="set_observing">Recarregamento automático</string>
-    <string name="set_observing_desc">Recarrega a biblioteca de músicas sempre que ela mudar (requer notificação fixa)</string>
     <string name="set_exclude_non_music">Excluir não-música</string>
-    <string name="set_separators">Separadores multi-valor</string>
-    <string name="set_separators_desc">Configurar caracteres que denotam múltiplos valores de etiqueta</string>
-    <string name="set_separators_comma">Vírgula (,)</string>
-    <string name="set_separators_and">E comercial (&amp;)</string>
-    <string name="set_cover_mode_high_quality">Qualidade alta</string>
     <string name="set_replay_gain_mode_track">Preferir faixa</string>
     <string name="set_pre_amp_warning">Aviso: Alterar o pré-amplificador para um valor positivo alto pode resultar em picos em algumas faixas de áudio.</string>
     <string name="set_library">Biblioteca</string>
@@ -284,12 +265,9 @@
     <string name="lng_empty_albums">Os seus álbuns aparecerão aqui.</string>
     <string name="lng_empty_playlists">As suas listas de reprodução aparecerão aqui.</string>
     <string name="lng_empty_genres">Os seus gêneros aparecerão aqui.</string>
-    <string name="set_cover_mode_save_space">Salvar espaco</string>
     <string name="cnt_mp4">MPEG-4 contendo %s</string>
     <string name="cdc_alac">Apple Lossless Audio Codec (ALAC)</string>
     <string name="cdc_unknown">Desconhecido</string>
-    <string name="set_with_hidden_desc">Ignorar ficheiros e pastas que estão ocultos (por exemplo, .cache)</string>
-    <string name="set_with_hidden">Ignorar ficheiros ocultos</string>
     <string name="set_excluded_locations">Pastas excluídas</string>
     <string name="set_excluded_locations_desc">Gerir pastas para excluir do carregamento de música</string>
     <string name="lng_play_next">A próxima música será tocada</string>
@@ -299,7 +277,6 @@
     <string name="lng_grant_storage_required">Conceda permissões de armazenamento externo para ativar esta opção.</string>
     <string name="lng_include_folders">Músicas fora das pastas selecionadas serão ignoradas.</string>
     <string name="lng_exclude_folders">As músicas dentro das pastas selecionadas serão ignoradas.</string>
-    <string name="set_cover_mode_as_is">Como é</string>
     <string name="set_load_from">Carregar de</string>
     <string name="set_file_picker">Seletor de arquivos</string>
     <string name="set_system_database">Sistema</string>

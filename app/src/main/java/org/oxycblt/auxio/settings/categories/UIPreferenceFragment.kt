@@ -18,14 +18,11 @@
  
 package org.oxycblt.auxio.settings.categories
 
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
-import coil3.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.oxycblt.auxio.R
-import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.settings.BasePreferenceFragment
 import org.oxycblt.auxio.settings.ui.WrappedDialogPreference
 import org.oxycblt.auxio.ui.LauncherIcon
@@ -42,8 +39,6 @@ import timber.log.Timber as L
 @AndroidEntryPoint
 class UIPreferenceFragment : BasePreferenceFragment(R.xml.preferences_ui) {
     @Inject lateinit var uiSettings: UISettings
-    @Inject lateinit var imageLoader: ImageLoader
-    private val musicModel: MusicViewModel by activityViewModels()
 
     override fun onOpenDialogPreference(preference: WrappedDialogPreference) {
         if (preference.key == getString(R.string.set_key_home_tabs)) {
@@ -80,24 +75,6 @@ class UIPreferenceFragment : BasePreferenceFragment(R.xml.preferences_ui) {
                             L.d("Switching launcher icon to $it")
                             LauncherIcon.apply(requireContext(), it)
                         }
-                        true
-                    }
-            }
-            getString(R.string.set_key_cover_mode) -> {
-                L.d("Configuring cover mode setting")
-                preference.onPreferenceChangeListener =
-                    Preference.OnPreferenceChangeListener { _, _ ->
-                        L.d("Cover mode changed, reloading music")
-                        musicModel.refresh()
-                        true
-                    }
-            }
-            getString(R.string.set_key_square_covers) -> {
-                L.d("Configuring square cover setting")
-                preference.onPreferenceChangeListener =
-                    Preference.OnPreferenceChangeListener { _, _ ->
-                        L.d("Square covers changed, resetting image memory cache")
-                        imageLoader.memoryCache?.clear()
                         true
                     }
             }

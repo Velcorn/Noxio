@@ -63,7 +63,6 @@
     <string name="set_black_mode_desc">Koristi potpuno crnu tamnu temu</string>
     <string name="set_lib_tabs">Kartice zbirke</string>
     <string name="set_lib_tabs_desc">Promijeni vidljivost i redoslijed kartica zbirke</string>
-    <string name="set_round_mode">Zaobljena naslovnica</string>
     <string name="set_audio">Zvuk</string>
     <string name="set_replay_gain_mode">Strategija normalizacije glasnoće</string>
     <string name="set_replay_gain_mode_track">Preferiraj zvučni zapis</string>
@@ -78,8 +77,6 @@
     <string name="set_reindex_desc">Ponovo učitaj glazbenu biblioteku, koristeći predmemorirane oznake kada je to moguće</string>
     <string name="set_locations">Izvori glazbe</string>
     <string name="set_locations_desc">Upravljaj odakle će se glazba učitati</string>
-    <string name="set_observing">Automatsko ponovno učitavanje</string>
-    <string name="set_observing_desc">Ponovo učitaj svoju zbirku glazbe čim se dogode promjene (zahtijeva stalno obavještavanje)</string>
     <string name="err_index_failed">Greška u učitvanju glazbe</string>
     <string name="err_no_app">Nijedna aplikacija ne može obraditi ovaj zadatak</string>
     <string name="err_bad_location">Ova mapa nije podržana</string>
@@ -164,7 +161,6 @@
     <string name="set_root_title">Postavke</string>
     <string name="set_theme">Tema</string>
     <string name="set_theme_auto">Automatski</string>
-    <string name="set_round_mode_desc">Omogući zaobljene rubove na dodatnim elementima korisničkog sučelja (zahtijeva zaobljene omote albuma)</string>
     <string name="set_rewind_prev">Premotaj prije preskakanja natrag</string>
     <string name="desc_skip_next">Preskoči na sljedeću pjesmu</string>
     <string name="set_keep_shuffle">Zapamti miješanje glazbe</string>
@@ -176,27 +172,15 @@
     <string name="clr_purple">Ljubičasto</string>
     <string name="desc_queue_bar">Otvori redoslijed</string>
     <string name="lbl_genre">Žanr</string>
-    <string name="set_separators_comma">Zarez (,)</string>
-    <string name="set_separators_and">Znak i (&amp;)</string>
     <string name="lbl_compilation_live">Kompilacija uživo</string>
     <string name="lbl_compilation_remix">Kompilacija remiksa</string>
     <string name="lbl_mixes">DJ kompilacije</string>
-    <string name="set_separators">Znakovi odjeljivanja vrijednosti</string>
     <string name="desc_exit">Prekini reprodukciju</string>
-    <string name="set_separators_desc">Konfiguriraj znakove koji označavaju višestruke vrijednosti oznaka</string>
-    <string name="set_separators_slash">Kosa crta (/)</string>
-    <string name="set_separators_plus">Plus (+)</string>
     <string name="lbl_mix">DJ kompilacija</string>
-    <string name="set_separators_semicolon">Točka-zarez (;)</string>
     <string name="lbl_equalizer">Ekvilajzer</string>
     <string name="set_hide_collaborators">Sakrij suradnike</string>
-    <string name="set_cover_mode_off">Isključeno</string>
     <string name="set_exclude_non_music">Isključi sve što nije glazba</string>
-    <string name="set_cover_mode_high_quality">Visoka kvaliteta</string>
-    <string name="set_cover_mode_balanced">Srednja kvaliteta</string>
     <string name="set_exclude_non_music_desc">Zanemari sve audio datoteke koje nisu glazba, npr. podcast datoteke</string>
-    <string name="set_separators_warning">Upozorenje: Korištenje ove postavke može dovesti do pogrešnog tumačenja nekih oznaka kao da imaju više vrijednosti. To možeš riješiti postavljanjem obrnute kose crte (\\) ispred neželjenih znakova rastavljanja.</string>
-    <string name="set_cover_mode">Omoti albuma</string>
     <string name="set_hide_collaborators_desc">Prikaži samo izvođače koji su izravno navedeni na albumu</string>
     <plurals name="fmt_artist_count">
         <item quantity="one">%d izvođač</item>
@@ -213,7 +197,6 @@
     <string name="lbl_sort_dsc">Silazno</string>
     <string name="set_ui_desc">Promijenite temu i boje aplikacije</string>
     <string name="set_content_desc">Upravljajte učitavanjem glazbe i slika</string>
-    <string name="set_images">Slike</string>
     <string name="set_audio_desc">Konfiguriraj ponašanje zvuka i reprodukcije</string>
     <string name="set_library">Fonoteka</string>
     <string name="lbl_playlists">Popisi pjesama</string>
@@ -237,8 +220,6 @@
     <string name="lbl_appears_on">Sudjeluje u</string>
     <string name="lbl_share">Dijeli</string>
     <string name="def_disc">Nema diska</string>
-    <string name="set_square_covers">Prisili kvadratične omote albuma</string>
-    <string name="set_square_covers_desc">Odreži sve omote albuma na omjer 1:1</string>
     <string name="lbl_song">Pjesma</string>
     <string name="lbl_sort_mode">Razvrstaj po</string>
     <string name="lbl_sort_direction">Smjer</string>
@@ -282,7 +263,6 @@
     <string name="def_album">Nepoznat album</string>
     <string name="cdc_unknown">Nepoznato</string>
     <string name="cnt_mp4">MPEG-4 sadrži %s</string>
-    <string name="set_cover_mode_save_space">Niža kvaliteta</string>
     <string name="lng_empty_songs">Tvoje pjesme će se ovdje prikazati.</string>
     <string name="lng_empty_albums">Tvoji albumi će se ovdje prikazati.</string>
     <string name="lng_empty_artists">Tvoji izvođači će se ovdje prikazati.</string>
@@ -295,9 +275,6 @@
     <string name="lng_grant_storage_required">Za aktiviranje ove opcije dodijeli dozvole za eksterno spremište.</string>
     <string name="lng_include_folders">Glazba izvan odabranih mapa će se ignorirati.</string>
     <string name="lng_exclude_folders">Glazba unutar odabranih mapa će se ignorirati.</string>
-    <string name="set_with_hidden">Uključuje skrivene datoteke</string>
-    <string name="set_with_hidden_desc">Uključi skrivene audio datoteke (npr. .cache)</string>
-    <string name="set_cover_mode_as_is">Nepromijenjeno</string>
     <string name="set_load_from">Učitaj iz</string>
     <string name="set_file_picker">Birač datotka</string>
     <string name="set_system_database">Sustav</string>

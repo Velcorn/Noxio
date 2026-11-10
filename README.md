@@ -37,9 +37,10 @@ stats, stays in its own database or in files you export.
 - **One-handed layout:** search, sort and tabs at the bottom, a floating shuffle button, no back buttons (gestures
   only), no three-dot buttons on rows (long press for the menu), shorter item menus.
 - **Queue** with search and sort; **playlists** you can search and sort.
-- **Look:** pure black theme, wavy seek bar (can be turned off), and a minimal white outline icon next to the default
+- **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
-- **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed.
+- **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed;
+  fixed appearance defaults, hidden files excluded, manual library refresh and native multi-value tags.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
 - **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
 

@@ -150,8 +150,6 @@
     <string name="set_accent">ترکیب‌بندی رنگ</string>
     <string name="set_black_mode">تم تاریک</string>
     <string name="set_black_mode_desc">استفاده از تم تاریک سیاه خالص</string>
-    <string name="set_round_mode">حالت گرد</string>
-    <string name="set_round_mode_desc">فعال‌سازی گوشه های گرد شده در اجزای اضافه رابط کاربری (جلد آلبوم‌ها باید گرد باشند)</string>
     <string name="set_lib_tabs">سربرگ کتابخانه‌ها</string>
     <string name="set_lib_tabs_desc">تغییر پدیداری و ترتیب سربرگ کتابخانه‌ها</string>
     <string name="set_keep_shuffle">به یاد داشتن بر</string>
@@ -159,25 +157,10 @@
     <string name="set_content">محتوی</string>
     <string name="set_content_desc">تنظیم چگونگی بارگیری موسیقی و تصاویر</string>
     <string name="set_music">موسیقی</string>
-    <string name="set_observing">بارگیری مجدد خودکار</string>
-    <string name="set_observing_desc">بارگیری مجدد کتابخانه موسیقی هرگاه تغییری رخ دهد (نیازمند آگهی دائم)</string>
     <string name="set_exclude_non_music">منع کردن غیر موسیقی‌ها</string>
     <string name="set_exclude_non_music_desc">نادیده گرفتن پرونده های صوتی که موسیقی نیستند، مانند وب‌آواها</string>
-    <string name="set_with_hidden">دربرگرفتن پرونده‌های پنهان</string>
-    <string name="set_with_hidden_desc">دربرگرفتن پرونده‌های صوتی پنهان (مانند .cache)</string>
-    <string name="set_separators">تفکیک کننده های چند دریچه‌ای</string>
-    <string name="set_separators_desc">تنظیم کردن علائمی که بیانگر چندین مقدار برچسب هستند</string>
-    <string name="set_separators_comma">ویرگول (،)</string>
-    <string name="set_separators_semicolon">نقطه ویرگول (؛)</string>
-    <string name="set_separators_slash">خط کج (/)</string>
-    <string name="set_separators_plus">بعلاوه (+)</string>
-    <string name="set_separators_and">امپرسند (&amp;)</string>
-    <string name="set_separators_warning">هشدار: استفاده از این تنظیم ممکن است باعث شود برخی سربرگ‌ها به نادرستی دارای چند مقدار تعبیر شوند. شما می‌توانید این را با قرار دادن یک خط کج برعکس (\\) قبل از علائم تفکیک کننده ناخواسته برطرف کنید.</string>
     <string name="set_hide_collaborators">پنهان‌سازی همکاران</string>
     <string name="set_hide_collaborators_desc">نشان دادن هنرمندانی که مستقیما روی آلبوم معرفی شده‌اند (با کتابخانه های خوب برچسب گذاری شده بهتر کار می‌کند)</string>
-    <string name="set_images">تصاویر</string>
-    <string name="set_cover_mode">جلد آلبوم‌ها</string>
-    <string name="set_cover_mode_off">خاموش</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d آهنگ</item>
         <item quantity="other">%d آهنگ‌ها</item>
@@ -190,12 +173,6 @@
         <item quantity="one">%d هنرمند</item>
         <item quantity="other">%d هنرمندان</item>
     </plurals>
-    <string name="set_cover_mode_save_space">حفظ فضا</string>
-    <string name="set_cover_mode_balanced">متعادل</string>
-    <string name="set_cover_mode_high_quality">کیفیت بالا</string>
-    <string name="set_cover_mode_as_is">همان‌طور که هست</string>
-    <string name="set_square_covers">جلد آلبوم مربعی</string>
-    <string name="set_square_covers_desc">برش همه جلدهای آلبوم‌ها به نسبت ابعادی ۱:۱</string>
     <string name="set_audio">صدا</string>
     <string name="set_audio_desc">تنظیم صدا و رفتار پخش</string>
     <string name="set_rewind_prev">برگرداندن به اول قبل از رد کردن به قبلی</string>
