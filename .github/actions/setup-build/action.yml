@@ -26,7 +26,8 @@ runs:
     - name: Set up Gradle output caching
       uses: gradle/actions/setup-gradle@v6.4.1
       with:
-        cache-provider: basic
+        # Per-job/commit snapshots avoid lint and tests competing for one immutable cache.
+        cache-provider: enhanced
         # dev is the working branch; main supplies caches accessible to release tags too.
         cache-read-only: ${{ github.ref != 'refs/heads/dev' && github.ref != 'refs/heads/main' }}
     - name: Identify native build inputs
