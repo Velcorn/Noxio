@@ -220,6 +220,16 @@ class StatsRepositoryTest {
         }
     }
 
+    @Test
+    fun aSavedPlayCanBeUpdatedAndTheYearIsSummedUp() = runBlocking {
+        val id = repository.record(play("A", startedAt = 5_000, listenedMs = 10))
+        repository.updateListened(id, 90_000)
+        assertEquals(90_000L, dao.events.single().listenedMs)
+        val review = repository.yearInReview(1970)
+        assertEquals(1, review.plays)
+        assertEquals("A", review.topSongs.single().name)
+    }
+
     // --- the repository ---
 
     private class FakeDao : PlayEventDao {

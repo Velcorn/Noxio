@@ -262,4 +262,40 @@ class PlayRecorderTest {
         recorder.release()
         assertTrue(player.listeners.isEmpty())
     }
+
+    @Test
+    fun aChangedQueueOrANewPlaybackFinishesThePlayOfTheSongBefore() {
+        playing(song("a"))
+        elapse(40_000)
+        player.song = song("b")
+        recorder.onQueueChanged(
+            emptyList(),
+            0,
+            org.oxycblt.auxio.playback.state.QueueChange(
+                org.oxycblt.auxio.playback.state.QueueChange.Type.MAPPING,
+                org.oxycblt.auxio.list.adapter.UpdateInstructions.Diff,
+            ),
+        )
+        assertTrue(repository.rows.single().listenedMs >= 40_000)
+        player.song = song("c")
+        recorder.onNewPlayback(null, emptyList(), 0, false)
+        elapse(31_000)
+        assertEquals(listOf("a", "c"), repository.rows.map { it.songUid })
+    }
+
+    @Test
+    fun theFactoryMakesARecorderThatListensToThePlayer() {
+        val manager = io.mockk.mockk<PlaybackStateManager>(relaxed = true)
+        val made =
+            PlayRecorder.Factory(
+                    androidx.test.core.app.ApplicationProvider.getApplicationContext(),
+                    manager,
+                    FakeRepository(),
+                )
+                .create()
+        made.attach()
+        io.mockk.verify { manager.addListener(made) }
+        made.release()
+        io.mockk.verify { manager.removeListener(made) }
+    }
 }

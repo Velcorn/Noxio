@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,6 +55,7 @@ class StatsViewModelTest {
             unknownArtist: String,
         ): ItemStats? {
             itemKey = key
+            looked += category to period
             return item
         }
 
@@ -72,6 +74,12 @@ class StatsViewModelTest {
             imported += 1
             return 3
         }
+
+        var review: YearInReview? = null
+        val looked = mutableListOf<Pair<StatsCategory, StatsPeriod>>()
+
+        override suspend fun yearInReview(year: Int, unknownArtist: String) =
+            review ?: yearInReview(emptyList(), year, unknownArtist)
     }
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
@@ -221,5 +229,68 @@ class StatsViewModelTest {
     @Test
     fun exportingIsPassedOnToTheRepository() = runBlocking {
         model.exportCsv(java.io.ByteArrayOutputStream())
+    }
+
+    @Test
+    fun theWrappedYearIsTheShownYearOrTheCurrentOne() {
+        val now = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+        assertEquals(now, model.wrappedYear())
+        val collector = CoroutineScope(Dispatchers.Unconfined).launch { model.ui.collect {} }
+        model.setPeriod(StatsPeriod.YEAR)
+        model.previous()
+        waitFor { model.ui.value?.query == StatsViewModel.Query(StatsPeriod.YEAR, -1) }
+        assertEquals(now - 1, model.wrappedYear())
+        collector.cancel()
+    }
+
+    @Test
+    fun theWrappedCardsLookCloserAtTheTopArtistAndAlbumOfTheYear() = runBlocking {
+        val events =
+            listOf(
+                PlayEvent(
+                    songUid = "u",
+                    title = "Song",
+                    artists = "Star",
+                    album = "Big",
+                    startedAt =
+                        java.util.Calendar.getInstance()
+                            .apply {
+                                clear()
+                                set(2026, 4, 1)
+                            }
+                            .timeInMillis,
+                    listenedMs = 1,
+                    durationMs = 1,
+                )
+            )
+        repository.review = yearInReview(events, 2026)
+        val wrapped = model.loadWrapped(2026)
+        assertEquals(2026, wrapped.review.year)
+        assertEquals(
+            listOf(
+                StatsCategory.ARTISTS to StatsPeriod.YEAR,
+                StatsCategory.ALBUMS to StatsPeriod.YEAR,
+            ),
+            repository.looked,
+        )
+    }
+
+    @Test
+    fun anEmptyYearHasNothingToLookCloserAt() = runBlocking {
+        val wrapped = model.loadWrapped(2001)
+        assertTrue(wrapped.review.isEmpty)
+        assertNull(wrapped.topArtist)
+        assertTrue(repository.looked.isEmpty())
+    }
+
+    @Test
+    fun aMusicoletFileNameGivesItsWeek() {
+        val parsed =
+            model.parseCsv(
+                "FILE_PATH,TITLE,ARTIST,ALBUM,ALBUM_ARTIST,COMPOSER,GENRE,YEAR,DURATION_MS,PLAY_COUNT\n" +
+                    "a.mp3,A,X,Al,x,x,x,0,1,2\n",
+                "Most played Songs • Week 22 - 2026.csv",
+            ) as StatsCsvImport.Parsed.MostPlayed
+        assertEquals(22, parsed.period?.number)
     }
 }

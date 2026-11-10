@@ -11,156 +11,81 @@
 </p>
 
 > [!WARNING]
-> **I'm not an Android developer.** Noxio is a personal project, and nearly all of its code is written with an
-> AI assistant for my own use. The logic has unit tests; the screens have no automated tests and are only checked
-> by hand, on an emulator and on my own phone, so expect rough edges and review anything you rely on.
->
-> The fork started for the **sleep timer**. It has grown since: a one-handed UI with search, sort and the shuffle
-> button at the bottom and gestures instead of back buttons, **listening stats** with sharing and backup, and a
-> switchable minimal icon. Noxio only reads your music and its tags and never edits them. It is shared as is,
-> with no promise of support or stability.
+> **I'm not an Android developer.** Noxio is a personal project, written almost entirely with an AI assistant for my
+> own use. The logic has unit tests; the screens are only checked by hand, on an emulator and my own phone. It is
+> shared as is, with no promise of support.
 
 ## About
 
-Noxio is a fork of [Auxio](https://github.com/OxygenCobalt/Auxio) by Alexander Capehart. Auxio is a great local music
-player with a fast, reliable UI, and Noxio keeps that foundation. The name merges **Auxio** with **Nocturne**: the fork
-started because a music player that is good to fall asleep to needs a sleep timer.
+Noxio is a fork of [Auxio](https://github.com/OxygenCobalt/Auxio) by Alexander Capehart, a fast and reliable local
+music player. The name merges **Auxio** with **Nocturne**: it started because a player to fall asleep to needs a sleep
+timer. Noxio is **not** affiliated with the Auxio project, so please don't report its issues upstream.
 
-Noxio is a personal project and will keep diverging from upstream. It is **not** affiliated with the Auxio project, and
-upstream issues should not be reported against it.
+**Noxio only reads your files.** It never edits tags or writes to your music. What it works out, like listening
+stats, stays in its own database or in files you export.
 
 ## What's different from Auxio
 
-| | Auxio | Noxio |
-| --- | --- | --- |
-| Sleep timer | none | Hold the player's play/pause button to open the timer; hold it again to reopen the timer sheet. 30 min, custom minutes (1–599) or 60 min, optionally finishing the last song and fading out, and shaking the device restarts it (all three switches are in the timer sheet). The countdown appears inside the play/pause button in the icon colour. Pausing playback freezes the timer and resuming continues it; and a quiet notification of its own counts down live (or shows the frozen time while paused) with +10 min and Stop timer buttons (it needs the permission to post notifications, which is asked for when a timer starts). Remembers your last choice. |
-| Listening stats | none | Home menu > Listening stats. Top artists, albums and songs with plays and time listened for each, plus the total, per week, month, year or all time. The artists, albums and songs switch is at the top and you can also swipe between them, while the range and period controls are at the bottom, in reach of the thumb. Tap an artist, album or song for a closer look at it: plays, listening time, its share of all your listening and the days you listened in that period, the top songs of an artist or album, or the plays of a song over time, with the first play and the total. Colorful cards you can share as an image, the overview as well as a single artist, album or song, CSV export and import. A year in review (menu > Year in review, for the year shown or the current one): five cards to swipe through and share, with the year's listening time, plays, different songs and artists, the change from the year before, plays per month, the busiest month and weekday, the top artist, top songs and top album, and a summary card. Musicolet's "Most played songs" lists can be imported: a weekly file ("Most played Songs • Week 22 - 2026.csv") puts its plays into that week (weeks start on Monday and are numbered like ISO 8601), spread evenly over its seven days, and a monthly file into that month, spread over its days. Weekly files are preferred: a month that already has weekly plays is not imported, and a weekly file replaces the plays of the same week, so importing a file twice changes nothing. Plays imported this way count for rankings, plays and listening time of the week, month, year and all time, but their day and time are only an estimate. They count for weeks listened (shown for a year and all time), for the plays-over-time chart when its bars are months or years, and for the first and last play, which then get a "≈". They are left out of days listened and of day bars, and the closer look says how many of its plays are imported. A list without a week or month in its name is counted in All time only. Stored on the device only. |
-| Backup | none | Settings > Backup. A full backup of your settings, listening history and playlists in one zip, written automatically every day, week or month at a day and hour you pick (and on "Back up now") into a folder you choose, one file per day (`noxio_YYYY-MM-DD.zip`) with the last five kept. A backup that holds much less than the last good one (an empty or freshly installed app, or less than half of the plays) is not written on its own, so it cannot replace a good backup; "Back up now" asks first and saves such a backup under its own name (`_small`), and good backups are never removed below three. "Restore from backup" shows what is in the file first, replaces the settings, adds the plays that are missing and creates the playlists that do not exist yet, finding their songs by file path or by title, artist and album. A backup from a newer version is refused. The zip holds plain text files (settings, a history CSV and playlists as JSON). |
-| APK downloads | One universal APK | Universal APK for all supported architectures, plus a smaller `arm64-v8a` APK for 64-bit ARM devices. Both contain the same features and use the same release signing key |
-| Now playing layout | Controls in the middle of the screen | Content packed towards the bottom for one-handed use, and the playing strip moves to the bottom while the queue is open. Wavy seek bar while playing, which can be turned off for less motion (Settings > Appearance). The playback bar always has previous, play and next; the setting for a custom action (next, repeat or shuffle) is gone |
-| Navigation | Tabs and search at the top, five tabs including Genres | Search row and tabs at the bottom of the home screen (Artists, Albums, Songs, Playlists by default, no Genres tab; an old Auxio default order is reset once), the player above the navigation, a floating shuffle button. Short lists sit at the bottom edge instead of the top. No screen has a back button (search, settings, about, listening stats and the detail pages included), the back gesture does that |
-| Queue | Reorder by dragging, remove by swiping | Search row under the playing strip: filter the queue and jump to a song, sort the whole queue in the same sort dialog as the other lists (name, artist, album, date, duration, ascending or descending, or random). The current song keeps playing |
-| Detail pages | Header with Play and Shuffle pills, sort in the list header | Album, genre, playlist and artist pages share the home screen's bottom row (a filter field on artists and playlists, sort, more) and its floating shuffle button; there is no back bar, the back gesture does that. Artist pages have Albums and Songs tabs you can swipe between, each with its own sort, and the search filters the list shown. Playlists can be searched and sorted; a sort is saved as the new order of the playlist right away. Lists are sorted ascending by default |
-| Search | Filter chips at the top, every type is searched | Filter chips at the bottom, above the keyboard. Only the types that have a tab on the home screen are shown and searched |
-| List rows | A button with three dots on every row, long press selects | No dots on the rows, a long press opens the menu of the item |
-| Item menus | Playback and management actions mixed together | Queue actions first, then playlist actions and navigation. Play and Shuffle stay on the main controls; tapping opens an album, artist or playlist or plays a song. Playlist menus group queue actions, Rename / Import / Export, and Delete last. Sharing audio files is available for individual songs |
-| Black theme | Black background, tinted menus | Popup menus, dialogs, bottom sheets (including the sleep timer and item menus), the app bar and the status bar stay pure black. Shuffle and repeat in the notification are grey when off |
-| Settings | One long list with Personalize and UI | Four short screens: Appearance (with the library tabs), Playback, Library and Backup. Settings that added little are gone and Noxio does what they did by default: what plays when you tap a song (always the list you tapped it in), headset autoplay, pause on repeat, remember pause, always exit on close (all off) and intelligent sorting (always on). Weeks in the listening stats always start on Monday |
-| Languages | Many, translated on Weblate | English and German cover all of Noxio. The other languages of Auxio stay, but show the texts that Noxio added in English |
-| App icon | One icon | Default (crescent and sparkle on black), or a minimal version drawn in white outlines with no background, chosen in Settings > Appearance |
-| Equalizer shortcut | Button in the now playing toolbar | Moved to Settings > Playback |
-| About | Auxio author, donate and supporters, upstream links | Noxio's own source and issue links, with the Auxio credit and a notice that Noxio is a fork and not affiliated |
-| Library actions | Refresh and rescan without feedback | Rescan asks first and both show their progress and result |
-| Package name | `org.oxycblt.auxio` | `de.devfin.noxio`, so it installs next to Auxio |
+- **Sleep timer:** hold play/pause. 30 min, 60 min or your own time, finish the last song, fade out, shake to restart.
+  The countdown shows in the play button and in a quiet notification with +10 min and Stop; it pauses with playback.
+- **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
+  cards to share or save. A **year in review** with five cards to swipe through.
+- **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
+  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
+- **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly or monthly, the last
+  five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
+- **One-handed layout:** search, sort and tabs at the bottom, a floating shuffle button, no back buttons (gestures
+  only), no three-dot buttons on rows (long press for the menu), shorter item menus.
+- **Queue** with search and sort; **playlists** you can search and sort.
+- **Look:** pure black theme, wavy seek bar (can be turned off), and a minimal white outline icon next to the default
+  one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
+- **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed.
+- **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
+- **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
 
-Everything above is built and unit tested where there is logic, but screens have no automated tests and
-only some of it has been tried on a device. Progress is tracked in
-[ROADMAP.md](/ROADMAP.md). Everything else is inherited from Auxio: Media3 playback, gapless playback, ReplayGain, rich
-tag support (multiple artists, release types, disc numbers, sort tags), playlists, playback persistence, Android Auto,
-widgets, and being completely private and offline.
-
-**Noxio only reads your files.** It never edits tags or writes to your audio files, and editing tags is not part
-of the project. Anything it works out, such as listening stats, stays in its own database or in files you export.
+Everything else comes from Auxio: Media3 playback, gapless, ReplayGain, rich tag support, playlists, Android Auto,
+widgets, completely private and offline. Progress and what still needs a check on a phone are in
+[ROADMAP.md](/ROADMAP.md).
 
 ## Screenshots
 
-What differs from Auxio, in the black theme on a Pixel 9 sized emulator with a made up library and listening history.
+Black theme on a Pixel 9 sized emulator, with a made up library and listening history.
 
 <table>
 <tr><td align="center" width="20%"><img src="docs/screenshots/01-home.png" width="160" alt="Home: search, sort and tabs at the bottom"><br><sub>Home: search, sort and tabs at the bottom</sub></td><td align="center" width="20%"><img src="docs/screenshots/02-player.png" width="160" alt="Now playing"><br><sub>Now playing</sub></td><td align="center" width="20%"><img src="docs/screenshots/03-queue.png" width="160" alt="Queue with search and sort"><br><sub>Queue with search and sort</sub></td><td align="center" width="20%"><img src="docs/screenshots/04-album.png" width="160" alt="Album page, no back bar"><br><sub>Album page, no back bar</sub></td><td align="center" width="20%"><img src="docs/screenshots/05-stats.png" width="160" alt="Listening stats"><br><sub>Listening stats</sub></td></tr>
 <tr><td align="center" width="20%"><img src="docs/screenshots/06-stats-item.png" width="160" alt="A closer look at an artist, with imported plays"><br><sub>A closer look at an artist, with imported plays</sub></td><td align="center" width="20%"><img src="docs/screenshots/07-share-card.png" width="160" alt="Share card of the overview"><br><sub>Share card of the overview</sub></td><td align="center" width="20%"><img src="docs/screenshots/08-sleep-timer.png" width="160" alt="Sleep timer"><br><sub>Sleep timer</sub></td><td align="center" width="20%"><img src="docs/screenshots/09-backup.png" width="160" alt="Backup on a schedule"><br><sub>Backup on a schedule</sub></td><td align="center" width="20%"><img src="docs/screenshots/10-search.png" width="160" alt="Search, chips above the keyboard"><br><sub>Search, chips above the keyboard</sub></td></tr>
 </table>
 
-## Minimal icon
-
-Besides the default icon, Noxio has a minimal version: the crescent, the play button and a star as white
-outlines with no background at all, drawn like the icons of [Arcticons](https://github.com/Donnnno/Arcticons) so it
-sits straight on your wallpaper and does not stand out in a launcher that uses that pack. Switch to it in Settings >
-Appearance > App icon. Any launcher shows the choice, since it is the app's own launcher icon, and launchers that
-support themed icons (like Kvaesitso) tint the single-color layer with your theme colors. Neither icon has a
-background layer at all, so a launcher that cuts icons to a shape (Kvaesitso does, whatever the icon pack) leaves
-the crescent and the lines whole.
-
-## Branches
-
-- `main`: stable, releasable state
-- `dev`: day-to-day development; merged into `main` when ready
-
-## Permissions
-
-- Storage (`READ_MEDIA_AUDIO`, `READ_EXTERNAL_STORAGE`) to read and play your music files
-- Services (`FOREGROUND_SERVICE`, `WAKE_LOCK`) to keep the music playing in the background
-- Notifications (`POST_NOTIFICATION`) to indicate ongoing playback and music loading
-
 ## Building
 
-Noxio relies on a patched Media3 and taglib, which adds some caveats:
-
-1. `cmake` and `ninja-build` must be installed.
-2. The project uses submodules: clone with `git clone --recurse-submodules`, or run
-   `git submodule update --init --recursive` afterwards.
-3. Building on Windows is not supported (the Media3 build runs unix shell scripts). Use Linux, macOS or WSL.
-4. You need JDK 21 and NDK `28.2.13676358` (installable through Android Studio's SDK manager).
+Linux, macOS or WSL (not Windows) with JDK 21, NDK `28.2.13676358`, `cmake` and `ninja-build`. Clone with
+`--recurse-submodules` (or run `git submodule update --init --recursive`), then:
 
 ```bash
 ./gradlew assembleDebug   # build
 ./gradlew installDebug    # install on a connected device or emulator
-# Optional: build only the JNI bridges and APK for the target architecture.
-./gradlew app:assembleDebug -Pandroid.injected.build.abi=x86_64   # x86_64 emulator
-./gradlew app:assembleDebug -Pandroid.injected.build.abi=arm64-v8a # 64-bit ARM phone
+./gradlew app:assembleDebug -Pandroid.injected.build.abi=arm64-v8a   # faster, one architecture only
 ```
 
-Release tags publish `Noxio-<version>.apk` (universal, keeping the existing filename) and
-`Noxio-arm64-v8a-<version>.apk` (64-bit ARM only). When using Obtainium, the universal APK remains
-available; select the ARM64 asset explicitly if you want the smaller download.
-
-To build both locally (the local release uses the development signing key):
-
-```bash
-./gradlew app:assembleRelease -PnoxioSplitApks=true
-```
-
-Gradle's build-output cache is enabled. CI also caches the compiled TagLib and FFmpeg libraries
-and FFmpeg's generated headers, using the submodule revisions and native build settings as the
-cache key. Native caches have no fallback keys. The first build fills the caches; subsequent
-builds can reuse them. The cautious memory and worker limits for WSL remain in place. CI lint/tests select `x86_64`;
-normal builds still support all four architectures. The upstream static-library preparation scripts
-build all architectures once even when `android.injected.build.abi` selects one JNI target. Use the target-ABI option for development, and omit it when publishing split APKs.
-
-The code still lives under the `org.oxycblt.auxio` package on purpose, so changes from upstream can be merged with
-minimal conflicts. Only the application ID and branding differ.
+The code stays in the `org.oxycblt.auxio` package on purpose, so upstream changes merge with few conflicts.
 
 ## Tests
 
-The code Noxio adds has unit tests that run on the JVM, with no device or emulator: the formatting and navigation of the stats screen, the backup folder handling, how a search matches names, the settings of the search, the launcher icon switch, the share image, the swipe and bottom alignment maths, the listening stats (play
-counting including repeated songs, CSV export and import, ranking, the weekly, monthly, yearly and all time ranges,
-the undated "before Noxio" plays, the safe weekly backup) and the sleep timer (state, fade, shake detection). The
-music library (`musikr`) comes with its own tests. They run in WSL, Linux or macOS like the build:
+The logic Noxio adds has JVM unit tests (no device needed); `musikr` has its own. CI runs formatting, Android lint and
+the tests on every push.
 
 ```bash
-./gradlew coverageReport            # runs the tests of the app and musikr, writes the all-code coverage report
-python3 scripts/noxio_coverage.py build/reports/jacoco/coverageReport/coverageReport.xml noxio-code.txt   # the Noxio code number and its gaps
-./gradlew spotlessCheck app:lintDebug
+./gradlew coverageReport spotlessCheck app:lintDebug
+python3 scripts/noxio_coverage.py build/reports/jacoco/coverageReport/coverageReport.xml noxio-code.txt
 ```
 
-The coverage report is in `build/reports/jacoco/coverageReport/index.html`.
-
-**The coverage badge counts only the code Noxio added that can reasonably be unit tested**, the files listed in
-`noxio-code.txt`: logic, helpers and views with behavior. Screens and dialogs that only wire views together are left out
-of it, and so is dependency injection. That is a temporary choice: the badge will switch to the number for all the code,
-Auxio and the music library included, once that is respectable. The all-code number is in the coverage report that CI
-uploads (and is also published as `coverage-all.json`), and it is rising as Auxio's logic gets tests. Everything
-visible, the screens included, still needs a look on a device.
-
-GitHub Actions runs the formatting check, Android lint and the tests on every push and pull request, and refreshes
-the badge from `dev`. Android lint knows the problems that came with Auxio (`app/lint-baseline.xml`), so only new
-ones fail the build.
+The coverage badge counts the Noxio files listed in `noxio-code.txt` (logic, not screens that only wire views
+together). The number for all code, Auxio included, is published as `coverage-all.json`.
 
 ## Credits & License
 
-Noxio is built on [Auxio](https://github.com/OxygenCobalt/Auxio) © Auxio Project, and on its dependencies, including
-Media3, taglib and Material Components. Thanks to Alexander Capehart and all Auxio contributors.
+Built on [Auxio](https://github.com/OxygenCobalt/Auxio) © Auxio Project and its dependencies, including Media3, taglib
+and Material Components. Thanks to Alexander Capehart and all Auxio contributors.
 
-Noxio is Free Software, licensed under the
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html) or later, the same as Auxio. See
-[LICENSE](/LICENSE).
+Free Software under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html) or later, like
+Auxio. See [LICENSE](/LICENSE).

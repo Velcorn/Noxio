@@ -343,4 +343,37 @@ class SleepTimerControllerTest {
         assertEquals(1f, player.volume, 0f)
         assertEquals(false, pausedAtEnd.last())
     }
+
+    private fun addAccelerometer(): android.hardware.SensorManager {
+        val manager =
+            androidx.test.core.app.ApplicationProvider.getApplicationContext<
+                    android.content.Context
+                >()
+                .getSystemService(android.hardware.SensorManager::class.java)
+        org.robolectric.Shadows.shadowOf(manager)
+            .addSensor(
+                org.robolectric.shadows.ShadowSensor.newInstance(
+                    android.hardware.Sensor.TYPE_ACCELEROMETER
+                )
+            )
+        return manager
+    }
+
+    @Test
+    fun aMinutesTimerListensForShakesUntilItIsOver() {
+        val manager = addAccelerometer()
+        startMinutes(600)
+        assertTrue(org.robolectric.Shadows.shadowOf(manager).hasListener(controller))
+        timer.cancel()
+        scope.testScheduler.runCurrent()
+        assertEquals(false, org.robolectric.Shadows.shadowOf(manager).hasListener(controller))
+    }
+
+    @Test
+    fun withShakingTurnedOffNothingIsListenedFor() {
+        val manager = addAccelerometer()
+        timer.shakeToReset = false
+        startMinutes(600)
+        assertEquals(false, org.robolectric.Shadows.shadowOf(manager).hasListener(controller))
+    }
 }

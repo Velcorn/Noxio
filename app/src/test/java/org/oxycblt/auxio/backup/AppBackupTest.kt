@@ -397,4 +397,183 @@ class AppBackupTest {
         assertTrue(restored.libraryMissing)
         assertEquals(0, restored.playlists)
     }
+
+    // --- playlists from and into the library ---
+
+    private fun name(raw: String) =
+        mockk<org.oxycblt.musikr.tag.Name.Known> {
+            io.mockk.every { this@mockk.raw } returns raw
+        }
+
+    private fun song(path: String, title: String, artist: String, album: String) =
+        mockk<org.oxycblt.musikr.Song>(relaxed = true) {
+            io.mockk.every { this@mockk.path } returns
+                org.oxycblt.musikr.fs.Path(
+                    mockk(relaxed = true),
+                    org.oxycblt.musikr.fs.Components.parseUnix(path),
+                )
+            io.mockk.every { this@mockk.name } returns name(title)
+            val credited =
+                mockk<org.oxycblt.musikr.Artist> {
+                    io.mockk.every { this@mockk.name } returns name(artist)
+                }
+            io.mockk.every { artists } returns listOf(credited)
+            val onAlbum =
+                mockk<org.oxycblt.musikr.Album> {
+                    io.mockk.every { this@mockk.name } returns name(album)
+                }
+            io.mockk.every { this@mockk.album } returns onAlbum
+        }
+
+    private fun playlist(title: String, songs: List<org.oxycblt.musikr.Song>) =
+        mockk<org.oxycblt.musikr.Playlist> {
+            io.mockk.every { name } returns name(title)
+            io.mockk.every { this@mockk.songs } returns songs
+        }
+
+    private fun libraryWith(
+        songs: List<org.oxycblt.musikr.Song>,
+        playlists: List<org.oxycblt.musikr.Playlist> = emptyList(),
+    ): MusicRepository {
+        val library =
+            mockk<org.oxycblt.musikr.Library> {
+                io.mockk.every { this@mockk.songs } returns songs
+                io.mockk.every { this@mockk.playlists } returns playlists
+            }
+        return mockk(relaxed = true) { io.mockk.every { this@mockk.library } returns library }
+    }
+
+    @Test
+    fun thePlaylistsOfTheLibraryAreInTheBackup() = runBlocking {
+        val a = song("Music/a.mp3", "A", "X", "Al")
+        val b = song("Music/b.mp3", "B", "Y", "Bl")
+        val music = libraryWith(listOf(a, b), listOf(playlist("Gym", listOf(b, a))))
+        val backup =
+            AppBackup(
+                    context,
+                    repository,
+                    music,
+                    { _, _ -> DocumentFile.fromFile(folder.root) },
+                    { day },
+                )
+                .also { it.folder = treeUri }
+        backup.run()
+        val read = backup.read(Uri.fromFile(File(folder.root, "noxio_2026-11-09.zip")))!!
+        assertEquals(1, read.info.playlists)
+        assertEquals(
+            listOf(
+                BackupPlaylist(
+                    "Gym",
+                    listOf(
+                        BackupSong("Music/b.mp3", "B", "Y", "Bl"),
+                        BackupSong("Music/a.mp3", "A", "X", "Al"),
+                    ),
+                )
+            ),
+            read.playlists,
+        )
+    }
+
+    @Test
+    fun withoutALibraryThePlaylistsOfTheLastBackupAreKept() = runBlocking {
+        val a = song("Music/a.mp3", "A", "X", "Al")
+        val first =
+            AppBackup(
+                    context,
+                    repository,
+                    libraryWith(listOf(a), listOf(playlist("Gym", listOf(a)))),
+                    { _, _ -> DocumentFile.fromFile(folder.root) },
+                    { day },
+                )
+                .also { it.folder = treeUri }
+        first.run()
+        val noLibrary = mockk<MusicRepository>(relaxed = true)
+        io.mockk.every { noLibrary.library } returns null
+        day = day.plusDays(7)
+        val second =
+            AppBackup(
+                context,
+                repository,
+                noLibrary,
+                { _, _ -> DocumentFile.fromFile(folder.root) },
+                { day },
+            )
+        second.run()
+        val read = second.read(Uri.fromFile(File(folder.root, "noxio_2026-11-16.zip")))!!
+        assertEquals(listOf("Gym"), read.playlists.map { it.name })
+    }
+
+    @Test
+    fun restoredPlaylistsFindTheirSongsByPathOrByName() = runBlocking {
+        val moved = song("Other/a.mp3", "A", "X", "Al")
+        val same = song("Music/b.mp3", "B", "Y", "Bl")
+        val music = libraryWith(listOf(moved, same), listOf(playlist("Existing", emptyList())))
+        val backup =
+            AppBackup(
+                context,
+                repository,
+                music,
+                { _, _ -> DocumentFile.fromFile(folder.root) },
+                { day },
+            )
+        val restored =
+            backup.restore(
+                data(
+                    emptyMap(),
+                    listOf(
+                        BackupPlaylist(
+                            "Night",
+                            listOf(
+                                // Found by its path.
+                                BackupSong("Music/b.mp3", "B", "Y", "Bl"),
+                                // Moved, so found by its title, artist and album.
+                                BackupSong("Music/a.mp3", "A", "X", "Al"),
+                                // Not in the library.
+                                BackupSong("Music/c.mp3", "C", "Z", "Cl"),
+                            ),
+                        ),
+                        // Already there, so it is not made a second time.
+                        BackupPlaylist(
+                            "Existing",
+                            listOf(BackupSong("Music/b.mp3", "B", "Y", "Bl")),
+                        ),
+                        // None of its songs is there, so there is nothing to make.
+                        BackupPlaylist("Gone", listOf(BackupSong("x.mp3", "X", "X", "X"))),
+                    ),
+                )
+            )
+        io.mockk.coVerify(exactly = 1) { music.createPlaylist("Night", listOf(same, moved)) }
+        io.mockk.coVerify(exactly = 0) { music.createPlaylist("Existing", any()) }
+        io.mockk.coVerify(exactly = 0) { music.createPlaylist("Gone", any()) }
+        assertEquals(1, restored.playlists)
+        assertEquals(2, restored.missingSongs)
+        assertFalse(restored.libraryMissing)
+    }
+
+    @Test
+    fun aFileThatIsNoBackupReadsAsNothing() {
+        val file = File(folder.root, "photo.zip").apply { writeText("no zip") }
+        assertNull(backupInto().read(Uri.fromFile(file)))
+        assertNull(backupInto().read(Uri.fromFile(File(folder.root, "missing.zip"))))
+    }
+
+    @Test
+    fun theNextRunFollowsTheSchedule() {
+        val backup = backupInto()
+        val now = java.time.ZonedDateTime.of(2026, 11, 10, 13, 0, 0, 0, java.time.ZoneId.of("UTC"))
+        assertNull(backup.nextRun(now))
+        backup.schedule = BackupSchedule(BackupSchedule.Frequency.DAILY, hour = 3)
+        assertEquals(now.plusHours(14), backup.nextRun(now))
+    }
+
+    @Test
+    fun aBackupRightAwayIsQueuedOnceWithoutPlanningTheNext() {
+        androidx.work.testing.WorkManagerTestInitHelper.initializeTestWorkManager(context)
+        val work = androidx.work.WorkManager.getInstance(context)
+        backupInto().backUpSoon()
+        val queued =
+            work.getWorkInfosByTag(org.oxycblt.auxio.stats.StatsBackupWorker::class.java.name).get()
+        assertEquals(1, queued.size)
+        assertTrue(work.getWorkInfosForUniqueWork(AppBackup.WORK_NAME).get().isEmpty())
+    }
 }
