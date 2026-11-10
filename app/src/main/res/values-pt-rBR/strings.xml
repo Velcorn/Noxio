@@ -239,7 +239,6 @@
     <string name="fmt_deletion_info">Apagar %s? Esta ação não pode ser desfeita.</string>
     <string name="lbl_demo">Demo</string>
     <string name="lbl_imported_playlist">Playlist importada</string>
-    <string name="lbl_parent_detail">Visualizar</string>
     <string name="lng_playlist_imported">Playlist importada</string>
     <string name="lng_playlist_exported">Playlist exportada</string>
     <string name="err_import_failed">Não foi possível importar uma playlist deste arquivo</string>

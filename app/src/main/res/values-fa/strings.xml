@@ -78,7 +78,6 @@
     <string name="lbl_artist_details">رفتن به بخش هنرمند</string>
     <string name="lbl_album_details">رفتن به آلبوم</string>
     <string name="lbl_song_detail">دیدن مشخصات</string>
-    <string name="lbl_parent_detail">نما</string>
     <string name="lbl_share">ارسال</string>
     <string name="lbl_props">مشخصات آهنگ</string>
     <string name="lbl_path">مسیر</string>

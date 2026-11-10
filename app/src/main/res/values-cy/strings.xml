@@ -137,7 +137,6 @@
     <string name="lbl_artist_details">Mynd i\'r artist</string>
     <string name="lbl_album_details">Mynd i\'r albwm</string>
     <string name="lbl_song_detail">Gweld priodweddau</string>
-    <string name="lbl_parent_detail">Gweld</string>
     <string name="lbl_share">Rhannu</string>
     <string name="lbl_path">Llwybr</string>
     <string name="lbl_shuffle_shortcut_short">Chwarae ar hap</string>

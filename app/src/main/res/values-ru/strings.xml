@@ -243,7 +243,6 @@
     <string name="set_square_covers">Использовать квадратные обложки альбомов</string>
     <string name="set_square_covers_desc">Обрезать все обложки альбомов до соотношения сторон 1:1</string>
     <string name="lbl_song">Трек</string>
-    <string name="lbl_parent_detail">Вид</string>
     <string name="lbl_sort_mode">Сортировать по</string>
     <string name="lbl_sort_direction">Направление</string>
     <string name="lbl_selection">Выберите</string>

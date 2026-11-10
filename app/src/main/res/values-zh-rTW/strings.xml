@@ -116,7 +116,6 @@
     <string name="lbl_export">匯出</string>
     <string name="lbl_export_playlist">匯出播放清單</string>
     <string name="lbl_empty_playlist">空的播放清單</string>
-    <string name="lbl_parent_detail">檢視</string>
     <string name="lbl_feedback">傳送意見</string>
     <string name="lng_observing">正在檢查媒體變更…</string>
     <string name="set_content_desc">設定載入音樂和影像方式</string>

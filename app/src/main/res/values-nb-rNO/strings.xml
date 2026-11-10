@@ -58,7 +58,6 @@
     <string name="lbl_disc">Platenummer</string>
     <string name="lbl_artist_details">Gå til artist</string>
     <string name="lbl_album_details">Gå til album</string>
-    <string name="lbl_parent_detail">Vis</string>
     <string name="lbl_share">Del</string>
     <string name="lbl_size">Størrelse</string>
     <string name="lbl_bitrate">Bitrate</string>

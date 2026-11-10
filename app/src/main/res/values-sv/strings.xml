@@ -255,7 +255,6 @@
     <string name="err_export_failed">Kunde inte importera spellistan till denna fil</string>
     <string name="lbl_empty_playlist">Tom spellista</string>
     <string name="lbl_import_playlist">Importera spellista</string>
-    <string name="lbl_parent_detail">Visa</string>
     <string name="lbl_path">Sökväg</string>
     <string name="lbl_replaygain_track">ReplayGain Spårbaserad Volymjustering</string>
     <string name="lbl_replaygain_album">ReplayGain Albumbaserad Volymjustering</string>

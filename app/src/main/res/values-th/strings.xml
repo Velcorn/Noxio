@@ -78,7 +78,6 @@
     <string name="lbl_artist_details">ไปที่ศิลปิน</string>
     <string name="lbl_album_details">ไปที่อัลบั้ม</string>
     <string name="lbl_song_detail">ดูคุณสมบัติ</string>
-    <string name="lbl_parent_detail">ดู</string>
     <string name="lbl_share">แชร์</string>
     <string name="lbl_props">คุณสมบัติเพลง</string>
     <string name="lbl_path">พาธ</string>

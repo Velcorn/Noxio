@@ -214,7 +214,6 @@
     <string name="desc_queue_bar">कतार खोलें</string>
     <string name="clr_red">लाल</string>
     <string name="lbl_song">गीत</string>
-    <string name="lbl_parent_detail">देखें</string>
     <string name="set_separators_warning">चेतावनी: इस सेटिंग का उपयोग करने से कुछ टैग को गलत तरीके से एकाधिक मान के रूप में व्याख्या किया जा सकता है. आप बैकस्लैश (\\) के साथ अवांछित विभाजक वर्णों को उपसर्ग करके इसे हल कर सकते हैं।</string>
     <string name="set_hide_collaborators_desc">केवल उन कलाकारों को दिखाएँ जिन्हें सीधे एल्बम पर श्रेय दिया जाता है (अच्छी तरह से टैग की गई लाइब्रेरी पर अच्छा काम करता है)</string>
     <string name="set_cover_mode_balanced">तेज</string>

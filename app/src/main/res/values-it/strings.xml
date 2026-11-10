@@ -241,7 +241,6 @@
     <string name="set_square_covers">Forza copertine album quadrate</string>
     <string name="set_square_covers_desc">Adatta tutte le copertine degli album ad una visualizzazione 1:1</string>
     <string name="lbl_song">Brano</string>
-    <string name="lbl_parent_detail">Visualizza</string>
     <string name="lbl_sort_mode">Ordina per</string>
     <string name="lbl_imported_playlist">Playlist esterna</string>
     <string name="err_export_failed">Impossibile esportare la playlist in questo file</string>

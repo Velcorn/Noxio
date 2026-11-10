@@ -112,7 +112,6 @@
     <string name="lbl_artist_details">கலைஞரிடம் செல்லுங்கள்</string>
     <string name="lbl_album_details">ஆல்பத்திற்குச் செல்லுங்கள்</string>
     <string name="lbl_song_detail">பண்புகளைக் காண்க</string>
-    <string name="lbl_parent_detail">பார்வை</string>
     <string name="lbl_share">பங்கு</string>
     <string name="lbl_props">பாடல் பண்புகள்</string>
     <string name="lbl_path">பாதை</string>

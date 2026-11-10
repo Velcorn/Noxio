@@ -200,6 +200,10 @@ interface StatsRepository {
      */
     suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int
 
+    /** Sum up the listening of [year], see [yearInReview]. */
+    suspend fun yearInReview(year: Int, unknownArtist: String = "Unknown artist"): YearInReview =
+        yearInReview(emptyList(), year, unknownArtist)
+
     /**
      * Look closer at one artist, album or song of the stats, see [summarizeItem].
      *
@@ -232,6 +236,9 @@ class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : S
         range: LongRange,
         unknownArtist: String,
     ) = summarizeItem(dao.all(), category, key, period, range, unknownArtist)
+
+    override suspend fun yearInReview(year: Int, unknownArtist: String) =
+        yearInReview(dao.all(), year, unknownArtist)
 
     override suspend fun importCsv(files: List<StatsCsvImport.Parsed>): Int {
         // Skip dated plays that are already there, so importing a backup twice is harmless.

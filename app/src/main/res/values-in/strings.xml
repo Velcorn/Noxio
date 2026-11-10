@@ -205,7 +205,6 @@
     <string name="lng_playlist_imported">Daftar putar diimpor</string>
     <string name="lng_playlist_exported">Daftar putar diekspor</string>
     <string name="lng_playlist_deleted">Daftar putar dihapus</string>
-    <string name="lbl_parent_detail">Tampilkan</string>
     <string name="set_exclude_non_music">Kecualikan item non-musik</string>
     <string name="set_square_covers">Paksa sampul album kotak</string>
     <string name="set_square_covers_desc">Potong semua sampul album ke aspek rasio 1:1</string>

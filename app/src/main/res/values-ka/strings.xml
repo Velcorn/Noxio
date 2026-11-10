@@ -58,7 +58,6 @@
     <string name="lbl_shuffle">შემთხვევითი მუსიკა</string>
     <string name="lbl_share">გაზიარება</string>
     <string name="lbl_format">ფორმატი</string>
-    <string name="lbl_parent_detail">ნახვა</string>
     <string name="lbl_props">სიმღერის პარამეტრები</string>
     <string name="lbl_song_detail">პარამეტრების ნახვა</string>
     <string name="lbl_size">ზომა</string>

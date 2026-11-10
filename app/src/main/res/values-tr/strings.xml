@@ -242,7 +242,6 @@
     <string name="set_square_covers_desc">Tüm albüm kapaklarını 1:1 en boy oranında kırp</string>
     <string name="fmt_editing">%s düzenleniyor</string>
     <string name="lbl_sort_mode">Sıralama kriteri</string>
-    <string name="lbl_parent_detail">Görünüm</string>
     <string name="lbl_song">Şarkı</string>
     <string name="lng_playlist_deleted">Çalma listesi silindi</string>
     <string name="lbl_report">Rapor</string>

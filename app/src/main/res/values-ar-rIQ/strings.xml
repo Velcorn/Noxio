@@ -182,7 +182,6 @@
     <string name="lbl_rename">إعادة التسمية</string>
     <string name="lng_playlist_added">تمت الإضافة إلى قائمة التشغيل</string>
     <string name="lbl_sort_mode">رتب حسب</string>
-    <string name="lbl_parent_detail">مشاهدة</string>
     <string name="lbl_confirm_delete_playlist">حذف قائمة التشغيل؟</string>
     <string name="lng_playlist_deleted">تم حذف قائمة التشغيل</string>
     <string name="lbl_report">تقرير</string>

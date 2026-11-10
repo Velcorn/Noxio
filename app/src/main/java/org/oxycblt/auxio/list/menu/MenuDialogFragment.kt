@@ -85,6 +85,7 @@ abstract class MenuDialogFragment<M : Menu> :
         binding.menuOptionRecycler.apply {
             adapter = menuAdapter
             itemAnimator = null
+            addItemDecoration(MenuGroupDivider(requireContext()))
         }
 
         // --- VIEWMODEL SETUP ---

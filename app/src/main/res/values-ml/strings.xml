@@ -88,7 +88,6 @@
     <string name="lbl_delete">ഇല്ലാതാക്കുക</string>
     <string name="lbl_rename">പേരുമാറ്റുക</string>
     <string name="set_theme_auto">സ്വയമേവ</string>
-    <string name="lbl_parent_detail">കാണുക</string>
     <string name="lbl_share">പങ്കിടുക</string>
     <string name="lbl_appears_on">ദൃശ്യമാകുന്നു</string>
 </resources>

@@ -240,7 +240,6 @@
     <string name="set_square_covers">Forzar carátulas de álbum cuadradas</string>
     <string name="set_square_covers_desc">Recorta todas las portadas de los álbumes a una relación de aspecto 1:1</string>
     <string name="lbl_song">Canción</string>
-    <string name="lbl_parent_detail">Vista</string>
     <string name="lbl_sort_mode">Ordenar por</string>
     <string name="lbl_sort_direction">Dirección</string>
     <string name="desc_selection_image">Selección de imágenes</string>

@@ -1,17 +1,21 @@
 # Noxio roadmap
 
 ## Open
-- [ ] Shareable "Wrapped" cards: a yearly summary of the listening stats
+Nothing planned right now.
 
 ## Needs a check on a phone
 Built and unit tested where there is logic, and looked at on an emulator, but not yet confirmed on a real device:
 - Sleep timer: hold play/pause for the timer sheet, countdown inside play/pause, the timer pauses with playback, custom duration up to 599 minutes, its own notification with a live countdown, +10 min and Stop, finish last song, fade-out, shake to restart
 - Backup: an automatic backup at its chosen hour, and Restore from backup (playlists especially)
 - Minimal and default launcher icon in Kvaesitso (no background layer, so it is not cut to the icon shape)
+- Item menus: shorter options and playlist group dividers (no automated screen tests; visual review pending)
+- Year in review cards on a phone screen
 - Musicolet monthly files: their file naming is a guess (weekly files are confirmed)
 - No back buttons anywhere, the back gesture only
 
 ## Done
+- Shorter item menus: duplicate Play, Shuffle and View entries removed; queue actions first, playlist management grouped with Delete last; audio sharing kept for songs
+- Year in review ("Wrapped"): five cards to swipe through, share or save (the year with its months, top artist, top songs, top album, and a summary), from the menu of the listening stats
 - Listening stats: top artists, albums and songs with plays and time per week, month, year or all time, swiping between artists, albums and songs, a closer look at a single artist, album or song, and colorful cards to share or save as an image
 - Musicolet weekly and monthly "Most played songs" files import into their week or month, spread over its days (weekly preferred, a re-import replaces); imported plays count as estimated: for weeks listened, month and year bars and the first and last play (with ≈), not for days listened or day bars
 - CSV export and import of the full listening history, with Musicolet-compatible columns

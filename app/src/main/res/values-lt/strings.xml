@@ -241,7 +241,6 @@
     <string name="fmt_editing">Redaguojama „%s“</string>
     <string name="lbl_appears_on">Pasirodo</string>
     <string name="lbl_song">Daina</string>
-    <string name="lbl_parent_detail">Peržiūrėti</string>
     <string name="set_square_covers_desc">Apkarpyti visus albumų viršelius iki 1:1 kraštinių koeficiento.</string>
     <string name="set_square_covers">Priversti kvadratinių albumų viršelius</string>
     <string name="lbl_sort_mode">Rikiuoti pagal</string>

@@ -243,7 +243,6 @@
     <string name="set_square_covers_desc">Przytnij okładki do formatu 1:1</string>
     <string name="set_square_covers">Wymuś kwadratowe okładki</string>
     <string name="lbl_song">Utwór</string>
-    <string name="lbl_parent_detail">Widok</string>
     <string name="lbl_sort_mode">Sortuj według</string>
     <string name="lbl_sort_direction">Kierunek</string>
     <string name="def_album_count">Brak albumów</string>

@@ -78,7 +78,6 @@
     <string name="lbl_artist_details">Prejsť na interpreta</string>
     <string name="lbl_album_details">Prejsť na album</string>
     <string name="lbl_song_detail">Zobraziť vlastnosti</string>
-    <string name="lbl_parent_detail">Zobraziť</string>
     <string name="lbl_share">Zdielať</string>
     <string name="lbl_props">Vlastnosti skladby</string>
     <string name="lbl_path">Cesta</string>

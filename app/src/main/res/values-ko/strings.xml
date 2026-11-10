@@ -243,7 +243,6 @@
     <string name="lng_playlist_deleted">재생 목록을 삭제했습니다.</string>
     <string name="fmt_editing">%s 편집 중</string>
     <string name="lbl_song">노래</string>
-    <string name="lbl_parent_detail">보기</string>
     <string name="set_square_covers">정사각형 앨범 커버 강제</string>
     <string name="set_square_covers_desc">모든 앨범 커버를 가로세로 1:1 비율로 자릅니다.</string>
     <string name="lbl_sort_direction">방향</string>

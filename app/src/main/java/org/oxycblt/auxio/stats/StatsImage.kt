@@ -178,15 +178,24 @@ object StatsImage {
             text.alpha = 255
         }
 
-        if (content.rows.isNotEmpty() || content.bars.isNotEmpty()) {
+        if (
+            content.tiles.isNotEmpty() && (content.rows.isNotEmpty() || content.bars.isNotEmpty())
+        ) {
             text.typeface = Typeface.DEFAULT_BOLD
             text.textSize = 34f
             text.alpha = 217
             canvas.drawText(content.sectionTitle.uppercase(), MARGIN, SECTION_Y, text)
             text.alpha = 255
         }
-        content.rows.take(3).forEachIndexed { index, row ->
-            drawRow(canvas, paint, text, index, SECTION_Y + 44f + index * ITEM_ROW_HEIGHT, row)
+        if (content.tiles.isEmpty()) {
+            // Without tiles the rows take their place, as on the overview card: up to five.
+            content.rows.take(5).forEachIndexed { index, row ->
+                drawRow(canvas, paint, text, index, FIRST_ROW_Y + index * ROW_HEIGHT, row)
+            }
+        } else {
+            content.rows.take(3).forEachIndexed { index, row ->
+                drawRow(canvas, paint, text, index, SECTION_Y + 44f + index * ITEM_ROW_HEIGHT, row)
+            }
         }
         if (content.rows.isEmpty()) {
             drawBars(canvas, paint, text, content.bars)

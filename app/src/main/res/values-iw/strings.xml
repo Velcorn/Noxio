@@ -216,7 +216,6 @@
     <string name="clr_yellow">צהוב</string>
     <string name="fmt_deletion_info">למחוק את %s? פעולה זו לא ניתן לביטול.</string>
     <string name="lbl_song">שיר</string>
-    <string name="lbl_parent_detail">הצגה</string>
     <string name="set_square_covers">הכרחת עטיפות אלבום מרובעות</string>
     <string name="set_rescan_desc">ריקון מטמון התגיות וטעינת ספריית המוזיקה מחדש במלואה (איטי יותר, אך יותר שלם)</string>
     <string name="lbl_sort_mode">מיון על פי</string>

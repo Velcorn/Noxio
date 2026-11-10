@@ -240,7 +240,6 @@
     <string name="set_square_covers">Prisili kvadratične omote albuma</string>
     <string name="set_square_covers_desc">Odreži sve omote albuma na omjer 1:1</string>
     <string name="lbl_song">Pjesma</string>
-    <string name="lbl_parent_detail">Pogledaj</string>
     <string name="lbl_sort_mode">Razvrstaj po</string>
     <string name="lbl_sort_direction">Smjer</string>
     <string name="desc_selection_image">Slika odabira</string>

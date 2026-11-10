@@ -234,7 +234,6 @@
     <string name="lbl_export_playlist">Exportă playlistul</string>
     <string name="lbl_import">Importă</string>
     <string name="err_import_failed">Nu se poate importa un playlist din acest fișier</string>
-    <string name="lbl_parent_detail">Vizualizează</string>
     <string name="set_system_database">Sistem</string>
     <string name="lng_system_database">Încarcă muzica detectată automat de sistemul de operare Android. Este mai rapid, dar mai puțin fiabil. Nu suportă funcții dependente de sistemul de fișiere, cum ar fi cover.jpg.</string>
 </resources>

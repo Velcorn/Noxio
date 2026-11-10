@@ -67,7 +67,6 @@
     <string name="lbl_play_next">Spela nest</string>
     <string name="lbl_artist_details">Syn artist</string>
     <string name="lbl_song_detail">Syn eigenskapar</string>
-    <string name="lbl_parent_detail">Syn</string>
     <string name="lbl_bitrate">Bitrate</string>
     <string name="lbl_sample_rate">Samplingsfrekvens</string>
     <string name="lbl_replaygain_track">ReplayGain-sporjustering</string>

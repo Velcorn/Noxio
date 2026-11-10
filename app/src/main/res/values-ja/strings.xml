@@ -262,7 +262,6 @@
     <string name="cnt_mp4">%sを含むMPEG-4</string>
     <string name="lbl_report">報告</string>
     <string name="lbl_sort_direction">順列</string>
-    <string name="lbl_parent_detail">表示</string>
     <string name="lng_empty_songs">あなたの曲はここに表示されます</string>
     <string name="lng_empty_albums">あなたのアルバムはここに表示されます</string>
     <string name="lng_empty_artists">あなたのアーティストはここに表示されます</string>

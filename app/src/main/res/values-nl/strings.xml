@@ -263,7 +263,6 @@
     <string name="set_square_covers_desc">Snijd alle albumhoezen bij tot een verhouding van 1:1</string>
     <string name="lbl_error_info">Fout informatie</string>
     <string name="lbl_copied">Gekopieerd</string>
-    <string name="lbl_parent_detail">Bekijk</string>
     <string name="lbl_selection">Selectie</string>
     <string name="lbl_empty_playlist">Lege afspeellijst</string>
     <string name="lbl_import_playlist">Importeer afspeellijst</string>

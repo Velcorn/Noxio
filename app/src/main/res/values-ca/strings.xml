@@ -78,7 +78,6 @@
     <string name="lbl_artist_details">Vés a l\'artista</string>
     <string name="lbl_album_details">Vés a l\'àlbum</string>
     <string name="lbl_song_detail">Mostra les propietats</string>
-    <string name="lbl_parent_detail">Mostra</string>
     <string name="lbl_share">Comparteix</string>
     <string name="lbl_props">Propietats de la cançó</string>
     <string name="lbl_path">Camí</string>

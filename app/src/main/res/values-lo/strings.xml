@@ -78,7 +78,6 @@
     <string name="lbl_artist_details">ໄປຫາສິນລະປິນ</string>
     <string name="lbl_album_details">ໄປຫາອາລະບໍາ</string>
     <string name="lbl_song_detail">ເບິ່ງຄຸນສົມບັດ</string>
-    <string name="lbl_parent_detail">ເບິ່ງ</string>
     <string name="lbl_share">ແບ່ງປັນ</string>
     <string name="lbl_props">ຄຸນສົມບັດຂອງເພງ</string>
     <string name="lbl_path">ທີ່ຢູ່ໄຟລ໌ (Path)</string>

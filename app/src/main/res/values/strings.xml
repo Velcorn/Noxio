@@ -253,7 +253,6 @@
     <string name="lbl_artist_details">Go to artist</string>
     <string name="lbl_album_details">Go to album</string>
     <string name="lbl_song_detail">View properties</string>
-    <string name="lbl_parent_detail">View</string>
     <string name="lbl_share">Share</string>
 
     <string name="lbl_props">Song properties</string>
@@ -614,4 +613,18 @@
     <string name="fmt_sleep_notification_paused">Paused · %s remaining</string>
     <string name="fmt_sleep_range">1–%d min</string>
     <string name="desc_sleep_timer_hold">Play or pause; hold for sleep timer</string>
+    <string name="lbl_stats_wrapped">Year in review</string>
+    <string name="fmt_stats_wrapped_title">Your %s</string>
+    <string name="lbl_stats_wrapped_subtitle">Your year in music</string>
+    <string name="fmt_stats_wrapped_summary">My %s</string>
+    <string name="fmt_stats_wrapped_more">%1$s more than in %2$s</string>
+    <string name="fmt_stats_wrapped_less">%1$s less than in %2$s</string>
+    <string name="lbl_stats_wrapped_songs">Different songs</string>
+    <string name="lbl_stats_wrapped_artists">Different artists</string>
+    <string name="lbl_stats_wrapped_top_artist">Top artist</string>
+    <string name="lbl_stats_wrapped_top_album">Top album</string>
+    <string name="fmt_stats_wrapped_busiest_month">Busiest month: %s</string>
+    <string name="fmt_stats_wrapped_busiest_day">Busiest day: %s</string>
+    <string name="fmt_stats_wrapped_empty">Nothing was played in %s yet</string>
+    <string name="fmt_stats_wrapped_page">%1$d / %2$d</string>
 </resources>

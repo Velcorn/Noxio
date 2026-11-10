@@ -18,6 +18,7 @@
  
 package org.oxycblt.auxio.stats
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -67,7 +68,14 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
             dismiss()
             return
         }
-        val content = content(details)
+        val content =
+            itemImageContent(
+                requireContext(),
+                details.rank,
+                details.query.period,
+                details.range,
+                details.stats,
+            )
         val image = StatsImage.renderItem(requireContext(), content)
         bitmap = image
 
@@ -94,120 +102,6 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
         bitmap = null
     }
 
-    private fun content(details: StatsViewModel.Details): StatsItemImageContent {
-        val context = requireContext()
-        val stats = details.stats
-        val period = details.query.period
-        val rangeLabel = StatsFormat.range(context, period, details.range)
-        val rankLine =
-            getString(
-                when (stats.category) {
-                    StatsCategory.ARTISTS -> R.string.fmt_stats_item_artist
-                    StatsCategory.ALBUMS -> R.string.fmt_stats_item_album
-                    StatsCategory.SONGS -> R.string.fmt_stats_item_song
-                },
-                details.rank,
-                rangeLabel,
-            )
-        val labels =
-            StatsFormat.bucketLabels(period, stats.bucketUnit, stats.buckets.map { it.startMs })
-        val mostPlays = stats.buckets.maxOfOrNull { it.plays } ?: 0
-        return StatsItemImageContent(
-            category = stats.category,
-            name = stats.name,
-            lines =
-                listOfNotNull(
-                    stats.subtitle?.ifEmpty { null },
-                    rankLine,
-                    if (stats.estimatedPlays > 0) {
-                        resources.getQuantityString(
-                            R.plurals.fmt_stats_item_estimated,
-                            stats.estimatedPlays,
-                            stats.estimatedPlays,
-                        )
-                    } else {
-                        null
-                    },
-                ),
-            tiles =
-                listOf(
-                    StatsItemImageContent.Tile(
-                        stats.plays.toString(),
-                        getString(R.string.lbl_stats_item_plays),
-                    ),
-                    StatsItemImageContent.Tile(
-                        StatsFormat.listened(context, stats.listenedMs),
-                        getString(R.string.lbl_stats_item_time),
-                    ),
-                    StatsItemImageContent.Tile(
-                        StatsFormat.percent(stats.share),
-                        getString(R.string.lbl_stats_item_share),
-                    ),
-                    if (stats.countsWeeks) {
-                        StatsItemImageContent.Tile(
-                            stats.weeksPlayed.toString(),
-                            getString(R.string.lbl_stats_item_weeks),
-                        )
-                    } else {
-                        StatsItemImageContent.Tile(
-                            // Imported plays have no real day.
-                            if (stats.daysPlayed == 0 && stats.estimatedPlays > 0) "–"
-                            else stats.daysPlayed.toString(),
-                            getString(R.string.lbl_stats_item_days),
-                        )
-                    },
-                ),
-            sectionTitle =
-                getString(
-                    if (stats.topSongs.isEmpty()) R.string.lbl_stats_item_over_time
-                    else R.string.lbl_stats_top_songs
-                ),
-            rows =
-                stats.topSongs.map {
-                    StatsImageContent.Row(
-                        it.name,
-                        // The artist is in the heading already.
-                        null,
-                        StatsFormat.plays(context, it.plays),
-                        StatsFormat.listened(context, it.listenedMs),
-                    )
-                },
-            bars =
-                if (mostPlays == 0) {
-                    emptyList()
-                } else {
-                    stats.buckets.mapIndexed { index, bucket ->
-                        StatsItemImageContent.Bar(bucket.plays.toFloat() / mostPlays, labels[index])
-                    }
-                },
-            footerStart =
-                stats.firstPlayedMs?.let {
-                    getString(
-                        if (stats.firstPlayEstimated) R.string.fmt_stats_item_first_estimated
-                        else R.string.fmt_stats_item_first,
-                        StatsFormat.date(context, it),
-                    )
-                } ?: "",
-            // Inside a period the total of all time is the other number of interest. All time has
-            // it at the top already.
-            footerEnd =
-                if (period != StatsPeriod.ALL) {
-                    getString(
-                        R.string.fmt_stats_item_total,
-                        StatsFormat.plays(context, stats.allTimePlays),
-                    )
-                } else {
-                    stats.lastPlayedMs?.let {
-                        getString(
-                            if (stats.lastPlayEstimated) R.string.fmt_stats_item_last_estimated
-                            else R.string.fmt_stats_item_last,
-                            StatsFormat.date(context, it),
-                        )
-                    } ?: ""
-                },
-        )
-    }
-
     /** The text of the image, for a screen reader. */
     private fun describe(content: StatsItemImageContent) =
         (listOf(content.name) +
@@ -221,4 +115,122 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
     companion object {
         const val TAG = "StatsItemDialog"
     }
+}
+
+/** The card of a single artist, album or song, at its [rank] in the [period] of [range]. */
+internal fun itemImageContent(
+    context: Context,
+    rank: Int,
+    period: StatsPeriod,
+    range: LongRange,
+    stats: ItemStats,
+): StatsItemImageContent {
+    val rangeLabel = StatsFormat.range(context, period, range)
+    val rankLine =
+        context.getString(
+            when (stats.category) {
+                StatsCategory.ARTISTS -> R.string.fmt_stats_item_artist
+                StatsCategory.ALBUMS -> R.string.fmt_stats_item_album
+                StatsCategory.SONGS -> R.string.fmt_stats_item_song
+            },
+            rank,
+            rangeLabel,
+        )
+    val labels =
+        StatsFormat.bucketLabels(period, stats.bucketUnit, stats.buckets.map { it.startMs })
+    val mostPlays = stats.buckets.maxOfOrNull { it.plays } ?: 0
+    return StatsItemImageContent(
+        category = stats.category,
+        name = stats.name,
+        lines =
+            listOfNotNull(
+                stats.subtitle?.ifEmpty { null },
+                rankLine,
+                if (stats.estimatedPlays > 0) {
+                    context.resources.getQuantityString(
+                        R.plurals.fmt_stats_item_estimated,
+                        stats.estimatedPlays,
+                        stats.estimatedPlays,
+                    )
+                } else {
+                    null
+                },
+            ),
+        tiles =
+            listOf(
+                StatsItemImageContent.Tile(
+                    stats.plays.toString(),
+                    context.getString(R.string.lbl_stats_item_plays),
+                ),
+                StatsItemImageContent.Tile(
+                    StatsFormat.listened(context, stats.listenedMs),
+                    context.getString(R.string.lbl_stats_item_time),
+                ),
+                StatsItemImageContent.Tile(
+                    StatsFormat.percent(stats.share),
+                    context.getString(R.string.lbl_stats_item_share),
+                ),
+                if (stats.countsWeeks) {
+                    StatsItemImageContent.Tile(
+                        stats.weeksPlayed.toString(),
+                        context.getString(R.string.lbl_stats_item_weeks),
+                    )
+                } else {
+                    StatsItemImageContent.Tile(
+                        // Imported plays have no real day.
+                        if (stats.daysPlayed == 0 && stats.estimatedPlays > 0) "–"
+                        else stats.daysPlayed.toString(),
+                        context.getString(R.string.lbl_stats_item_days),
+                    )
+                },
+            ),
+        sectionTitle =
+            context.getString(
+                if (stats.topSongs.isEmpty()) R.string.lbl_stats_item_over_time
+                else R.string.lbl_stats_top_songs
+            ),
+        rows =
+            stats.topSongs.map {
+                StatsImageContent.Row(
+                    it.name,
+                    // The artist is in the heading already.
+                    null,
+                    StatsFormat.plays(context, it.plays),
+                    StatsFormat.listened(context, it.listenedMs),
+                )
+            },
+        bars =
+            if (mostPlays == 0) {
+                emptyList()
+            } else {
+                stats.buckets.mapIndexed { index, bucket ->
+                    StatsItemImageContent.Bar(bucket.plays.toFloat() / mostPlays, labels[index])
+                }
+            },
+        footerStart =
+            stats.firstPlayedMs?.let {
+                context.getString(
+                    if (stats.firstPlayEstimated) R.string.fmt_stats_item_first_estimated
+                    else R.string.fmt_stats_item_first,
+                    StatsFormat.date(context, it),
+                )
+            } ?: "",
+        // Inside a period the total of all time is the other number of interest. All time has
+        // it at the top already.
+        footerEnd =
+            if (period != StatsPeriod.ALL) {
+                context.getString(
+                    R.string.fmt_stats_item_total,
+                    StatsFormat.plays(context, stats.allTimePlays),
+                )
+            } else {
+                stats.lastPlayedMs?.let {
+                    context.getString(
+                        if (stats.lastPlayEstimated) R.string.fmt_stats_item_last_estimated
+                        else R.string.fmt_stats_item_last,
+                        StatsFormat.date(context, it),
+                    )
+                } ?: ""
+            },
+    )
 }

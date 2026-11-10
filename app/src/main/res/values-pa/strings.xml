@@ -237,7 +237,6 @@
     <string name="set_square_covers">ਵਰਗੀਕ੍ਰਿਤ ਐਲਬਮ ਕਵਰ ਫੋਰਸ ਕਰੋ</string>
     <string name="set_square_covers_desc">ਸਾਰੇ ਐਲਬਮ ਕਵਰਾਂ ਨੂੰ 1:1 ਦੇ ਆਕਾਰ ਅਨੁਪਾਤ ਤੱਕ ਕਾਂਟ-ਛਾਂਟ ਕਰੋ</string>
     <string name="lbl_song">ਗੀਤ</string>
-    <string name="lbl_parent_detail">ਵੇਖੋ</string>
     <string name="lbl_sort_mode">ਸੌਰਟ ਕਰੋ</string>
     <string name="lbl_sort_direction">ਦਿਸ਼ਾ</string>
     <string name="lbl_selection">ਚੋਣ</string>

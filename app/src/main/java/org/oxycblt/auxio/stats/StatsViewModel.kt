@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.OutputStream
+import java.util.Calendar
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -165,6 +166,41 @@ constructor(
 
     /** Read an imported stats file. [fileName] tells which week a Musicolet export is for. */
     fun parseCsv(text: String, fileName: String?) = StatsCsvImport.parse(text, fileName)
+
+    /** A year in review with a closer look at its top artist and album, for the Wrapped cards. */
+    data class Wrapped(
+        val review: YearInReview,
+        val topArtist: ItemStats?,
+        val topAlbum: ItemStats?,
+    )
+
+    /**
+     * The year the Wrapped cards are about: the one that is shown in the year view, otherwise the
+     * current one.
+     */
+    fun wrappedYear(): Int {
+        val ui = ui.value
+        val calendar = Calendar.getInstance()
+        if (ui != null && ui.query.period == StatsPeriod.YEAR) {
+            calendar.timeInMillis = ui.range.first
+        }
+        return calendar.get(Calendar.YEAR)
+    }
+
+    /** Sum up [year] for the Wrapped cards. */
+    suspend fun loadWrapped(year: Int): Wrapped =
+        withContext(Dispatchers.IO) {
+            val unknown = context.getString(R.string.def_artist)
+            val review = repository.yearInReview(year, unknown)
+            suspend fun look(category: StatsCategory, item: RankedItem?) = item?.let {
+                repository.itemStats(category, it.key, StatsPeriod.YEAR, review.range, unknown)
+            }
+            Wrapped(
+                review,
+                look(StatsCategory.ARTISTS, review.topArtist),
+                look(StatsCategory.ALBUMS, review.topAlbum),
+            )
+        }
 
     /** Write the full play history as CSV. Must be called off the main thread. */
     suspend fun exportCsv(out: OutputStream) = repository.exportCsv(out)

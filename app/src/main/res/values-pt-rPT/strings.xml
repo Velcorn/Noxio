@@ -243,7 +243,6 @@
     <string name="set_square_covers_desc">Recortar à capa dos álbuns numa proporção de 1:1</string>
     <string name="fmt_editing">A editar %s</string>
     <string name="lbl_sort_mode">Ordenar por</string>
-    <string name="lbl_parent_detail">Visualizar</string>
     <string name="lbl_song">Música</string>
     <string name="lbl_confirm_delete_playlist">Apagar lista de reprodução?</string>
     <string name="lng_playlist_deleted">Lista de reprodução eliminada</string>

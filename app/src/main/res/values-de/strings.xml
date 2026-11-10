@@ -237,7 +237,6 @@
     <string name="set_square_covers">Quadratische Album-Cover erzwingen</string>
     <string name="set_square_covers_desc">Alle Album-Cover auf ein Seitenverhältnis von 1:1 zuschneiden</string>
     <string name="lbl_song">Lied</string>
-    <string name="lbl_parent_detail">Ansehen</string>
     <string name="lbl_sort_direction">Richtung</string>
     <string name="lbl_sort_mode">Sortieren nach</string>
     <string name="desc_selection_image">Auswahl-Bild</string>
@@ -467,4 +466,18 @@
     <string name="fmt_sleep_notification_paused">Pausiert · noch %s</string>
     <string name="fmt_sleep_range">1–%d Min.</string>
     <string name="desc_sleep_timer_hold">Wiedergabe starten oder pausieren; für den Sleep-Timer gedrückt halten</string>
+    <string name="lbl_stats_wrapped">Jahresrückblick</string>
+    <string name="fmt_stats_wrapped_title">Dein %s</string>
+    <string name="lbl_stats_wrapped_subtitle">Dein Jahr in Musik</string>
+    <string name="fmt_stats_wrapped_summary">Mein %s</string>
+    <string name="fmt_stats_wrapped_more">%1$s mehr als %2$s</string>
+    <string name="fmt_stats_wrapped_less">%1$s weniger als %2$s</string>
+    <string name="lbl_stats_wrapped_songs">Verschiedene Lieder</string>
+    <string name="lbl_stats_wrapped_artists">Verschiedene Künstler</string>
+    <string name="lbl_stats_wrapped_top_artist">Top-Künstler</string>
+    <string name="lbl_stats_wrapped_top_album">Top-Album</string>
+    <string name="fmt_stats_wrapped_busiest_month">Stärkster Monat: %s</string>
+    <string name="fmt_stats_wrapped_busiest_day">Stärkster Tag: %s</string>
+    <string name="fmt_stats_wrapped_empty">%s wurde noch nichts gehört</string>
+    <string name="fmt_stats_wrapped_page">%1$d / %2$d</string>
 </resources>

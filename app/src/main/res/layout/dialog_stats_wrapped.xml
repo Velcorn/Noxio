@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/wrapped_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/wrapped_pager"
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        android:layout_marginHorizontal="@dimen/spacing_medium" />
+
+    <TextView
+        android:id="@+id/wrapped_page"
+        style="@style/Widget.Auxio.TextView.Secondary.Compact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:gravity="center"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_medium"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginBottom="@dimen/spacing_medium"
+        android:orientation="horizontal">
+
+        <org.oxycblt.auxio.ui.RippleFixMaterialButton
+            android:id="@+id/share_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_small"
+            android:layout_weight="1"
+            android:text="@string/lbl_stats_share" />
+
+        <org.oxycblt.auxio.ui.RippleFixMaterialButton
+            android:id="@+id/share_save"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/lbl_stats_save_image" />
+
+    </LinearLayout>
+</LinearLayout>

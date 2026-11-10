@@ -4,7 +4,7 @@
 # creates that holds logic.
 #
 # Left out on purpose, as they only wire views together and have nothing a JVM test can check:
-#   screens and dialogs (stats/StatsFragment, stats/StatsShareDialog, stats/StatsItemDialog, playback/timer/SleepTimerDialog,
+#   screens and dialogs (stats/StatsFragment, stats/StatsShareDialog, stats/StatsItemDialog, stats/StatsWrappedDialog, playback/timer/SleepTimerDialog,
 #   settings/categories/BackupPreferenceFragment, detail/sort/ArtistAlbumSortDialog) and the dependency
 #   injection module (stats/StatsModule). They still need a look on a device.
 #
@@ -36,5 +36,7 @@ ui/HorizontalSwipe.kt
 ui/LauncherIcon.kt
 playback/queue/QueueOrder.kt
 stats/StatsItem.kt
+stats/StatsWrapped.kt
 
 playback/ui/button/TimerPlaybackButton.kt
+list/menu/MenuGroupDivider.kt

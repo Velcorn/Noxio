@@ -98,6 +98,11 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 menuInflater.inflate(R.menu.toolbar_stats, menu)
                 setOnMenuItemClickListener {
                     when (it.itemId) {
+                        R.id.action_wrapped -> {
+                            StatsWrappedDialog.of(statsModel.wrappedYear())
+                                .show(childFragmentManager, StatsWrappedDialog.TAG)
+                            true
+                        }
                         R.id.action_export_stats -> {
                             exportLauncher.launch("noxio-stats-${LocalDate.now()}.csv")
                             true

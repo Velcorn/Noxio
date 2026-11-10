@@ -56,7 +56,6 @@
     <string name="lbl_artist_details">Отиди на изпълнител</string>
     <string name="lbl_album_details">Отиди на албум</string>
     <string name="lbl_song_detail">Преглед на свойства</string>
-    <string name="lbl_parent_detail">Преглед</string>
     <string name="lbl_share">Сподели</string>
     <string name="lbl_props">Свойства на песента</string>
     <string name="lbl_path">Път</string>
