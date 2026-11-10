@@ -55,6 +55,20 @@ android {
         }
     }
 
+    signingConfigs {
+        // The real release key. CI passes it as environment variables from repository secrets, the
+        // key file itself is never committed. Without them (local builds) the release falls back
+        // to the throwaway dev key above.
+        if (System.getenv("NOXIO_KEYSTORE_FILE")) {
+            release {
+                storeFile file(System.getenv("NOXIO_KEYSTORE_FILE"))
+                storePassword System.getenv("NOXIO_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("NOXIO_KEY_ALIAS")
+                keyPassword System.getenv("NOXIO_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -63,7 +77,7 @@ android {
         }
 
         release {
-            signingConfig signingConfigs.dev
+            signingConfig System.getenv("NOXIO_KEYSTORE_FILE") ? signingConfigs.release : signingConfigs.dev
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"

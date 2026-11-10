@@ -16,6 +16,7 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 
 ## Releases
 - Pushing a tag `v*` runs `.github/workflows/release.yml`, which builds a signed release APK and publishes it as a GitHub Release (a hyphen in the tag, like `v1.0.0-dev.5`, makes it a pre-release). Obtainium follows these.
+- Final releases (tags without a hyphen, like `v1.0.0`) are signed with the real key from the repository secrets `NOXIO_KEYSTORE_BASE64`, `NOXIO_KEYSTORE_PASSWORD`, `NOXIO_KEY_ALIAS` and `NOXIO_KEY_PASSWORD`; the key file is never committed. Do not tag a final release before those secrets exist.
 - Dev builds are signed with a throwaway key in `keystore/dev.jks`. Replace it with a secret-backed key before real releases.
 - Nothing is tested on a device by the agent, and screens have no automated tests. Say so instead of claiming a feature works.
 
