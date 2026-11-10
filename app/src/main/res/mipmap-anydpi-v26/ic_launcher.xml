@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- No background: the crescent is drawn straight onto what is behind the icon. -->
-    <background android:drawable="@android:color/transparent"/>
+    <!-- No background layer on purpose, not even a transparent one: a launcher that cuts icons to
+         a shape (Kvaesitso does, also with an icon pack) only leaves an icon alone when it has no
+         background, and would otherwise cut pieces off the crescent. -->
     <foreground android:drawable="@drawable/ic_launcher_foreground"/>
     <monochrome android:drawable="@drawable/ic_launcher_monochrome"/>
 </adaptive-icon>

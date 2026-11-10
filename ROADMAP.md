@@ -15,7 +15,7 @@
 - [x] README screenshots retaken: ten shots of what differs from Auxio
 - [x] No back buttons left (search, settings, about, listening stats, detail pages), gestures only; needs a check on a device
 - [x] Listening stats: tap an artist, album or song for a closer look (plays, time, share of all listening, days listened, top songs or plays over time, first play and total) that can be shared or saved as an image; needs a check on a device
-- [x] Minimal icon without a background layer, so Kvaesitso no longer cuts it to its icon shape (seen with the pentagon and triangle shapes on an emulator); needs a check on a device
+- [x] Default and minimal icon without a background layer, so Kvaesitso no longer cuts them to its icon shape (seen with the pentagon and triangle shapes on an emulator); needs a check on a device
 - [x] Black theme: menus, dialogs, sheets, app bar and status bar pure black; grey shuffle and repeat in the notification; optional wavy seek bar
 - [x] Settings regrouped into five screens (Appearance, Home and player, Playback, Library, Listening stats)
 - [x] About page: Noxio links, Auxio credit and fork notice, upstream donate and supporters removed; needs a check on a device

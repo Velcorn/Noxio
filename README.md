@@ -69,13 +69,13 @@ What differs from Auxio, in the black theme on a Pixel 9 sized emulator with a m
 
 ## Minimal icon
 
-Besides the default icon, Noxio has a minimal version: the crescent, the play button and a star as thin white
+Besides the default icon, Noxio has a minimal version: the crescent, the play button and a star as white
 outlines with no background at all, drawn like the icons of [Arcticons](https://github.com/Donnnno/Arcticons) so it
 sits straight on your wallpaper and does not stand out in a launcher that uses that pack. Switch to it in Settings >
 Appearance > App icon. Any launcher shows the choice, since it is the app's own launcher icon, and launchers that
-support themed icons (like Kvaesitso) tint the single-color layer with your theme colors. The icon has no
+support themed icons (like Kvaesitso) tint the single-color layer with your theme colors. Neither icon has a
 background layer at all, so a launcher that cuts icons to a shape (Kvaesitso does, whatever the icon pack) leaves
-its lines whole.
+the crescent and the lines whole.
 
 ## Branches
 
