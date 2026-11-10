@@ -19,13 +19,9 @@
 package org.oxycblt.auxio.playback
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
 import android.text.format.DateUtils
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.updatePadding
@@ -33,7 +29,6 @@ import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.color.MaterialColors
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -162,9 +157,10 @@ class PlaybackPanelFragment :
         }
         binding.playbackSkipNext.setOnClickListener { playbackModel.next() }
         binding.playbackShuffle.setOnClickListener { playbackModel.toggleShuffled() }
-        binding.playbackSleepTimer.setOnClickListener {
+        binding.playbackPlayPause.setOnLongClickListener {
             L.d("Opening sleep timer")
             SleepTimerDialog().show(childFragmentManager, SleepTimerDialog.TAG)
+            true
         }
         binding.playbackMore?.setOnClickListener {
             playbackModel.song.value?.let {
@@ -234,33 +230,17 @@ class PlaybackPanelFragment :
     }
 
     private fun updateSleepTimer(state: SleepTimerState) {
-        val button = requireBinding().playbackSleepTimer
+        val button = requireBinding().playbackPlayPause
         countdownJob?.cancel()
+        button.countdown = null
         if (state is SleepTimerState.Active) {
-            // While a timer is running, the moon makes way for the time that is left.
-            button.icon = null
-            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, COUNTDOWN_TEXT_SP)
-            button.setTypeface(null, Typeface.BOLD)
-            button.setTextColor(
-                MaterialColors.getColor(button, androidx.appcompat.R.attr.colorPrimary)
-            )
             countdownJob =
                 viewLifecycleOwner.lifecycleScope.launch {
                     while (true) {
-                        button.text = remainingText(state)
+                        button.countdown = remainingText(state)
                         delay(COUNTDOWN_TICK_MS)
                     }
                 }
-        } else {
-            button.text = ""
-            button.setIconResource(R.drawable.ic_sleep_timer_24)
-            button.iconTint =
-                ColorStateList.valueOf(
-                    MaterialColors.getColor(
-                        button,
-                        com.google.android.material.R.attr.colorOnSurfaceVariant,
-                    )
-                )
         }
     }
 
@@ -268,12 +248,12 @@ class PlaybackPanelFragment :
     private fun remainingText(state: SleepTimerState.Active): String {
         val remainingMs =
             when (state.mode) {
-                is SleepTimerMode.Minutes -> state.endsAt - SystemClock.elapsedRealtime()
+                is SleepTimerMode.Minutes -> state.remainingMs()
                 SleepTimerMode.EndOfTrack ->
                     (playbackModel.song.value?.durationMs ?: 0L) -
                         playbackModel.positionDs.value * 100
             }
-        return DateUtils.formatElapsedTime(maxOf(0L, remainingMs) / 1000)
+        return DateUtils.formatElapsedTime((maxOf(0L, remainingMs) + 999) / 1000)
     }
 
     private fun updateSong(song: Song?) {
@@ -422,6 +402,5 @@ class PlaybackPanelFragment :
         const val COUNTDOWN_TICK_MS = 1000L
 
         /** The size of the countdown that takes the place of the moon icon. */
-        const val COUNTDOWN_TEXT_SP = 18f
     }
 }

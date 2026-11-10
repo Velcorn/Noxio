@@ -29,6 +29,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.annotation.OptIn
 import androidx.media3.common.C
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import kotlin.math.sqrt
@@ -74,11 +75,21 @@ class SleepTimerController(
     private var listeningForShake = false
     private val shakeDetector = ShakeDetector()
 
+    private val playbackListener =
+        object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                sleepTimer.setPlaying(isPlaying)
+            }
+        }
+
     fun attach() {
+        player.addListener(playbackListener)
+        sleepTimer.setPlaying(player.isPlaying)
         scope.launch { sleepTimer.state.collect(::onState) }
     }
 
     fun release() {
+        player.removeListener(playbackListener)
         scope.cancel()
         stopListeningForShake()
         notification.release()
@@ -113,7 +124,9 @@ class SleepTimerController(
                     is SleepTimerMode.Minutes -> {
                         onPauseAtEndChanged(false)
                         startListeningForShake()
-                        job = scope.launch { countdown(state) }
+                        if (state.pausedRemainingMs == null) {
+                            job = scope.launch { countdown(state) }
+                        }
                     }
                     SleepTimerMode.EndOfTrack -> {
                         onPauseAtEndChanged(true)

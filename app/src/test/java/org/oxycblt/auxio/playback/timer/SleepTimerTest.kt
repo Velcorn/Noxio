@@ -217,6 +217,103 @@ class SleepTimerTest {
     }
 
     @Test
+    fun pausesFreezeRemainingTimeAndResumingKeepsOnlyUnplayedTime() {
+        timer.start(SleepTimerMode.Minutes(10))
+        ShadowSystemClock.advanceBy(Duration.ofMinutes(3))
+        timer.setPlaying(false)
+        assertEquals(7 * 60_000L, active().remainingMs())
+        ShadowSystemClock.advanceBy(Duration.ofHours(2))
+        timer.setPlaying(false)
+        assertEquals(7 * 60_000L, active().remainingMs())
+        timer.setPlaying(true)
+        assertNull(active().pausedRemainingMs)
+        assertEquals(SystemClock.elapsedRealtime() + 7 * 60_000L, active().endsAt)
+        ShadowSystemClock.advanceBy(Duration.ofMinutes(2))
+        timer.setPlaying(false)
+        assertEquals(5 * 60_000L, active().remainingMs())
+    }
+
+    @Test
+    fun startingAndRestartingWhilePausedKeepsTheFullDurationFrozen() {
+        timer.setPlaying(false)
+        timer.start(SleepTimerMode.Minutes(5))
+        ShadowSystemClock.advanceBy(Duration.ofMinutes(10))
+        assertEquals(5 * 60_000L, active().remainingMs())
+        timer.reset()
+        assertEquals(5 * 60_000L, active().pausedRemainingMs)
+        timer.setPlaying(true)
+        ShadowSystemClock.advanceBy(Duration.ofMinutes(1))
+        assertEquals(4 * 60_000L, active().remainingMs())
+    }
+
+    @Test
+    fun extendingWhilePausedAddsToFrozenTimeAndNeverReachesTenHours() {
+        timer.start(SleepTimerMode.Minutes(590))
+        timer.setPlaying(false)
+        ShadowSystemClock.advanceBy(Duration.ofHours(1))
+        timer.extend(10)
+        assertEquals(599 * 60_000L, active().remainingMs())
+        timer.extend(10)
+        assertEquals(599 * 60_000L, active().pausedRemainingMs)
+        timer.extend(-10)
+        assertEquals(599 * 60_000L, active().remainingMs())
+        timer.setPlaying(true)
+        assertEquals(SystemClock.elapsedRealtime() + 599 * 60_000L, active().endsAt)
+    }
+
+    @Test
+    fun oldSavedDurationsAreClampedBelowTenHours() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putInt("noxio_sleep_last_minutes", 720)
+            .putInt("noxio_sleep_custom_minutes", 720)
+            .commit()
+        assertEquals(599, timer.lastMode.minutes)
+        assertEquals(599, timer.lastCustomMinutes)
+        timer.lastCustomMinutes = 999
+        assertEquals(599, timer.lastCustomMinutes)
+        timer.lastCustomMinutes = 0
+        assertEquals(1, timer.lastCustomMinutes)
+        assertEquals(599, SleepTimer.MAX_MINUTES)
+    }
+
+    @Test
+    fun pauseEventsWhileOffAndWaitingForTheLastSongDoNotArmAMinutesTimer() {
+        timer.setPlaying(false)
+        assertEquals(SleepTimerState.Off, timer.state.value)
+        timer.start(SleepTimerMode.EndOfTrack)
+        timer.setPlaying(true)
+        timer.setPlaying(false)
+        assertEquals(SleepTimerMode.EndOfTrack, active().mode)
+        assertNull(active().pausedRemainingMs)
+    }
+
+    @Test
+    fun elapsedTimersNeverShowANegativeRemainingTime() {
+        timer.start(SleepTimerMode.Minutes(1))
+        ShadowSystemClock.advanceBy(Duration.ofMinutes(2))
+        assertEquals(0L, active().remainingMs())
+        timer.setPlaying(false)
+        assertEquals(0L, active().remainingMs())
+    }
+
+    @Test
+    fun aPausedSleepTimerKeepsTheSessionAliveUntilCancelled() {
+        timer.setPlaying(false)
+        assertTrue(shouldStopIdlePlayback(false, true, timer.state.value))
+        timer.start(SleepTimerMode.Minutes(599))
+        ShadowSystemClock.advanceBy(Duration.ofHours(1))
+        assertFalse(shouldStopIdlePlayback(false, true, timer.state.value))
+        timer.cancel()
+        assertTrue(shouldStopIdlePlayback(false, true, timer.state.value))
+        assertFalse(shouldStopIdlePlayback(true, true, timer.state.value))
+        assertFalse(shouldStopIdlePlayback(false, false, timer.state.value))
+        timer.start(SleepTimerMode.EndOfTrack)
+        assertFalse(shouldStopIdlePlayback(false, true, timer.state.value))
+    }
+
+    @Test
     fun theNotificationCountsDownToTheWallClockTimeOfTheEnd() {
         assertEquals(
             1_000_000L + 60_000L,

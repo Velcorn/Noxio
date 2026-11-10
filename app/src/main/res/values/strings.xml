@@ -610,4 +610,8 @@
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
+    <string name="lbl_sleep_paused">Timer paused — resumes with playback</string>
+    <string name="fmt_sleep_notification_paused">Paused · %s remaining</string>
+    <string name="fmt_sleep_range">1–%d min</string>
+    <string name="desc_sleep_timer_hold">Play or pause; hold for sleep timer</string>
 </resources>

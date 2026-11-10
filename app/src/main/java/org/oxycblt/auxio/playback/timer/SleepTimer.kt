@@ -48,7 +48,9 @@ sealed interface SleepTimerState {
      *
      * @param mode How the timer ends.
      * @param endsAt When the timer ends, in [SystemClock.elapsedRealtime] milliseconds. Only
-     *   meaningful for [SleepTimerMode.Minutes], 0 otherwise.
+     *   meaningful for running [SleepTimerMode.Minutes], 0 otherwise.
+     * @param pausedRemainingMs Frozen remaining duration while playback is paused, null while
+     *   running.
      * @param fade Whether volume should fade out before playback stops.
      * @param finishSong Whether the song that is playing when the time is up is played to its end
      *   before playback stops, instead of stopping right away.
@@ -58,7 +60,12 @@ sealed interface SleepTimerState {
         val endsAt: Long,
         val fade: Boolean,
         val finishSong: Boolean = false,
-    ) : SleepTimerState
+        val pausedRemainingMs: Long? = null,
+    ) : SleepTimerState {
+        /** Frozen while paused; otherwise measured against the monotonic clock. */
+        fun remainingMs(now: Long = SystemClock.elapsedRealtime()): Long =
+            (pausedRemainingMs ?: (endsAt - now)).coerceAtLeast(0L)
+    }
 }
 
 /**
@@ -97,12 +104,15 @@ interface SleepTimer {
      */
     fun extend(minutes: Int)
 
+    /** Freeze or resume the countdown with actual playback, including external controls. */
+    fun setPlaying(playing: Boolean)
+
     /** Stop the timer without affecting playback. */
     fun cancel()
 
     companion object {
         const val MIN_MINUTES = 1
-        const val MAX_MINUTES = 12 * 60
+        const val MAX_MINUTES = 599
         const val DEFAULT_CUSTOM_MINUTES = 45
         const val DEFAULT_MINUTES = 30
         /** How much the notification's button adds to a running timer. */
@@ -117,24 +127,36 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
         PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     private val mutableState = MutableStateFlow<SleepTimerState>(SleepTimerState.Off)
 
+    private var playing = true
+
     override val state: StateFlow<SleepTimerState> = mutableState.asStateFlow()
 
     override val lastMode: SleepTimerMode.Minutes
         get() {
             // Older versions stored 0 for an end of track timer, which no longer exists.
             val minutes = sharedPreferences.getInt(KEY_LAST_MINUTES, 0)
-            return SleepTimerMode.Minutes(if (minutes > 0) minutes else SleepTimer.DEFAULT_MINUTES)
+            return SleepTimerMode.Minutes(
+                if (minutes > 0) minutes.coerceAtMost(SleepTimer.MAX_MINUTES)
+                else SleepTimer.DEFAULT_MINUTES
+            )
         }
 
     override var lastCustomMinutes: Int?
         get() =
             if (sharedPreferences.contains(KEY_CUSTOM_MINUTES)) {
-                sharedPreferences.getInt(KEY_CUSTOM_MINUTES, 0)
+                sharedPreferences
+                    .getInt(KEY_CUSTOM_MINUTES, SleepTimer.DEFAULT_CUSTOM_MINUTES)
+                    .coerceIn(SleepTimer.MIN_MINUTES, SleepTimer.MAX_MINUTES)
             } else {
                 null
             }
         set(value) = sharedPreferences.edit {
-            if (value != null) putInt(KEY_CUSTOM_MINUTES, value) else remove(KEY_CUSTOM_MINUTES)
+            if (value != null)
+                putInt(
+                    KEY_CUSTOM_MINUTES,
+                    value.coerceIn(SleepTimer.MIN_MINUTES, SleepTimer.MAX_MINUTES),
+                )
+            else remove(KEY_CUSTOM_MINUTES)
         }
 
     override var fade: Boolean
@@ -169,7 +191,14 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
             } else {
                 0L
             }
-        mutableState.value = SleepTimerState.Active(fixed, endsAt, fade, finishSong)
+        mutableState.value =
+            SleepTimerState.Active(
+                fixed,
+                endsAt,
+                fade,
+                finishSong,
+                if (!playing && fixed is SleepTimerMode.Minutes) fixed.minutes * 60_000L else null,
+            )
     }
 
     override fun reset() {
@@ -189,10 +218,30 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
     override fun extend(minutes: Int) {
         val current = mutableState.value as? SleepTimerState.Active ?: return
         if (current.mode is SleepTimerMode.Minutes) {
-            // Never more than the longest timer from now.
-            val latest = SystemClock.elapsedRealtime() + SleepTimer.MAX_MINUTES * 60_000L
+            val now = SystemClock.elapsedRealtime()
+            val remaining =
+                (current.remainingMs(now) + minutes.coerceAtLeast(0).toLong() * 60_000L)
+                    .coerceAtMost(SleepTimer.MAX_MINUTES * 60_000L)
             mutableState.value =
-                current.copy(endsAt = minOf(current.endsAt + minutes * 60_000L, latest))
+                current.copy(
+                    endsAt = now + remaining,
+                    pausedRemainingMs = if (current.pausedRemainingMs != null) remaining else null,
+                )
+        }
+    }
+
+    override fun setPlaying(playing: Boolean) {
+        this.playing = playing
+        val current = mutableState.value as? SleepTimerState.Active ?: return
+        if (current.mode !is SleepTimerMode.Minutes) return
+        if (!playing && current.pausedRemainingMs == null) {
+            mutableState.value = current.copy(pausedRemainingMs = current.remainingMs())
+        } else if (playing && current.pausedRemainingMs != null) {
+            mutableState.value =
+                current.copy(
+                    endsAt = SystemClock.elapsedRealtime() + current.pausedRemainingMs,
+                    pausedRemainingMs = null,
+                )
         }
     }
 

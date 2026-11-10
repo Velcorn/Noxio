@@ -40,7 +40,7 @@
         android:layout_marginBottom="@dimen/spacing_tiny"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/playback_controls_wrapper"
-        app:layout_constraintEnd_toStartOf="@+id/playback_sleep_timer"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/playback_pager"
         app:layout_constraintTop_toTopOf="@+id/playback_pager"
         app:layout_constraintVertical_chainStyle="packed">
@@ -63,18 +63,6 @@
 
     </LinearLayout>
 
-    <org.oxycblt.auxio.ui.RippleFixMaterialButton
-        android:id="@+id/playback_sleep_timer"
-        style="@style/Widget.Auxio.Button.Playback.More"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_small"
-        android:contentDescription="@string/lbl_sleep_timer"
-        app:icon="@drawable/ic_sleep_timer_24"
-        app:layout_constraintBottom_toBottomOf="@+id/playback_info_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/playback_info_container"
-        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small" />
 
     <org.oxycblt.auxio.playback.ui.ForcedLTRFrameLayout
         android:id="@+id/playback_controls_wrapper"
@@ -111,12 +99,12 @@
                 app:icon="@drawable/ic_skip_prev_24"
                 app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large.Narrow" />
 
-            <org.oxycblt.auxio.playback.ui.button.ScaledPlaybackButton
+            <org.oxycblt.auxio.playback.ui.button.TimerPlaybackButton
                 android:id="@+id/playback_play_pause"
                 style="@style/Widget.Auxio.Button.Playback.PlayPause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/desc_play_pause"
+                android:contentDescription="@string/desc_sleep_timer_hold"
                 app:icon="@drawable/sel_playing_state_24"
                 app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large"
                 tools:icon="@drawable/ic_play_24" />

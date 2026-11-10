@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.SystemClock
 import android.text.format.DateFormat
+import android.text.format.DateUtils
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -77,26 +78,34 @@ class SleepTimerNotification(private val context: Context) {
         when (state.mode) {
             is SleepTimerMode.Minutes -> {
                 val endsAtWallClock = wallClockOf(state.endsAt)
-                builder
-                    .setWhen(endsAtWallClock)
-                    .setUsesChronometer(true)
-                    .setChronometerCountDown(true)
-                    .setContentText(
-                        context.getString(
-                            R.string.fmt_sleep_notification_until,
-                            DateFormat.getTimeFormat(context).format(Date(endsAtWallClock)),
+                if (state.pausedRemainingMs != null) {
+                    builder
+                        .setShowWhen(false)
+                        .setContentText(
+                            context.getString(
+                                R.string.fmt_sleep_notification_paused,
+                                DateUtils.formatElapsedTime((state.remainingMs() + 999) / 1000),
+                            )
                         )
-                    )
-                    .addAction(
-                        0,
-                        context.getString(
-                            R.string.fmt_sleep_notification_extend,
-                            SleepTimer.EXTEND_MINUTES,
-                        ),
-                        context.newBroadcastPendingIntent(
-                            PlaybackActions.ACTION_EXTEND_SLEEP_TIMER
-                        ),
-                    )
+                } else
+                    builder
+                        .setWhen(endsAtWallClock)
+                        .setUsesChronometer(true)
+                        .setChronometerCountDown(true)
+                        .setContentText(
+                            context.getString(
+                                R.string.fmt_sleep_notification_until,
+                                DateFormat.getTimeFormat(context).format(Date(endsAtWallClock)),
+                            )
+                        )
+                builder.addAction(
+                    0,
+                    context.getString(
+                        R.string.fmt_sleep_notification_extend,
+                        SleepTimer.EXTEND_MINUTES,
+                    ),
+                    context.newBroadcastPendingIntent(PlaybackActions.ACTION_EXTEND_SLEEP_TIMER),
+                )
             }
             SleepTimerMode.EndOfTrack ->
                 builder

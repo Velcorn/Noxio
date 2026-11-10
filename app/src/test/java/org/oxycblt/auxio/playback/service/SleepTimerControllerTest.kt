@@ -22,6 +22,7 @@ import android.content.Context
 import android.hardware.SensorManager
 import android.os.SystemClock
 import androidx.media3.common.C
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.test.core.app.ApplicationProvider
 import java.lang.reflect.Proxy
@@ -38,6 +39,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.timer.SleepTimer
+import org.oxycblt.auxio.playback.timer.SleepTimerImpl
 import org.oxycblt.auxio.playback.timer.SleepTimerMode
 import org.oxycblt.auxio.playback.timer.SleepTimerState
 import org.robolectric.RobolectricTestRunner
@@ -79,6 +81,8 @@ class SleepTimerControllerTest {
             mutable.value = active.copy(mode = SleepTimerMode.EndOfTrack)
         }
 
+        override fun setPlaying(playing: Boolean) {}
+
         override fun extend(minutes: Int) {}
 
         override fun cancel() {
@@ -92,12 +96,22 @@ class SleepTimerControllerTest {
         var durationMs = C.TIME_UNSET
         var positionMs = 0L
 
+        val listeners = mutableListOf<Player.Listener>()
+
         val exo: ExoPlayer =
             Proxy.newProxyInstance(
                 ExoPlayer::class.java.classLoader,
                 arrayOf(ExoPlayer::class.java),
             ) { _, method, args ->
                 when (method.name) {
+                    "addListener" -> {
+                        listeners.add(args!![0] as Player.Listener)
+                        Unit
+                    }
+                    "removeListener" -> {
+                        listeners.remove(args!![0] as Player.Listener)
+                        Unit
+                    }
                     "getVolume" -> volume
                     "setVolume" -> volume = args!![0] as Float
                     "isPlaying" -> playing
@@ -203,11 +217,47 @@ class SleepTimerControllerTest {
     }
 
     @Test
-    fun aTimerThatLetsTheSongFinishPausesAtOnceIfNothingIsPlaying() {
+    fun actualPlaybackEventsFreezeTheTimerAndResumeItsFadeAndExpiry() {
+        val realTimer = SleepTimerImpl(context)
+        realTimer.finishSong = false
+        realTimer.fade = true
+        val realController =
+            SleepTimerController(context, player.exo, playbackManager, realTimer, scope) {}
+        realController.attach()
+        realTimer.start(SleepTimerMode.Minutes(1))
+        scope.testScheduler.runCurrent()
+        elapse(56_000)
+        assertEquals(0.25f, player.volume, 0.05f)
         player.playing = false
-        startMinutes(60, finishSong = true)
-        elapse(61_000)
+        player.listeners.toList().forEach { it.onIsPlayingChanged(false) }
+        scope.testScheduler.runCurrent()
+        assertEquals(1f, player.volume, 0f)
+        elapse(120_000)
+        assertEquals(0, pausedPlayback)
+        assertEquals(4_000L, (realTimer.state.value as SleepTimerState.Active).remainingMs())
+        player.playing = true
+        player.listeners.toList().forEach { it.onIsPlayingChanged(true) }
+        scope.testScheduler.runCurrent()
+        elapse(5_000)
         assertEquals(1, pausedPlayback)
+        assertEquals(SleepTimerState.Off, realTimer.state.value)
+        realController.release()
+        assertEquals(1, player.listeners.size) // Only the original controller remains.
+    }
+
+    @Test
+    fun attachingToAPausedPlayerStartsTimersFrozen() {
+        player.playing = false
+        val realTimer = SleepTimerImpl(context)
+        val realController =
+            SleepTimerController(context, player.exo, playbackManager, realTimer, scope) {}
+        realController.attach()
+        realTimer.start(SleepTimerMode.Minutes(1))
+        scope.testScheduler.runCurrent()
+        elapse(120_000)
+        assertEquals(60_000L, (realTimer.state.value as SleepTimerState.Active).remainingMs())
+        assertEquals(0, pausedPlayback)
+        realController.release()
     }
 
     @Test

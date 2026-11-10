@@ -41,7 +41,7 @@ import org.oxycblt.auxio.util.lazyReflectedMethod
  * @author Codex w/cleanup + cognitive ownership by Alexander Capehart (OxygenCobalt)
  */
 @SuppressLint("RestrictedApi")
-class ScaledPlaybackButton
+open class ScaledPlaybackButton
 @JvmOverloads
 constructor(
     context: Context,

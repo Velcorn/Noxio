@@ -37,6 +37,7 @@ import org.oxycblt.auxio.playback.state.DeferredPlayback
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.state.Progression
 import org.oxycblt.auxio.playback.timer.SleepTimer
+import org.oxycblt.auxio.playback.timer.shouldStopIdlePlayback
 import org.oxycblt.auxio.stats.PlayRecorder
 import org.oxycblt.auxio.widgets.WidgetComponent
 import org.oxycblt.musikr.MusicParent
@@ -113,10 +114,10 @@ private constructor(
     }
 
     private fun updateAutoStopTimer(isPlaying: Boolean) {
-        if (isPlaying) {
-            cancelAutoStop()
-        } else if (exoHolder.sessionOngoing) {
+        if (shouldStopIdlePlayback(isPlaying, exoHolder.sessionOngoing, sleepTimer.state.value)) {
             scheduleAutoStop()
+        } else {
+            cancelAutoStop()
         }
     }
 
@@ -129,6 +130,11 @@ private constructor(
         systemReceiver.attach()
         playRecorder.attach()
         playbackManager.addListener(this)
+        scope.launch {
+            sleepTimer.state.collect {
+                updateAutoStopTimer(playbackManager.progression.isPlaying)
+            }
+        }
         updateAutoStopTimer(playbackManager.progression.isPlaying)
         return sessionHolder.token
     }

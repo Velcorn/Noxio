@@ -36,3 +36,5 @@ ui/HorizontalSwipe.kt
 ui/LauncherIcon.kt
 playback/queue/QueueOrder.kt
 stats/StatsItem.kt
+
+playback/ui/button/TimerPlaybackButton.kt

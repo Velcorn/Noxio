@@ -1,7 +1,7 @@
 # Noxio roadmap
 
 ## Next
-- [ ] Sleep timer: built and unit tested (timer state, fade curve, shake detection), needs on-device testing (small moon next to ⋯ with countdown, own notification with live countdown, +10 min and Stop, 30 / custom / 60 min, finish last song, fade-out, shake to restart)
+- [ ] Sleep timer: built and unit tested (timer state, fade curve, shake detection), needs on-device testing (hold play/pause for the timer sheet, countdown inside play/pause, timer pauses with playback, custom duration capped at 599 minutes, own notification with live countdown, +10 min and Stop, 30 / custom / 60 min, finish last song, fade-out, shake to restart)
 - [x] Equalizer moved from the now playing toolbar to Settings > Playback
 - [x] Icon: Crescent and Sparkle (adaptive icon on pure black, themed icon layer, splash, notification glyph)
 - [x] Minimal launcher icon (white, no background), switchable in Settings > Appearance; needs a check on a device
@@ -37,4 +37,3 @@
 ## Ideas
 - More screenshots (settings, playlists, the share cards) and ones from a real device
 - Bottom bar on the now playing screen for jumping to Songs, Albums, Artists and Playlists (deferred)
-- Show the remaining time next to the toolbar icon (currently the icon is only tinted)

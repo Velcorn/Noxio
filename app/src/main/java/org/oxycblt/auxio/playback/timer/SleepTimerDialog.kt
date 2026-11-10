@@ -22,7 +22,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -45,8 +44,8 @@ import org.oxycblt.auxio.ui.ViewBindingBottomSheetDialogFragment
 import org.oxycblt.auxio.util.systemBarInsetsCompat
 
 /**
- * A bottom sheet for starting, checking and stopping the [SleepTimer]. Opened from the button above
- * the seek bar of the playback panel.
+ * A bottom sheet for starting, checking and stopping the [SleepTimer]. Opened by holding the
+ * play/pause button of the playback panel.
  *
  * The Custom tile doubles as the input: tap it to type a number of minutes, after which it shows "N
  * min". Tapping it again while selected edits the value again.
@@ -139,6 +138,7 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
             dismiss()
         }
 
+        binding.sleepCustomInput.hint = getString(R.string.fmt_sleep_range, SleepTimer.MAX_MINUTES)
         select(choice)
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -206,9 +206,9 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
         editing = false
         val binding = requireBinding()
         val minutes = binding.sleepCustomInput.text?.toString()?.toIntOrNull()
-        if (minutes != null && minutes in SleepTimer.MIN_MINUTES..SleepTimer.MAX_MINUTES) {
-            customMinutes = minutes
-            sleepTimer.lastCustomMinutes = minutes
+        if (minutes != null) {
+            customMinutes = minutes.coerceIn(SleepTimer.MIN_MINUTES, SleepTimer.MAX_MINUTES)
+            sleepTimer.lastCustomMinutes = customMinutes
         }
         binding.sleepCustomInput.clearFocus()
         context
@@ -272,13 +272,14 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
             }
             is SleepTimerMode.Minutes -> {
                 binding.sleepRemainingNote.setText(
-                    if (active.finishSong) R.string.lbl_sleep_stops_after_song_over
+                    if (active.pausedRemainingMs != null) R.string.lbl_sleep_paused
+                    else if (active.finishSong) R.string.lbl_sleep_stops_after_song_over
                     else R.string.lbl_sleep_stops_when_over
                 )
                 binding.sleepRestart.visibility = View.VISIBLE
                 // collectLatest cancels this suspend function as soon as the state changes.
                 while (true) {
-                    val remaining = active.endsAt - SystemClock.elapsedRealtime()
+                    val remaining = active.remainingMs()
                     binding.sleepRemaining.text = formatRemaining(remaining)
                     delay(TICK_MS)
                 }

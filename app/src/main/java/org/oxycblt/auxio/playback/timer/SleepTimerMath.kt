@@ -94,3 +94,10 @@ class ShakeDetector {
         private const val NEVER = Long.MIN_VALUE / 2
     }
 }
+
+/** A paused sleep timer must survive the service's normal inactivity timeout. */
+fun shouldStopIdlePlayback(
+    isPlaying: Boolean,
+    sessionOngoing: Boolean,
+    timer: SleepTimerState,
+): Boolean = !isPlaying && sessionOngoing && timer == SleepTimerState.Off
