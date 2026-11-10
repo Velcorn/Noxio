@@ -1,7 +1,7 @@
 # Noxio roadmap
 
 ## Next
-- [x] Build-output caching and CI native-library caching (including generated FFmpeg headers); release tags publish a smaller ARM64 APK alongside the unchanged universal filename. Cache speed gains still need a warm CI run.
+- [x] Build-output caching and CI native-library caching (including generated FFmpeg headers); release tags publish a smaller ARM64 APK alongside the unchanged universal filename. Local output-cache reuse and clean JNI rebuilds from cached libraries/headers verified; CI lint and tests pass. The first run populates caches.
 - [ ] Sleep timer: built and unit tested (timer state, fade curve, shake detection), needs on-device testing (hold play/pause for the timer sheet, countdown inside play/pause, timer pauses with playback, custom duration capped at 599 minutes, own notification with live countdown, +10 min and Stop, 30 / custom / 60 min, finish last song, fade-out, shake to restart)
 - [x] Equalizer moved from the now playing toolbar to Settings > Playback
 - [x] Icon: Crescent and Sparkle (adaptive icon on pure black, themed icon layer, splash, notification glyph)
