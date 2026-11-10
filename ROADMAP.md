@@ -13,6 +13,7 @@
 - [x] Themed-icon launchers (Kvaesitso) no longer clip the crescent; stats backup has a Back up now button and says that one file is replaced; search chips stay above the playback bar
 - [x] Default tab order Artists, Albums, Songs, Playlists; an order still at the old Auxio default is reset once, one set by hand is kept
 - [x] README screenshots retaken: ten shots of what differs from Auxio
+- [x] Importing weekly or monthly Musicolet lists asks whether to remove the undated plays of an earlier import, so All time does not count them twice
 - [x] Musicolet weekly and monthly "Most played songs" files import into their week or month, spread over its days (weekly preferred, re-importing replaces); imported plays are marked as estimated and left out of days listened, the chart and first/last play; needs a check on a device with real Musicolet files (the file naming of monthly files is a guess)
 - [x] Full backup (settings, listening history, playlists) in its own Settings > Backup screen, as noxio_YYYY-MM-DD.zip every day, week or month at a chosen day and hour, the last five kept, with a safeguard against writing an empty or much smaller backup over a good one, and Restore from backup; needs a check on a device (restoring playlists especially)
 - [x] German translation of everything Noxio added, and of the Auxio texts whose meaning Noxio changed

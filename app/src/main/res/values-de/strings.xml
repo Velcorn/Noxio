@@ -483,4 +483,11 @@
         <item quantity="one">%d Wiedergabe</item>
         <item quantity="other">%d Wiedergaben</item>
     </plurals>
+    <string name="lbl_stats_import_undated">Deine Wiedergaben vor Noxio ersetzen?</string>
+    <plurals name="fmt_stats_import_undated_desc">
+        <item quantity="one">Ein früherer Import hat %d Wiedergabe ohne Datum hinterlassen, die nur für Gesamt zählt. Die Wochen- und Monatslisten, die du importierst, enthalten dieselben Wiedergaben mit ihrer Woche oder ihrem Monat. Vor dem Import entfernen? Sonst zählt Gesamt sie doppelt.</item>
+        <item quantity="other">Ein früherer Import hat %d Wiedergaben ohne Datum hinterlassen, die nur für Gesamt zählen. Die Wochen- und Monatslisten, die du importierst, enthalten dieselben Wiedergaben mit ihrer Woche oder ihrem Monat. Vor dem Import entfernen? Sonst zählt Gesamt sie doppelt.</item>
+    </plurals>
+    <string name="lbl_stats_import_undated_remove">Entfernen</string>
+    <string name="lbl_stats_import_undated_keep">Behalten</string>
 </resources>

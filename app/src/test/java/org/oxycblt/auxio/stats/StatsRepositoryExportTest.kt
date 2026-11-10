@@ -43,6 +43,10 @@ class StatsRepositoryExportTest {
             this.events += events
         }
 
+        override suspend fun countBaseline() = events.count {
+            it.startedAt == PlayEvent.BASELINE_TIME
+        }
+
         override suspend fun deleteBaseline() {
             events.removeAll { it.startedAt == PlayEvent.BASELINE_TIME }
         }

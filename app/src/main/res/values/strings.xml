@@ -145,6 +145,13 @@
     <string name="lbl_stats_all">All time</string>
     <string name="lbl_stats_import_baseline">Import as your history before Noxio?</string>
     <string name="lbl_stats_import_baseline_desc">Play counts without a week or month in the file name are added to All time only, not to any week, month or year. They replace the ones of an earlier import. Several files are added together.</string>
+    <string name="lbl_stats_import_undated">Replace your plays from before Noxio?</string>
+    <plurals name="fmt_stats_import_undated_desc">
+        <item quantity="one">An earlier import left %d play without a date, which counts in All time only. The weekly and monthly lists you are importing hold the same listens with their week or month. Remove it before the import? Otherwise All time counts these listens twice.</item>
+        <item quantity="other">An earlier import left %d plays without a date, which count in All time only. The weekly and monthly lists you are importing hold the same listens with their week or month. Remove them before the import? Otherwise All time counts these listens twice.</item>
+    </plurals>
+    <string name="lbl_stats_import_undated_remove">Remove</string>
+    <string name="lbl_stats_import_undated_keep">Keep</string>
     <plurals name="fmt_stats_item_estimated">
         <item quantity="one">Includes %d imported play with an estimated time</item>
         <item quantity="other">Includes %d imported plays with estimated times</item>

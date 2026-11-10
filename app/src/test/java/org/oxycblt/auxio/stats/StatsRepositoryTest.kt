@@ -240,6 +240,10 @@ class StatsRepositoryTest {
             this.events += events
         }
 
+        override suspend fun countBaseline() = events.count {
+            it.startedAt == PlayEvent.BASELINE_TIME
+        }
+
         override suspend fun deleteBaseline() {
             events.removeAll { it.startedAt == PlayEvent.BASELINE_TIME }
         }
@@ -342,6 +346,16 @@ class StatsRepositoryTest {
         repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 2)), week)))
         val inWeek = dao.events.filter { it.startedAt in week.startMs until week.endMs }
         assertEquals(2, inWeek.size)
+    }
+
+    @Test
+    fun theUndatedPlaysCanBeCountedAndRemovedWithoutTouchingDatedOnes() = runBlocking {
+        repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 4)))))
+        repository.record(play("Live", startedAt = 5_000))
+        assertEquals(4, repository.undatedPlays())
+        repository.removeUndated()
+        assertEquals(0, repository.undatedPlays())
+        assertEquals(listOf("Live"), dao.events.map { it.title })
     }
 
     @Test
