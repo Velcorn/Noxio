@@ -5,7 +5,7 @@ Nothing planned right now.
 
 ## Needs a check on a phone
 Built and unit tested where there is logic, and looked at on an emulator, but not yet confirmed on a real device:
-- Sleep timer: hold play/pause for the timer sheet, countdown inside play/pause, the timer pauses with playback, custom duration up to 599 minutes, its own notification with a live countdown, +10 min and Stop, finish last song, fade-out, shake to restart
+- Sleep timer: hold play/pause for the timer sheet, countdown inside play/pause, the timer pauses with playback, custom duration up to 599 minutes, its own notification with a live countdown, +10 min, Restart and Stop, finish last song, fade-out, shake to restart
 - Backup: an automatic backup at its chosen hour, and Restore from backup (playlists especially)
 - Minimal and default launcher icon in Kvaesitso (no background layer, so it is not cut to the icon shape)
 - Settings alignment: short lists at the bottom; captured and visually checked on an emulator (no automated screen tests; user review and phone testing pending)

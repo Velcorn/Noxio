@@ -405,7 +405,7 @@
     <string name="fmt_sleep_notification_extend">+%d Min.</string>
     <string name="lbl_sleep_start">Starten</string>
     <string name="lbl_sleep_restart">Neu starten</string>
-    <string name="lbl_sleep_stop">Timer stoppen</string>
+    <string name="lbl_sleep_stop">Stoppen</string>
     <string name="lbl_sleep_stops_after_track">Die Wiedergabe stoppt nach diesem Titel</string>
     <string name="lbl_sleep_stops_when_over">Die Wiedergabe stoppt, wenn der Timer abläuft</string>
     <string name="lbl_sleep_stops_after_song_over">Die Wiedergabe stoppt, wenn das dann laufende Lied endet</string>

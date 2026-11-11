@@ -68,4 +68,13 @@ class TimerPlaybackButtonTest {
             }
         }
     }
+
+    @Test
+    fun digitsAreCenteredWithTheGlyphAbove() {
+        val (iconTop, baseline) =
+            timerStack(height = 100, iconSize = 24, iconInset = 5f, digitHeight = 20, gap = 6f)
+        // Digits from 40 to 60, the glyph ends 6 above them at 34 and starts 14 higher at 20.
+        assertEquals(60f, baseline, 0.001f)
+        assertEquals(20f, iconTop + 5f, 0.001f)
+    }
 }

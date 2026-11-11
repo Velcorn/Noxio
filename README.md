@@ -27,7 +27,7 @@ stats, stays in its own database or in files you export.
 ## What's different from Auxio
 
 - **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
-  The countdown shows in the play button and in a quiet notification with +10 min and Stop; it pauses with playback.
+  The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
   cards to share or save. A **year in review** with five cards to swipe through.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only

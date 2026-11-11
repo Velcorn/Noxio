@@ -236,7 +236,7 @@
     <string name="fmt_sleep_notification_extend">+%d min</string>
     <string name="lbl_sleep_start">Start</string>
     <string name="lbl_sleep_restart">Restart</string>
-    <string name="lbl_sleep_stop">Stop timer</string>
+    <string name="lbl_sleep_stop">Stop</string>
     <string name="lbl_sleep_stops_after_track">Playback stops after this track</string>
     <string name="lbl_sleep_stops_when_over">Playback stops when the timer ends</string>
     <string name="lbl_sleep_stops_after_song_over">Playback stops when the song that is playing then ends</string>

@@ -60,7 +60,10 @@ class SleepTimerNotificationTest {
         assertTrue(
             paused.extras.getCharSequence(Notification.EXTRA_TEXT).toString().contains("1:40:00")
         )
-        assertEquals(2, paused.actions.size)
+        assertEquals(
+            listOf("+10 min", "Restart", "Stop"),
+            paused.actions.map { it.title.toString() },
+        )
         notification.show(active)
         assertTrue(
             manager.allNotifications.single().extras.getBoolean(Notification.EXTRA_SHOW_CHRONOMETER)

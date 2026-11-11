@@ -106,6 +106,12 @@ class SleepTimerNotification(private val context: Context) {
                     ),
                     context.newBroadcastPendingIntent(PlaybackActions.ACTION_EXTEND_SLEEP_TIMER),
                 )
+                // Back to the full duration, like shaking the phone.
+                builder.addAction(
+                    0,
+                    context.getString(R.string.lbl_sleep_restart),
+                    context.newBroadcastPendingIntent(PlaybackActions.ACTION_RESET_SLEEP_TIMER),
+                )
             }
             SleepTimerMode.EndOfTrack ->
                 builder
