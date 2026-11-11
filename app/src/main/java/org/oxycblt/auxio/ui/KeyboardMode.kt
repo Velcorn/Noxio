@@ -38,11 +38,21 @@ object KeyboardMode {
     fun isActive(setting: Int, config: Configuration, autoValue: Int, onValue: Int): Boolean =
         when (setting) {
             onValue -> true
-            autoValue ->
-                config.keyboard == Configuration.KEYBOARD_QWERTY &&
-                    config.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
+            autoValue -> hasKeys(config)
             else -> false
         }
+
+    /**
+     * Whether [config] reports a hardware keyboard that is there and not folded away. Without one
+     * the mode keeps the search row with sort and more, so the screen still works by touch.
+     */
+    fun hasKeys(config: Configuration): Boolean =
+        config.keyboard == Configuration.KEYBOARD_QWERTY &&
+            config.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
+
+    /** Whether the mode is on but no keys were found, see [hasKeys]. */
+    fun isTouchOnly(context: Context): Boolean =
+        isActive(context) && !hasKeys(context.resources.configuration)
 
     /** Whether the mode is on now, read from the settings. */
     fun isActive(context: Context): Boolean {

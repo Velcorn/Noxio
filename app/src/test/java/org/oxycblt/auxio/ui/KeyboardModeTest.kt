@@ -66,6 +66,37 @@ class KeyboardModeTest {
     }
 
     @Test
+    fun keysAreOnlyThereWhenAKeyboardIsOut() {
+        assertTrue(
+            KeyboardMode.hasKeys(
+                config(Configuration.KEYBOARD_QWERTY, Configuration.HARDKEYBOARDHIDDEN_NO)
+            )
+        )
+        assertFalse(
+            KeyboardMode.hasKeys(
+                config(Configuration.KEYBOARD_QWERTY, Configuration.HARDKEYBOARDHIDDEN_YES)
+            )
+        )
+        assertFalse(
+            KeyboardMode.hasKeys(
+                config(Configuration.KEYBOARD_NOKEYS, Configuration.HARDKEYBOARDHIDDEN_YES)
+            )
+        )
+    }
+
+    @Test
+    fun switchedOnWithoutKeysTheScreenStaysUsableByTouch() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val key = context.getString(R.string.set_key_keyboard_mode)
+        // Robolectric reports no hardware keyboard.
+        prefs.edit { putInt(key, context.resources.getInteger(R.integer.keyboard_mode_on)) }
+        assertTrue(KeyboardMode.isTouchOnly(context))
+        prefs.edit { putInt(key, context.resources.getInteger(R.integer.keyboard_mode_off)) }
+        assertFalse(KeyboardMode.isTouchOnly(context))
+    }
+
+    @Test
     fun theSettingIsReadFromThePreferences() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)

@@ -132,6 +132,8 @@ class MainFragment :
     private var navMode = NavMode.NONE
     /** Whether the keyboard phone mode is on, see [KeyboardMode]. */
     private var keyboardMode = false
+    // The keyboard phone mode switched on without a keyboard: the search row stays for touch.
+    private var touchOnly = false
     private var navInsetBottom = 0
     private var keyboardLift = 0
     private var stripBaseTranslation = 0f
@@ -246,6 +248,7 @@ class MainFragment :
         }
 
         keyboardMode = KeyboardMode.isActive(requireContext())
+        touchOnly = keyboardMode && KeyboardMode.isTouchOnly(requireContext())
         (activity as? MainActivity)?.keyHandler = if (keyboardMode) ::handleKey else null
         if (keyboardMode && savedInstanceState == null) {
             // The overview of the keys shows once by itself, then from Ctrl+H or the settings.
@@ -494,8 +497,8 @@ class MainFragment :
         // Sort and more are in the header of the list on the pages of an album and a genre, which
         // have nothing to filter, so the row is not needed there at all.
         val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
-        binding.mainSort.isVisible = !ownHeader && !keyboardMode
-        binding.mainMore.isVisible = !ownHeader && !keyboardMode
+        binding.mainSort.isVisible = !ownHeader && (!keyboardMode || touchOnly)
+        binding.mainMore.isVisible = !ownHeader && (!keyboardMode || touchOnly)
         if (filter) {
             binding.mainSearchInput.setText(
                 if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery
@@ -676,8 +679,14 @@ class MainFragment :
     private fun showMoreMenu(anchor: View) {
         popupMenu(requireContext(), anchor).apply {
             inflate(R.menu.home_overflow)
+            // Without the floating button, new playlists are made from here.
+            val playlists = keyboardMode && homeModel.currentTabType.value == MusicType.PLAYLISTS
+            menu.findItem(R.id.action_new_playlist).isVisible = playlists
+            menu.findItem(R.id.action_import_playlist).isVisible = playlists
             setOnMenuItemClickListener {
                 when (it.itemId) {
+                    R.id.action_new_playlist -> musicModel.createPlaylist()
+                    R.id.action_import_playlist -> musicModel.importPlaylist()
                     R.id.action_stats -> homeModel.showStats()
                     R.id.action_settings -> homeModel.showSettings()
                     R.id.action_about -> homeModel.showAbout()
@@ -780,7 +789,7 @@ class MainFragment :
         // artist or a playlist page the filter shows while it is used.
         val filtering =
             binding.mainSearchInput.hasFocus() || binding.mainSearchInput.text.isNotEmpty()
-        val rowShown = shown && !ownHeader && (!keyboardMode || filtering)
+        val rowShown = shown && !ownHeader && (!keyboardMode || touchOnly || filtering)
         row.alpha = nav.alpha
         row.visibility =
             when {
@@ -1069,12 +1078,9 @@ class MainFragment :
         // If there are no songs, it's likely that the library has not been loaded, so
         // displaying the shuffle FAB makes no sense. We also don't want the fast scroll
         // popup to overlap with the FAB, so we hide the FAB when fast scrolling too.
-        // The keyboard phone mode shuffles with Ctrl+S instead of the floating button; the
-        // button for new playlists stays.
-        if (
-            shouldHideAllFabs(binding, songs, isFastScrolling) ||
-                (keyboardMode && tabType != MusicType.PLAYLISTS)
-        ) {
+        // The keyboard phone mode shuffles with Ctrl+S instead of the floating button, and new
+        // playlists are in the menu (Ctrl+M).
+        if (shouldHideAllFabs(binding, songs, isFastScrolling) || keyboardMode) {
             L.d("Hiding fab: [empty: ${songs.isEmpty()} scrolling: $isFastScrolling]")
             forceHideAllFabs()
         } else {
