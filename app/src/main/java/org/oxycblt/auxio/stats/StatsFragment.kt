@@ -208,7 +208,19 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
 
         val hasPlays = !stats.isEmpty
         binding.statsEmpty.isVisible = !hasPlays
-        binding.statsHero.isVisible = hasPlays
+        // On short screens the totals go into the title row to leave room for the card.
+        val shortScreen = resources.getBoolean(R.bool.noxio_short_screen)
+        binding.statsHero.isVisible = hasPlays && !shortScreen
+        binding.statsBarTitle.text =
+            if (hasPlays && shortScreen) {
+                getString(
+                    R.string.fmt_stats_totals,
+                    StatsFormat.listened(context, stats.listenedMs),
+                    StatsFormat.plays(context, stats.plays),
+                )
+            } else {
+                getString(R.string.lbl_stats)
+            }
         binding.statsCard.isVisible = hasPlays
         binding.statsMore.isVisible = hasPlays && items.size > COLLAPSED_ROWS
         binding.statsHeroTime.text = StatsFormat.listened(context, stats.listenedMs)

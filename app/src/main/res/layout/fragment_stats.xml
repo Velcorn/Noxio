@@ -265,6 +265,7 @@
         android:paddingEnd="@dimen/spacing_tiny">
 
         <TextView
+            android:id="@+id/stats_bar_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

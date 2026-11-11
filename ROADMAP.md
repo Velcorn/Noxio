@@ -13,10 +13,12 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 - Appearance: simplified settings, rounded UI and cover proportions (no automated screen tests; not tested on a device)
 - Item menus: shorter options and playlist group dividers (no automated screen tests; visual review pending)
 - Year in review cards on a phone screen
+- Short and square screens on the Clicks Communicator itself
 - Musicolet monthly files: their file naming is a guess (weekly files are confirmed)
 - No back buttons anywhere, the back gesture only
 
 ## Done
+- Short and square screens (under 480 dp of height, like the 1080 × 1200 Clicks Communicator): home tabs show icons only (labels kept for screen readers), the stats totals move into the bottom title row so the top list shows more rows, album, artist, genre and playlist headers lose the empty toolbar gap, and the player text is centered. Checked on an emulator at 1080 × 1200, 420 dpi; normal phones unchanged.
 - Compact player: centered square artwork above centered song details and a shorter full-width control row, with the seek bar retained on screens down to 300 dp available height. The redundant top heading is hidden on these short screens to leave room for the cover. Checked at a Communicator-like 1080 × 1200 resolution at 400 and 480 dpi; real-phone testing pending.
 - Sleep timer duration tiles: all three edit on the first tap, remember their values, and sort shortest to longest after confirmation; readable input and labels, with the active field kept above the keyboard. Defaults are 30 / 45 / 60 minutes, and edits remain capped at 1–599 minutes.
 - Settings: the main settings menu and Appearance, Playback, Library and Backup place short preference lists at the bottom above the navigation inset. A small fixed title bar sits below the options, matching About; the top toolbar is removed. Long lists start at the top and scroll above the title bar.

@@ -36,7 +36,8 @@ stats, stays in its own database or in files you export.
   five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
 - **One-handed layout:** search, sort and tabs at the bottom, a floating shuffle button, no back buttons (gestures
   only), no three-dot buttons on rows (long press for the menu), shorter item menus.
-- **Compact player:** centered artwork above compact controls and a visible seek bar on short and near-square screens.
+- **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
+  header, so more fits on screens like the Clicks Communicator.
 - **Queue** with search and sort; **playlists** you can search and sort.
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.

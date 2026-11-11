@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:paddingStart="@dimen/spacing_medium"
-                android:paddingTop="?attr/actionBarSize"
+                android:paddingTop="@dimen/spacing_small"
                 android:paddingEnd="@dimen/spacing_medium"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.85">

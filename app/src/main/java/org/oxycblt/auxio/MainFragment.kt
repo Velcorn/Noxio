@@ -545,6 +545,14 @@ class MainFragment :
             }
             shownTabTypes = types
         }
+        if (resources.getBoolean(R.bool.noxio_short_screen)) {
+            // Icons only on short screens; the label stays for screen readers.
+            for (i in 0 until binding.mainTabs.tabCount) {
+                val tab = binding.mainTabs.getTabAt(i) ?: continue
+                tab.contentDescription = tab.text
+                tab.text = null
+            }
+        }
         settingTabs = false
         selectCurrentTab(binding)
     }

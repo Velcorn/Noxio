@@ -222,6 +222,7 @@
     <string name="fmt_stats_item_last_estimated">Last play ≈ %s</string>
     <string name="fmt_stats_item_last">Last play %s</string>
     <string name="fmt_stats_item_total">%s in total</string>
+    <string name="fmt_stats_totals">%1$s · %2$s</string>
     <string name="lbl_sleep_end_of_track">End of track</string>
     <string name="lbl_sleep_minutes">Minutes</string>
     <string name="lbl_sleep_unit">min</string>

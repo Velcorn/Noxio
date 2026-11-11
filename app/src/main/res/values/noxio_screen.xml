@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- True on short screens (under 480 dp of height, like square phones or landscape), where
+         the home tabs drop their labels and the stats totals move into the bottom title row. -->
+    <bool name="noxio_short_screen">true</bool>
+</resources>

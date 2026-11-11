@@ -391,6 +391,7 @@
     <string name="fmt_stats_item_last_estimated">Zuletzt gehört ≈ %s</string>
     <string name="fmt_stats_item_last">Zuletzt gehört %s</string>
     <string name="fmt_stats_item_total">%s insgesamt</string>
+    <string name="fmt_stats_totals">%1$s · %2$s</string>
     <string name="lbl_sleep_end_of_track">Ende des Titels</string>
     <string name="lbl_sleep_minutes">Minuten</string>
     <string name="lbl_sleep_unit">Min.</string>
