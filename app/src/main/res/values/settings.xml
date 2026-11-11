@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="set_key_sleep_presets" translatable="false">noxio_sleep_presets</string>
+    <integer-array name="def_sleep_presets">
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+    </integer-array>
     <!-- Note: The old way of naming keys was to prefix them with KEY_. Now it's to prefix them with auxio_. -->
     <string name="set_key_ui" translatable="false">auxio_ui</string>
     <string name="set_key_music" translatable="false">auxio_music</string>

@@ -26,7 +26,7 @@ stats, stays in its own database or in files you export.
 
 ## What's different from Auxio
 
-- **Sleep timer:** hold play/pause. 30 min, 60 min or your own time, finish the last song, fade out, shake to restart.
+- **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
   The countdown shows in the play button and in a quiet notification with +10 min and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
   cards to share or save. A **year in review** with five cards to swipe through.
@@ -36,11 +36,12 @@ stats, stays in its own database or in files you export.
   five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
 - **One-handed layout:** search, sort and tabs at the bottom, a floating shuffle button, no back buttons (gestures
   only), no three-dot buttons on rows (long press for the menu), shorter item menus.
+- **Compact player:** centered artwork above compact controls and a visible seek bar on short and near-square screens.
 - **Queue** with search and sort; **playlists** you can search and sort.
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
 - **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed;
-  fixed appearance defaults, hidden files excluded, manual library refresh and native multi-value tags.
+  short lists and page titles at the bottom, fixed appearance defaults, hidden files excluded and manual refresh.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
 - **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Each include needs its own parent to overlay the editor on one duration tile. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MergeRootFrame"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <org.oxycblt.auxio.ui.RippleFixMaterialButton
+        android:id="@+id/duration_button"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        app:backgroundTint="@color/sel_sleep_duration_background"
+        app:strokeColor="@color/sel_sleep_duration_stroke"
+        android:textColor="?android:attr/textColorPrimary" />
+
+    <LinearLayout
+        android:id="@+id/duration_edit_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/duration_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="off"
+            android:contentDescription="@string/lbl_sleep_minutes"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="3"
+            android:minWidth="40dp"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textColorHint="?android:attr/textColorSecondary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/duration_input"
+            android:text="@string/lbl_sleep_unit"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:textColor="?android:attr/textColorPrimary" />
+
+    </LinearLayout>
+</FrameLayout>

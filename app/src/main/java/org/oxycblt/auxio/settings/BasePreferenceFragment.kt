@@ -22,20 +22,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.XmlRes
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.children
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.transition.MaterialSharedAxis
 import org.oxycblt.auxio.R
+import org.oxycblt.auxio.settings.ui.BottomAlignedPreferenceLayoutManager
 import org.oxycblt.auxio.settings.ui.IntListPreference
 import org.oxycblt.auxio.settings.ui.IntListPreferenceDialog
 import org.oxycblt.auxio.settings.ui.PreferenceHeaderItemDecoration
 import org.oxycblt.auxio.settings.ui.WrappedDialogPreference
-import org.oxycblt.auxio.ui.AuxioToolbar
+import org.oxycblt.auxio.ui.liftByBottomInset
 import org.oxycblt.auxio.util.systemBarInsetsCompat
 import timber.log.Timber as L
 
@@ -71,10 +73,13 @@ abstract class BasePreferenceFragment(@XmlRes private val screen: Int) :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<AppBarLayout>(R.id.preferences_appbar).liftOnScrollTargetViewId =
-            androidx.preference.R.id.recycler_view
-        view.findViewById<AuxioToolbar>(R.id.preferences_toolbar).apply {
-            title = preferenceScreen.title
+        view.findViewById<TextView>(R.id.preferences_title).text = preferenceScreen.title
+        val container = view.findViewById<View>(android.R.id.list_container)
+        val barHeight = resources.getDimensionPixelSize(R.dimen.size_detail_bottom_bar)
+        view.findViewById<View>(R.id.preferences_bar).liftByBottomInset { inset ->
+            container.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = barHeight + inset
+            }
         }
 
         preferenceManager.onDisplayPreferenceDialogListener = this
@@ -90,9 +95,10 @@ abstract class BasePreferenceFragment(@XmlRes private val screen: Int) :
     ) =
         super.onCreateRecyclerView(inflater, parent, savedInstanceState).apply {
             clipToPadding = false
+            layoutManager = BottomAlignedPreferenceLayoutManager(context)
             addItemDecoration(PreferenceHeaderItemDecoration(context))
             setOnApplyWindowInsetsListener { _, insets ->
-                updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
+                updatePadding(top = insets.systemBarInsetsCompat.top, bottom = 0)
                 insets
             }
         }

@@ -8,6 +8,7 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 - Sleep timer: hold play/pause for the timer sheet, countdown inside play/pause, the timer pauses with playback, custom duration up to 599 minutes, its own notification with a live countdown, +10 min and Stop, finish last song, fade-out, shake to restart
 - Backup: an automatic backup at its chosen hour, and Restore from backup (playlists especially)
 - Minimal and default launcher icon in Kvaesitso (no background layer, so it is not cut to the icon shape)
+- Settings alignment: short lists at the bottom; captured and visually checked on an emulator (no automated screen tests; user review and phone testing pending)
 - Library settings and Music sources: simplified options (no automated screen or dialog tests; not tested on a device)
 - Appearance: simplified settings, rounded UI and cover proportions (no automated screen tests; not tested on a device)
 - Item menus: shorter options and playlist group dividers (no automated screen tests; visual review pending)
@@ -16,6 +17,9 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 - No back buttons anywhere, the back gesture only
 
 ## Done
+- Compact player: centered square artwork above centered song details and a shorter full-width control row, with the seek bar retained on screens down to 300 dp available height. The redundant top heading is hidden on these short screens to leave room for the cover. Checked at a Communicator-like 1080 × 1200 resolution at 400 and 480 dpi; real-phone testing pending.
+- Sleep timer duration tiles: all three edit on the first tap, remember their values, and sort shortest to longest after confirmation; readable input and labels, with the active field kept above the keyboard. Defaults are 30 / 45 / 60 minutes, and edits remain capped at 1–599 minutes.
+- Settings: the main settings menu and Appearance, Playback, Library and Backup place short preference lists at the bottom above the navigation inset. A small fixed title bar sits below the options, matching About; the top toolbar is removed. Long lists start at the top and scroll above the title bar.
 - Library settings: Automatic reloading and Multi-value separators removed. Background watching is always off, with Refresh and Rescan still available; native multi-value tags stay supported, without extra punctuation splitting, even if old preferences are restored. The unused separator dialog is removed; Hide collaborators remains configurable.
 - Music sources: Include hidden files removed; hidden files are always excluded in File picker mode, even with an old saved preference or restored backup. Other source and folder options are kept.
 - Appearance: round mode and the wavy seek bar are always enabled; the Round mode, Wavy seek bar and Force square album covers switches and the Album covers selector are removed. Cover proportions are preserved, including for old installs or restored settings. Artwork always uses Balanced quality (embedded artwork cached as JPEG quality 85 with a 750-pixel downsampling target); old quality choices are discarded, and the empty Images section is removed.

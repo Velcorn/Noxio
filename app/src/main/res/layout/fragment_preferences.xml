@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
-    android:orientation="vertical"
     android:transitionGroup="true">
-
-    <org.oxycblt.auxio.ui.CoordinatorAppBarLayout
-        android:id="@+id/preferences_appbar"
-        style="@style/Widget.Auxio.AppBarLayout"
-        android:clickable="true"
-        android:focusable="true"
-        app:liftOnScroll="true">
-
-        <org.oxycblt.auxio.ui.AuxioToolbar
-            android:id="@+id/preferences_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="@string/set_root_title" />
-
-    </org.oxycblt.auxio.ui.CoordinatorAppBarLayout>
 
     <FrameLayout
         android:id="@android:id/list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        android:layout_marginBottom="@dimen/size_detail_bottom_bar" />
+
+    <LinearLayout
+        android:id="@+id/preferences_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_detail_bottom_bar"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSurface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_tiny"
+        android:paddingEnd="@dimen/spacing_tiny">
+
+        <TextView
+            android:id="@+id/preferences_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingHorizontal="@dimen/spacing_small"
+            android:text="@string/set_root_title"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:textColor="?android:attr/textColorSecondary" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
