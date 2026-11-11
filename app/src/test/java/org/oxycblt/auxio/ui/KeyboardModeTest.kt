@@ -76,27 +76,67 @@ class KeyboardModeTest {
         assertFalse(KeyboardMode.isActive(context))
     }
 
+    private fun ctrl(code: Int) = KeyboardMode.actionFor(code, alt = false, ctrl = true, char = 0)
+
     @Test
-    fun altKeysControlPlaybackAndTabs() {
-        fun alt(code: Int) = KeyboardMode.actionFor(code, alt = true, ctrl = false, char = 0)
-        assertEquals(KeyAction.Previous, alt(KeyEvent.KEYCODE_DPAD_LEFT))
-        assertEquals(KeyAction.Next, alt(KeyEvent.KEYCODE_DPAD_RIGHT))
-        assertEquals(KeyAction.OpenPlayer, alt(KeyEvent.KEYCODE_DPAD_UP))
-        assertEquals(KeyAction.ClosePlayer, alt(KeyEvent.KEYCODE_DPAD_DOWN))
+    fun ctrlLettersAreNamedCommands() {
+        assertEquals(KeyAction.Next, ctrl(KeyEvent.KEYCODE_N))
+        assertEquals(KeyAction.Previous, ctrl(KeyEvent.KEYCODE_B))
+        assertEquals(KeyAction.Player, ctrl(KeyEvent.KEYCODE_P))
+        assertEquals(KeyAction.Queue, ctrl(KeyEvent.KEYCODE_Q))
+        assertEquals(KeyAction.Shuffle, ctrl(KeyEvent.KEYCODE_S))
+        assertEquals(KeyAction.Repeat, ctrl(KeyEvent.KEYCODE_R))
+        assertEquals(KeyAction.SleepTimer, ctrl(KeyEvent.KEYCODE_T))
+        assertEquals(KeyAction.Find, ctrl(KeyEvent.KEYCODE_F))
+        assertEquals(KeyAction.Sort, ctrl(KeyEvent.KEYCODE_O))
+        assertEquals(KeyAction.Menu, ctrl(KeyEvent.KEYCODE_M))
+        assertEquals(KeyAction.SeekBack, ctrl(KeyEvent.KEYCODE_J))
+        assertEquals(KeyAction.SeekForward, ctrl(KeyEvent.KEYCODE_L))
+        assertEquals(KeyAction.Help, ctrl(KeyEvent.KEYCODE_H))
+        // Unused letters and copy or paste keep their usual meaning.
+        assertNull(ctrl(KeyEvent.KEYCODE_A))
+        assertNull(ctrl(KeyEvent.KEYCODE_C))
+        assertNull(ctrl(KeyEvent.KEYCODE_V))
+    }
+
+    @Test
+    fun altWithAPrintedNumberSwitchesTabs() {
+        fun alt(code: Int, altChar: Int = 0) =
+            KeyboardMode.actionFor(code, alt = true, ctrl = false, char = 0, altChar = altChar)
+        // A BlackBerry style keyboard: Alt+W types 1, Alt+S types 4.
+        assertEquals(KeyAction.Tab(0), alt(KeyEvent.KEYCODE_W, '1'.code))
+        assertEquals(KeyAction.Tab(3), alt(KeyEvent.KEYCODE_S, '4'.code))
+        // A keyboard with a number row.
         assertEquals(KeyAction.Tab(0), alt(KeyEvent.KEYCODE_1))
-        assertEquals(KeyAction.Tab(3), alt(KeyEvent.KEYCODE_4))
+        assertEquals(KeyAction.Tab(1), alt(KeyEvent.KEYCODE_2))
+        // Alt+B types ? there.
+        assertEquals(KeyAction.Help, alt(KeyEvent.KEYCODE_B, '?'.code))
+        assertNull(alt(KeyEvent.KEYCODE_T, '('.code))
         assertNull(alt(KeyEvent.KEYCODE_A))
     }
 
     @Test
-    fun spacePlaysAndLettersOrDigitsType() {
+    fun spacePlaysBackspaceGoesBackAndQuestionMarkHelps() {
         assertEquals(
             KeyAction.PlayPause,
             KeyboardMode.actionFor(KeyEvent.KEYCODE_SPACE, false, false, ' '.code),
         )
+        assertEquals(KeyAction.Back, KeyboardMode.actionFor(KeyEvent.KEYCODE_DEL, false, false, 0))
+        assertEquals(
+            KeyAction.Help,
+            KeyboardMode.actionFor(KeyEvent.KEYCODE_SLASH, false, false, '?'.code),
+        )
+    }
+
+    @Test
+    fun lettersOrDigitsType() {
         assertEquals(
             KeyAction.Type("a"),
             KeyboardMode.actionFor(KeyEvent.KEYCODE_A, false, false, 'a'.code),
+        )
+        assertEquals(
+            KeyAction.Type("A"),
+            KeyboardMode.actionFor(KeyEvent.KEYCODE_A, false, false, 'A'.code),
         )
         assertEquals(
             KeyAction.Type("2"),
@@ -109,10 +149,25 @@ class KeyboardModeTest {
     }
 
     @Test
-    fun otherKeysAndCtrlAreLeftAlone() {
+    fun otherKeysAreLeftAlone() {
         assertNull(KeyboardMode.actionFor(KeyEvent.KEYCODE_PERIOD, false, false, '.'.code))
         assertNull(KeyboardMode.actionFor(KeyEvent.KEYCODE_DPAD_DOWN, false, false, 0))
-        assertNull(KeyboardMode.actionFor(KeyEvent.KEYCODE_A, false, true, 'a'.code))
         assertNull(KeyboardMode.actionFor(KeyEvent.KEYCODE_ENTER, false, false, 0))
+    }
+
+    @Test
+    fun theOverviewListsEveryCommandOnce() {
+        val shortcuts = KeyboardMode.shortcuts
+        assertEquals(shortcuts.size, shortcuts.map { it.description }.toSet().size)
+        assertEquals(shortcuts.size, shortcuts.map { it.keys }.toSet().size)
+        // Every Ctrl letter that does something is in the overview.
+        val listed = shortcuts.joinToString(" ") { it.keys }
+        for (letter in "NBPQSRTFOMJLH") {
+            val code = KeyEvent.keyCodeFromString("KEYCODE_$letter")
+            assertTrue("Ctrl $letter", ctrl(code) != null)
+            assertTrue("Ctrl $letter listed", listed.contains("Ctrl $letter"))
+        }
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        shortcuts.forEach { assertTrue(context.getString(it.description).isNotBlank()) }
     }
 }

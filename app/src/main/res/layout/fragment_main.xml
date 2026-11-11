@@ -157,51 +157,17 @@
         android:orientation="vertical"
         android:translationZ="8dp">
 
-        <!-- Sort and more sit at the ends of the tabs in the keyboard phone mode, where there is no
-             search row (see MainFragment). -->
-        <LinearLayout
-            android:id="@+id/main_tab_row"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/main_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/main_nav_sort"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/lbl_sort"
-                android:src="@drawable/ic_sort_20"
-                android:visibility="gone"
-                app:tint="?android:attr/textColorSecondary" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/main_tabs"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                app:tabGravity="fill"
-                app:tabIndicatorHeight="0dp"
-                app:tabInlineLabel="false"
-                app:tabMode="fixed"
-                app:tabRippleColor="@android:color/transparent"
-                app:tabTextAppearance="?attr/textAppearanceLabelSmall" />
-
-            <ImageButton
-                android:id="@+id/main_nav_more"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="@dimen/spacing_small"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/lbl_more"
-                android:src="@drawable/ic_more_vert_20"
-                android:visibility="gone"
-                app:tint="?android:attr/textColorSecondary" />
-
-        </LinearLayout>
+            android:background="@android:color/transparent"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="0dp"
+            app:tabInlineLabel="false"
+            app:tabMode="fixed"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabTextAppearance="?attr/textAppearanceLabelSmall" />
 
     </LinearLayout>
 

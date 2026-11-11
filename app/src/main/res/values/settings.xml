@@ -51,6 +51,8 @@
     <string name="set_key_backup_restore" translatable="false">noxio_backup_restore</string>
     <string name="set_key_launcher_icon" translatable="false">noxio_launcher_icon</string>
     <string name="set_key_keyboard_mode" translatable="false">noxio_keyboard_mode</string>
+    <string name="set_key_keyboard_keys" translatable="false">noxio_keyboard_keys</string>
+    <string name="set_key_keyboard_hint_shown" translatable="false">noxio_keyboard_hint_shown</string>
     <string name="set_key_sleep_shake" translatable="false">noxio_sleep_shake</string>
     <string name="set_key_equalizer" translatable="false">noxio_equalizer</string>
 

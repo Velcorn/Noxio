@@ -39,8 +39,9 @@
             app:useSimpleSummaryProvider="true" />
 
         <Preference
-            app:selectable="false"
-            app:summary="@string/set_keyboard_mode_desc" />
+            app:key="@string/set_key_keyboard_keys"
+            app:summary="@string/set_keyboard_keys_desc"
+            app:title="@string/lbl_keys" />
 
     </PreferenceCategory>
 

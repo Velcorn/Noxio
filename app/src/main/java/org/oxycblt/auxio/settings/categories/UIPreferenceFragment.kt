@@ -25,6 +25,7 @@ import javax.inject.Inject
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.settings.BasePreferenceFragment
 import org.oxycblt.auxio.settings.ui.WrappedDialogPreference
+import org.oxycblt.auxio.ui.KeyboardShortcutsDialog
 import org.oxycblt.auxio.ui.LauncherIcon
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.util.isNight
@@ -66,6 +67,13 @@ class UIPreferenceFragment : BasePreferenceFragment(R.xml.preferences_ui) {
             getString(R.string.set_key_accent) -> {
                 L.d("Configuring accent setting")
                 preference.summary = getString(uiSettings.accent.name)
+            }
+            getString(R.string.set_key_keyboard_keys) -> {
+                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    KeyboardShortcutsDialog()
+                        .show(childFragmentManager, KeyboardShortcutsDialog.TAG)
+                    true
+                }
             }
             getString(R.string.set_key_launcher_icon) -> {
                 L.d("Configuring launcher icon setting")

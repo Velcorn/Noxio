@@ -20,6 +20,7 @@ package org.oxycblt.auxio.playback
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.R
@@ -27,6 +28,7 @@ import org.oxycblt.auxio.databinding.FragmentPlaybackBarBinding
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
+import org.oxycblt.auxio.ui.KeyboardMode
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.musikr.Song
@@ -62,6 +64,14 @@ class PlaybackBarFragment : ViewBindingFragment<FragmentPlaybackBarBinding>() {
         // Set up marquee on song information
         binding.playbackSong.isSelected = true
         binding.playbackInfo.isSelected = true
+
+        // The keyboard phone mode plays, pauses and skips with keys (Space, Ctrl+N, Ctrl+B), so the
+        // strip only shows what is playing.
+        if (KeyboardMode.isActive(requireContext())) {
+            binding.playbackSkipPrev.isVisible = false
+            binding.playbackPlayPause.isVisible = false
+            binding.playbackSecondaryAction.isVisible = false
+        }
 
         // Set up actions
         binding.playbackPlayPause.setOnClickListener { playbackModel.togglePlaying() }

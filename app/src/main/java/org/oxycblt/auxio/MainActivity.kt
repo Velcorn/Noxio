@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                     event.isAltPressed,
                     event.isCtrlPressed || event.isMetaPressed,
                     if (event.isAltPressed) 0 else event.unicodeChar,
+                    event.getUnicodeChar(KeyEvent.META_ALT_ON),
                 )
             if (action != null && handler(action)) return true
         }

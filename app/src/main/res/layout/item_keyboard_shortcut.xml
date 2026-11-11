@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One row of the keyboard shortcut overview: the keys, then what they do. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="true"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/spacing_tiny">
+
+    <TextView
+        android:id="@+id/shortcut_keys"
+        android:layout_width="112dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceLabelLargeEmphasized"
+        android:textColor="?attr/colorPrimary"
+        tools:text="Ctrl N · Ctrl B" />
+
+    <TextView
+        android:id="@+id/shortcut_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        tools:text="Next or previous song" />
+
+</LinearLayout>

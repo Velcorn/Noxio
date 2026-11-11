@@ -28,6 +28,7 @@ import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isInvisible
@@ -38,6 +39,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.google.android.material.R as MR
 import com.google.android.material.bottomsheet.BackportBottomSheetBehavior
 import com.google.android.material.color.MaterialColors
@@ -73,9 +75,11 @@ import org.oxycblt.auxio.playback.PlaybackBottomSheetBehavior
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.playback.queue.QueueBottomSheetBehavior
 import org.oxycblt.auxio.playback.queue.QueueViewModel
+import org.oxycblt.auxio.playback.timer.SleepTimerDialog
 import org.oxycblt.auxio.ui.DialogAwareNavigationListener
 import org.oxycblt.auxio.ui.KeyAction
 import org.oxycblt.auxio.ui.KeyboardMode
+import org.oxycblt.auxio.ui.KeyboardShortcutsDialog
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.ui.popupMenu
@@ -243,6 +247,15 @@ class MainFragment :
 
         keyboardMode = KeyboardMode.isActive(requireContext())
         (activity as? MainActivity)?.keyHandler = if (keyboardMode) ::handleKey else null
+        if (keyboardMode && savedInstanceState == null) {
+            // The overview of the keys shows once by itself, then from Ctrl+H or the settings.
+            val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            val shown = getString(R.string.set_key_keyboard_hint_shown)
+            if (!prefs.getBoolean(shown, false)) {
+                prefs.edit { putBoolean(shown, true) }
+                KeyboardShortcutsDialog().show(childFragmentManager, KeyboardShortcutsDialog.TAG)
+            }
+        }
         setupBottomNav(binding)
         forceHideAllFabs()
         updateSpeedDial(false)
@@ -391,9 +404,6 @@ class MainFragment :
             )
         }
         binding.mainMore.setOnClickListener(::showMore)
-        // The same two at the ends of the tabs in the keyboard phone mode.
-        binding.mainNavSort?.setOnClickListener { binding.mainSort.performClick() }
-        binding.mainNavMore?.setOnClickListener(::showMore)
         binding.mainSearchInput.setOnKeyListener { view, keyCode, event ->
             // Backspace on an empty filter puts it away again in the keyboard phone mode.
             if (
@@ -417,6 +427,20 @@ class MainFragment :
                 .getSystemService(InputMethodManager::class.java)
                 ?.hideSoftInputFromWindow(view.windowToken, 0)
             true
+        }
+        binding.queueSearchInput.setOnKeyListener { view, keyCode, event ->
+            // Backspace on an empty search puts it away again in the keyboard phone mode.
+            if (
+                keyboardMode &&
+                    keyCode == KeyEvent.KEYCODE_DEL &&
+                    event.action == KeyEvent.ACTION_DOWN &&
+                    binding.queueSearchInput.text.isEmpty()
+            ) {
+                view.clearFocus()
+                true
+            } else {
+                false
+            }
         }
         binding.queueSort.setOnClickListener {
             // The same dialog as the other lists have, it can be opened from any screen.
@@ -537,24 +561,79 @@ class MainFragment :
     }
 
     /**
-     * What a key does in the keyboard phone mode.
+     * What a key does in the keyboard phone mode, see [KeyboardMode.actionFor].
      *
      * @return Whether the key was used.
      */
     private fun handleKey(action: KeyAction): Boolean {
         val binding = requireBinding()
         val sheet = binding.playbackSheet.coordinatorLayoutBehavior as PlaybackBottomSheetBehavior
+        val queue = binding.queueSheet.coordinatorLayoutBehavior as QueueBottomSheetBehavior?
         val playerOpen = sheet.state == BackportBottomSheetBehavior.STATE_EXPANDED
+        val queueOpen = playerOpen && queue?.state == BackportBottomSheetBehavior.STATE_EXPANDED
         val playing = playbackModel.song.value != null
+        fun whenPlaying(block: () -> Unit) = playing.also { if (it) block() }
         return when (action) {
-            KeyAction.PlayPause -> playing.also { if (it) playbackModel.togglePlaying() }
-            KeyAction.Previous -> playing.also { if (it) playbackModel.prev() }
-            KeyAction.Next -> playing.also { if (it) playbackModel.next() }
-            KeyAction.OpenPlayer -> playing.also { if (it) playbackModel.openPlayback() }
-            KeyAction.ClosePlayer -> playerOpen.also { if (it) playbackModel.openMain() }
+            KeyAction.PlayPause -> whenPlaying(playbackModel::togglePlaying)
+            KeyAction.Previous -> whenPlaying(playbackModel::prev)
+            KeyAction.Next -> whenPlaying(playbackModel::next)
+            KeyAction.SeekBack -> whenPlaying(playbackModel::stepBackwards)
+            KeyAction.SeekForward -> whenPlaying(playbackModel::stepForward)
+            KeyAction.Repeat -> whenPlaying(playbackModel::toggleRepeatMode)
+            KeyAction.Player ->
+                whenPlaying {
+                    if (playerOpen) playbackModel.openMain() else playbackModel.openPlayback()
+                }
+            KeyAction.Queue ->
+                whenPlaying {
+                    if (queueOpen) playbackModel.openPlayback() else playbackModel.openQueue()
+                }
+            KeyAction.SleepTimer -> {
+                SleepTimerDialog().show(childFragmentManager, SleepTimerDialog.TAG)
+                true
+            }
+            KeyAction.Shuffle ->
+                when {
+                    playerOpen -> whenPlaying(playbackModel::toggleShuffled)
+                    navMode == NavMode.NONE -> false
+                    else -> {
+                        // What the floating shuffle button does, which this mode hides.
+                        binding.homeShuffleFab.performClick()
+                        true
+                    }
+                }
+            KeyAction.Sort ->
+                when {
+                    queueOpen -> binding.queueSort.performClick()
+                    playerOpen || navMode == NavMode.NONE -> false
+                    else -> {
+                        binding.mainSort.performClick()
+                        true
+                    }
+                }
+            KeyAction.Menu ->
+                when {
+                    playerOpen -> false
+                    navMode == NavMode.HOME ||
+                        navMode == NavMode.ARTIST ||
+                        navMode == NavMode.PLAYLIST -> {
+                        showMore(binding.mainTabs)
+                        true
+                    }
+                    else -> false
+                }
+            KeyAction.Help -> {
+                KeyboardShortcutsDialog().show(childFragmentManager, KeyboardShortcutsDialog.TAG)
+                true
+            }
+            KeyAction.Back -> {
+                // Backspace is never a way to leave the app by accident.
+                val dispatcher = requireActivity().onBackPressedDispatcher
+                dispatcher.hasEnabledCallbacks().also { if (it) dispatcher.onBackPressed() }
+            }
             is KeyAction.Tab -> {
                 val tab =
-                    if (!playerOpen && binding.mainTabs.isVisible) {
+                    if (!playerOpen && (navMode == NavMode.HOME || navMode == NavMode.ARTIST)) {
                         binding.mainTabs.getTabAt(action.index)
                     } else {
                         null
@@ -562,23 +641,36 @@ class MainFragment :
                 tab?.select()
                 tab != null
             }
-            is KeyAction.Type ->
-                when {
-                    playerOpen -> false
-                    navMode == NavMode.HOME -> {
-                        exploreNavigate(HomeFragmentDirections.search(action.text))
-                        true
-                    }
-                    navMode == NavMode.ARTIST || navMode == NavMode.PLAYLIST -> {
-                        // The filter shows while it is used, see updateBottomNav.
-                        val input = binding.mainSearchInput
-                        input.requestFocus()
-                        input.append(action.text)
-                        true
-                    }
-                    else -> false
-                }
+            KeyAction.Find -> startTyping(binding, "", playerOpen, queueOpen)
+            is KeyAction.Type -> startTyping(binding, action.text, playerOpen, queueOpen)
         }
+    }
+
+    /**
+     * Search or filter what is shown, starting with [text]: the queue while it is open, the albums
+     * or songs of an artist or a playlist, otherwise the whole library.
+     */
+    private fun startTyping(
+        binding: FragmentMainBinding,
+        text: String,
+        playerOpen: Boolean,
+        queueOpen: Boolean,
+    ): Boolean {
+        val input =
+            when {
+                queueOpen -> binding.queueSearchInput
+                playerOpen -> return false
+                navMode == NavMode.HOME -> {
+                    exploreNavigate(HomeFragmentDirections.search(text))
+                    return true
+                }
+                navMode == NavMode.ARTIST || navMode == NavMode.PLAYLIST -> binding.mainSearchInput
+                else -> return false
+            }
+        // The field shows while it is used, see updateBottomNav and onPreDraw.
+        input.requestFocus()
+        input.append(text)
+        return true
     }
 
     private fun showMoreMenu(anchor: View) {
@@ -668,14 +760,16 @@ class MainFragment :
         }
         // On the home screen a single tab makes the tabs redundant.
         // The pages of an album, a genre and a playlist have no tabs.
+        // The keyboard phone mode has no tabs: swipe, or Alt with a number.
         binding.mainTabs.isVisible =
-            when (mode) {
-                NavMode.HOME -> homeModel.currentTabTypes.size > 1
-                NavMode.ALBUM,
-                NavMode.GENRE,
-                NavMode.PLAYLIST -> false
-                else -> true
-            }
+            !keyboardMode &&
+                when (mode) {
+                    NavMode.HOME -> homeModel.currentTabTypes.size > 1
+                    NavMode.ALBUM,
+                    NavMode.GENRE,
+                    NavMode.PLAYLIST -> false
+                    else -> true
+                }
         applyNavPadding(binding)
         nav.alpha = if (shown) fadeRatio else 0f
         nav.isInvisible = nav.alpha == 0f
@@ -687,9 +781,6 @@ class MainFragment :
         val filtering =
             binding.mainSearchInput.hasFocus() || binding.mainSearchInput.text.isNotEmpty()
         val rowShown = shown && !ownHeader && (!keyboardMode || filtering)
-        val navButtons = keyboardMode && shown && !ownHeader
-        binding.mainNavSort?.isVisible = navButtons
-        binding.mainNavMore?.isVisible = navButtons
         row.alpha = nav.alpha
         row.visibility =
             when {
@@ -792,7 +883,10 @@ class MainFragment :
             placePlayingStrip(binding, queueBarRatio > 0f)
             // The search row under the strip fades in with it.
             binding.queueRow.alpha = queueBarRatio
-            binding.queueRow.isInvisible = queueBarRatio == 0f
+            // In the keyboard phone mode the queue search only shows while it is used.
+            val queueFiltering =
+                binding.queueSearchInput.hasFocus() || binding.queueSearchInput.text.isNotEmpty()
+            binding.queueRow.isInvisible = queueBarRatio == 0f || (keyboardMode && !queueFiltering)
             binding.queueCover.alpha = queueBarRatio
             binding.queueCover.isInvisible = queueBarRatio == 0f
             // The search row is above the strip, the strip above the space at the bottom.
@@ -975,7 +1069,12 @@ class MainFragment :
         // If there are no songs, it's likely that the library has not been loaded, so
         // displaying the shuffle FAB makes no sense. We also don't want the fast scroll
         // popup to overlap with the FAB, so we hide the FAB when fast scrolling too.
-        if (shouldHideAllFabs(binding, songs, isFastScrolling)) {
+        // The keyboard phone mode shuffles with Ctrl+S instead of the floating button; the
+        // button for new playlists stays.
+        if (
+            shouldHideAllFabs(binding, songs, isFastScrolling) ||
+                (keyboardMode && tabType != MusicType.PLAYLISTS)
+        ) {
             L.d("Hiding fab: [empty: ${songs.isEmpty()} scrolling: $isFastScrolling]")
             forceHideAllFabs()
         } else {
