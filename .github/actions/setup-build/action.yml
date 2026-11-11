@@ -5,8 +5,17 @@ runs:
   using: composite
   steps:
     - name: Install ninja-build
+      # The Ubuntu mirrors sometimes cannot be resolved from the runners; retry, then fall back
+      # to the ninja package on PyPI.
       shell: bash
-      run: sudo apt-get install -y ninja-build
+      run: |
+        if command -v ninja >/dev/null; then ninja --version; exit 0; fi
+        for i in 1 2 3; do
+          sudo apt-get update -q && sudo apt-get install -y ninja-build && exit 0
+          echo "apt failed (attempt $i), retrying..."
+          sleep 10
+        done
+        pip install --user ninja && echo "$HOME/.local/bin" >> "$GITHUB_PATH"
     - name: Clone submodules
       # git.ffmpeg.org often returns 502 to CI runners, so use the GitHub mirror and retry.
       shell: bash
