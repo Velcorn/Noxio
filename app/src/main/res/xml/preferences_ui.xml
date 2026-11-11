@@ -28,6 +28,22 @@
         app:summary="@string/set_lib_tabs_desc"
         app:title="@string/set_lib_tabs" />
 
+    <PreferenceCategory android:title="@string/set_keyboard">
+
+        <org.oxycblt.auxio.settings.ui.IntListPreference
+            app:defaultValue="@integer/keyboard_mode_auto"
+            app:entries="@array/entries_keyboard_mode"
+            app:entryValues="@array/values_keyboard_mode"
+            app:key="@string/set_key_keyboard_mode"
+            app:title="@string/set_keyboard_mode"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:selectable="false"
+            app:summary="@string/set_keyboard_mode_desc" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/set_launcher">
 
         <org.oxycblt.auxio.settings.ui.IntListPreference

@@ -14,10 +14,12 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 - Item menus: shorter options and playlist group dividers (no automated screen tests; visual review pending)
 - Year in review cards on a phone screen
 - Short and square screens on the Clicks Communicator itself
+- Keyboard phone mode on the Communicator: whether Automatic detects its keyboard, and which keys it has (Alt and arrows)
 - Musicolet monthly files: their file naming is a guess (weekly files are confirmed)
 - No back buttons anywhere, the back gesture only
 
 ## Done
+- Keyboard phone mode (Settings > Appearance > Keyboard phone: automatic when a hardware keyboard is found, on or off): no search row, Sort and More at the ends of the tabs; typing a letter or digit opens the search with it (on an artist or playlist page it filters in place, Backspace on an empty filter hides it again); in the search Enter plays the first song or opens the first result and Backspace on an empty field closes it; Space plays or pauses, Alt+←/→ previous/next, Alt+↑/↓ open/close the player, Alt+1–4 switch tabs. Checked on an emulator with its hardware keyboard; on the Clicks Communicator itself pending, as is customizing the keys.
 - Playing strip under the search row: on the home screen between the search row and the tabs, on album, artist and playlist pages and in the queue at the bottom, so it is nearer the thumb; the search row follows it and stays above the keyboard. The search field of a playlist page now shows the playlist name on first open.
 - Short and square screens (under 480 dp of height, like the 1080 × 1200 Clicks Communicator): home tabs show icons only (labels kept for screen readers), the stats totals move into the bottom title row so the top list shows more rows, album, artist, genre and playlist headers lose the empty toolbar gap, and the player text is centered. Checked on an emulator at 1080 × 1200, 420 dpi; normal phones unchanged.
 - Compact player: centered square artwork above centered song details and a shorter full-width control row, with the seek bar retained on screens down to 300 dp available height. The redundant top heading is hidden on these short screens to leave room for the cover. Checked at a Communicator-like 1080 × 1200 resolution at 400 and 480 dpi; real-phone testing pending.

@@ -42,3 +42,4 @@ playback/ui/button/TimerPlaybackButton.kt
 list/menu/MenuGroupDivider.kt
 settings/ui/BottomAlignedPreferenceLayoutManager.kt
 playback/timer/SleepTimerPresets.kt
+ui/KeyboardMode.kt

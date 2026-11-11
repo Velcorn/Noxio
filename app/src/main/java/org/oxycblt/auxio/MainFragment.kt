@@ -20,6 +20,7 @@ package org.oxycblt.auxio
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
@@ -73,6 +74,8 @@ import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.playback.queue.QueueBottomSheetBehavior
 import org.oxycblt.auxio.playback.queue.QueueViewModel
 import org.oxycblt.auxio.ui.DialogAwareNavigationListener
+import org.oxycblt.auxio.ui.KeyAction
+import org.oxycblt.auxio.ui.KeyboardMode
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.ui.popupMenu
@@ -123,6 +126,8 @@ class MainFragment :
     private var shownTabTypes: List<MusicType> = emptyList()
     private var settingTabs = false
     private var navMode = NavMode.NONE
+    /** Whether the keyboard phone mode is on, see [KeyboardMode]. */
+    private var keyboardMode = false
     private var navInsetBottom = 0
     private var keyboardLift = 0
     private var stripBaseTranslation = 0f
@@ -236,6 +241,8 @@ class MainFragment :
             setChangeListener(::updateSpeedDial)
         }
 
+        keyboardMode = KeyboardMode.isActive(requireContext())
+        (activity as? MainActivity)?.keyHandler = if (keyboardMode) ::handleKey else null
         setupBottomNav(binding)
         forceHideAllFabs()
         updateSpeedDial(false)
@@ -308,6 +315,7 @@ class MainFragment :
         binding.homeNewPlaylistFab.setChangeListener(null)
         binding.homeNewPlaylistFab.setOnActionSelectedListener(null)
         binding.mainBottomNav.setOnApplyWindowInsetsListener(null)
+        (activity as? MainActivity)?.keyHandler = null
     }
 
     // --- MAIN NAVIGATION (search row and tabs) ---
@@ -382,17 +390,22 @@ class MainFragment :
                 }
             )
         }
-        binding.mainMore.setOnClickListener {
-            when (navMode) {
-                NavMode.ARTIST ->
-                    detailModel.currentArtist.value?.let {
-                        listModel.openMenu(R.menu.detail_parent, it)
-                    }
-                NavMode.PLAYLIST ->
-                    detailModel.currentPlaylist.value?.let {
-                        listModel.openMenu(R.menu.detail_playlist, it)
-                    }
-                else -> showMoreMenu(it)
+        binding.mainMore.setOnClickListener(::showMore)
+        // The same two at the ends of the tabs in the keyboard phone mode.
+        binding.mainNavSort?.setOnClickListener { binding.mainSort.performClick() }
+        binding.mainNavMore?.setOnClickListener(::showMore)
+        binding.mainSearchInput.setOnKeyListener { view, keyCode, event ->
+            // Backspace on an empty filter puts it away again in the keyboard phone mode.
+            if (
+                keyboardMode &&
+                    keyCode == KeyEvent.KEYCODE_DEL &&
+                    event.action == KeyEvent.ACTION_DOWN &&
+                    binding.mainSearchInput.text.isEmpty()
+            ) {
+                view.clearFocus()
+                true
+            } else {
+                false
             }
         }
         binding.queueSearchInput.doAfterTextChanged {
@@ -457,8 +470,8 @@ class MainFragment :
         // Sort and more are in the header of the list on the pages of an album and a genre, which
         // have nothing to filter, so the row is not needed there at all.
         val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
-        binding.mainSort.isVisible = !ownHeader
-        binding.mainMore.isVisible = !ownHeader
+        binding.mainSort.isVisible = !ownHeader && !keyboardMode
+        binding.mainMore.isVisible = !ownHeader && !keyboardMode
         if (filter) {
             binding.mainSearchInput.setText(
                 if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery
@@ -507,6 +520,65 @@ class MainFragment :
 
     private fun exploreNavigate(directions: androidx.navigation.NavDirections) {
         requireBinding().exploreNavHost.findNavController().navigateSafe(directions)
+    }
+
+    private fun showMore(anchor: View) {
+        when (navMode) {
+            NavMode.ARTIST ->
+                detailModel.currentArtist.value?.let {
+                    listModel.openMenu(R.menu.detail_parent, it)
+                }
+            NavMode.PLAYLIST ->
+                detailModel.currentPlaylist.value?.let {
+                    listModel.openMenu(R.menu.detail_playlist, it)
+                }
+            else -> showMoreMenu(anchor)
+        }
+    }
+
+    /**
+     * What a key does in the keyboard phone mode.
+     *
+     * @return Whether the key was used.
+     */
+    private fun handleKey(action: KeyAction): Boolean {
+        val binding = requireBinding()
+        val sheet = binding.playbackSheet.coordinatorLayoutBehavior as PlaybackBottomSheetBehavior
+        val playerOpen = sheet.state == BackportBottomSheetBehavior.STATE_EXPANDED
+        val playing = playbackModel.song.value != null
+        return when (action) {
+            KeyAction.PlayPause -> playing.also { if (it) playbackModel.togglePlaying() }
+            KeyAction.Previous -> playing.also { if (it) playbackModel.prev() }
+            KeyAction.Next -> playing.also { if (it) playbackModel.next() }
+            KeyAction.OpenPlayer -> playing.also { if (it) playbackModel.openPlayback() }
+            KeyAction.ClosePlayer -> playerOpen.also { if (it) playbackModel.openMain() }
+            is KeyAction.Tab -> {
+                val tab =
+                    if (!playerOpen && binding.mainTabs.isVisible) {
+                        binding.mainTabs.getTabAt(action.index)
+                    } else {
+                        null
+                    }
+                tab?.select()
+                tab != null
+            }
+            is KeyAction.Type ->
+                when {
+                    playerOpen -> false
+                    navMode == NavMode.HOME -> {
+                        exploreNavigate(HomeFragmentDirections.search(action.text))
+                        true
+                    }
+                    navMode == NavMode.ARTIST || navMode == NavMode.PLAYLIST -> {
+                        // The filter shows while it is used, see updateBottomNav.
+                        val input = binding.mainSearchInput
+                        input.requestFocus()
+                        input.append(action.text)
+                        true
+                    }
+                    else -> false
+                }
+        }
     }
 
     private fun showMoreMenu(anchor: View) {
@@ -609,7 +681,15 @@ class MainFragment :
         nav.isInvisible = nav.alpha == 0f
         // Albums and genres have sort and more in the header of their list, so no row at all.
         val row = binding.mainRow
-        val rowShown = shown && mode != NavMode.ALBUM && mode != NavMode.GENRE
+        val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
+        // In the keyboard phone mode there is no search row: typing opens the search, and on an
+        // artist or a playlist page the filter shows while it is used.
+        val filtering =
+            binding.mainSearchInput.hasFocus() || binding.mainSearchInput.text.isNotEmpty()
+        val rowShown = shown && !ownHeader && (!keyboardMode || filtering)
+        val navButtons = keyboardMode && shown && !ownHeader
+        binding.mainNavSort?.isVisible = navButtons
+        binding.mainNavMore?.isVisible = navButtons
         row.alpha = nav.alpha
         row.visibility =
             when {

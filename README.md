@@ -39,6 +39,8 @@ stats, stays in its own database or in files you export.
   shorter item menus.
 - **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
+- **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) there is no search row: just
+  type to search. Space plays or pauses, Alt+arrows skip and open the player, Alt+1–4 switch tabs.
 - **Queue** with search and sort; **playlists** you can search and sort.
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.

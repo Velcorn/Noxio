@@ -19,6 +19,7 @@
 package org.oxycblt.auxio.search
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,6 +58,7 @@ import org.oxycblt.auxio.music.PlaylistMessage
 import org.oxycblt.auxio.playback.PlaybackDecision
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.ui.FadingToolbarOffsetListener
+import org.oxycblt.auxio.ui.KeyboardMode
 import org.oxycblt.auxio.util.collect
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.context
@@ -89,6 +92,7 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
     override val playbackModel: PlaybackViewModel by activityViewModels()
     override val musicModel: MusicViewModel by activityViewModels()
     private val searchAdapter = SearchAdapter(this)
+    private val args: SearchFragmentArgs by navArgs()
     private var getContentLauncher: ActivityResultLauncher<String>? = null
     private var pendingImportTarget: Playlist? = null
     private var imm: InputMethodManager? = null
@@ -134,12 +138,33 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
         }
 
         binding.searchEditText.apply {
+            if (KeyboardMode.isActive(context)) {
+                // Enter plays the first song or opens the first other result, and Backspace on
+                // an empty field closes the search.
+                setOnEditorActionListener { _, _, _ -> openFirstResult() }
+                setOnKeyListener { _, keyCode, event ->
+                    if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+                    when {
+                        keyCode == KeyEvent.KEYCODE_ENTER -> openFirstResult()
+                        keyCode == KeyEvent.KEYCODE_DEL && text.isNullOrEmpty() -> {
+                            imm?.hideSoftInputFromWindow(windowToken, 0)
+                            findNavController().navigateUp()
+                        }
+                        else -> false
+                    }
+                }
+            }
             addTextChangedListener { text ->
                 // Run the search with the updated text as the query
                 searchModel.search(text?.toString()?.trim())
             }
 
             if (!launchedKeyboard) {
+                // What was typed to open the search in the keyboard phone mode.
+                if (args.query.isNotEmpty()) {
+                    setText(args.query)
+                    setSelection(args.query.length)
+                }
                 // Auto-open the keyboard when this view is shown
                 L.d("Keyboard is not shown yet")
                 showKeyboard(this)
@@ -208,6 +233,12 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
         super.onDestroyBinding(binding)
         binding.searchNormalToolbar.setOnMenuItemClickListener(null)
         binding.searchRecycler.adapter = null
+    }
+
+    private fun openFirstResult(): Boolean {
+        val first = searchModel.searchResults.value.firstOrNull { it is Music } as Music?
+        first?.let(::onRealClick)
+        return first != null
     }
 
     override fun onRealClick(item: Music) {

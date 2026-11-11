@@ -365,6 +365,12 @@
     <string name="set_lib_tabs_desc">Change visibility and order of library tabs</string>
     <!-- Skip to next (song) -->
     <string name="set_launcher">Launcher</string>
+    <string name="set_keyboard">Keyboard</string>
+    <string name="set_keyboard_mode">Keyboard phone</string>
+    <string name="set_keyboard_mode_auto">Automatic, when a keyboard is found</string>
+    <string name="set_keyboard_mode_on">On</string>
+    <string name="set_keyboard_mode_off">Off</string>
+    <string name="set_keyboard_mode_desc">Without the search row: type to search. Space plays or pauses, Alt+arrows skip and open the player, Alt+1–4 switch tabs</string>
     <string name="set_launcher_icon">App icon</string>
     <string name="set_launcher_icon_default">Default</string>
     <string name="set_launcher_icon_minimal">Minimal, white without a background</string>

@@ -414,6 +414,12 @@
     <string name="lng_based_on_auxio">Noxio ist ein Fork von Auxio von Alexander Capehart. Es gehört nicht zum Auxio-Projekt, melde Probleme mit Noxio also bitte nicht dort.</string>
     <string name="lbl_auxio_author">Auxio von Alexander Capehart</string>
     <string name="set_launcher">Launcher</string>
+    <string name="set_keyboard">Tastatur</string>
+    <string name="set_keyboard_mode">Handy mit Tastatur</string>
+    <string name="set_keyboard_mode_auto">Automatisch, wenn eine Tastatur da ist</string>
+    <string name="set_keyboard_mode_on">An</string>
+    <string name="set_keyboard_mode_off">Aus</string>
+    <string name="set_keyboard_mode_desc">Ohne Suchzeile: einfach tippen, um zu suchen. Leertaste spielt oder pausiert, Alt+Pfeile springen und öffnen die Wiedergabe, Alt+1–4 wechseln die Tabs</string>
     <string name="set_launcher_icon">App-Icon</string>
     <string name="set_launcher_icon_default">Standard</string>
     <string name="set_launcher_icon_minimal">Minimal, weiß ohne Hintergrund</string>

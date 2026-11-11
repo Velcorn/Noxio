@@ -20,7 +20,9 @@ package org.oxycblt.auxio
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -31,6 +33,8 @@ import javax.inject.Inject
 import org.oxycblt.auxio.databinding.ActivityMainBinding
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.playback.state.DeferredPlayback
+import org.oxycblt.auxio.ui.KeyAction
+import org.oxycblt.auxio.ui.KeyboardMode
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.util.isNight
 import org.oxycblt.auxio.util.systemBarInsetsCompat
@@ -78,6 +82,33 @@ class MainActivity : AppCompatActivity() {
             // No intent action to do, just restore the previously saved state.
             playbackModel.playDeferred(DeferredPlayback.RestoreState(false))
         }
+    }
+
+    /**
+     * What to do with a key press in the keyboard phone mode, set by the main screen while the mode
+     * is on. Returns whether the key was used.
+     */
+    var keyHandler: ((KeyAction) -> Boolean)? = null
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        val handler = keyHandler
+        // Keys typed into a text field are left to it.
+        if (
+            handler != null &&
+                event.action == KeyEvent.ACTION_DOWN &&
+                event.repeatCount == 0 &&
+                currentFocus !is EditText
+        ) {
+            val action =
+                KeyboardMode.actionFor(
+                    event.keyCode,
+                    event.isAltPressed,
+                    event.isCtrlPressed || event.isMetaPressed,
+                    if (event.isAltPressed) 0 else event.unicodeChar,
+                )
+            if (action != null && handler(action)) return true
+        }
+        return super.dispatchKeyEvent(event)
     }
 
     override fun onNewIntent(intent: Intent) {

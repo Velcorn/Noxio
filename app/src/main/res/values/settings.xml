@@ -50,6 +50,7 @@
     <string name="set_key_stats_backup_now" translatable="false">noxio_stats_backup_now</string>
     <string name="set_key_backup_restore" translatable="false">noxio_backup_restore</string>
     <string name="set_key_launcher_icon" translatable="false">noxio_launcher_icon</string>
+    <string name="set_key_keyboard_mode" translatable="false">noxio_keyboard_mode</string>
     <string name="set_key_sleep_shake" translatable="false">noxio_sleep_shake</string>
     <string name="set_key_equalizer" translatable="false">noxio_equalizer</string>
 
@@ -92,6 +93,18 @@
         <item>@integer/theme_auto</item>
         <item>@integer/theme_light</item>
         <item>@integer/theme_dark</item>
+    </integer-array>
+
+    <string-array name="entries_keyboard_mode">
+        <item>@string/set_keyboard_mode_auto</item>
+        <item>@string/set_keyboard_mode_on</item>
+        <item>@string/set_keyboard_mode_off</item>
+    </string-array>
+
+    <integer-array name="values_keyboard_mode">
+        <item>@integer/keyboard_mode_auto</item>
+        <item>@integer/keyboard_mode_on</item>
+        <item>@integer/keyboard_mode_off</item>
     </integer-array>
 
     <string-array name="entries_launcher_icon">
@@ -137,6 +150,9 @@
     <integer name="replay_gain_dynamic">0xA113</integer>
 
     <integer name="launcher_icon_default">0xA400</integer>
+    <integer name="keyboard_mode_auto">0xA410</integer>
+    <integer name="keyboard_mode_on">0xA411</integer>
+    <integer name="keyboard_mode_off">0xA412</integer>
     <integer name="launcher_icon_minimal">0xA401</integer>
 
     <string-array name="entries_backup_frequency">

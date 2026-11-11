@@ -153,6 +153,11 @@
         android:name="org.oxycblt.auxio.search.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/fragment_search">
+        <!-- What was typed to open the search in the keyboard phone mode. -->
+        <argument
+            android:name="query"
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/show_song"
             app:destination="@id/song_detail_dialog" />
