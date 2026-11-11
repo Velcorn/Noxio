@@ -31,6 +31,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
@@ -255,6 +256,7 @@ class MainFragment :
         collectImmediately(homeModel.showOuter.flow, ::handleShowOuter)
         collectImmediately(homeModel.currentTabType, ::updateCurrentTab)
         collectImmediately(detailModel.currentArtist) { updateSearchHint(binding) }
+        collectImmediately(detailModel.currentPlaylist) { updateSearchHint(binding) }
         collectImmediately(detailModel.artistTab) { selectCurrentTab(binding) }
         collectImmediately(homeModel.songList, homeModel.isFastScrolling, ::updateFab)
         collectImmediately(musicModel.indexingState, ::updateIndexerState)
@@ -457,7 +459,6 @@ class MainFragment :
         val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
         binding.mainSort.isVisible = !ownHeader
         binding.mainMore.isVisible = !ownHeader
-        binding.mainRow.isVisible = !ownHeader
         if (filter) {
             binding.mainSearchInput.setText(
                 if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery
@@ -476,7 +477,6 @@ class MainFragment :
      * that it does not sit lower than the tabs of the other screens.
      */
     private fun applyKeyboardLift(binding: FragmentMainBinding) {
-        binding.queueRow.translationY = -keyboardLift.toFloat()
         binding.mainBottomNav.translationY = -keyboardLift.toFloat()
         if (stripAtBottom) {
             binding.playbackBarFragment.translationY = stripBaseTranslation - keyboardLift
@@ -484,7 +484,11 @@ class MainFragment :
     }
 
     private fun applyNavPadding(binding: FragmentMainBinding) {
-        binding.queueRow.updatePadding(bottom = navInsetBottom)
+        // The space under the strip in the queue is as tall as on a playlist page.
+        val cover = navInsetBottom + requireContext().getDimenPixels(R.dimen.spacing_medium)
+        if (binding.queueCover.layoutParams.height != cover) {
+            binding.queueCover.updateLayoutParams { height = cover }
+        }
         val noTabs = !binding.mainTabs.isVisible
         val extra = if (noTabs) requireContext().getDimenPixels(R.dimen.spacing_medium) else 0
         binding.mainBottomNav.updatePadding(bottom = navInsetBottom + extra)
@@ -603,10 +607,25 @@ class MainFragment :
         applyNavPadding(binding)
         nav.alpha = if (shown) fadeRatio else 0f
         nav.isInvisible = nav.alpha == 0f
+        // Albums and genres have sort and more in the header of their list, so no row at all.
+        val row = binding.mainRow
+        val rowShown = shown && mode != NavMode.ALBUM && mode != NavMode.GENRE
+        row.alpha = nav.alpha
+        row.visibility =
+            when {
+                !rowShown -> View.GONE
+                row.alpha == 0f -> View.INVISIBLE
+                else -> View.VISIBLE
+            }
 
         val obstruction = if (shown) nav.height else 0
-        if (playbackSheetBehavior.bottomObstruction != obstruction) {
+        val extra = if (rowShown) row.height else 0
+        if (
+            playbackSheetBehavior.bottomObstruction != obstruction ||
+                playbackSheetBehavior.contentExtra != extra
+        ) {
             playbackSheetBehavior.bottomObstruction = obstruction
+            playbackSheetBehavior.contentExtra = extra
             binding.playbackSheet.requestApplyInsets()
             // The content is only re-inset when the sheet moves, so ask for it explicitly.
             (binding.exploreNavHost.parent as View).requestApplyInsets()
@@ -645,6 +664,7 @@ class MainFragment :
         val playbackOutRatio = 1 - min(playbackRatio * 2, 1f)
         val playbackInRatio = max(playbackRatio - 0.5f, 0f) * 2
         updateBottomNav(binding, playbackSheetBehavior, playbackOutRatio)
+        placeMainRow(binding)
 
         val playbackMaxXScaleDelta = maxScaleXDistance / binding.playbackSheet.width
         val playbackEdgeRatio = max(playbackRatio - 0.9f, 0f) / 0.1f
@@ -693,6 +713,13 @@ class MainFragment :
             // The search row under the strip fades in with it.
             binding.queueRow.alpha = queueBarRatio
             binding.queueRow.isInvisible = queueBarRatio == 0f
+            binding.queueCover.alpha = queueBarRatio
+            binding.queueCover.isInvisible = queueBarRatio == 0f
+            // The search row is above the strip, the strip above the space at the bottom.
+            binding.queueCover.translationY = -keyboardLift.toFloat()
+            binding.queueRow.translationY =
+                -(binding.queueCover.height + binding.playbackBarFragment.height + keyboardLift)
+                    .toFloat()
             if (queueBarRatio == 0f && binding.queueSearchInput.text.isNotEmpty()) {
                 // Not filtering what is not shown.
                 binding.queueSearchInput.setText("")
@@ -749,8 +776,27 @@ class MainFragment :
     }
 
     /**
+     * The search row sits right above the playing strip, so that the strip is nearer the thumb. It
+     * follows the strip as the sheet moves, and sits above the tabs when nothing plays. With the
+     * keyboard open it stays above the keyboard.
+     */
+    private fun placeMainRow(binding: FragmentMainBinding) {
+        val parent = binding.mainLayout.height
+        if (parent == 0) return
+        val nav = binding.mainBottomNav
+        val bottom =
+            minOf(
+                binding.playbackSheet.top.toFloat(),
+                nav.top + nav.translationY,
+                (parent - navInsetBottom - keyboardLift).toFloat(),
+            )
+        binding.mainRow.translationY = bottom - parent
+    }
+
+    /**
      * While the queue is open the playing strip is at the bottom, where the thumb is, with the
-     * queue above it. It sits over the end of the queue, so it needs a background of its own.
+     * queue and its search row above it. It sits over the end of the queue, so it needs a
+     * background of its own.
      */
     private fun placePlayingStrip(binding: FragmentMainBinding, atBottom: Boolean) {
         val strip = binding.playbackBarFragment
@@ -762,12 +808,12 @@ class MainFragment :
         stripBaseTranslation =
             if (atBottom && bars != null) {
                 // The sheet is as tall as the screen, but its top is below the status bar.
-                // The search row is under the strip.
+                // The search row is above the strip, the space of a playlist page under it.
                 (binding.playbackSheet.height -
                         bars.top -
                         bars.bottom -
                         strip.height -
-                        resources.getDimensionPixelSize(R.dimen.size_queue_row))
+                        resources.getDimensionPixelSize(R.dimen.spacing_medium))
                     .toFloat()
             } else {
                 0f

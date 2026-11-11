@@ -150,6 +150,8 @@ class BottomSheetContentBehavior<V : View>(context: Context, attributeSet: Attri
             }
         // Whatever covers the bottom of the screen (the main navigation) stays inset even when
         // the sheet itself is hidden.
-        return maxOf(consumed, (this as? BaseBottomSheetBehavior<*>)?.bottomObstruction ?: 0)
+        // What rides on top of the bar (the search row) takes its own room above that.
+        val base = this as? BaseBottomSheetBehavior<*>
+        return maxOf(consumed, base?.bottomObstruction ?: 0) + (base?.contentExtra ?: 0)
     }
 }

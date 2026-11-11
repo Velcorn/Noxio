@@ -59,6 +59,13 @@ abstract class BaseBottomSheetBehavior<V : View>(context: Context, attributeSet:
      */
     var bottomObstruction = 0
 
+    /**
+     * Space that is taken above the bar, like a search row that rides on top of it. Content is
+     * inset by this much more than the bar and [bottomObstruction]. The owner must request window
+     * insets on the content again after changing it.
+     */
+    var contentExtra = 0
+
     init {
         // Disable isFitToContents to make the bottom sheet expand to the top of the screen and
         // not just how much the content takes up.

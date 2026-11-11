@@ -34,8 +34,9 @@ stats, stays in its own database or in files you export.
   estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
 - **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly or monthly, the last
   five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
-- **One-handed layout:** search, sort and tabs at the bottom, a floating shuffle button, no back buttons (gestures
-  only), no three-dot buttons on rows (long press for the menu), shorter item menus.
+- **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
+  floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),
+  shorter item menus.
 - **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
 - **Queue** with search and sort; **playlists** you can search and sort.

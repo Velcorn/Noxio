@@ -145,9 +145,9 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- The main navigation: a search row above the tabs, on the plain surface. It is drawn over
-         the bottom of the playback sheet, which is raised by its height so that the playback bar
-         sits right above it. Only shown on the home screen (see MainFragment). -->
+    <!-- The tabs at the bottom, on the plain surface. They are drawn over the bottom of the
+         playback sheet, which is raised by their height so that the playing strip sits right above
+         them. Shown and faded by MainFragment. -->
     <LinearLayout
         android:id="@+id/main_bottom_nav"
         android:layout_width="match_parent"
@@ -156,66 +156,6 @@
         android:background="?attr/colorSurface"
         android:orientation="vertical"
         android:translationZ="8dp">
-
-        <LinearLayout
-            android:id="@+id/main_row"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/spacing_medium"
-            android:paddingEnd="12dp">
-
-            <TextView
-                android:id="@+id/main_search"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="@string/lbl_search"
-                android:drawablePadding="@dimen/spacing_mid_medium"
-                android:drawableStart="@drawable/ic_search_20"
-                android:gravity="center_vertical"
-                android:text="@string/hint_search_music"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
-                android:textColor="?android:attr/textColorSecondary" />
-
-            <!-- Instead of the field above on an artist page, where it filters the albums or songs -->
-            <EditText
-                android:id="@+id/main_search_input"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@null"
-                android:drawablePadding="@dimen/spacing_mid_medium"
-                android:drawableStart="@drawable/ic_search_20"
-                android:imeOptions="actionSearch"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
-                android:visibility="gone"
-                tools:ignore="Autofill,LabelFor" />
-
-            <ImageButton
-                android:id="@+id/main_sort"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/lbl_sort"
-                android:src="@drawable/ic_sort_20"
-                app:tint="?android:attr/textColorSecondary" />
-
-            <ImageButton
-                android:id="@+id/main_more"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/lbl_more"
-                android:src="@drawable/ic_more_vert_20"
-                app:tint="?android:attr/textColorSecondary" />
-
-        </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/main_tabs"
@@ -231,8 +171,73 @@
 
     </LinearLayout>
 
-    <!-- The search row under the playing strip while the queue is open, with the same space below
-         it as the playlist page. Shown and faded by MainFragment together with the strip. -->
+    <!-- The search row above the playing strip, or above the tabs when nothing plays. It follows
+         the strip, see MainFragment. -->
+    <LinearLayout
+        android:id="@+id/main_row"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSurface"
+        android:translationZ="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:id="@+id/main_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/lbl_search"
+            android:drawablePadding="@dimen/spacing_mid_medium"
+            android:drawableStart="@drawable/ic_search_20"
+            android:gravity="center_vertical"
+            android:text="@string/hint_search_music"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <!-- Instead of the field above on an artist page, where it filters the albums or songs -->
+        <EditText
+            android:id="@+id/main_search_input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawablePadding="@dimen/spacing_mid_medium"
+            android:drawableStart="@drawable/ic_search_20"
+            android:imeOptions="actionSearch"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:visibility="gone"
+            tools:ignore="Autofill,LabelFor" />
+
+        <ImageButton
+            android:id="@+id/main_sort"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/lbl_sort"
+            android:src="@drawable/ic_sort_20"
+            app:tint="?android:attr/textColorSecondary" />
+
+        <ImageButton
+            android:id="@+id/main_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/lbl_more"
+            android:src="@drawable/ic_more_vert_20"
+            app:tint="?android:attr/textColorSecondary" />
+
+    </LinearLayout>
+
+    <!-- The search row above the playing strip while the queue is open. Shown, faded and placed
+         by MainFragment together with the strip. -->
     <LinearLayout
         android:id="@+id/queue_row"
         android:layout_width="match_parent"
@@ -279,10 +284,18 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_medium" />
-
     </LinearLayout>
+
+    <!-- The space under the playing strip while the queue is open, the same as on a playlist
+         page, so that the end of the queue does not show through below the strip. -->
+    <View
+        android:id="@+id/queue_cover"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_medium"
+        android:layout_gravity="bottom"
+        android:alpha="0"
+        android:background="?attr/colorSurface"
+        android:translationZ="8dp"
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

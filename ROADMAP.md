@@ -18,6 +18,7 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 - No back buttons anywhere, the back gesture only
 
 ## Done
+- Playing strip under the search row: on the home screen between the search row and the tabs, on album, artist and playlist pages and in the queue at the bottom, so it is nearer the thumb; the search row follows it and stays above the keyboard. The search field of a playlist page now shows the playlist name on first open.
 - Short and square screens (under 480 dp of height, like the 1080 × 1200 Clicks Communicator): home tabs show icons only (labels kept for screen readers), the stats totals move into the bottom title row so the top list shows more rows, album, artist, genre and playlist headers lose the empty toolbar gap, and the player text is centered. Checked on an emulator at 1080 × 1200, 420 dpi; normal phones unchanged.
 - Compact player: centered square artwork above centered song details and a shorter full-width control row, with the seek bar retained on screens down to 300 dp available height. The redundant top heading is hidden on these short screens to leave room for the cover. Checked at a Communicator-like 1080 × 1200 resolution at 400 and 480 dpi; real-phone testing pending.
 - Sleep timer duration tiles: all three edit on the first tap, remember their values, and sort shortest to longest after confirmation; readable input and labels, with the active field kept above the keyboard. Defaults are 30 / 45 / 60 minutes, and edits remain capped at 1–599 minutes.
