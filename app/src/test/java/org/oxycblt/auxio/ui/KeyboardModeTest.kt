@@ -131,19 +131,37 @@ class KeyboardModeTest {
     }
 
     @Test
-    fun altWithAPrintedNumberSwitchesTabs() {
+    fun altWithAPrintedNumberTypesIt() {
         fun alt(code: Int, altChar: Int = 0) =
             KeyboardMode.actionFor(code, alt = true, ctrl = false, char = 0, altChar = altChar)
-        // A BlackBerry style keyboard: Alt+W types 1, Alt+S types 4.
-        assertEquals(KeyAction.Tab(0), alt(KeyEvent.KEYCODE_W, '1'.code))
-        assertEquals(KeyAction.Tab(3), alt(KeyEvent.KEYCODE_S, '4'.code))
+        // A BlackBerry style keyboard: Alt+W types 1, Alt+S types 4, Alt+0 is on its own key.
+        assertEquals(KeyAction.Type("1"), alt(KeyEvent.KEYCODE_W, '1'.code))
+        assertEquals(KeyAction.Type("4"), alt(KeyEvent.KEYCODE_S, '4'.code))
+        assertEquals(KeyAction.Type("0"), alt(KeyEvent.KEYCODE_Z, '0'.code))
         // A keyboard with a number row.
-        assertEquals(KeyAction.Tab(0), alt(KeyEvent.KEYCODE_1))
-        assertEquals(KeyAction.Tab(1), alt(KeyEvent.KEYCODE_2))
+        assertEquals(KeyAction.Type("1"), alt(KeyEvent.KEYCODE_1))
+        assertEquals(KeyAction.Type("9"), alt(KeyEvent.KEYCODE_9))
         // Alt+B types ? there.
         assertEquals(KeyAction.Help, alt(KeyEvent.KEYCODE_B, '?'.code))
         assertNull(alt(KeyEvent.KEYCODE_T, '('.code))
         assertNull(alt(KeyEvent.KEYCODE_A))
+    }
+
+    @Test
+    fun ctrlWithCommaOrPeriodSwitchesTabs() {
+        assertEquals(KeyAction.PreviousTab, ctrl(KeyEvent.KEYCODE_COMMA))
+        assertEquals(KeyAction.NextTab, ctrl(KeyEvent.KEYCODE_PERIOD))
+        fun ctrlAlt(code: Int, altChar: Int) =
+            KeyboardMode.actionFor(code, alt = true, ctrl = true, char = 0, altChar = altChar)
+        // Where comma and period need Alt, as on a BlackBerry style keyboard.
+        assertEquals(KeyAction.PreviousTab, ctrlAlt(KeyEvent.KEYCODE_N, ','.code))
+        assertEquals(KeyAction.NextTab, ctrlAlt(KeyEvent.KEYCODE_M, '.'.code))
+        // Without Alt the letter is meant, even when it has a period printed on it.
+        assertEquals(
+            KeyAction.Menu,
+            KeyboardMode.actionFor(KeyEvent.KEYCODE_M, false, true, 0, '.'.code),
+        )
+        assertNull(ctrlAlt(KeyEvent.KEYCODE_P, '0'.code))
     }
 
     @Test

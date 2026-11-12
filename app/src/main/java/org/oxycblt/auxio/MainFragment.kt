@@ -634,10 +634,13 @@ class MainFragment :
                 val dispatcher = requireActivity().onBackPressedDispatcher
                 dispatcher.hasEnabledCallbacks().also { if (it) dispatcher.onBackPressed() }
             }
-            is KeyAction.Tab -> {
+            KeyAction.PreviousTab,
+            KeyAction.NextTab -> {
+                val tabs = binding.mainTabs
+                val step = if (action == KeyAction.NextTab) 1 else -1
                 val tab =
                     if (!playerOpen && (navMode == NavMode.HOME || navMode == NavMode.ARTIST)) {
-                        binding.mainTabs.getTabAt(action.index)
+                        tabs.getTabAt(tabs.selectedTabPosition + step)
                     } else {
                         null
                     }

@@ -423,7 +423,7 @@
     <string name="lbl_keys_desc">Einfach lostippen, um zu suchen. Diese Tasten gelten, solange du nicht in ein Feld tippst.</string>
     <string name="lbl_keys_type">Suchen, oder diese Seite oder die Warteschlange filtern</string>
     <string name="lbl_keys_play_pause">Abspielen oder pausieren</string>
-    <string name="lbl_keys_back">Zurück: Wiedergabe, Warteschlange oder Seite schließen</string>
+    <string name="lbl_keys_back">Wiedergabe, Warteschlange oder Seite schließen</string>
     <string name="lbl_keys_next_previous">Nächster oder vorheriger Titel</string>
     <string name="lbl_keys_seek">10 Sekunden zurück oder vor</string>
     <string name="lbl_keys_player">Wiedergabe öffnen oder schließen</string>
@@ -434,7 +434,7 @@
     <string name="lbl_keys_find">Hier suchen</string>
     <string name="lbl_keys_sort">Sortieren (ordnen)</string>
     <string name="lbl_keys_menu">Menü</string>
-    <string name="lbl_keys_tabs">Tabs, mit der Zahl auf der Taste</string>
+    <string name="lbl_keys_tabs">Vorheriger oder nächster Tab</string>
     <string name="lbl_keys_help">Diese Übersicht</string>
     <string name="set_keyboard_keys_desc">Alle Tasten auf einen Blick</string>
     <string name="set_launcher_icon">App-Icon</string>

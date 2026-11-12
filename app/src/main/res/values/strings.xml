@@ -374,7 +374,7 @@
     <string name="lbl_keys_desc">Type anywhere to search. These keys work whenever you are not typing in a field.</string>
     <string name="lbl_keys_type">Search, or filter this page or the queue</string>
     <string name="lbl_keys_play_pause">Play or pause</string>
-    <string name="lbl_keys_back">Back: close the player, the queue or the page</string>
+    <string name="lbl_keys_back">Close the player, the queue or the page</string>
     <string name="lbl_keys_next_previous">Next or previous song</string>
     <string name="lbl_keys_seek">Back or ahead 10 seconds</string>
     <string name="lbl_keys_player">Open or close the player</string>
@@ -385,7 +385,7 @@
     <string name="lbl_keys_find">Search here</string>
     <string name="lbl_keys_sort">Sort (order)</string>
     <string name="lbl_keys_menu">Menu (more)</string>
-    <string name="lbl_keys_tabs">Tabs, with the number printed on the key</string>
+    <string name="lbl_keys_tabs">Previous or next tab</string>
     <string name="lbl_keys_help">This overview</string>
     <string name="set_keyboard_keys_desc">All keys at a glance</string>
     <string name="set_launcher_icon">App icon</string>

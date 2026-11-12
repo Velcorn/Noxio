@@ -71,9 +71,9 @@ object KeyboardMode {
     /**
      * What a key press does outside of a text field.
      *
-     * Plain letters and digits type (search or filter), Ctrl with a letter is a command named by
-     * that letter, and Alt with a key that has a number printed on it (Alt+W is 1 on a BlackBerry
-     * style keyboard) switches to that tab.
+     * Letters and digits type (search or filter), also a digit printed on a letter key (Alt+W is 1
+     * on a BlackBerry style keyboard), Ctrl with a letter is a command named by that letter, and
+     * Ctrl with comma or period goes to the previous or next tab.
      *
      * @param keyCode The [KeyEvent] key code.
      * @param alt Whether Alt is held.
@@ -89,12 +89,23 @@ object KeyboardMode {
         char: Int,
         altChar: Int = 0,
     ): KeyAction? {
-        if (ctrl) return CTRL[keyCode]
-        if (alt) {
-            if (keyCode in KeyEvent.KEYCODE_1..KeyEvent.KEYCODE_9) {
-                return KeyAction.Tab(keyCode - KeyEvent.KEYCODE_1)
+        if (ctrl) {
+            // Comma and period may need Alt, as on the Communicator; only then is the character
+            // with Alt what the key means.
+            val tabKey = if (alt) altChar else 0
+            return when {
+                keyCode == KeyEvent.KEYCODE_COMMA || tabKey == ','.code -> KeyAction.PreviousTab
+                keyCode == KeyEvent.KEYCODE_PERIOD || tabKey == '.'.code -> KeyAction.NextTab
+                alt -> null
+                else -> CTRL[keyCode]
             }
-            if (altChar in '1'.code..'9'.code) return KeyAction.Tab(altChar - '1'.code)
+        }
+        if (alt) {
+            // Digits are printed on letter keys (Alt+W types 1) and start a search like letters.
+            if (keyCode in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9) {
+                return KeyAction.Type((keyCode - KeyEvent.KEYCODE_0).toString())
+            }
+            if (altChar in '0'.code..'9'.code) return KeyAction.Type(altChar.toChar().toString())
             return if (altChar == '?'.code) KeyAction.Help else null
         }
         return when {
@@ -130,9 +141,9 @@ object KeyboardMode {
     /** All shortcuts, in the order the overview shows them. */
     val shortcuts =
         listOf(
-            Shortcut("a–z", R.string.lbl_keys_type),
+            Shortcut("a–z · 0–9", R.string.lbl_keys_type),
             Shortcut("Space", R.string.lbl_keys_play_pause),
-            Shortcut("⌫", R.string.lbl_keys_back),
+            Shortcut("Backspace", R.string.lbl_keys_back),
             Shortcut("Ctrl N · Ctrl B", R.string.lbl_keys_next_previous),
             Shortcut("Ctrl J · Ctrl L", R.string.lbl_keys_seek),
             Shortcut("Ctrl P", R.string.lbl_keys_player),
@@ -143,7 +154,7 @@ object KeyboardMode {
             Shortcut("Ctrl F", R.string.lbl_keys_find),
             Shortcut("Ctrl O", R.string.lbl_keys_sort),
             Shortcut("Ctrl M", R.string.lbl_keys_menu),
-            Shortcut("Alt 1–4", R.string.lbl_keys_tabs),
+            Shortcut("Ctrl , · Ctrl .", R.string.lbl_keys_tabs),
             Shortcut("Ctrl H · ?", R.string.lbl_keys_help),
         )
 }
@@ -186,8 +197,11 @@ sealed interface KeyAction {
     /** The overview of the shortcuts. */
     data object Help : KeyAction
 
-    /** Switch to the tab at [index], 0 for the first. */
-    data class Tab(val index: Int) : KeyAction
+    /** The tab to the left of the shown one. */
+    data object PreviousTab : KeyAction
+
+    /** The tab to the right of the shown one. */
+    data object NextTab : KeyAction
 
     /** Start searching or filtering with [text]. */
     data class Type(val text: String) : KeyAction
