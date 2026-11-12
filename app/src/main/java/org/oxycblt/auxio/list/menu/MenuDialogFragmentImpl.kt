@@ -28,8 +28,10 @@ import org.oxycblt.auxio.databinding.DialogMenuBinding
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.MusicViewModel
+import org.oxycblt.auxio.music.PlaylistSongs
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
+import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.playback.formatDurationMs
 import org.oxycblt.auxio.util.getPlural
@@ -81,6 +83,11 @@ class SongMenuDialogFragment : MenuDialogFragment<Menu.ForSong>() {
                 requireContext().showToast(R.string.lng_queue_added)
             }
             R.id.action_playlist_add -> musicModel.addToPlaylist(menu.song)
+            R.id.action_playlist_remove -> {
+                // Only in the menu of a song on a playlist page.
+                val playlist = (menu.playWith as? PlaySong.FromPlaylist)?.which
+                if (playlist != null) musicModel.removeFromPlaylist(menu.song, playlist)
+            }
             R.id.action_artist_details -> detailModel.showArtist(menu.song)
             R.id.action_album_details -> detailModel.showAlbum(menu.song.album)
             R.id.action_share -> requireContext().share(menu.song)
@@ -293,8 +300,11 @@ class PlaylistMenuDialogFragment : MenuDialogFragment<Menu.ForPlaylist>() {
                 R.id.action_queue_add,
                 R.id.action_playlist_add,
                 R.id.action_export,
+                R.id.action_remove_duplicates,
                 R.id.action_share,
             )
+        } else if (!PlaylistSongs.hasDuplicates(menu.playlist.songs)) {
+            setOf(R.id.action_remove_duplicates)
         } else {
             setOf()
         }
@@ -328,6 +338,7 @@ class PlaylistMenuDialogFragment : MenuDialogFragment<Menu.ForPlaylist>() {
             R.id.action_rename -> musicModel.renamePlaylist(menu.playlist)
             R.id.action_import -> musicModel.importPlaylist(target = menu.playlist)
             R.id.action_export -> musicModel.exportPlaylist(menu.playlist)
+            R.id.action_remove_duplicates -> musicModel.removeDuplicates(menu.playlist)
             R.id.action_delete -> musicModel.deletePlaylist(menu.playlist)
             R.id.action_share -> requireContext().share(menu.playlist)
             else -> error("Unexpected menu item $item")

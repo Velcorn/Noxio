@@ -32,6 +32,7 @@ import org.oxycblt.auxio.list.EditClickListListener
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.ui.ViewBindingFragment
+import org.oxycblt.auxio.util.collect
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.musikr.Song
 import timber.log.Timber as L
@@ -84,6 +85,7 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
             playbackModel.isPlaying,
             ::updateQueue,
         )
+        collect(queueModel.scrollToCurrent.flow, ::scrollToCurrent)
         // Typing in the search row of the main screen filters the list.
         collectImmediately(queueModel.query) {
             updateQueue(
@@ -109,6 +111,20 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
 
     override fun onPickUp(viewHolder: RecyclerView.ViewHolder) {
         requireNotNull(touchHelper) { "ItemTouchHelper was not available" }.startDrag(viewHolder)
+    }
+
+    private fun scrollToCurrent(index: Int?) {
+        if (index == null) return
+        queueModel.scrollToCurrent.consume()
+        // In a filtered list the song is where the filter shows it, or not there at all.
+        val query = queueModel.query.value
+        val position =
+            if (query.isBlank()) index
+            else QueueOrder.filter(queueModel.queue.value, query).indexOf(index)
+        if (position >= 0) {
+            (requireBinding().queueRecycler.layoutManager as LinearLayoutManager)
+                .scrollToPositionWithOffset(position, 0)
+        }
     }
 
     private fun updateDivider() {

@@ -23,6 +23,10 @@
             android:id="@+id/action_export"
             android:icon="@drawable/ic_save_24"
             android:title="@string/lbl_export" />
+        <item
+            android:id="@+id/action_remove_duplicates"
+            android:icon="@drawable/ic_close_24"
+            android:title="@string/lbl_remove_duplicates" />
     </group>
     <group android:id="@+id/menu_delete_action">
         <item

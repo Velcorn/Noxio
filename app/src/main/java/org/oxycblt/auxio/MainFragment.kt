@@ -203,6 +203,18 @@ class MainFragment :
             unlikelyToBeNull(binding.queueHandleWrapper).setOnClickListener {
                 playbackModel.openQueue()
             }
+            // Whenever the queue is opened it starts with the song that is playing.
+            queueSheetBehavior.addBottomSheetCallback(
+                object : BackportBottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        if (newState == BackportBottomSheetBehavior.STATE_EXPANDED) {
+                            queueModel.showCurrent()
+                        }
+                    }
+
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                }
+            )
         } else {
             // Dual-pane mode, manually style the static queue sheet.
             L.d("Configuring dual-pane bottom sheet")
@@ -449,6 +461,7 @@ class MainFragment :
             // The same dialog as the other lists have, it can be opened from any screen.
             requireBinding().exploreNavHost.findNavController().navigate(R.id.queue_sort_dialog)
         }
+        binding.queueMore.setOnClickListener(::showQueueMore)
         binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
             // Keep the tabs clear of the system navigation.
             navInsetBottom = insets.systemBarInsetsCompat.bottom
@@ -563,6 +576,20 @@ class MainFragment :
         }
     }
 
+    /** The menu of the queue: what is done with the whole of it. */
+    private fun showQueueMore(anchor: View) {
+        popupMenu(requireContext(), anchor).apply {
+            inflate(R.menu.queue_overflow)
+            menu.findItem(R.id.action_queue_save).isEnabled = queueModel.queue.value.isNotEmpty()
+            setOnMenuItemClickListener {
+                // The dialog of the playlists, with a new one at its end.
+                musicModel.addToPlaylist(queueModel.queue.value)
+                true
+            }
+            show()
+        }
+    }
+
     /**
      * What a key does in the keyboard phone mode, see [KeyboardMode.actionFor].
      *
@@ -616,6 +643,10 @@ class MainFragment :
                 }
             KeyAction.Menu ->
                 when {
+                    queueOpen -> {
+                        showQueueMore(binding.queueMore)
+                        true
+                    }
                     playerOpen -> false
                     navMode == NavMode.HOME ||
                         navMode == NavMode.ARTIST ||

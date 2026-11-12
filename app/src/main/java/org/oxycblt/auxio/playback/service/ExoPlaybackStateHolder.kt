@@ -89,6 +89,14 @@ class ExoPlaybackStateHolder(
     private val saveScope = CoroutineScope(Dispatchers.IO + saveJob)
     private val restoreScope = CoroutineScope(Dispatchers.IO + saveJob)
     private var currentSaveJob: Job? = null
+    // While something plays the position is saved every little while, not only after changes.
+    private val autoSaver =
+        AutoSaver(CoroutineScope(Dispatchers.Main + saveJob), AUTO_SAVE_INTERVAL) {
+            if (sessionOngoing) {
+                val positionMs = playbackManager.progression.calculateElapsedPositionMs()
+                saveScope.launch { persistenceRepository.savePosition(positionMs) }
+            }
+        }
     private var openAudioEffectSession = false
     private var sleepPauseAtEnd = false
     private val sleepTimerController =
@@ -543,6 +551,13 @@ class ExoPlaybackStateHolder(
         }
     }
 
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+        super.onIsPlayingChanged(isPlaying)
+        autoSaver.setPlaying(isPlaying)
+        // Where it stopped or started is worth keeping, however it was started or stopped.
+        deferSave()
+    }
+
     override fun onEvents(player: Player, events: Player.Events) {
         super.onEvents(player, events)
 
@@ -745,5 +760,6 @@ class ExoPlaybackStateHolder(
 
     private companion object {
         const val SAVE_BUFFER = 5000L
+        const val AUTO_SAVE_INTERVAL = 15_000L
     }
 }

@@ -198,6 +198,15 @@ class KeyboardModeTest {
     }
 
     @Test
+    fun theSearchAndMenuKeysDoWhatTheirNamesSay() {
+        fun key(code: Int) = KeyboardMode.actionFor(code, false, false, 0)
+        assertEquals(KeyAction.Find, key(KeyEvent.KEYCODE_SEARCH))
+        assertEquals(KeyAction.Menu, key(KeyEvent.KEYCODE_MENU))
+        // Also with a modifier held.
+        assertEquals(KeyAction.Find, ctrl(KeyEvent.KEYCODE_SEARCH))
+    }
+
+    @Test
     fun otherKeysAreLeftAlone() {
         assertNull(KeyboardMode.actionFor(KeyEvent.KEYCODE_PERIOD, false, false, '.'.code))
         assertNull(KeyboardMode.actionFor(KeyEvent.KEYCODE_DPAD_DOWN, false, false, 0))

@@ -33,7 +33,8 @@ import org.oxycblt.musikr.tag.Name
 import timber.log.Timber as L
 
 /**
- * Implements the fuzzy-ish searching algorithm used in the search view.
+ * Implements the fuzzy-ish searching algorithm used in the search view: what matches, best match
+ * first.
  *
  * @author Alexander Capehart
  */
@@ -82,7 +83,8 @@ class SearchEngineImpl @Inject constructor(@ApplicationContext private val conte
     }
 
     /**
-     * Search a given [Music] list.
+     * Search a given [Music] list, the best matches first (see [SearchRank]), and those that match
+     * equally well in the order they came in.
      *
      * @param query The query to search for. The routine will compare this query to the names of
      *   each object in the list and
@@ -93,42 +95,35 @@ class SearchEngineImpl @Inject constructor(@ApplicationContext private val conte
     private inline fun <T : Music> Collection<T>.searchListImpl(
         query: String,
         fallback: (String, T) -> Boolean = { _, _ -> false },
-    ) =
-        filter {
+    ): List<T>? =
+        mapNotNull {
                 // See if the plain resolved name matches the query. This works for most
                 // situations.
                 val name = it.name
-
                 val resolvedName = name.resolve(context)
-                if (resolvedName.contains(query, ignoreCase = true)) {
-                    return@filter true
-                }
 
-                // See if the sort name matches. This can sometimes be helpful as certain
-                // libraries
-                // will tag sort names to have a alphabetized version of the title.
-                if (name is Name.Known) {
-                    val sortName = name.sort
-                    if (sortName != null && sortName.contains(query, ignoreCase = true)) {
-                        return@filter true
-                    }
-                }
+                // The sort name can sometimes be helpful as certain libraries will tag sort names
+                // to have a alphabetized version of the title.
+                val sortName = (name as? Name.Known)?.sort
 
                 // As a last-ditch effort, see if the normalized name matches. This will replace
-                // any non-alphabetical characters with their alphabetical representations,
-                // which
+                // any non-alphabetical characters with their alphabetical representations, which
                 // could make it match the query.
                 val normalizedName =
                     NORMALIZE_POST_PROCESSING_REGEX.replace(
                         Normalizer.normalize(resolvedName, Normalizer.Form.NFKD),
                         "",
                     )
-                if (normalizedName.contains(query, ignoreCase = true)) {
-                    return@filter true
-                }
 
-                fallback(query, it)
+                val rank = SearchRank.best(listOf(resolvedName, sortName, normalizedName), query)
+                when {
+                    rank != SearchRank.NONE -> it to rank
+                    fallback(query, it) -> it to SearchRank.OTHER
+                    else -> null
+                }
             }
+            .sortedBy { it.second }
+            .map { it.first }
             .ifEmpty { null }
 
     private companion object {

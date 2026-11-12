@@ -113,23 +113,19 @@ constructor(
     private suspend fun searchImpl(library: Library, query: String): List<Item> {
         val filters = activeTypes()
 
+        // The best matches come first, the ones that match equally well by name.
+        val all = sortedByName(library)
         val items =
             if (!filters.isEmpty()) {
                 SearchEngine.Items(
-                    songs = if (MusicType.SONGS in filters) library.songs else null,
-                    albums = if (MusicType.ALBUMS in filters) library.albums else null,
-                    artists = if (MusicType.ARTISTS in filters) library.artists else null,
-                    genres = if (MusicType.GENRES in filters) library.genres else null,
-                    playlists = if (MusicType.PLAYLISTS in filters) library.playlists else null,
+                    songs = if (MusicType.SONGS in filters) all.songs else null,
+                    albums = if (MusicType.ALBUMS in filters) all.albums else null,
+                    artists = if (MusicType.ARTISTS in filters) all.artists else null,
+                    genres = if (MusicType.GENRES in filters) all.genres else null,
+                    playlists = if (MusicType.PLAYLISTS in filters) all.playlists else null,
                 )
             } else {
-                SearchEngine.Items(
-                    songs = library.songs,
-                    albums = library.albums,
-                    artists = library.artists,
-                    genres = library.genres,
-                    playlists = library.playlists,
-                )
+                all
             }
 
         val results = searchEngine.search(items, query)
@@ -139,7 +135,7 @@ constructor(
                 L.d("Adding ${it.size} artists to search results")
                 val header = BasicHeader(R.string.lbl_artists)
                 add(header)
-                addAll(SORT.artists(it))
+                addAll(it)
             }
             results.albums?.let {
                 L.d("Adding ${it.size} albums to search results")
@@ -149,7 +145,7 @@ constructor(
                 }
 
                 add(header)
-                addAll(SORT.albums(it))
+                addAll(it)
             }
             results.playlists?.let {
                 L.d("Adding ${it.size} playlists to search results")
@@ -159,7 +155,7 @@ constructor(
                 }
 
                 add(header)
-                addAll(SORT.playlists(it))
+                addAll(it)
             }
             results.genres?.let {
                 L.d("Adding ${it.size} genres to search results")
@@ -169,7 +165,7 @@ constructor(
                 }
 
                 add(header)
-                addAll(SORT.genres(it))
+                addAll(it)
             }
             results.songs?.let {
                 L.d("Adding ${it.size} songs to search results")
@@ -179,7 +175,7 @@ constructor(
                 }
 
                 add(header)
-                addAll(SORT.songs(it))
+                addAll(it)
             }
         }
     }
@@ -204,6 +200,26 @@ constructor(
         searchSettings.filters = filters
         search(lastQuery)
     }
+
+    // The library sorted by name, kept for as long as the library is the same.
+    private var sortedLibrary: Library? = null
+    private var sortedItems = SearchEngine.Items()
+
+    private fun sortedByName(library: Library): SearchEngine.Items =
+        synchronized(this) {
+            if (sortedLibrary !== library) {
+                sortedItems =
+                    SearchEngine.Items(
+                        songs = SORT.songs(library.songs),
+                        albums = SORT.albums(library.albums),
+                        artists = SORT.artists(library.artists),
+                        genres = SORT.genres(library.genres),
+                        playlists = SORT.playlists(library.playlists),
+                    )
+                sortedLibrary = library
+            }
+            sortedItems
+        }
 
     private companion object {
         val SORT = Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)

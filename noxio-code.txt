@@ -43,3 +43,6 @@ list/menu/MenuGroupDivider.kt
 settings/ui/BottomAlignedPreferenceLayoutManager.kt
 playback/timer/SleepTimerPresets.kt
 ui/KeyboardMode.kt
+search/SearchRank.kt
+music/PlaylistSongs.kt
+playback/service/AutoSaver.kt

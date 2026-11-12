@@ -60,14 +60,16 @@ class MenuGroupDividerTest {
     fun playlistDividersSeparateQueueManagementAndDeleteEvenWhenActionsAreDisabled() {
         for (resource in listOf(R.menu.playlist, R.menu.detail_playlist)) {
             val adapter = adapter(resource)
-            // Empty playlists disable queue actions and export without changing the groups.
+            // Empty playlists disable queue actions, export and duplicates without changing the
+            // groups.
             adapter.currentList.forEach { it.isEnabled = false }
             assertFalse(divider.shouldDrawDivider(0, adapter))
             assertTrue(divider.shouldDrawDivider(1, adapter))
             assertFalse(divider.shouldDrawDivider(2, adapter))
             assertFalse(divider.shouldDrawDivider(3, adapter))
-            assertTrue(divider.shouldDrawDivider(4, adapter))
-            assertFalse(divider.shouldDrawDivider(5, adapter))
+            assertFalse(divider.shouldDrawDivider(4, adapter))
+            assertTrue(divider.shouldDrawDivider(5, adapter))
+            assertFalse(divider.shouldDrawDivider(6, adapter))
         }
     }
 

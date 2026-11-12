@@ -39,6 +39,13 @@ interface PersistenceRepository {
      * @param state The [PlaybackStateManager.SavedState] to persist.
      */
     suspend fun saveState(state: PlaybackStateManager.SavedState?): Boolean
+
+    /**
+     * Persist only the position in the current song, in the state saved last.
+     *
+     * @param positionMs The position in milliseconds.
+     */
+    suspend fun savePosition(positionMs: Long): Boolean
 }
 
 class PersistenceRepositoryImpl
@@ -78,6 +85,16 @@ constructor(
             songUid = playbackState.songUid,
         )
     }
+
+    override suspend fun savePosition(positionMs: Long): Boolean =
+        try {
+            playbackStateDao.updatePosition(positionMs)
+            true
+        } catch (e: Exception) {
+            L.e("Unable to save the position")
+            L.e(e.stackTraceToString())
+            false
+        }
 
     override suspend fun saveState(state: PlaybackStateManager.SavedState?): Boolean {
         try {

@@ -625,4 +625,10 @@
     <string name="fmt_stats_wrapped_busiest_day">Busiest day: %s</string>
     <string name="fmt_stats_wrapped_empty">Nothing was played in %s yet</string>
     <string name="fmt_stats_wrapped_page">%1$d / %2$d</string>
+    <string name="lbl_playlist_remove">Remove from playlist</string>
+    <string name="lbl_remove_duplicates">Remove duplicates</string>
+    <string name="lbl_queue_save">Save as playlist</string>
+    <string name="lng_playlist_already">Already in the playlist</string>
+    <string name="lng_playlist_removed">Removed from the playlist</string>
+    <string name="lng_playlist_deduped">Duplicates removed</string>
 </resources>

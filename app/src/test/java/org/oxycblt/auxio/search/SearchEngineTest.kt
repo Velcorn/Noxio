@@ -140,4 +140,45 @@ class SearchEngineTest {
         val result = engine.search(SearchEngine.Items(songs = listOf(song, other)), "final")
         assertEquals(listOf(song), result.songs?.toList())
     }
+
+    @Test
+    fun theBestMatchesComeFirstAndEqualOnesKeepTheirOrder() {
+        val result =
+            search(
+                "moth",
+                artist("Behemoth"),
+                artist("Night Moth"),
+                artist("Moth Eaten"),
+                artist("Moth"),
+                artist("Mothership"),
+                artist("Kestrel"),
+            )
+        assertEquals(
+            listOf("Moth", "Moth Eaten", "Mothership", "Night Moth", "Behemoth"),
+            names(result),
+        )
+    }
+
+    @Test
+    fun severalWordsMatchInAnyOrderButAfterTheNameThatHasThemTogether() {
+        val result =
+            search(
+                "night owls",
+                artist("Owls of the Night"),
+                artist("The Night Owls"),
+                artist("Night"),
+            )
+        assertEquals(listOf("The Night Owls", "Owls of the Night"), names(result))
+    }
+
+    @Test
+    fun aSongThatOnlyMatchesByItsFileNameComesAfterTheNamedOnes() = runBlocking {
+        fun path(file: String) =
+            Path(Volume.ThirdParty(Uri.EMPTY), Components.parseUnix("Music/$file"))
+        val byFile = fake<Song>(known("Seven"), path("final.mp3"))
+        val byName = fake<Song>(known("Finally"), path("x.mp3"))
+        val result =
+            engine.search(SearchEngine.Items(songs = listOf(byFile, byName)), "final").songs
+        assertEquals(listOf(byName, byFile), result?.toList())
+    }
 }

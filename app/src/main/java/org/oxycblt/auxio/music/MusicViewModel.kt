@@ -340,14 +340,53 @@ constructor(
      */
     fun addToPlaylist(songs: List<Song>, playlist: Playlist? = null) {
         if (playlist != null) {
-            L.d("Adding ${songs.size} songs to $playlist")
+            // A song is only added once, what is in the playlist already is left out.
+            val current = musicRepository.library?.findPlaylist(playlist.uid) ?: playlist
+            val fresh = PlaylistSongs.newOnes(current.songs, songs)
+            if (fresh.isEmpty()) {
+                L.d("All ${songs.size} songs are in $playlist already")
+                playlistMessage.put(PlaylistMessage.AlreadyAdded)
+                return
+            }
+            L.d("Adding ${fresh.size} songs to $playlist")
             viewModelScope.launch(Dispatchers.IO) {
-                musicRepository.addToPlaylist(songs, playlist)
+                musicRepository.addToPlaylist(fresh, playlist)
                 playlistMessage.put(PlaylistMessage.AddSuccess)
             }
         } else {
             L.d("Launching addition dialog for songs=${songs.size}")
             playlistDecision.put(PlaylistDecision.Add(songs))
+        }
+    }
+
+    /**
+     * Take a [Song] out of a [Playlist]. If it is in it more than once only the first copy goes.
+     *
+     * @param song The [Song] to remove.
+     * @param playlist The [Playlist] to remove it from.
+     */
+    fun removeFromPlaylist(song: Song, playlist: Playlist) {
+        rewrite(playlist, PlaylistMessage.RemoveSuccess) { PlaylistSongs.withoutOne(it, song) }
+    }
+
+    /**
+     * Leave every [Song] of a [Playlist] only at its first place.
+     *
+     * @param playlist The [Playlist] to remove the duplicates from.
+     */
+    fun removeDuplicates(playlist: Playlist) {
+        rewrite(playlist, PlaylistMessage.DuplicatesRemoved, PlaylistSongs::withoutDuplicates)
+    }
+
+    private fun rewrite(
+        playlist: Playlist,
+        message: PlaylistMessage,
+        change: (List<Song>) -> List<Song>,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val current = musicRepository.library?.findPlaylist(playlist.uid) ?: return@launch
+            musicRepository.rewritePlaylist(current, change(current.songs))
+            playlistMessage.put(message)
         }
     }
 
@@ -472,6 +511,21 @@ sealed interface PlaylistMessage {
     data object AddSuccess : PlaylistMessage {
         override val stringRes: Int
             get() = R.string.lng_playlist_added
+    }
+
+    data object AlreadyAdded : PlaylistMessage {
+        override val stringRes: Int
+            get() = R.string.lng_playlist_already
+    }
+
+    data object RemoveSuccess : PlaylistMessage {
+        override val stringRes: Int
+            get() = R.string.lng_playlist_removed
+    }
+
+    data object DuplicatesRemoved : PlaylistMessage {
+        override val stringRes: Int
+            get() = R.string.lng_playlist_deduped
     }
 
     data object ExportSuccess : PlaylistMessage {

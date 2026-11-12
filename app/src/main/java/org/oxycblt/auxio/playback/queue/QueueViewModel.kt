@@ -58,6 +58,10 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
     val scrollTo: Event<Int>
         field = MutableEvent<Int>()
 
+    /** The song that is playing is to be put at the top of the list, as the queue is opened. */
+    val scrollToCurrent: Event<Int>
+        field = MutableEvent<Int>()
+
     /** The index of the currently playing song in the queue. */
     val index: StateFlow<Int>
         field = MutableStateFlow(playbackManager.index)
@@ -117,6 +121,11 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
      * @param adapterIndex The index of the queue item to play. Does nothing if the index is out of
      *   range.
      */
+    /** Ask the list to put the song that is playing at its top. */
+    fun showCurrent() {
+        scrollToCurrent.put(index.value)
+    }
+
     /** Only show the songs of the queue that match [query] in the title, artist or album. */
     fun setQuery(query: String) {
         _query.value = query

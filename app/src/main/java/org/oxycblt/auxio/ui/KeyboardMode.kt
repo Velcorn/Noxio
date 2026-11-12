@@ -89,6 +89,11 @@ object KeyboardMode {
         char: Int,
         altChar: Int = 0,
     ): KeyAction? {
+        // The keys that some phones have for these two.
+        when (keyCode) {
+            KeyEvent.KEYCODE_SEARCH -> return KeyAction.Find
+            KeyEvent.KEYCODE_MENU -> return KeyAction.Menu
+        }
         if (ctrl) {
             // Comma and period may need Alt, as on the Communicator; only then is the character
             // with Alt what the key means.

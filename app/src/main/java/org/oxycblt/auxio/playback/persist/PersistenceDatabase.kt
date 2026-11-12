@@ -82,6 +82,15 @@ interface PlaybackStateDao {
      */
     @Query("SELECT * FROM PlaybackState WHERE id = 0") suspend fun getState(): PlaybackState?
 
+    /**
+     * Change only the position in the persisted [PlaybackState], which is cheap enough to do every
+     * few seconds. Does nothing if no state was persisted yet.
+     *
+     * @param positionMs The new position in the current song, in milliseconds.
+     */
+    @Query("UPDATE PlaybackState SET positionMs = :positionMs WHERE id = 0")
+    suspend fun updatePosition(positionMs: Long)
+
     /** Delete any previously persisted [PlaybackState]s. */
     @Query("DELETE FROM PlaybackState") suspend fun nukeState()
 
