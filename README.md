@@ -30,19 +30,19 @@ stats, stays in its own database or in files you export.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
   cards to share or save. A **year in review** with five cards to swipe through.
-- **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
-  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
-- **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly or monthly, the last
-  five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
 - **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
   floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),
   shorter item menus.
-- **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
-  header, so more fits on screens like the Clicks Communicator.
+- **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly or monthly, the last
+  five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
+- **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
+  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
+- **Queue** with search and sort; **playlists** you can search and sort.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
   a keyboard the search row stays, so it can always be switched off.
-- **Queue** with search and sort; **playlists** you can search and sort.
+- **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
+  header, so more fits on screens like the Clicks Communicator.
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
 - **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed;
@@ -59,8 +59,8 @@ widgets, completely private and offline. Progress and what still needs a check o
 Black theme on a Pixel 9 sized emulator, with a made up library and listening history.
 
 <table>
-<tr><td align="center" width="20%"><img src="docs/screenshots/01-home.png" width="160" alt="Home: search, sort and tabs at the bottom"><br><sub>Home: search, sort and tabs at the bottom</sub></td><td align="center" width="20%"><img src="docs/screenshots/02-player.png" width="160" alt="Now playing"><br><sub>Now playing</sub></td><td align="center" width="20%"><img src="docs/screenshots/03-queue.png" width="160" alt="Queue with search and sort"><br><sub>Queue with search and sort</sub></td><td align="center" width="20%"><img src="docs/screenshots/04-album.png" width="160" alt="Album page, no back bar"><br><sub>Album page, no back bar</sub></td><td align="center" width="20%"><img src="docs/screenshots/05-stats.png" width="160" alt="Listening stats"><br><sub>Listening stats</sub></td></tr>
-<tr><td align="center" width="20%"><img src="docs/screenshots/06-stats-item.png" width="160" alt="A closer look at an artist, with imported plays"><br><sub>A closer look at an artist, with imported plays</sub></td><td align="center" width="20%"><img src="docs/screenshots/07-share-card.png" width="160" alt="Share card of the overview"><br><sub>Share card of the overview</sub></td><td align="center" width="20%"><img src="docs/screenshots/08-sleep-timer.png" width="160" alt="Sleep timer"><br><sub>Sleep timer</sub></td><td align="center" width="20%"><img src="docs/screenshots/09-backup.png" width="160" alt="Backup on a schedule"><br><sub>Backup on a schedule</sub></td><td align="center" width="20%"><img src="docs/screenshots/10-search.png" width="160" alt="Search, chips above the keyboard"><br><sub>Search, chips above the keyboard</sub></td></tr>
+<tr><td align="center" width="20%"><img src="docs/screenshots/08-sleep-timer.png" alt="Sleep timer"><br><sub>Sleep timer</sub></td><td align="center" width="20%"><img src="docs/screenshots/02-player.png" alt="Now playing"><br><sub>Now playing</sub></td><td align="center" width="20%"><img src="docs/screenshots/01-home.png" alt="Home"><br><sub>Home</sub></td><td align="center" width="20%"><img src="docs/screenshots/03-queue.png" alt="Queue"><br><sub>Queue</sub></td><td align="center" width="20%"><img src="docs/screenshots/04-album.png" alt="Album"><br><sub>Album</sub></td></tr>
+<tr><td align="center" width="20%"><img src="docs/screenshots/05-stats.png" alt="Stats"><br><sub>Stats</sub></td><td align="center" width="20%"><img src="docs/screenshots/06-stats-item.png" alt="Artist stats"><br><sub>Artist stats</sub></td><td align="center" width="20%"><img src="docs/screenshots/07-share-card.png" alt="Share card"><br><sub>Share card</sub></td><td align="center" width="20%"><img src="docs/screenshots/09-backup.png" alt="Backup"><br><sub>Backup</sub></td><td align="center" width="20%"><img src="docs/screenshots/10-search.png" alt="Search"><br><sub>Search</sub></td></tr>
 </table>
 
 ## Building
