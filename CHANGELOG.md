@@ -6,7 +6,7 @@ behaves, a patch version only fixes things. Auxio's own history is in its reposi
 ## v1.10.1
 
 ## What's Improved
-- Loading the library is about 2.4 times faster (13.8 s to 5.8 s with 6,467 songs, measured on an emulator)
+- Loading the library is ~2.5 times faster (14.3 s to 5.8 s with 6,467 songs, measured on an emulator)
 
 ## v1.10.0
 
