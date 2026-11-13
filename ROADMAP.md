@@ -57,4 +57,3 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 ## Ideas
 - Bottom bar on the now playing screen for jumping to Songs, Albums, Artists and Playlists (deferred)
 - Queue ready before the library has loaded (Auxio #1467, deferred until a phone with a big library is there to test it): save each queued song's file record with the queue (Room schema 38 to 39 with a migration), add a small public entry point in `musikr/` that builds a temporary library from cached files, restore the queue from it at start, and let the existing tight restore swap in the real songs when the full library arrives.
-- Fast scrolling in very large lists (Auxio #1070, deferred): reported as slow at about 10,000 songs; needs test data of that size to find it.
