@@ -558,6 +558,18 @@ class PlaybackStateManagerTest {
     }
 
     @Test
+    fun clearingTheQueueResetsThePlayer() {
+        val player = attach(holder(a, b))
+        manager.clearQueue()
+        verify { player.mock.reset(StateAck.NewPlayback) }
+    }
+
+    @Test
+    fun clearingTheQueueWithoutAPlayerDoesNothing() {
+        manager.clearQueue()
+    }
+
+    @Test
     fun aQueueWithNoSongLeftStartsOver() {
         val player = attach(holder())
         manager.applySavedState(savedState(listOf(null, null), index = 1, songUid = a.uid), false)

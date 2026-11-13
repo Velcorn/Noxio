@@ -580,10 +580,15 @@ class MainFragment :
     private fun showQueueMore(anchor: View) {
         popupMenu(requireContext(), anchor).apply {
             inflate(R.menu.queue_overflow)
-            menu.findItem(R.id.action_queue_save).isEnabled = queueModel.queue.value.isNotEmpty()
+            val hasSongs = queueModel.queue.value.isNotEmpty()
+            menu.findItem(R.id.action_queue_save).isEnabled = hasSongs
+            menu.findItem(R.id.action_queue_clear).isEnabled = hasSongs
             setOnMenuItemClickListener {
-                // The dialog of the playlists, with a new one at its end.
-                musicModel.addToPlaylist(queueModel.queue.value)
+                when (it.itemId) {
+                    // The dialog of the playlists, with a new one at its end.
+                    R.id.action_queue_save -> musicModel.addToPlaylist(queueModel.queue.value)
+                    R.id.action_queue_clear -> playbackModel.clearQueue()
+                }
                 true
             }
             show()

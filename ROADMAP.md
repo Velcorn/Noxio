@@ -20,7 +20,7 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 - No back buttons anywhere, the back gesture only
 
 ## Done
-- Playlists and queue (from the open issues of Auxio): a song's menu on a playlist page has Remove from playlist (the first copy, if it is there twice); the menu of a playlist has Remove duplicates (greyed out when there are none); adding songs to a playlist skips those that are in it already and says so; the queue has a More button (Ctrl+M with the queue open) with Save as playlist, which opens the playlist picker with a new playlist at its end; opening the queue always starts it at the song that plays.
+- Playlists and queue (from the open issues of Auxio): a song's menu on a playlist page has Remove from playlist (the first copy, if it is there twice); the menu of a playlist has Remove duplicates (greyed out when there are none); adding songs to a playlist skips those that are in it already and says so; the queue has a More button (Ctrl+M with the queue open) with Save as playlist, which opens the playlist picker with a new playlist at its end, and Clear queue, which empties the queue and stops playing; opening the queue always starts it at the song that plays.
 - Playback state: the position is saved every 15 seconds while playing and whenever playback starts or stops, so the last song and its position survive the app being stopped without notice (Auxio issues about the last song not being remembered).
 - Search: the best matches come first (exact, starts with, a word starts with, contains, all the words in any order, file name last), the same matches as before otherwise, equally good ones by name.
 - Keyboard phone mode: the Search and Menu keys of phones that have them work like Ctrl+F and Ctrl+M.
@@ -56,3 +56,5 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 
 ## Ideas
 - Bottom bar on the now playing screen for jumping to Songs, Albums, Artists and Playlists (deferred)
+- Queue ready before the library has loaded (Auxio #1467, deferred until a phone with a big library is there to test it): save each queued song's file record with the queue (Room schema 38 to 39 with a migration), add a small public entry point in `musikr/` that builds a temporary library from cached files, restore the queue from it at start, and let the existing tight restore swap in the real songs when the full library arrives.
+- Fast scrolling in very large lists (Auxio #1070, deferred): reported as slow at about 10,000 songs; needs test data of that size to find it.

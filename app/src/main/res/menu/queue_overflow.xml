@@ -3,4 +3,7 @@
     <item
         android:id="@+id/action_queue_save"
         android:title="@string/lbl_queue_save" />
+    <item
+        android:id="@+id/action_queue_clear"
+        android:title="@string/lbl_queue_clear" />
 </menu>

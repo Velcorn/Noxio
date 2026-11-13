@@ -481,6 +481,7 @@
     <string name="lbl_playlist_remove">Aus Wiedergabeliste entfernen</string>
     <string name="lbl_remove_duplicates">Duplikate entfernen</string>
     <string name="lbl_queue_save">Als Wiedergabeliste speichern</string>
+    <string name="lbl_queue_clear">Warteschlange leeren</string>
     <string name="lng_playlist_already">Schon in der Wiedergabeliste</string>
     <string name="lng_playlist_removed">Aus der Wiedergabeliste entfernt</string>
     <string name="lng_playlist_deduped">Duplikate entfernt</string>

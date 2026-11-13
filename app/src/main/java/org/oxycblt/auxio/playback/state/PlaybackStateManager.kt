@@ -244,6 +244,9 @@ interface PlaybackStateManager {
 
     fun endSession()
 
+    /** Empty the queue and stop playing. */
+    fun clearQueue()
+
     /**
      * Converts the current state of this instance into a [SavedState].
      *
@@ -592,6 +595,13 @@ class PlaybackStateManagerImpl @Inject constructor() : PlaybackStateManager {
         val stateHolder = stateHolder ?: return
         L.d("Seeking to ${positionMs}ms")
         stateHolder.seekTo(positionMs)
+    }
+
+    @Synchronized
+    override fun clearQueue() {
+        val stateHolder = stateHolder ?: return
+        L.d("Clearing the queue")
+        stateHolder.reset(StateAck.NewPlayback)
     }
 
     @Synchronized

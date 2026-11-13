@@ -595,6 +595,12 @@ constructor(
         playbackManager.addToQueue(songs)
     }
 
+    /** Empty the queue and stop playing. */
+    fun clearQueue() {
+        L.d("Clearing the queue")
+        playbackManager.clearQueue()
+    }
+
     // --- STATUS FUNCTIONS ---
 
     /** Toggle [isPlaying] (i.e from playing to paused) */
