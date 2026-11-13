@@ -5,6 +5,7 @@ Nothing planned right now.
 
 ## Needs a check on a phone
 Built and unit tested where there is logic, and looked at on an emulator, but not yet confirmed on a real device:
+- Loading the library is about 2.4 times faster (measured on the emulator with 6,467 songs from a real library, tags only: 13.8 s to 5.8 s with the cache warm). Check the time on a phone and that names and sorting (also of non-Latin names) are as before.
 - Playback state saved while playing: that the last song and position are there after the app was killed (the saving is tested, the killing is not)
 - Sleep timer: hold play/pause for the timer sheet, countdown inside play/pause, the timer pauses with playback, custom duration up to 599 minutes, its own notification with a live countdown, +10 min, Restart and Stop, finish last song, fade-out, shake to restart
 - Backup: an automatic backup at its chosen hour, and Restore from backup (playlists especially)
@@ -56,4 +57,4 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 
 ## Ideas
 - Bottom bar on the now playing screen for jumping to Songs, Albums, Artists and Playlists (deferred)
-- Queue ready before the library has loaded (Auxio #1467, deferred until a phone with a big library is there to test it): save each queued song's file record with the queue (Room schema 38 to 39 with a migration), add a small public entry point in `musikr/` that builds a temporary library from cached files, restore the queue from it at start, and let the existing tight restore swap in the real songs when the full library arrives.
+- Queue ready before the library has loaded (Auxio #1467, deferred; loading the library itself got faster in the meantime, see above until a phone with a big library is there to test it): save each queued song's file record with the queue (Room schema 38 to 39 with a migration), add a small public entry point in `musikr/` that builds a temporary library from cached files, restore the queue from it at start, and let the existing tight restore swap in the real songs when the full library arrives.

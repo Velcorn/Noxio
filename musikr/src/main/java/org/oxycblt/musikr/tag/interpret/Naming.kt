@@ -36,11 +36,25 @@ abstract class Naming {
 
     abstract fun name(raw: String, sort: String?): Name.Known
 
+    /**
+     * A [Naming] that works out each name once. Most songs of an album or artist have the same
+     * names, and working them out is the slowest part of loading a library. Names do not change, so
+     * they can be shared. Use it for one run of loading, it holds on to every name it made.
+     */
+    internal fun memoized(): Naming = MemoizedNaming(this)
+
     companion object {
         fun intelligent(): Naming = IntelligentNaming
 
         fun simple(): Naming = SimpleNaming
     }
+}
+
+private class MemoizedNaming(private val inner: Naming) : Naming() {
+    private val names = java.util.concurrent.ConcurrentHashMap<Pair<String, String?>, Name.Known>()
+
+    override fun name(raw: String, sort: String?): Name.Known =
+        names.getOrPut(raw to sort) { inner.name(raw, sort) }
 }
 
 data object IntelligentNaming : Naming() {
@@ -103,12 +117,10 @@ private data class IntelligentKnownName(override val raw: String, override val s
                     }
                 }
 
-        // Transliterate to latin if available
-        if (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                Transliterator.getAvailableIDs().toList().contains("Any-Latin")
-        ) {
-            stripped = Transliterator.getInstance("Any-Latin;").transliterate(stripped)
+        // Transliterate to latin if available. Noxio: the transliterator is looked up and
+        // compiled once, not for every name (that took most of the time of loading a library).
+        latinTransliterator?.let { transliterator ->
+            stripped = synchronized(transliterator) { transliterator.transliterate(stripped) }
         }
 
         // To properly compare numeric components in names, we have to split them up into
@@ -137,5 +149,16 @@ private data class IntelligentKnownName(override val raw: String, override val s
 
     companion object {
         private val TOKEN_REGEX by lazy { Regex("(\\d+)|(\\D+)") }
+
+        private val latinTransliterator: Transliterator? by lazy {
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                    Transliterator.getAvailableIDs().toList().contains("Any-Latin")
+            ) {
+                Transliterator.getInstance("Any-Latin;")
+            } else {
+                null
+            }
+        }
     }
 }

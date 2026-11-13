@@ -106,6 +106,9 @@ sealed interface IndexingProgress {
     data object Indeterminate : IndexingProgress
 }
 
+/** How many songs are between two reports of the progress. */
+private const val PROGRESS_STEP = 50
+
 private class MusikrImpl(
     private val config: Config,
     private val exploreStep: ExploreStep,
@@ -123,7 +126,11 @@ private class MusikrImpl(
             tryAsyncWith(trackedExploredChannel, Dispatchers.Main) {
                 for (item in exploredChannel) {
                     explored++
-                    onProgress(IndexingProgress.Songs(loaded, explored))
+                    // Noxio: not for every song, that made the main thread the slowest part of
+                    // loading a library.
+                    if (explored % PROGRESS_STEP == 0) {
+                        onProgress(IndexingProgress.Songs(loaded, explored))
+                    }
                     trackedExploredChannel.send(item)
                 }
             }
@@ -134,7 +141,9 @@ private class MusikrImpl(
             tryAsyncWith(trackedExtractedChannel, Dispatchers.Main) {
                 for (item in extractedChannel) {
                     loaded++
-                    onProgress(IndexingProgress.Songs(loaded, explored))
+                    if (loaded % PROGRESS_STEP == 0) {
+                        onProgress(IndexingProgress.Songs(loaded, explored))
+                    }
                     trackedExtractedChannel.send(item)
                 }
                 onProgress(IndexingProgress.Indeterminate)

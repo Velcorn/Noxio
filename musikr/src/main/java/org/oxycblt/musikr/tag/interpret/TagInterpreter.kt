@@ -37,7 +37,8 @@ internal interface TagInterpreter {
     fun interpret(song: RawSong): PreSong
 
     companion object {
-        fun new(interpretation: Interpretation): TagInterpreter = TagInterpreterImpl(interpretation)
+        fun new(interpretation: Interpretation): TagInterpreter =
+            TagInterpreterImpl(interpretation.copy(naming = interpretation.naming.memoized()))
     }
 }
 

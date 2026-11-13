@@ -20,6 +20,8 @@ package org.oxycblt.musikr.tag.interpret
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertSame
 import org.junit.Test
 import org.oxycblt.musikr.tag.Name
 import org.oxycblt.musikr.tag.Placeholder
@@ -428,5 +430,44 @@ class NamingTest {
         val a = Name.Unknown(Placeholder.ALBUM)
         val b = Naming.intelligent().name("A", null)
         assertEquals(-1, a.compareTo(b))
+    }
+
+    @Test
+    fun memoized_givesTheSameNameForTheSameInput() {
+        val naming = Naming.intelligent().memoized()
+        assertSame(naming.name("The Night Owls", null), naming.name("The Night Owls", null))
+    }
+
+    @Test
+    fun memoized_keepsNamesWithADifferentSortNameApart() {
+        val naming = Naming.intelligent().memoized()
+        val plain = naming.name("Drift", null)
+        val sorted = naming.name("Drift", "Zzz")
+        assertEquals(null, plain.sort)
+        assertEquals("Zzz", sorted.sort)
+        assertNotSame(plain, sorted)
+    }
+
+    @Test
+    fun memoized_namesAreTheSameAsTheOnesWithoutIt() {
+        for (raw in listOf("Loveless", "alt-J", "The 15-10", "Привет", "!!!")) {
+            val plain = Naming.intelligent().name(raw, null)
+            val memoized = Naming.intelligent().memoized().name(raw, null)
+            assertEquals(plain.raw, memoized.raw)
+            assertEquals(
+                plain.tokens.map { it.collationKey.sourceString },
+                memoized.tokens.map { it.collationKey.sourceString },
+            )
+            assertEquals(plain.tokens.map { it.type }, memoized.tokens.map { it.type })
+        }
+    }
+
+    @Test
+    fun intelligent_namesAreTransliteratedTheSameEachTime() {
+        val first =
+            Naming.intelligent().name("Привет", null).tokens.map { it.collationKey.sourceString }
+        val second =
+            Naming.intelligent().name("Привет", null).tokens.map { it.collationKey.sourceString }
+        assertEquals(first, second)
     }
 }
