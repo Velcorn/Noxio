@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.10.1
+
+## What's Improved
+- Loading the library is about 2.4 times faster (13.8 s to 5.8 s with 6,467 songs, measured on an emulator)
+
 ## v1.10.0
 
 ## What's New
