@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.10.2
+
+## What's Changed
+- Progress while the library loads is reported at most every 100 ms (it was every 50 songs), so it no longer slows the load on libraries of any size
+- Internal: the name preparation keeps Auxio's own check and only creates the transliterator once, which keeps the code closer to Auxio
+
 ## v1.10.1
 
 ## What's Improved
