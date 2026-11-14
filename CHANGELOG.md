@@ -3,6 +3,14 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.11.0
+
+## What's New
+- Swipe up on the open player to open the queue (swiping down still closes the player)
+
+## What's Improved
+- Loading the library is faster again, about 3 times faster than Auxio's on a Pixel 9 Pro (7.4 s to 2.5 s with 476 songs; the check for the transliterator is now done once as well)
+
 ## v1.10.2
 
 ## What's Changed

@@ -4,23 +4,14 @@
 Nothing planned right now.
 
 ## Needs a check on a phone
-Built and unit tested where there is logic, and looked at on an emulator, but not yet confirmed on a real device:
-- Loading the library is about 2.4 times faster (measured on the emulator with 6,467 songs from a real library, tags only: 13.7 s to 5.8 s with the cache warm; the transliterator created once, names remembered per run, progress at most every 100 ms). Check the time on a phone and that names and sorting (also of non-Latin names) are as before.
-- Playback state saved while playing: that the last song and position are there after the app was killed (the saving is tested, the killing is not)
-- Sleep timer: hold play/pause for the timer sheet, countdown inside play/pause, the timer pauses with playback, custom duration up to 599 minutes, its own notification with a live countdown, +10 min, Restart and Stop, finish last song, fade-out, shake to restart
-- Backup: an automatic backup at its chosen hour, and Restore from backup (playlists especially)
-- Minimal and default launcher icon in Kvaesitso (no background layer, so it is not cut to the icon shape)
-- Settings alignment: short lists at the bottom; captured and visually checked on an emulator (no automated screen tests; user review and phone testing pending)
-- Library settings and Music sources: simplified options (no automated screen or dialog tests; not tested on a device)
-- Appearance: simplified settings, rounded UI and cover proportions (no automated screen tests; not tested on a device)
-- Item menus: shorter options and playlist group dividers (no automated screen tests; visual review pending)
-- Year in review cards on a phone screen
+Built and unit tested where there is logic, and looked at on an emulator, but not yet confirmed on a real device (the rest of the earlier list has been checked on a phone):
+- Loading the library is about 2.5 to 3 times faster (checked on a Pixel 9 Pro with 476 songs, debug build: 7.4 s to 2.5 s, twice; on the emulator with 6,467 songs 13.7 s to 5.4 s; the transliterator and its availability check done once, names remembered per run, progress at most every 100 ms). Still to look at: that names and sorting (also of non-Latin names) are as before.
+- Swipe up on the open player opens the queue (the direction rules are unit tested; the swipe itself was only tried on an emulator): whether it is too sensitive or not enough, and that the seek bar and buttons are not affected
 - Short and square screens on the Clicks Communicator itself
 - Keyboard phone mode on the Communicator: whether Automatic detects its keyboard, and whether Ctrl, Alt+number and Ctrl with comma or period arrive as expected
-- Musicolet monthly files: their file naming is a guess (weekly files are confirmed)
-- No back buttons anywhere, the back gesture only
 
 ## Done
+- Queue: swiping up on the open player opens the queue (swiping down closes the player). Only where the queue is a sheet below the player; on wide screens the queue is already beside it.
 - Playlists and queue (from the open issues of Auxio): a song's menu on a playlist page has Remove from playlist (the first copy, if it is there twice); the menu of a playlist has Remove duplicates (greyed out when there are none); adding songs to a playlist skips those that are in it already and says so; the queue has a More button (Ctrl+M with the queue open) with Save as playlist, which opens the playlist picker with a new playlist at its end, and Clear queue, which empties the queue and stops playing; opening the queue always starts it at the song that plays.
 - Playback state: the position is saved every 15 seconds while playing and whenever playback starts or stops, so the last song and its position survive the app being stopped without notice (Auxio issues about the last song not being remembered).
 - Search: the best matches come first (exact, starts with, a word starts with, contains, all the words in any order, file name last), the same matches as before otherwise, equally good ones by name.

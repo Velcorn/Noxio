@@ -37,7 +37,7 @@ stats, stays in its own database or in files you export.
   five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
   estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
-- **Queue** with search and sort, opening at the song that plays, and saving as a playlist; **playlists** you can
+- **Queue** with search and sort, opening at the song that plays, opened by swiping up on the player, and saving as a playlist; **playlists** you can
   search, sort and take songs out of, with no song added twice and duplicates removed in one go.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
