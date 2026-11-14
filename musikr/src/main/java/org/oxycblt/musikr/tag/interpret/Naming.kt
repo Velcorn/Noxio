@@ -118,14 +118,10 @@ private data class IntelligentKnownName(override val raw: String, override val s
                 }
 
         // Transliterate to latin if available
-        if (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                Transliterator.getAvailableIDs().toList().contains("Any-Latin")
-        ) {
-            // Noxio: the transliterator is created once, not for every name (that took most of
-            // the time of loading a library). An instance is not thread-safe.
-            stripped =
-                synchronized(latinTransliterator) { latinTransliterator.transliterate(stripped) }
+        // Noxio: the transliterator is looked up once, not for every name (that took most of the
+        // time of loading a library). An instance is not thread-safe.
+        latinTransliterator?.let { transliterator ->
+            stripped = synchronized(transliterator) { transliterator.transliterate(stripped) }
         }
 
         // To properly compare numeric components in names, we have to split them up into
@@ -155,8 +151,15 @@ private data class IntelligentKnownName(override val raw: String, override val s
     companion object {
         private val TOKEN_REGEX by lazy { Regex("(\\d+)|(\\D+)") }
 
-        private val latinTransliterator: Transliterator by lazy {
-            Transliterator.getInstance("Any-Latin;")
+        private val latinTransliterator: Transliterator? by lazy {
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                    Transliterator.getAvailableIDs().toList().contains("Any-Latin")
+            ) {
+                Transliterator.getInstance("Any-Latin;")
+            } else {
+                null
+            }
         }
     }
 }
