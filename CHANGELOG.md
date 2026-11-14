@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.12.0
+
+## What's New
+- ReplayGain calculation: *Calculate ReplayGain* in Settings > Playback measures the loudness of your songs in the background (with a notification), so quiet and loud songs play at the same level. It can be stopped and continued, and your files are not changed
+- *Prefer ReplayGain tags* (on by default): a song's own tag is used when it has one and the measured loudness only for songs without; switched off, the measured loudness is used for every measured song
+
 ## v1.11.0
 
 ## What's New
