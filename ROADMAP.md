@@ -5,7 +5,6 @@ Nothing planned right now.
 
 ## Needs a check on a phone
 Built and unit tested where there is logic, and looked at on an emulator, but not yet confirmed on a real device (the rest of the earlier list has been checked on a phone):
-- Loading the library is about 2.5 to 3 times faster (checked on a Pixel 9 Pro with 476 songs, debug build: 7.4 s to 2.5 s, twice; on the emulator with 6,467 songs 13.7 s to 5.4 s; the transliterator and its availability check done once, names remembered per run, progress at most every 100 ms). Still to look at: that names and sorting (also of non-Latin names) are as before.
 - Swipe up on the open player opens the queue (the direction rules are unit tested; the swipe itself was only tried on an emulator): whether it is too sensitive or not enough, and that the seek bar and buttons are not affected
 - Short and square screens on the Clicks Communicator itself
 - Keyboard phone mode on the Communicator: whether Automatic detects its keyboard, and whether Ctrl, Alt+number and Ctrl with comma or period arrive as expected
