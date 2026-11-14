@@ -39,6 +39,11 @@ interface PlaybackSettings : Settings<PlaybackSettings.Listener> {
     val headsetAutoplay: Boolean
     /** The current ReplayGain configuration. */
     val replayGainMode: ReplayGainMode
+    /**
+     * Whether a ReplayGain tag of a song is used before the loudness Noxio measured (Noxio). When
+     * false, the measured loudness is used for every song that has been measured.
+     */
+    val replayGainPreferTags: Boolean
     /** The current ReplayGain pre-amp configuration. */
     var replayGainPreAmp: ReplayGainPreAmp
     /** How to play a song from a general list of songs, specified by [PlaySong] */
@@ -86,6 +91,10 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
             ReplayGainMode.fromIntCode(
                 sharedPreferences.getInt(getString(R.string.set_key_replay_gain), Int.MIN_VALUE)
             ) ?: ReplayGainMode.DYNAMIC
+
+    override val replayGainPreferTags: Boolean
+        get() =
+            sharedPreferences.getBoolean(getString(R.string.set_key_replay_gain_prefer_tags), true)
 
     override var replayGainPreAmp: ReplayGainPreAmp
         get() =
@@ -167,6 +176,7 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
     override fun onSettingChanged(key: String, listener: PlaybackSettings.Listener) {
         when (key) {
             getString(R.string.set_key_replay_gain),
+            getString(R.string.set_key_replay_gain_prefer_tags),
             getString(R.string.set_key_pre_amp_with),
             getString(R.string.set_key_pre_amp_without) -> {
                 L.d("Dispatching ReplayGain setting change")

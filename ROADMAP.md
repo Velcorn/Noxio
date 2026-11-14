@@ -5,11 +5,13 @@ Nothing planned right now.
 
 ## Needs a check on a phone
 Built and unit tested where there is logic, and looked at on an emulator, but not yet confirmed on a real device (the rest of the earlier list has been checked on a phone):
+- ReplayGain calculation: that a scan runs to the end on a phone with the screen off, that the notification works, how long it takes on a real library, and that songs play at a similar level afterwards, with tags preferred and not
 - Swipe up on the open player opens the queue (the direction rules are unit tested; the swipe itself was only tried on an emulator): whether it is too sensitive or not enough, and that the seek bar and buttons are not affected
 - Short and square screens on the Clicks Communicator itself
 - Keyboard phone mode on the Communicator: whether Automatic detects its keyboard, and whether Ctrl, Alt+number and Ctrl with comma or period arrive as expected
 
 ## Done
+- ReplayGain calculation (Settings > Playback > Calculate ReplayGain, brought back from an earlier version): measures the loudness (EBU R128) of songs in a background service with a notification, can be stopped and continued, and keeps the values in Noxio's own database. The switch Prefer ReplayGain tags (on by default) decides which value a song uses: its tag, with the measured loudness only for songs without one, or the measured loudness for every measured song. A scan skips songs that are measured already, and, with tags preferred, songs that have a tag. Boosts are limited by the loudest sample so they never clip. The loudness measurement and the choice are unit tested; the service and decoding were run on an emulator only.
 - Queue: swiping up on the open player opens the queue (swiping down closes the player). Only where the queue is a sheet below the player; on wide screens the queue is already beside it.
 - Playlists and queue (from the open issues of Auxio): a song's menu on a playlist page has Remove from playlist (the first copy, if it is there twice); the menu of a playlist has Remove duplicates (greyed out when there are none); adding songs to a playlist skips those that are in it already and says so; the queue has a More button (Ctrl+M with the queue open) with Save as playlist, which opens the playlist picker with a new playlist at its end, and Clear queue, which empties the queue and stops playing; opening the queue always starts it at the song that plays.
 - Playback state: the position is saved every 15 seconds while playing and whenever playback starts or stops, so the last song and its position survive the app being stopped without notice (Auxio issues about the last song not being remembered).

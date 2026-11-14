@@ -35,6 +35,16 @@
     <string name="set_accent">Farbgestaltung</string>
     <string name="set_audio">Wiedergabe</string>
     <string name="set_replay_gain_mode">ReplayGain-Strategie</string>
+    <string name="set_replay_gain_prefer_tags">ReplayGain-Tags bevorzugen</string>
+    <string name="set_replay_gain_prefer_tags_desc">Das ReplayGain-Tag eines Titels wird verwendet, wenn er eines hat, und die gemessene Lautstärke nur für Titel ohne. Ist die Option aus, gilt für jeden gemessenen Titel die gemessene Lautstärke.</string>
+    <string name="lbl_replay_gain_scan">ReplayGain berechnen</string>
+    <string name="set_replay_gain_scan_desc">Misst die Lautstärke der Titel, damit leise und laute Titel gleich laut klingen. Sind Tags bevorzugt, werden nur Titel ohne ReplayGain-Tag gemessen. Deine Dateien werden nicht verändert.</string>
+    <string name="fmt_replay_gain_nothing">Nichts mehr zu messen</string>
+    <string name="fmt_replay_gain_running">Messe: %1$d von %2$d Titeln. Tippen zum Stoppen</string>
+    <string name="fmt_replay_gain_done">Fertig: %1$d Titel gemessen, %2$d konnten nicht gelesen werden</string>
+    <string name="fmt_replay_gain_ask">%1$d Titel messen? Dafür wird jeder Titel dekodiert, das dauert eine Weile und läuft im Hintergrund mit einer Benachrichtigung.</string>
+    <string name="fmt_replay_gain_progress">%1$d von %2$d Titeln</string>
+    <string name="lbl_replay_gain_start">Start</string>
     <string name="set_pre_amp">ReplayGain-Vorverstärkung</string>
     <string name="set_pre_amp_desc">Die Vorverstärkung wird während der Wiedergabe auf die existierende Einstellung angewendet</string>
     <string name="set_pre_amp_with">Abgleich mit Metadaten</string>

@@ -42,6 +42,9 @@ stats, stays in its own database or in files you export.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
   a keyboard the search row stays, so it can always be switched off.
+- **ReplayGain calculation:** Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs in the
+  background, so quiet and loud songs play alike. Tags are preferred by default; a switch uses the measured value instead.
+  Values stay in Noxio, your files are not changed.
 - **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
