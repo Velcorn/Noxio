@@ -160,6 +160,10 @@ class MainFragment :
         val queueSheetBehavior =
             binding.queueSheet.coordinatorLayoutBehavior as QueueBottomSheetBehavior?
         queueSheetBehavior?.uiSettings = uiSettings
+        // Swiping down closes the player, so swiping up opens the queue (where it is a sheet).
+        if (queueSheetBehavior != null) {
+            playbackSheetBehavior.onSwipeUp = { playbackModel.openQueue() }
+        }
 
         elevationNormal = binding.context.getDimen(MR.dimen.m3_sys_elevation_level1)
 

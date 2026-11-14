@@ -46,3 +46,4 @@ ui/KeyboardMode.kt
 search/SearchRank.kt
 music/PlaylistSongs.kt
 playback/service/AutoSaver.kt
+playback/SwipeUp.kt

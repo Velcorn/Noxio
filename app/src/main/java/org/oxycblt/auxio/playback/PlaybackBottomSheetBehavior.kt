@@ -21,8 +21,10 @@ package org.oxycblt.auxio.playback
 import android.content.Context
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.WindowInsets
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.R as MR
@@ -68,13 +70,58 @@ class PlaybackBottomSheetBehavior<V : View>(context: Context, attributeSet: Attr
         isHideable = true
     }
 
+    /**
+     * Called when the open player is swiped up. Noxio: this opens the queue, as swiping down
+     * already closes the player and nothing else uses the swipe up.
+     */
+    var onSwipeUp: (() -> Unit)? = null
+
+    private val swipeUpDetector =
+        GestureDetector(
+            context,
+            object : GestureDetector.SimpleOnGestureListener() {
+                override fun onFling(
+                    e1: MotionEvent?,
+                    e2: MotionEvent,
+                    velocityX: Float,
+                    velocityY: Float,
+                ): Boolean {
+                    e1 ?: return false
+                    val config = ViewConfiguration.get(context)
+                    val isSwipeUp =
+                        SwipeUp.isSwipeUp(
+                            dx = e2.x - e1.x,
+                            dy = e2.y - e1.y,
+                            velocityX = velocityX,
+                            velocityY = velocityY,
+                            minDistance = config.scaledTouchSlop * 4f,
+                            minVelocity = config.scaledMinimumFlingVelocity * 6f,
+                        )
+                    if (isSwipeUp) {
+                        onSwipeUp?.invoke()
+                    }
+                    return isSwipeUp
+                }
+            },
+        )
+
     override fun getIdealBarHeight(context: Context) =
         context.getDimenPixels(R.dimen.size_touchable_large)
 
     // Hack around issue where the playback sheet will try to intercept nested scrolling events
     // before the queue sheet.
-    override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent) =
-        super.onInterceptTouchEvent(parent, child, event) && state != STATE_EXPANDED
+    override fun onInterceptTouchEvent(
+        parent: CoordinatorLayout,
+        child: V,
+        event: MotionEvent,
+    ): Boolean {
+        if (state == STATE_EXPANDED && onSwipeUp != null) {
+            // Only looks at the touches: seek bar drags are not offered to us, and sideways swipes
+            // on the cover are not swipes up.
+            swipeUpDetector.onTouchEvent(event)
+        }
+        return super.onInterceptTouchEvent(parent, child, event) && state != STATE_EXPANDED
+    }
 
     // Note: This is an extension to Auxio's vendored BottomSheetBehavior
     override fun isHideableWhenDragging() = false
