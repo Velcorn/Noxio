@@ -27,6 +27,7 @@ import org.oxycblt.musikr.pipeline.ExploreStep
 import org.oxycblt.musikr.pipeline.Explored
 import org.oxycblt.musikr.pipeline.ExtractStep
 import org.oxycblt.musikr.pipeline.Extracted
+import org.oxycblt.musikr.util.ProgressThrottle
 import org.oxycblt.musikr.util.merge
 import org.oxycblt.musikr.util.tryAsyncWith
 
@@ -106,8 +107,8 @@ sealed interface IndexingProgress {
     data object Indeterminate : IndexingProgress
 }
 
-/** How many songs are between two reports of the progress. */
-private const val PROGRESS_STEP = 50
+/** The shortest time between two reports of the progress, in milliseconds. */
+private const val PROGRESS_INTERVAL_MS = 100L
 
 private class MusikrImpl(
     private val config: Config,
@@ -119,6 +120,10 @@ private class MusikrImpl(
         onProgress(IndexingProgress.Songs(0, 0))
         var explored = 0
         var loaded = 0
+        // Noxio: progress is reported at most every 100 ms, not for every song. That made the
+        // main thread the slowest part of loading a library.
+        val exploredThrottle = ProgressThrottle(PROGRESS_INTERVAL_MS)
+        val loadedThrottle = ProgressThrottle(PROGRESS_INTERVAL_MS)
         val exploredChannel = Channel<Explored>(Channel.UNLIMITED)
         val exploredTask = exploreStep.explore(this, exploredChannel)
         val trackedExploredChannel = Channel<Explored>(Channel.UNLIMITED)
@@ -126,9 +131,7 @@ private class MusikrImpl(
             tryAsyncWith(trackedExploredChannel, Dispatchers.Main) {
                 for (item in exploredChannel) {
                     explored++
-                    // Noxio: not for every song, that made the main thread the slowest part of
-                    // loading a library.
-                    if (explored % PROGRESS_STEP == 0) {
+                    if (exploredThrottle.allow()) {
                         onProgress(IndexingProgress.Songs(loaded, explored))
                     }
                     trackedExploredChannel.send(item)
@@ -141,7 +144,7 @@ private class MusikrImpl(
             tryAsyncWith(trackedExtractedChannel, Dispatchers.Main) {
                 for (item in extractedChannel) {
                     loaded++
-                    if (loaded % PROGRESS_STEP == 0) {
+                    if (loadedThrottle.allow()) {
                         onProgress(IndexingProgress.Songs(loaded, explored))
                     }
                     trackedExtractedChannel.send(item)
