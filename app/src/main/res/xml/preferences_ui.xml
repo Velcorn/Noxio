@@ -28,7 +28,22 @@
         app:summary="@string/set_lib_tabs_desc"
         app:title="@string/set_lib_tabs" />
 
-    <PreferenceCategory android:title="@string/set_keyboard">
+    <PreferenceCategory android:title="@string/set_launcher">
+
+        <org.oxycblt.auxio.settings.ui.IntListPreference
+            app:defaultValue="@integer/launcher_icon_default"
+            app:entries="@array/entries_launcher_icon"
+            app:entryValues="@array/values_launcher_icon"
+            app:key="@string/set_key_launcher_icon"
+            app:title="@string/set_launcher_icon"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <org.oxycblt.auxio.settings.ui.InfoCategory
+        app:infoMessage="@string/lbl_info_keyboard"
+        app:infoTitle="@string/lbl_info_keyboard_title"
+        app:title="@string/set_keyboard">
 
         <org.oxycblt.auxio.settings.ui.IntListPreference
             app:defaultValue="@integer/keyboard_mode_auto"
@@ -43,18 +58,6 @@
             app:summary="@string/set_keyboard_keys_desc"
             app:title="@string/lbl_keys" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/set_launcher">
-
-        <org.oxycblt.auxio.settings.ui.IntListPreference
-            app:defaultValue="@integer/launcher_icon_default"
-            app:entries="@array/entries_launcher_icon"
-            app:entryValues="@array/values_launcher_icon"
-            app:key="@string/set_key_launcher_icon"
-            app:title="@string/set_launcher_icon"
-            app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
+    </org.oxycblt.auxio.settings.ui.InfoCategory>
 
 </PreferenceScreen>

@@ -7,6 +7,11 @@
     <item name="home_genre_recycler" type="id" />
     <item name="home_playlist_recycler" type="id" />
 
+    <declare-styleable name="InfoCategory">
+        <attr name="infoTitle" format="reference" />
+        <attr name="infoMessage" format="reference" />
+    </declare-styleable>
+
     <integer name="anim_fade_enter_duration">200</integer>
     <integer name="anim_fade_exit_duration">100</integer>
 

@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:title="@string/set_library">
 
-    <PreferenceCategory app:title="@string/set_music">
+    <org.oxycblt.auxio.settings.ui.InfoCategory
+        app:infoMessage="@string/lbl_info_music"
+        app:infoTitle="@string/lbl_info_music_title"
+        app:title="@string/set_music">
 
         <org.oxycblt.auxio.settings.ui.WrappedDialogPreference
             app:key="@string/set_key_music_dirs"
@@ -20,9 +23,12 @@
             app:summary="@string/set_rescan_desc"
             app:title="@string/set_rescan" />
 
-    </PreferenceCategory>
+    </org.oxycblt.auxio.settings.ui.InfoCategory>
 
-    <PreferenceCategory app:title="@string/set_content">
+    <org.oxycblt.auxio.settings.ui.InfoCategory
+        app:infoMessage="@string/lbl_info_content"
+        app:infoTitle="@string/lbl_info_content_title"
+        app:title="@string/set_content">
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
@@ -30,6 +36,6 @@
             app:summary="@string/set_hide_collaborators_desc"
             app:title="@string/set_hide_collaborators" />
 
-    </PreferenceCategory>
+    </org.oxycblt.auxio.settings.ui.InfoCategory>
 
 </PreferenceScreen>

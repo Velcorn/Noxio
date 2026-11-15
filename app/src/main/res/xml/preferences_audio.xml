@@ -20,7 +20,10 @@
         app:summary="@string/set_equalizer_desc"
         app:title="@string/lbl_equalizer" />
 
-    <PreferenceCategory android:title="@string/set_replay_gain">
+    <org.oxycblt.auxio.settings.ui.InfoCategory
+        app:infoMessage="@string/lbl_info_strategy"
+        app:infoTitle="@string/lbl_info_strategy_title"
+        app:title="@string/set_replay_gain">
 
         <org.oxycblt.auxio.settings.ui.IntListPreference
             app:defaultValue="@integer/replay_gain_dynamic"
@@ -28,6 +31,13 @@
             app:entryValues="@array/values_replay_gain"
             app:key="@string/set_key_replay_gain"
             app:title="@string/set_replay_gain_mode" />
+
+    </org.oxycblt.auxio.settings.ui.InfoCategory>
+
+    <org.oxycblt.auxio.settings.ui.InfoCategory
+        app:infoMessage="@string/lbl_replay_gain_info"
+        app:infoTitle="@string/lbl_replay_gain_info_title"
+        app:title="@string/set_replay_gain_calculated">
 
         <SwitchPreferenceCompat
             app:defaultValue="true"
@@ -44,6 +54,6 @@
             app:key="@string/set_key_replay_gain_clear"
             app:title="@string/set_replay_gain_clear" />
 
-    </PreferenceCategory>
+    </org.oxycblt.auxio.settings.ui.InfoCategory>
 
 </PreferenceScreen>

@@ -33,9 +33,12 @@ stats, stays in its own database or in files you export.
 - **ReplayGain calculation:** Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs in
   the background, so quiet and loud songs play alike. Tags are preferred by default, a switch uses the measured value
   instead, and the measured values can be deleted. A song's details show what Noxio measured. Values stay in Noxio
-  (and in its backup), your files are not changed.
+  (and in its backup), your files are not changed. The target is the standard -18 LUFS
+  (ReplayGain 2.0).
 - **Backup:** settings, listening history, playlists and calculated ReplayGain as `noxio_YYYY-MM-DD.zip`, daily, weekly
   or monthly, the last five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
+- **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)
+  opens a short explanation.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
   estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
 - **Queue and playlists:** the queue has search and sort, opens at the song that plays, opens with a swipe up on the

@@ -158,8 +158,7 @@
     <string name="err_stats_export">Could not write the file</string>
     <string name="set_backup">Backup</string>
     <string name="set_backup_summary">Settings, listening history, playlists and calculated ReplayGain</string>
-    <string name="set_backup_frequency">Automatic backup</string>
-    <string name="set_backup_frequency_desc">Saves your settings, listening history, playlists and calculated ReplayGain in a folder you choose. Every backup is its own file, noxio_YYYY-MM-DD.zip, and the last 5 are kept</string>
+    <string name="set_backup_frequency">Schedule</string>
     <string name="set_backup_off">Off</string>
     <string name="set_backup_daily">Every day</string>
     <string name="set_backup_weekly">Every week</string>
@@ -178,20 +177,20 @@
     <string name="set_backup_sunday">Sunday</string>
     <string name="fmt_backup_next">Next backup: %s</string>
     <string name="set_stats_backup_now">Back up now</string>
-    <string name="set_stats_backup_now_desc">Saves a backup file in the backup folder now</string>
+    <string name="set_stats_backup_now_desc">Save a backup file now</string>
     <string name="lng_stats_backup_done">Backup saved to %s</string>
     <string name="err_stats_backup">Could not write the backup. Choose the folder again</string>
     <string name="set_stats_backup_folder">Backup folder</string>
     <string name="lbl_stats_backup_no_folder">No folder chosen</string>
     <string name="fmt_stats_backup_last">Last backup: %s</string>
-    <string name="lbl_stats_backup_skipped">The last automatic backup was skipped: it would have held much less than the one before</string>
+    <string name="lbl_stats_backup_skipped">The last automatic backup was skipped: it held much less than the one before</string>
     <string name="lbl_backup_small_title">This backup holds much less</string>
-    <string name="fmt_backup_small_desc">Plays now: %1$d, playlists: %2$d. The last good backup had plays: %3$d, playlists: %4$d. Save it anyway? It gets the ending _small and the older backups stay as they are.</string>
+    <string name="fmt_backup_small_desc">Plays: %1$d, playlists: %2$d. The last good backup had plays: %3$d, playlists: %4$d. It is saved as _small and the older backups stay.</string>
     <string name="lbl_backup_small_ok">Save anyway</string>
     <string name="set_backup_restore">Restore from backup</string>
-    <string name="set_backup_restore_desc">Puts the settings, plays, playlists and calculated ReplayGain of a backup file back</string>
+    <string name="set_backup_restore_desc">Restore a backup file</string>
     <string name="lbl_backup_restore_title">Restore this backup?</string>
-    <string name="fmt_backup_restore_desc">Made on %1$s with Noxio %2$s. It holds plays: %3$d, playlists: %4$d, settings: %5$d.\n\nThe settings are replaced. Plays and playlists are added to what is there, nothing is deleted.</string>
+    <string name="fmt_backup_restore_desc">Made on %1$s with Noxio %2$s. Plays: %3$d, playlists: %4$d, settings: %5$d.\n\nSettings are replaced. Plays and playlists are added, nothing is deleted.</string>
     <string name="lbl_backup_restore_ok">Restore</string>
     <string name="fmt_backup_restored_gains" tools:ignore="PluralsCandidate">Calculated ReplayGain restored for %1$d songs</string>
     <string name="fmt_backup_restored">Restored plays: %1$d, playlists: %2$d, settings: %3$d</string>
@@ -404,7 +403,7 @@
     <string name="set_exclude_non_music">Exclude non-music</string>
     <string name="set_exclude_non_music_desc">Ignore audio files that are not music, such as podcasts</string>
     <string name="set_hide_collaborators">Hide collaborators</string>
-    <string name="set_hide_collaborators_desc">Only show artists that are directly credited on an album (works best on well-tagged libraries)</string>
+    <string name="set_hide_collaborators_desc">Only show artists credited on an album</string>
 
     <string name="set_audio">Playback</string>
     <string name="set_audio_desc">Shuffle, skipping, equalizer and ReplayGain</string>
@@ -418,9 +417,25 @@
     <string name="set_replay_gain_mode_album">Prefer album</string>
     <string name="set_replay_gain_mode_dynamic">Prefer album if one is playing</string>
     <string name="set_replay_gain_prefer_tags">Prefer ReplayGain tags</string>
-    <string name="set_replay_gain_prefer_tags_desc">Use the ReplayGain tag of a song when it has one, and the measured loudness only for songs without. When off, the measured loudness is used for every song that has been measured.</string>
+    <string name="set_replay_gain_prefer_tags_desc">Use a song\'s tag first, the measured value only without one</string>
+    <string name="lbl_more_info">More information</string>
+    <string name="set_replay_gain_calculated">Calculated ReplayGain</string>
+    <string name="set_backup_auto">Automatic backup</string>
+    <string name="set_backup_manual">Manual</string>
+    <string name="lbl_info_strategy_title">About the ReplayGain strategy</string>
+    <string name="lbl_info_strategy">ReplayGain evens out the loudness of songs.\n\nPrefer track: every song is brought to the same level.\nPrefer album: the songs of an album keep their balance to each other.\nPrefer album if one is playing: the album level when you play an album, the track level everywhere else.\n\nIf the preferred value is missing, the other one is used. A song with neither plays unchanged.</string>
+    <string name="lbl_info_keyboard_title">About keyboard phones</string>
+    <string name="lbl_info_keyboard">For phones with a hardware keyboard. The screen loses its buttons, rows and tabs: type anywhere to search, Space plays or pauses, and Ctrl plus a letter does the rest.\n\nAutomatic turns it on when a keyboard is found, On and Off force it. Keyboard shortcuts lists all keys.</string>
+    <string name="lbl_info_music_title">About refresh and rescan</string>
+    <string name="lbl_info_music">Refresh music reloads the library and reuses the tags it has already read, so it is quick.\n\nRescan music clears that cache and reads every file again. It takes longer and also finds changed tags.\n\nMusic sources decide which folders are read.</string>
+    <string name="lbl_info_content_title">About collaborators</string>
+    <string name="lbl_info_content">Hide collaborators only lists artists who are credited on an album. Artists who appear only as guests on single songs are left out of the artist list.\n\nThis works best when the album artist tags are filled in.</string>
+    <string name="lbl_info_backup_title">About backups</string>
+    <string name="lbl_info_backup">A backup holds your settings, listening history, playlists and calculated ReplayGain. It is saved in the folder you choose as noxio_YYYY-MM-DD.zip, and the last 5 are kept.\n\nA backup that holds much less than the one before is saved as _small and never replaces a good one.\n\nRestoring replaces the settings and adds plays and playlists to what is there. Nothing is deleted.</string>
+    <string name="lbl_replay_gain_info_title">About ReplayGain calculation</string>
+    <string name="lbl_replay_gain_info">Noxio measures how loud a song is (EBU R128) and keeps the result in its own database. Your files are not changed.\n\nPrefer ReplayGain tags: a song uses the tag of its file when it has one, and the measured value only without a tag, so only songs without a tag are measured. When off, every song is measured and the measured value is used.\n\nThe target is the standard -18 LUFS (ReplayGain 2.0). Boosts are limited so they never clip.</string>
     <string name="lbl_replay_gain_scan">Calculate ReplayGain</string>
-    <string name="set_replay_gain_scan_desc">Measures the loudness of songs, so quiet and loud songs play at the same level. With tags preferred, only songs without a ReplayGain tag are measured. Your files are not changed.</string>
+    <string name="set_replay_gain_scan_desc">Measure the loudness of songs so they play at a similar level</string>
     <string name="fmt_replay_gain_nothing">Nothing left to measure</string>
     <string name="fmt_replay_gain_progress" tools:ignore="PluralsCandidate">%1$d of %2$d songs</string>
     <string name="fmt_replay_gain_running" tools:ignore="PluralsCandidate">Measuring: %1$d of %2$d songs. Tap to stop</string>
@@ -453,7 +468,7 @@
     <string name="set_excluded_locations">Excluded folders</string>
     <string name="set_excluded_locations_desc">Manage folders to exclude from music loading</string>
     <string name="set_reindex">Refresh music</string>
-    <string name="set_reindex_desc">Reload the music library, using cached tags when possible</string>
+    <string name="set_reindex_desc">Reload the library, using cached tags</string>
     <!-- Different from "Reload music" -->
     <string name="set_rescan">Rescan music</string>
     <string name="lbl_rescan">Rescan</string>
@@ -463,7 +478,7 @@
     <string name="lbl_scan_working">Working…</string>
     <string name="fmt_scan_progress">Scanning songs: %1$d / %2$d</string>
     <string name="lbl_scan_done">Your music is up to date</string>
-    <string name="set_rescan_desc">Clear the tag cache and fully reload the music library (slower, but more complete)</string>
+    <string name="set_rescan_desc">Clear the tag cache and read all files again</string>
 
     <!-- Error Namespace | Error Labels -->
     <string name="err_index_failed">Music loading failed</string>

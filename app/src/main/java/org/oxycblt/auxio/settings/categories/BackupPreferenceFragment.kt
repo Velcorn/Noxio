@@ -324,11 +324,6 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                     if (statsBackup.lastVerdict != null)
                         getString(R.string.lbl_stats_backup_skipped)
                     else next,
-                    if (schedule.frequency == Frequency.OFF) {
-                        getString(R.string.set_backup_frequency_desc)
-                    } else {
-                        null
-                    },
                 )
                 .joinToString("\n")
     }
