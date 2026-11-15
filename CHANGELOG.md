@@ -3,6 +3,19 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.14.0
+
+## What's New
+- An "i" in the header of the settings that need an explanation (ReplayGain strategy, Calculated ReplayGain, Keyboard, Music, Content, Backup) opens a short text about them
+
+## What's Improved
+- Settings summaries are shorter, the details are in the "i" texts
+- Settings > Backup is split into Automatic backup (folder first, then schedule) and Manual; Launcher comes before Keyboard in Appearance
+- *Calculate ReplayGain* and *Prefer ReplayGain tags* are in their own group, Calculated ReplayGain
+
+## What's Changed
+- The ReplayGain pre-amp is removed; songs always play at the level their ReplayGain gives (an old saved value is ignored)
+
 ## v1.13.1
 
 ## What's Improved
