@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.13.1
+
+## What's Improved
+- Long album, artist and song titles in the stats lists, the share cards and the year in review wrap to a second line instead of being cut off, so titles that differ only at the end can be told apart
+- Settings > Playback: *Prefer ReplayGain tags* sits above *Calculate ReplayGain*
+
 ## v1.13.0
 
 ## What's New
