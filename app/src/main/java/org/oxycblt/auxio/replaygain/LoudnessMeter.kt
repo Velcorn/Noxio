@@ -32,6 +32,8 @@ data class Loudness(
     val lufs: Double,
     /** The highest absolute sample value, 1.0 being full scale. */
     val peak: Float,
+    /** The loudness of the blocks, so an album can be measured from its songs later. */
+    val histogram: LoudnessHistogram? = null,
 ) {
     /**
      * The ReplayGain 2.0 adjustment in dB that brings this to the reference level of -18 LUFS. A
@@ -146,7 +148,9 @@ class LoudnessMeter(private val sampleRate: Int, private val channels: Int) {
         if (gated.isEmpty()) {
             return null
         }
-        return Loudness(lufs(gated.average()), peak)
+        val histogram = LoudnessHistogram()
+        absolute.forEach { histogram.add(lufs(it)) }
+        return Loudness(lufs(gated.average()), peak, histogram)
     }
 
     private fun lufs(meanSquare: Double) = -0.691 + 10 * log10(meanSquare)

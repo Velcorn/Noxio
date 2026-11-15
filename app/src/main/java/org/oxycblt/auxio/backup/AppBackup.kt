@@ -41,7 +41,9 @@ import javax.inject.Singleton
 import org.oxycblt.auxio.BuildConfig
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.resolve
+import org.oxycblt.auxio.replaygain.LoudnessHistogram
 import org.oxycblt.auxio.replaygain.ReplayGainStore
+import org.oxycblt.auxio.replaygain.SongLoudness
 import org.oxycblt.auxio.stats.PlayEvent
 import org.oxycblt.auxio.stats.SafeDocumentWriter
 import org.oxycblt.auxio.stats.StatsBackupWorker
@@ -282,10 +284,15 @@ internal constructor(
         )
 
     /** The measured ReplayGain values of the songs in the library, or null if it is not loaded. */
-    private fun readLibraryGains(): List<BackupGain>? =
-        music.library?.songs?.mapNotNull { song ->
-            measuredGains.gainFor(song)?.let { BackupGain(backupSong(song), it) }
+    private suspend fun readLibraryGains(): List<BackupGain>? {
+        val songs = music.library?.songs ?: return null
+        val stored = measuredGains.all()
+        return songs.mapNotNull { song ->
+            val gain = measuredGains.gainFor(song) ?: return@mapNotNull null
+            val row = stored[song.uid.toString()]
+            BackupGain(backupSong(song), gain, row?.peak, row?.blocks)
         }
+    }
 
     /** The settings of the user, which is everything in the preferences except what is local. */
     fun settings(): Map<String, Any> =
@@ -388,11 +395,23 @@ internal constructor(
                                 songIdentity(saved.song.title, saved.song.artist, saved.song.album)]
                             ?.firstOrNull()
                         ?: continue
-                if (measuredGains.gainFor(song) == null) {
-                    measuredGains.save(song, saved.gainDb)
+                val loudness =
+                    saved.peak?.let { peak ->
+                        saved.blocks?.let(LoudnessHistogram::decode)?.let {
+                            SongLoudness(it, peak)
+                        }
+                    }
+                // A song that has a value is only given the backup's one if that one is
+                // complete and the song's is not (measured before album adjustments).
+                if (
+                    measuredGains.gainFor(song) == null ||
+                        (loudness != null && !measuredGains.isComplete(song))
+                ) {
+                    measuredGains.save(song, saved.gainDb, loudness)
                     gains++
                 }
             }
+            measuredGains.updateAlbums()
         }
         return Restored(
             plays = plays,

@@ -657,6 +657,14 @@ constructor(
             measuredGains.gainFor(song)?.let {
                 add(SongProperty(R.string.lbl_replaygain_measured, SongProperty.Value.Decibels(it)))
             }
+            measuredGains.albumGainFor(song.album)?.let {
+                add(
+                    SongProperty(
+                        R.string.lbl_replaygain_measured_album,
+                        SongProperty.Value.Decibels(it),
+                    )
+                )
+            }
         }
     }
 

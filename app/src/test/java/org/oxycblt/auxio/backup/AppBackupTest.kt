@@ -29,6 +29,7 @@ import java.io.File
 import java.io.OutputStream
 import java.time.LocalDate
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -95,18 +96,18 @@ class AppBackupTest {
     private val music = mockk<MusicRepository>(relaxed = true)
 
     private class FakeGainDao : MeasuredGainDao {
-        val saved = mutableMapOf<String, Float>()
+        val saved = mutableMapOf<String, MeasuredGain>()
 
         override suspend fun save(gain: MeasuredGain) {
-            saved[gain.songUid] = gain.gainDb
+            saved[gain.songUid] = gain
         }
 
-        override suspend fun all() = saved.map { MeasuredGain(it.key, it.value, 0) }
+        override suspend fun all() = saved.values.toList()
 
         override suspend fun deleteAll() = saved.clear()
     }
 
-    private val gains = ReplayGainStore(FakeGainDao())
+    private val gains = ReplayGainStore(FakeGainDao(), music)
     private var day = LocalDate.of(2026, 11, 9)
 
     @get:Rule val folder = TemporaryFolder()
@@ -667,6 +668,73 @@ class AppBackupTest {
         assertEquals(1, restored.gains)
         assertEquals(-4.5f, gains.gainFor(a))
         assertEquals(-1f, gains.gainFor(b))
+    }
+
+    @Test
+    fun restoringCompletesSongsMeasuredWithoutAlbumData() = runBlocking {
+        val a = song("Music/a.mp3", "A", "X", "Al")
+        val b = song("Music/b.mp3", "B", "Y", "Bl")
+        val withLibrary = libraryWith(listOf(a, b))
+        // a was measured before album adjustments, b is complete.
+        val histogram = org.oxycblt.auxio.replaygain.LoudnessHistogram().apply { add(-20.0) }
+        gains.save(a, -1f)
+        gains.save(b, -2f, org.oxycblt.auxio.replaygain.SongLoudness(histogram, 0.5f))
+        val backup =
+            AppBackup(
+                context,
+                repository,
+                withLibrary,
+                gains,
+                { _, _ -> DocumentFile.fromFile(folder.root) },
+                { day },
+            )
+        val restored =
+            backup.restore(
+                data(emptyMap())
+                    .copy(
+                        gains =
+                            listOf(
+                                BackupGain(
+                                    BackupSong("Music/a.mp3", "A", "X", "Al"),
+                                    -4.5f,
+                                    0.25f,
+                                    histogram.encode(),
+                                ),
+                                BackupGain(
+                                    BackupSong("Music/b.mp3", "B", "Y", "Bl"),
+                                    -9f,
+                                    0.25f,
+                                    histogram.encode(),
+                                ),
+                            )
+                    )
+            )
+        assertEquals(1, restored.gains)
+        assertEquals(-4.5f, gains.gainFor(a))
+        assertTrue(gains.isComplete(a))
+        assertEquals(-2f, gains.gainFor(b))
+    }
+
+    @Test
+    fun theBackupKeepsWhatTheAlbumAdjustmentNeeds() = runBlocking {
+        val a = song("Music/a.mp3", "A", "X", "Al")
+        val histogram = org.oxycblt.auxio.replaygain.LoudnessHistogram().apply { add(-20.0) }
+        gains.save(a, -2f, org.oxycblt.auxio.replaygain.SongLoudness(histogram, 0.5f))
+        AppBackup(
+                context,
+                repository,
+                libraryWith(listOf(a)),
+                gains,
+                { _, _ -> DocumentFile.fromFile(folder.root) },
+                { day },
+            )
+            .also { it.folder = treeUri }
+            .run()
+        val written = folder.root.listFiles()!!.single { it.name.endsWith(".zip") }
+        val read = written.inputStream().use { BackupArchive.read(it) }!!
+        val gain = read.gains.single()
+        assertEquals(0.5f, gain.peak)
+        assertArrayEquals(histogram.encode(), gain.blocks)
     }
 
     @Test

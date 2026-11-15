@@ -21,17 +21,22 @@ package org.oxycblt.auxio.replaygain
 /** Which ReplayGain value a song uses: its tag or the loudness Noxio measured. */
 object ReplayGainChoice {
     /**
-     * The track adjustment in dB to use, or null if there is none. With [preferTags] the [tag]
-     * comes first and the [measured] value fills in for songs without one; otherwise it is the
-     * other way round.
+     * The adjustment in dB to use (of the track or of the album), or null if there is none. With
+     * [preferTags] the [tag] comes first and the [measured] value fills in for songs without one;
+     * otherwise it is the other way round.
      */
-    fun trackGain(tag: Float?, measured: Float?, preferTags: Boolean): Float? =
+    fun choose(tag: Float?, measured: Float?, preferTags: Boolean): Float? =
         if (preferTags) tag ?: measured else measured ?: tag
 
     /**
-     * Whether a scan has to measure a song: it has no measured value yet and, when [preferTags] is
-     * set, no tag either (a tag would win anyway).
+     * Whether a scan has to measure a song. A song measured with everything the album adjustment
+     * needs ([complete]) is done. Otherwise it is measured unless, with [preferTags], it has both a
+     * track and an album tag (the tags would win anyway).
      */
-    fun needsMeasuring(tag: Float?, measured: Float?, preferTags: Boolean): Boolean =
-        measured == null && (!preferTags || tag == null)
+    fun needsMeasuring(
+        trackTag: Float?,
+        albumTag: Float?,
+        complete: Boolean,
+        preferTags: Boolean,
+    ): Boolean = !complete && (!preferTags || trackTag == null || albumTag == null)
 }

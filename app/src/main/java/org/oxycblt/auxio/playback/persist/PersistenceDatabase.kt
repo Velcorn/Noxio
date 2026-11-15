@@ -37,8 +37,14 @@ import org.oxycblt.musikr.Music
  * @author Alexander Capehart
  */
 @Database(
-    entities = [PlaybackState::class, QueueHeapItem::class, QueueShuffledMappingItem::class],
-    version = 38,
+    entities =
+        [
+            PlaybackState::class,
+            QueueHeapItem::class,
+            QueueShuffledMappingItem::class,
+            QueueFileItem::class,
+        ],
+    version = 39,
     exportSchema = false,
 )
 @TypeConverters(Music.UID.TypeConverters::class)
@@ -64,6 +70,17 @@ abstract class PersistenceDatabase : RoomDatabase() {
                 it.execSQL("ALTER TABLE playback_state RENAME TO PlaybackState")
                 it.execSQL("ALTER TABLE queue_heap RENAME TO QueueHeapItem")
                 it.execSQL("ALTER TABLE queue_mapping RENAME TO QueueMappingItem")
+            }
+
+        /** Noxio: where the queued songs' files are, so the queue can play before the library. */
+        val MIGRATION_38_39 =
+            Migration(38, 39) {
+                it.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `QueueFileItem` (`id` INTEGER NOT NULL, " +
+                        "`uri` TEXT NOT NULL, `volume` TEXT NOT NULL, `path` TEXT NOT NULL, " +
+                        "`mimeType` TEXT NOT NULL, `size` INTEGER NOT NULL, " +
+                        "`modifiedMs` INTEGER NOT NULL, PRIMARY KEY(`id`))"
+                )
             }
     }
 }
@@ -124,6 +141,17 @@ interface QueueDao {
     @Query("SELECT * FROM QueueShuffledMappingItem")
     suspend fun getShuffledMapping(): List<QueueShuffledMappingItem>
 
+    /** Noxio: where the files of the heap are, by heap index. */
+    @Query("SELECT * FROM QueueFileItem") suspend fun getFiles(): List<QueueFileItem>
+
+    @Query("SELECT * FROM QueueFileItem WHERE id = :id")
+    suspend fun getFile(id: Int): QueueFileItem?
+
+    @Query("DELETE FROM QueueFileItem") suspend fun nukeFiles()
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun insertFiles(files: List<QueueFileItem>)
+
     /** Delete any previously persisted queue heap entries. */
     @Query("DELETE FROM QueueHeapItem") suspend fun nukeHeap()
 
@@ -160,3 +188,17 @@ data class PlaybackState(
 @Entity data class QueueHeapItem(@PrimaryKey val id: Int, val uid: Music.UID)
 
 @Entity data class QueueShuffledMappingItem(@PrimaryKey val id: Int, val index: Int)
+
+/** Noxio: where the file of the heap item [id] is, see [org.oxycblt.musikr.SongFile]. */
+@Entity
+data class QueueFileItem(
+    @PrimaryKey val id: Int,
+    val uri: String,
+    val volume: String,
+    val path: String,
+    val mimeType: String,
+    val size: Long,
+    val modifiedMs: Long,
+) {
+    companion object
+}

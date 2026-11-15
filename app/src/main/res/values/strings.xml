@@ -265,7 +265,8 @@
     <string name="lbl_sample_rate">Sample rate</string>
     <string name="lbl_replaygain_track">ReplayGain track adjustment</string>
     <string name="lbl_replaygain_album">ReplayGain album adjustment</string>
-    <string name="lbl_replaygain_measured">ReplayGain measured by Noxio</string>
+    <string name="lbl_replaygain_measured">ReplayGain track adjustment (measured)</string>
+    <string name="lbl_replaygain_measured_album">ReplayGain album adjustment (measured)</string>
     <string name="lbl_replay_gain_calculating">Calculating ReplayGain</string>
 
     <!-- Limit to 10 characters -->
@@ -433,7 +434,7 @@
     <string name="lbl_info_backup_title">About backups</string>
     <string name="lbl_info_backup">A backup holds your settings, listening history, playlists and calculated ReplayGain. It is saved in the folder you choose as noxio_YYYY-MM-DD.zip, and the last 5 are kept.\n\nA backup that holds much less than the one before is saved as _small and never replaces a good one.\n\nRestoring replaces the settings and adds plays and playlists to what is there. Nothing is deleted.</string>
     <string name="lbl_replay_gain_info_title">About ReplayGain calculation</string>
-    <string name="lbl_replay_gain_info">Noxio measures how loud a song is (EBU R128) and keeps the result in its own database. Your files are not changed.\n\nPrefer ReplayGain tags: a song uses the tag of its file when it has one, and the measured value only without a tag, so only songs without a tag are measured. When off, every song is measured and the measured value is used.\n\nThe target is the standard -18 LUFS (ReplayGain 2.0). Boosts are limited so they never clip.</string>
+    <string name="lbl_replay_gain_info">Noxio measures how loud a song is (EBU R128) and keeps the result in its own database. Your files are not changed.\n\nPrefer ReplayGain tags: a song uses the tag of its file when it has one, and the measured value only without a tag, so only songs missing a track or album tag are measured. When off, every song is measured and the measured value is used.\n\nOnce every song of an album is measured, the album is measured as a whole too, for \"Prefer album\". Songs measured before Noxio 1.15.0 are measured once more for it.\n\nThe target is the standard -18 LUFS (ReplayGain 2.0). Boosts are limited so they never clip.</string>
     <string name="lbl_replay_gain_scan">Calculate ReplayGain</string>
     <string name="set_replay_gain_scan_desc">Measure the loudness of songs so they play at a similar level</string>
     <string name="fmt_replay_gain_nothing">Nothing left to measure</string>

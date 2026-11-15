@@ -18,6 +18,7 @@
  
 package org.oxycblt.auxio.backup
 
+import android.util.Base64
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.OutputStream
@@ -32,7 +33,23 @@ import org.json.JSONObject
 data class BackupSong(val path: String, val title: String, val artist: String, val album: String)
 
 /** The loudness Noxio measured for one song, found again by the same means as playlist songs. */
-data class BackupGain(val song: BackupSong, val gainDb: Float)
+data class BackupGain(
+    val song: BackupSong,
+    val gainDb: Float,
+    /** The highest sample, null in older backups. */
+    val peak: Float? = null,
+    /** The loudness histogram for the album adjustment, null in older backups. */
+    val blocks: ByteArray? = null,
+) {
+    override fun equals(other: Any?) =
+        other is BackupGain &&
+            song == other.song &&
+            gainDb == other.gainDb &&
+            peak == other.peak &&
+            blocks.contentEquals(other.blocks)
+
+    override fun hashCode() = 31 * song.hashCode() + gainDb.hashCode()
+}
 
 /** A playlist of a backup. */
 data class BackupPlaylist(val name: String, val songs: List<BackupSong>)
@@ -259,6 +276,12 @@ object BackupArchive {
                     .put("artist", it.song.artist)
                     .put("album", it.song.album)
                     .put("gainDb", it.gainDb.toDouble())
+                    .apply {
+                        if (it.peak != null && it.blocks != null) {
+                            put("peak", it.peak.toDouble())
+                            put("blocks", Base64.encodeToString(it.blocks, Base64.NO_WRAP))
+                        }
+                    }
             }
         )
 
@@ -274,6 +297,17 @@ object BackupArchive {
                     item.optString("album"),
                 ),
                 item.getDouble("gainDb").toFloat(),
+                item.optDouble("peak").takeIf { !it.isNaN() }?.toFloat(),
+                item
+                    .optString("blocks")
+                    .takeIf { it.isNotEmpty() }
+                    ?.let {
+                        try {
+                            Base64.decode(it, Base64.NO_WRAP)
+                        } catch (e: IllegalArgumentException) {
+                            null
+                        }
+                    },
             )
         }
     }

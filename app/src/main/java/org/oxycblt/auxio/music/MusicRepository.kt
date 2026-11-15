@@ -39,7 +39,9 @@ import org.oxycblt.musikr.Music
 import org.oxycblt.musikr.Musikr
 import org.oxycblt.musikr.MutableLibrary
 import org.oxycblt.musikr.Playlist
+import org.oxycblt.musikr.Preview
 import org.oxycblt.musikr.Song
+import org.oxycblt.musikr.SongFile
 import org.oxycblt.musikr.Storage
 import org.oxycblt.musikr.cache.MutableCache
 import org.oxycblt.musikr.fs.mediastore.MediaStore
@@ -178,6 +180,12 @@ interface MusicRepository {
      * @return The top-level music loading [Job] started.
      */
     suspend fun index(worker: IndexingWorker, withCache: Boolean)
+
+    /**
+     * Noxio: a small stand-in library of only the songs at [files], built from the tag cache, so a
+     * saved queue can play before the real library has loaded. Null if it could not be built.
+     */
+    suspend fun preview(files: List<SongFile>): Library?
 
     /** A listener for changes to the stored music information. */
     interface UpdateListener {
@@ -377,6 +385,34 @@ constructor(
             L.e(e.stackTraceToString())
             emitIndexingCompletion(e)
         }
+    }
+
+    override suspend fun preview(files: List<SongFile>): Library? =
+        try {
+            Preview.library(
+                context,
+                files,
+                cache,
+                SettingCovers.immutable(context),
+                storedPlaylists,
+                interpretation(),
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            L.w("Could not build the preview library: $e")
+            null
+        }
+
+    private fun interpretation(): Interpretation {
+        val separators = Separators.from(musicSettings.separators)
+        val nameFactory =
+            if (musicSettings.intelligentSorting) {
+                Naming.intelligent()
+            } else {
+                Naming.simple()
+            }
+        return Interpretation(nameFactory, separators)
     }
 
     private suspend fun indexImpl(withCache: Boolean) {

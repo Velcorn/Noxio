@@ -50,7 +50,15 @@ class BackupArchiveTest {
                 ),
                 BackupPlaylist("Empty", emptyList()),
             ),
-            listOf(BackupGain(BackupSong("Music/a.mp3", "Song, A", "Artist; B", "Album"), -6.25f)),
+            listOf(
+                BackupGain(BackupSong("Music/a.mp3", "Song, A", "Artist; B", "Album"), -6.25f),
+                BackupGain(
+                    BackupSong("Music/b.mp3", "B", "Artist", "Album"),
+                    -3.5f,
+                    0.75f,
+                    byteArrayOf(1, 2, 0x7F, -1, 0),
+                ),
+            ),
         )
 
     private fun bytes(data: BackupData) =
@@ -63,6 +71,8 @@ class BackupArchiveTest {
         assertEquals(data.settings, read.settings)
         assertArrayEquals(data.history, read.history)
         assertEquals(data.playlists, read.playlists)
+        // The second one keeps its peak and histogram, for the album adjustment.
+        assertEquals(data.gains, read.gains)
     }
 
     @Test

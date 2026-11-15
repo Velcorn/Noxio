@@ -26,46 +26,49 @@ import org.junit.Test
 
 class ReplayGainChoiceTest {
     @Test
-    fun trackGain_tagsPreferred_tagWins() {
-        assertEquals(-3f, ReplayGainChoice.trackGain(-3f, -7f, preferTags = true))
+    fun choose_tagsPreferred_tagWins() {
+        assertEquals(-3f, ReplayGainChoice.choose(-3f, -7f, preferTags = true))
     }
 
     @Test
-    fun trackGain_tagsPreferred_measuredFillsIn() {
-        assertEquals(-7f, ReplayGainChoice.trackGain(null, -7f, preferTags = true))
+    fun choose_tagsPreferred_measuredFillsIn() {
+        assertEquals(-7f, ReplayGainChoice.choose(null, -7f, preferTags = true))
     }
 
     @Test
-    fun trackGain_measuredPreferred_measuredWins() {
-        assertEquals(-7f, ReplayGainChoice.trackGain(-3f, -7f, preferTags = false))
+    fun choose_measuredPreferred_measuredWins() {
+        assertEquals(-7f, ReplayGainChoice.choose(-3f, -7f, preferTags = false))
     }
 
     @Test
-    fun trackGain_measuredPreferred_tagFillsIn() {
-        assertEquals(-3f, ReplayGainChoice.trackGain(-3f, null, preferTags = false))
+    fun choose_measuredPreferred_tagFillsIn() {
+        assertEquals(-3f, ReplayGainChoice.choose(-3f, null, preferTags = false))
     }
 
     @Test
-    fun trackGain_nothing_isNull() {
-        assertNull(ReplayGainChoice.trackGain(null, null, preferTags = true))
-        assertNull(ReplayGainChoice.trackGain(null, null, preferTags = false))
+    fun choose_nothing_isNull() {
+        assertNull(ReplayGainChoice.choose(null, null, preferTags = true))
+        assertNull(ReplayGainChoice.choose(null, null, preferTags = false))
     }
 
     @Test
-    fun needsMeasuring_tagsPreferred_onlyUntaggedSongs() {
-        assertTrue(ReplayGainChoice.needsMeasuring(null, null, preferTags = true))
-        assertFalse(ReplayGainChoice.needsMeasuring(-3f, null, preferTags = true))
+    fun needsMeasuring_tagsPreferred_onlySongsMissingATag() {
+        assertTrue(ReplayGainChoice.needsMeasuring(null, null, false, preferTags = true))
+        // The album adjustment needs every song of the album, also ones with a track tag.
+        assertTrue(ReplayGainChoice.needsMeasuring(-3f, null, false, preferTags = true))
+        assertTrue(ReplayGainChoice.needsMeasuring(null, -4f, false, preferTags = true))
+        assertFalse(ReplayGainChoice.needsMeasuring(-3f, -4f, false, preferTags = true))
     }
 
     @Test
     fun needsMeasuring_measuredPreferred_taggedSongsToo() {
-        assertTrue(ReplayGainChoice.needsMeasuring(-3f, null, preferTags = false))
-        assertTrue(ReplayGainChoice.needsMeasuring(null, null, preferTags = false))
+        assertTrue(ReplayGainChoice.needsMeasuring(-3f, -4f, false, preferTags = false))
+        assertTrue(ReplayGainChoice.needsMeasuring(null, null, false, preferTags = false))
     }
 
     @Test
-    fun needsMeasuring_alreadyMeasured_isSkipped() {
-        assertFalse(ReplayGainChoice.needsMeasuring(null, -7f, preferTags = true))
-        assertFalse(ReplayGainChoice.needsMeasuring(-3f, -7f, preferTags = false))
+    fun needsMeasuring_completelyMeasured_isSkipped() {
+        assertFalse(ReplayGainChoice.needsMeasuring(null, null, true, preferTags = true))
+        assertFalse(ReplayGainChoice.needsMeasuring(-3f, -4f, true, preferTags = false))
     }
 }

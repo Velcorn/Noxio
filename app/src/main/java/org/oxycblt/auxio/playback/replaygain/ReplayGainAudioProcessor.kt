@@ -119,16 +119,17 @@ constructor(
 
         L.d("Applying ReplayGain adjustment for $song")
 
-        // Noxio: a song's tag or the loudness Noxio measured, depending on the setting.
+        // Noxio: a song's tags or the loudness Noxio measured, depending on the setting.
         val tagged = song.replayGainAdjustment
+        val preferTags = playbackSettings.replayGainPreferTags
         val gain =
             ReplayGainAdjustment(
-                ReplayGainChoice.trackGain(
-                    tagged.track,
-                    measuredGains.gainFor(song),
-                    playbackSettings.replayGainPreferTags,
+                ReplayGainChoice.choose(tagged.track, measuredGains.gainFor(song), preferTags),
+                ReplayGainChoice.choose(
+                    tagged.album,
+                    measuredGains.albumGainFor(song.album),
+                    preferTags,
                 ),
-                tagged.album,
             )
         val preAmp = playbackSettings.replayGainPreAmp
 

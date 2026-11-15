@@ -77,15 +77,16 @@ constructor(
     suspend fun clearMeasured() = store.clear()
 
     /**
-     * The songs a scan would measure: not measured yet, and, when tags are preferred, without a
-     * ReplayGain tag.
+     * The songs a scan would measure: not measured yet (or measured before album adjustments
+     * existed), and, when tags are preferred, without a track or album ReplayGain tag.
      */
     fun pending(): List<Song> {
         val preferTags = playbackSettings.replayGainPreferTags
         return musicRepository.library?.songs.orEmpty().filter {
             ReplayGainChoice.needsMeasuring(
                 it.replayGainAdjustment.track,
-                store.gainFor(it),
+                it.replayGainAdjustment.album,
+                store.isComplete(it),
                 preferTags,
             )
         }
@@ -122,7 +123,11 @@ constructor(
                                         null
                                     }
                                 if (loudness != null) {
-                                    store.save(song, loudness.replayGainDb())
+                                    store.save(
+                                        song,
+                                        loudness.replayGainDb(),
+                                        loudness.histogram?.let { SongLoudness(it, loudness.peak) },
+                                    )
                                     measured.incrementAndGet()
                                 } else {
                                     failed.incrementAndGet()
@@ -138,6 +143,7 @@ constructor(
                     }
                 }
             }
+            store.updateAlbums()
             mutableState.value =
                 ScanState.Idle(
                     measured.get(),
@@ -147,6 +153,8 @@ constructor(
                 )
         } catch (e: CancellationException) {
             mutableState.value = ScanState.Idle(measured.get(), failed.get())
+            // What was measured until now still counts for the albums that are complete.
+            withContext(kotlinx.coroutines.NonCancellable) { store.updateAlbums() }
             throw e
         }
     }

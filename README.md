@@ -30,8 +30,8 @@ stats, stays in its own database or in files you export.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
   cards to share or save. A **year in review** with five cards to swipe through.
-- **ReplayGain calculation:** Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs in
-  the background, so quiet and loud songs play alike. Tags are preferred by default, a switch uses the measured value
+- **ReplayGain calculation:** Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs, and
+  of whole albums once all their songs are, in the background, so quiet and loud songs play alike. Tags are preferred by default, a switch uses the measured value
   instead, and the measured values can be deleted. A song's details show what Noxio measured. Values stay in Noxio
   (and in its backup), your files are not changed. The target is the standard -18 LUFS
   (ReplayGain 2.0).
@@ -41,8 +41,9 @@ stats, stays in its own database or in files you export.
   opens a short explanation.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
   estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
-- **Queue and playlists:** the queue has search and sort, opens at the song that plays, opens with a swipe up on the
-  player, and can be cleared or saved as a playlist. Playlists can be searched, sorted and have songs taken out,
+- **Queue and playlists:** the song that played is ready right after a restart, before the library has loaded. The queue
+  has search and sort, opens at the song that plays, opens with a swipe up on the player, and can be cleared or saved
+  as a playlist. Playlists can be searched, sorted and have songs taken out,
   with no song added twice and duplicates removed in one go.
 - **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
   floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),

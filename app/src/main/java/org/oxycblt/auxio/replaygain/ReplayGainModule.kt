@@ -38,6 +38,7 @@ class ReplayGainModule {
                 ReplayGainDatabase::class.java,
                 "replaygain.db",
             )
+            .addMigrations(ReplayGainDatabase.MIGRATION_1_2)
             .build()
 
     @Provides fun measuredGainDao(database: ReplayGainDatabase) = database.measuredGainDao()

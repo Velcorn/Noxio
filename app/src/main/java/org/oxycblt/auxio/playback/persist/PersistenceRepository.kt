@@ -18,10 +18,14 @@
  
 package org.oxycblt.auxio.playback.persist
 
+import androidx.core.net.toUri
 import javax.inject.Inject
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
+import org.oxycblt.musikr.Library
+import org.oxycblt.musikr.Music
 import org.oxycblt.musikr.MusicParent
+import org.oxycblt.musikr.SongFile
 import timber.log.Timber as L
 
 /**
@@ -32,6 +36,13 @@ import timber.log.Timber as L
 interface PersistenceRepository {
     /** Read the previously persisted [PlaybackStateManager.SavedState]. */
     suspend fun readState(): PlaybackStateManager.SavedState?
+
+    /**
+     * Noxio: read the persisted state before the library has loaded, with stand-in songs built from
+     * the tag cache (see [MusicRepository.preview]). Null if nothing was saved, or if the saved
+     * queue has no file records (saved by an older version).
+     */
+    suspend fun readEarlyState(): PlaybackStateManager.SavedState?
 
     /**
      * Persist a new [PlaybackStateManager.SavedState].
@@ -58,6 +69,39 @@ constructor(
 
     override suspend fun readState(): PlaybackStateManager.SavedState? {
         val library = musicRepository.library?.takeIf { !it.empty() } ?: return null
+        return readState(library)
+    }
+
+    override suspend fun readEarlyState(): PlaybackStateManager.SavedState? {
+        val playbackState: PlaybackState
+        val file: QueueFileItem
+        try {
+            playbackState = playbackStateDao.getState() ?: return null
+            // Only the song that plays: building every song of a long queue would take as long
+            // as loading the library. The rest of the queue follows with the library.
+            val heapIndex =
+                queueDao.getHeap().firstOrNull { it.uid == playbackState.songUid }?.id
+                    ?: return null
+            file = queueDao.getFile(heapIndex) ?: return null
+        } catch (e: Exception) {
+            L.e("Unable to read the playing song's file")
+            L.e(e.stackTraceToString())
+            return null
+        }
+        val library = musicRepository.preview(listOf(file.toSongFile())) ?: return null
+        val song = library.findSong(playbackState.songUid) ?: return null
+        return PlaybackStateManager.SavedState(
+            positionMs = playbackState.positionMs,
+            repeatMode = playbackState.repeatMode,
+            parent = playbackState.parentUid?.let { library.findParent(it) },
+            heap = listOf(song),
+            shuffledMapping = emptyList(),
+            index = 0,
+            songUid = song.uid,
+        )
+    }
+
+    private suspend fun readState(library: Library): PlaybackStateManager.SavedState? {
         val playbackState: PlaybackState
         val heapItems: List<QueueHeapItem>
         val mappingItems: List<QueueShuffledMappingItem>
@@ -73,7 +117,7 @@ constructor(
 
         val heap = heapItems.map { library.findSong(it.uid) }
         val shuffledMapping = mappingItems.map { it.index }
-        val parent = playbackState.parentUid?.let { musicRepository.find(it) as? MusicParent }
+        val parent = playbackState.parentUid?.let { library.findParent(it) }
 
         return PlaybackStateManager.SavedState(
             positionMs = playbackState.positionMs,
@@ -101,6 +145,7 @@ constructor(
             playbackStateDao.nukeState()
             queueDao.nukeHeap()
             queueDao.nukeShuffledMapping()
+            queueDao.nukeFiles()
         } catch (e: Exception) {
             L.e("Unable to clear previous state")
             L.e(e.stackTraceToString())
@@ -127,10 +172,16 @@ constructor(
             val shuffledMapping =
                 state.shuffledMapping.mapIndexed { i, index -> QueueShuffledMappingItem(i, index) }
 
+            val files =
+                state.heap.mapIndexedNotNull { i, song ->
+                    song?.let(SongFile::of)?.let { QueueFileItem.of(i, it) }
+                }
+
             try {
                 playbackStateDao.insertState(playbackState)
                 queueDao.insertHeap(heap)
                 queueDao.insertShuffledMapping(shuffledMapping)
+                queueDao.insertFiles(files)
             } catch (e: Exception) {
                 L.e("Unable to write new state")
                 L.e(e.stackTraceToString())
@@ -143,3 +194,21 @@ constructor(
         return true
     }
 }
+
+/** The album, artist, genre or playlist with [uid] in this library, or null. */
+internal fun Library.findParent(uid: Music.UID): MusicParent? =
+    findAlbum(uid) ?: findArtist(uid) ?: findGenre(uid) ?: findPlaylist(uid)
+
+internal fun QueueFileItem.toSongFile() =
+    SongFile(uri.toUri(), volume, path, mimeType, size, modifiedMs)
+
+internal fun QueueFileItem.Companion.of(id: Int, file: SongFile) =
+    QueueFileItem(
+        id,
+        file.uri.toString(),
+        file.volume,
+        file.path,
+        file.mimeType,
+        file.size,
+        file.modifiedMs,
+    )

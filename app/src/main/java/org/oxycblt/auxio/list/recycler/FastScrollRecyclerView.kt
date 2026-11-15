@@ -331,9 +331,10 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
             val first = lm.findViewByPosition(0)
             val last = lm.findViewByPosition(count - 1)
             if (first != null && last != null) {
-                // The decorated top of the first item includes the gap that is there now.
-                val content =
-                    lm.getDecoratedBottom(last) - lm.getDecoratedTop(first) - bottomAlignGap
+                // Measured from the first item itself, not its decorated top: the gap decoration
+                // may not have been applied yet (it is invalidated with a post), and subtracting
+                // the new gap from an old offset made a short list swing off the screen.
+                val content = lm.getDecoratedBottom(last) - first.top
                 // Under a collapsing app bar the view is taller than what is on screen, as it
                 // also covers what the bar gives up when it collapses. Count only what is shown
                 // while the bar is expanded.

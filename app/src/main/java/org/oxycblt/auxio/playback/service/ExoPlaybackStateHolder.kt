@@ -58,6 +58,7 @@ import org.oxycblt.auxio.playback.state.PlaybackCommand
 import org.oxycblt.auxio.playback.state.PlaybackStateHolder
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.playback.state.Progression
+import org.oxycblt.auxio.playback.state.QueueSwap
 import org.oxycblt.auxio.playback.state.RawQueue
 import org.oxycblt.auxio.playback.state.RepeatMode
 import org.oxycblt.auxio.playback.state.ShuffleMode
@@ -154,8 +155,8 @@ class ExoPlaybackStateHolder(
         get() = player.audioSessionId
 
     override fun resolveQueue(): RawQueue {
-        if (musicRepository.library == null) {
-            // No library, cannot do anything.
+        if (musicRepository.library == null && !earlyRestored) {
+            // No library, cannot do anything. Noxio: unless the playing song was restored early.
             return RawQueue(emptyList(), emptyList(), 0)
         }
         val heap = (0 until player.mediaItemCount).map { player.getMediaItemAt(it) }
@@ -168,15 +169,78 @@ class ExoPlaybackStateHolder(
         return RawQueue(heap.mapNotNull { it.song }, shuffledMapping, player.currentMediaItemIndex)
     }
 
+    /**
+     * Noxio: whether only the playing song of the saved queue is there, restored before the library
+     * had loaded. Until the rest follows, the saved queue must not be overwritten.
+     */
+    private var earlyRestored = false
+    private var earlyRestoreStarted = false
+    private var earlyPlayed = false
+
+    /**
+     * Noxio: restore the song that played with a stand-in from the tag cache, so it can play right
+     * away instead of after the whole library has loaded (Auxio #1467). The rest of the queue is
+     * added around it when the library is there, see [handleDeferred].
+     */
+    private fun restoreEarly(action: DeferredPlayback.RestoreState) {
+        if (earlyRestoreStarted) return
+        earlyRestoreStarted = true
+        restoreScope.launch {
+            val state = persistenceRepository.readEarlyState() ?: return@launch
+            withContext(Dispatchers.Main) {
+                // The library may have won the race, then the usual restore does it.
+                if (musicRepository.library?.takeIf { !it.empty() } != null) return@withContext
+                L.d("Restoring the playing song before the library")
+                earlyRestored = true
+                playbackManager.applySavedState(state, false)
+                if (action.play) {
+                    earlyPlayed = true
+                    playbackManager.playing(true)
+                }
+            }
+        }
+    }
+
+    /** Noxio: add the rest of the saved queue around the song restored early. */
+    private fun completeEarlyRestore(action: DeferredPlayback.RestoreState) {
+        restoreScope.launch {
+            val state = persistenceRepository.readState()
+            withContext(Dispatchers.Main) {
+                earlyRestored = false
+                val current = playbackManager.currentSong
+                if (state != null && current != null && state.songUid == current.uid) {
+                    L.d("Adding the rest of the queue around the playing song")
+                    // Where it plays now, not where it was saved.
+                    playbackManager.applySavedState(
+                        state.copy(
+                            positionMs = playbackManager.progression.calculateElapsedPositionMs()
+                        ),
+                        true,
+                    )
+                }
+                // A request to play that came after the early restore still plays.
+                if (action.play && !earlyPlayed) playbackManager.playing(true)
+            }
+        }
+    }
+
     override fun handleDeferred(action: DeferredPlayback): Boolean {
-        val library =
-            musicRepository.library?.takeIf { !it.empty() }
-                // No library, cannot do anything.
-                ?: return false
+        val library = musicRepository.library?.takeIf { !it.empty() }
+        if (library == null) {
+            // Noxio: no library yet, but the saved queue can already be built from the tag
+            // cache. The action stays pending, the library still has to arrive.
+            if (action is DeferredPlayback.RestoreState) restoreEarly(action)
+            return false
+        }
 
         when (action) {
             // Restore state -> Start a new restoreState job
             is DeferredPlayback.RestoreState -> {
+                if (earlyRestored) {
+                    // Noxio: the playing song is already there, the rest of the queue follows.
+                    completeEarlyRestore(action)
+                    return true
+                }
                 L.d("Restoring playback state")
                 restoreScope.launch {
                     val state = persistenceRepository.readState()
@@ -265,6 +329,8 @@ class ExoPlaybackStateHolder(
     }
 
     override fun newPlayback(command: PlaybackCommand) {
+        // Noxio: something new plays, the queue restored early is replaced and may be saved over.
+        earlyRestored = false
         parent = command.parent
         player.shuffleModeEnabled = command.shuffled
         player.setMediaItems(command.queue.map { it.buildMediaItem() })
@@ -454,7 +520,35 @@ class ExoPlaybackStateHolder(
             this.parent = parent
             sendNewPlaybackEvent = true
         }
-        if (rawQueue != resolveQueue()) {
+        val current = resolveQueue()
+        if (rawQueue != current && QueueSwap.isSameQueue(current, rawQueue)) {
+            // Noxio: the same songs as new objects (the library was loaded again, or the songs
+            // of an early restore are replaced by the real ones). Replacing the items keeps the
+            // player where it is, without a gap.
+            L.d("Replacing the songs of the queue in place")
+            player.replaceMediaItems(
+                0,
+                player.mediaItemCount,
+                rawQueue.heap.map { it.buildMediaItem() },
+            )
+            sendNewPlaybackEvent = true
+        } else if (QueueSwap.isGrowth(current, rawQueue)) {
+            // Noxio: the song restored early gets the rest of its queue around it, while it
+            // keeps playing.
+            L.d("Growing the queue around the playing song")
+            val heap = rawQueue.heap.map { it.buildMediaItem() }
+            val index = rawQueue.heapIndex
+            player.replaceMediaItem(0, heap[index])
+            player.addMediaItems(1, heap.subList(index + 1, heap.size))
+            player.addMediaItems(0, heap.subList(0, index))
+            if (rawQueue.isShuffled) {
+                player.shuffleModeEnabled = true
+                player.setShuffleOrder(BetterShuffleOrder(rawQueue.shuffledMapping.toIntArray()))
+            } else {
+                player.shuffleModeEnabled = false
+            }
+            sendNewPlaybackEvent = true
+        } else if (rawQueue != current) {
             player.setMediaItems(rawQueue.heap.map { it.buildMediaItem() })
             if (rawQueue.isShuffled) {
                 player.shuffleModeEnabled = true
@@ -618,8 +712,10 @@ class ExoPlaybackStateHolder(
     }
 
     private fun save(cb: () -> Unit) {
+        // Noxio: not while only the song restored early is there, that would lose the queue.
+        val partial = earlyRestored
         saveJob {
-            if (sessionOngoing) {
+            if (sessionOngoing && !partial) {
                 persistenceRepository.saveState(playbackManager.toSavedState())
             }
             withContext(Dispatchers.Main) { cb() }
@@ -632,7 +728,7 @@ class ExoPlaybackStateHolder(
             delay(SAVE_BUFFER.milliseconds)
             yield()
             L.d("Committing saved state")
-            if (sessionOngoing) {
+            if (sessionOngoing && !earlyRestored) {
                 persistenceRepository.saveState(playbackManager.toSavedState())
             }
         }
