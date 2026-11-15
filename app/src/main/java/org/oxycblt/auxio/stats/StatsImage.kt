@@ -117,7 +117,7 @@ object StatsImage {
         canvas.drawText(content.rangeLabel, MARGIN, 312f, text)
 
         content.rows.forEachIndexed { index, row ->
-            drawRow(canvas, paint, text, index, FIRST_ROW_Y + index * ROW_HEIGHT, row)
+            drawRow(canvas, paint, text, index, FIRST_ROW_Y + index * ROW_HEIGHT, row, ROW_HEIGHT)
         }
 
         drawFooter(canvas, paint, text, content.totalTime, content.totalPlays)
@@ -132,19 +132,35 @@ object StatsImage {
         val text = TextPaint(Paint.ANTI_ALIAS_FLAG)
         drawBackground(context, canvas, paint, text, content.category)
 
-        // A long name is written smaller before it is cut off.
+        // A long name is written smaller first, then wraps to a second line (and then the card
+        // keeps only the first of its lines under the name, to leave room for the tiles).
         text.alpha = 255
         text.textSize = 96f
+        var titleLines = listOf(content.name)
         if (text.measureText(content.name) > CONTENT_WIDTH) {
             text.textSize = 68f
+            if (text.measureText(content.name) > CONTENT_WIDTH) {
+                text.textSize = 60f
+                titleLines = TextWrap.wrap(content.name, 2, CONTENT_WIDTH, text::measureText)
+            }
         }
-        canvas.drawText(ellipsize(content.name, text, CONTENT_WIDTH), MARGIN, 250f, text)
+        val wrappedTitle = titleLines.size > 1
+        titleLines.forEachIndexed { index, line ->
+            val value = if (titleLines.size == 1) ellipsize(line, text, CONTENT_WIDTH) else line
+            canvas.drawText(value, MARGIN, (if (wrappedTitle) 226f else 250f) + index * 66f, text)
+        }
 
         text.typeface = Typeface.DEFAULT
         text.textSize = 40f
         text.alpha = 230
-        content.lines.take(2).forEachIndexed { index, line ->
-            canvas.drawText(ellipsize(line, text, CONTENT_WIDTH), MARGIN, 312f + index * 54f, text)
+        val firstLineY = if (wrappedTitle) 360f else 312f
+        content.lines.take(if (wrappedTitle) 1 else 2).forEachIndexed { index, line ->
+            canvas.drawText(
+                ellipsize(line, text, CONTENT_WIDTH),
+                MARGIN,
+                firstLineY + index * 54f,
+                text,
+            )
         }
         text.alpha = 255
 
@@ -190,11 +206,27 @@ object StatsImage {
         if (content.tiles.isEmpty()) {
             // Without tiles the rows take their place, as on the overview card: up to five.
             content.rows.take(5).forEachIndexed { index, row ->
-                drawRow(canvas, paint, text, index, FIRST_ROW_Y + index * ROW_HEIGHT, row)
+                drawRow(
+                    canvas,
+                    paint,
+                    text,
+                    index,
+                    FIRST_ROW_Y + index * ROW_HEIGHT,
+                    row,
+                    ROW_HEIGHT,
+                )
             }
         } else {
             content.rows.take(3).forEachIndexed { index, row ->
-                drawRow(canvas, paint, text, index, SECTION_Y + 44f + index * ITEM_ROW_HEIGHT, row)
+                drawRow(
+                    canvas,
+                    paint,
+                    text,
+                    index,
+                    SECTION_Y + 44f + index * ITEM_ROW_HEIGHT,
+                    row,
+                    ITEM_ROW_HEIGHT,
+                )
             }
         }
         if (content.rows.isEmpty()) {
@@ -335,7 +367,9 @@ object StatsImage {
         index: Int,
         top: Float,
         row: StatsImageContent.Row,
+        rowHeight: Float,
     ) {
+        val roomy = rowHeight >= ROW_HEIGHT
         val first = index == 0
 
         paint.color = if (first) WHITE else 0x38FFFFFF
@@ -350,14 +384,41 @@ object StatsImage {
         text.color = WHITE
         text.textAlign = Paint.Align.LEFT
         text.textSize = 44f
-        // A name without a second line sits in the middle of its row, next to the number.
-        val nameY = if (row.subtitle.isNullOrEmpty()) top + 55f else top + 36f
-        canvas.drawText(ellipsize(row.name, text, 560f), MARGIN + 120f, nameY, text)
-        if (!row.subtitle.isNullOrEmpty()) {
+        // A long name wraps to a second line, in a smaller size, and moves the artist down.
+        val name = TextWrap.wrap(row.name, 2, 560f, text::measureText)
+        val wrapped = name.size > 1
+        if (wrapped) {
+            text.textSize = if (roomy) 38f else 36f
+        }
+        val lines = if (wrapped) TextWrap.wrap(row.name, 2, 560f, text::measureText) else name
+        val hasSubtitle = !row.subtitle.isNullOrEmpty()
+        if (wrapped) {
+            // Two lines of name, then the artist under them.
+            val firstY = top + (if (!hasSubtitle) 42f else if (roomy) 30f else 26f)
+            lines.forEachIndexed { line, value ->
+                canvas.drawText(
+                    value,
+                    MARGIN + 120f,
+                    firstY + line * (if (roomy) 44f else 38f),
+                    text,
+                )
+            }
+        } else {
+            // A name without a second line sits in the middle of its row, next to the number.
+            val nameY = if (hasSubtitle) top + 36f else top + 55f
+            canvas.drawText(lines.firstOrNull().orEmpty(), MARGIN + 120f, nameY, text)
+        }
+        if (hasSubtitle) {
             text.typeface = Typeface.DEFAULT
             text.textSize = 32f
             text.alpha = 204
-            canvas.drawText(ellipsize(row.subtitle, text, 560f), MARGIN + 120f, top + 80f, text)
+            val subtitleY = if (!wrapped) top + 80f else if (roomy) top + 122f else top + 102f
+            canvas.drawText(
+                ellipsize(row.subtitle.orEmpty(), text, 560f),
+                MARGIN + 120f,
+                subtitleY,
+                text,
+            )
             text.alpha = 255
         }
 
