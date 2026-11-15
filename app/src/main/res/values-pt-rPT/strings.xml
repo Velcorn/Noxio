@@ -92,8 +92,6 @@
     <string name="lbl_disc">Disco</string>
     <string name="lbl_track">Faixa</string>
     <string name="lbl_bitrate">Taxa de bits</string>
-    <string name="set_pre_amp_warning">Aviso: Alterar o pré-amplificador para um valor positivo alto pode resultar em picos em algumas faixas de áudio.</string>
-    <string name="set_pre_amp_with">Ajustar com etiquetas</string>
     <string name="cdc_ogg">Áudio Ogg</string>
     <string name="lbl_date_added">Data adicionada</string>
     <string name="lbl_sample_rate">Taxa de amostragem</string>
@@ -137,7 +135,6 @@
     <string name="fmt_disc_no">Disco %d</string>
     <string name="fmt_disc_no_subtitle">Disco %1$d – %2$s</string>
     <string name="desc_album_cover">Capa do álbum para %s</string>
-    <string name="set_pre_amp_without">Ajustar sem etiquetas</string>
     <string name="set_content">Conteúdo</string>
     <string name="fmt_lib_genre_count">Gêneros carregados: %d</string>
     <string name="lbl_indexer">A carregar música</string>
@@ -149,7 +146,6 @@
     <string name="set_lib_tabs_desc">Altere a visibilidade e a ordem das abas da biblioteca</string>
     <string name="set_replay_gain_mode">Estratégia do ganho de repetição</string>
     <string name="set_replay_gain_mode_album">Preferir álbum</string>
-    <string name="set_pre_amp_desc">O pré-amplificador é aplicado ao ajuste existente durante a reprodução</string>
     <string name="desc_shuffle">Ativar ou desativar a reprodução aleatória</string>
     <string name="desc_remove_song">Remover esta música de fila</string>
     <string name="cdc_aac">Codificação de Audio Avançada (AAC)</string>
@@ -179,13 +175,11 @@
     <string name="lbl_single_live">Single ao vivo</string>
     <string name="lbl_single_remix">Single remix</string>
     <string name="lng_observing">A Monitorizar alterações na sua biblioteca de músicas…</string>
-    <string name="lbl_reset">Repor</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="lng_widget">Vêr e controlar a reprodução da música</string>
     <string name="set_black_mode_desc">Utilizar tema preto escuro puro</string>
     <string name="set_hide_collaborators_desc">Mostrar apenas artistas que foram creditados diretamente no álbum (funciona melhor em músicas com metadados completos)</string>
     <string name="set_replay_gain_mode_track">Preferir faixa</string>
-    <string name="set_pre_amp">Pré-amplificação da normalização de volume</string>
     <string name="set_rewind_prev_desc">Retrocede a música antes de voltar para a anterior</string>
     <string name="set_reindex">Recarregar música</string>
     <string name="fmt_list">%1$s, %2$s</string>

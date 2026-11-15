@@ -20,7 +20,6 @@
     <string name="lbl_props">Propriedades da música</string>
     <string name="lbl_format">Formato</string>
     <string name="lbl_queue">Fila</string>
-    <string name="lbl_reset">Repor</string>
     <string name="lbl_code">Código fonte</string>
     <string name="lbl_selection">Seleção</string>
     <string name="lng_indexing">A carregar biblioteca de músicas…</string>
@@ -155,10 +154,6 @@
     <string name="lbl_wiki">Wiki</string>
     <string name="set_exclude_non_music_desc">Ignorar ficheiros de áudio que não são música, tal como podcasts</string>
     <string name="set_audio">Áudio</string>
-    <string name="set_pre_amp">Pré-amplificação da normalização de volume</string>
-    <string name="set_pre_amp_desc">O pré-amplificador é aplicado ao ajuste existente durante a reprodução</string>
-    <string name="set_pre_amp_with">Ajustar com etiquetas</string>
-    <string name="set_pre_amp_without">Ajustar sem etiquetas</string>
     <string name="err_index_failed">Falha ao carregar música</string>
     <string name="desc_track_number">Música %d</string>
     <string name="desc_play_pause">Reproduzir ou pausar</string>
@@ -220,7 +215,6 @@
     <string name="set_music">Música</string>
     <string name="set_exclude_non_music">Excluir não-música</string>
     <string name="set_replay_gain_mode_track">Preferir faixa</string>
-    <string name="set_pre_amp_warning">Aviso: Alterar o pré-amplificador para um valor positivo alto pode resultar em picos em algumas faixas de áudio.</string>
     <string name="set_library">Biblioteca</string>
     <string name="set_reindex_desc">Recarrega a biblioteca de músicas usando metadados salvos em cache quando possível</string>
     <string name="set_rescan">Procurar músicas novamente</string>

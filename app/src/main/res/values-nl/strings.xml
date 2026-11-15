@@ -110,9 +110,7 @@
     <string name="set_replay_gain_mode_dynamic">Voorkeur album als er een speelt</string>
     <string name="set_replay_gain_mode_track">Voorkeur track</string>
     <string name="set_replay_gain_mode_album">Voorkeur album</string>
-    <string name="set_pre_amp_desc">De voorversterker wordt toegepast op de bestaande afstelling tijdens weergave</string>
     <string name="set_locations">Muziek mappen</string>
-    <string name="set_pre_amp">ReplayGain voorversterker</string>
     <string name="set_locations_desc">Beheer waarvan muziek moet worden geladen</string>
     <string name="fmt_lib_total_duration">Totale duur: %s</string>
     <string name="lbl_shuffle_shortcut_long">Shuffle alles</string>
@@ -121,13 +119,10 @@
     <string name="set_reindex_desc">Laad de muziekbibliotheek opnieuw, indien mogelijk met behulp van gecashte tags</string>
     <string name="fmt_indexing">Uw muziekbibliotheek wordt geladen… (%1$d/%2$d)</string>
     <string name="set_reindex">Muziek opnieuw laden</string>
-    <string name="set_pre_amp_with">Aanpassing met tags</string>
-    <string name="set_pre_amp_without">Aanpassing zonder tags</string>
     <string name="def_playback">Geen muziek wordt afgespeeld</string>
     <string name="lbl_library_counts">Bibliotheek statistieken</string>
     <string name="set_lib_tabs_desc">Verander de zichtbaarheid en volgorde van bibliotheek tabbladen</string>
     <string name="set_replay_gain_mode">ReplayGain strategie</string>
-    <string name="set_pre_amp_warning">Waarschuwing: Als u de voorversterker op een hoge positieve waarde zet, kan dit bij sommige audiotracks tot pieken leiden.</string>
     <string name="desc_remove_song">Verwijder dit nummer</string>
     <string name="desc_song_handle">Verplaats dit nummer</string>
     <string name="desc_tab_handle">Verplaats dit tabblad</string>
@@ -174,7 +169,6 @@
     <string name="set_replay_gain">Volume normalisatie</string>
     <string name="lbl_playlist">Afspeellijst</string>
     <string name="lbl_wiki">Wiki</string>
-    <string name="lbl_reset">Reset</string>
     <string name="set_library">Bibliotheek</string>
     <string name="lbl_ep_live">Live EP</string>
     <string name="lbl_ep_remix">Remix EP</string>

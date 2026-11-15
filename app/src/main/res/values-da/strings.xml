@@ -91,7 +91,6 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Annuller</string>
     <string name="lbl_save">Gem</string>
-    <string name="lbl_reset">Nulstil</string>
     <string name="lbl_more">Flere</string>
     <string name="lbl_path_style_absolute">Absolut</string>
     <string name="lbl_path_style_relative">Relativ</string>

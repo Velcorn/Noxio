@@ -40,7 +40,6 @@
     <string name="lng_search_library">Išči v knjižnici…</string>
     <string name="set_reindex">Ponovno naloži glasbo</string>
     <string name="lbl_remix_group">Remiksi</string>
-    <string name="set_pre_amp_warning">Opozorilo: Sprememba pred-ojačevalca na visoko pozitivno vrednost lahko privede do preseganja na nekaterih avdio posnetkih.</string>
     <string name="def_date">Ni datuma</string>
     <string name="set_reindex_desc">Ponovno naloži glasbeno knjižnico, uporabi predpomnjene oznake, kadar je mogoče</string>
     <string name="err_no_app">Najdena ni bila nobena aplikacija, ki bi lahko opravila to nalogo</string>
@@ -85,7 +84,6 @@
     <string name="lbl_soundtracks">Glasbene podlage</string>
     <string name="lbl_shuffle_shortcut_long">Premešaj vse</string>
     <string name="lbl_queue_add">Dodaj v čakalno vrsto</string>
-    <string name="set_pre_amp">Pred-ojačevalnik ReplayGain</string>
     <string name="cdc_mp3">MPEG-1 Audio</string>
     <string name="set_ui_desc">Spremenite temo in barve aplikacije</string>
     <string name="lbl_retry">Poskusi znova</string>
@@ -96,7 +94,6 @@
     <string name="lbl_indexing">Nalaganje glasbe</string>
     <string name="lbl_date">Datum</string>
     <string name="set_rescan_desc">Izprazni predpomnilnik oznak in popolnoma ponovno naloži glasbeno knjižnico (počasneje, vendar bolj popolno)</string>
-    <string name="set_pre_amp_desc">Pred-ojačevalec se uporablja na obstoječi prilagoditvi med predvajanjem</string>
     <string name="set_music">Glasba</string>
     <string name="err_bad_location">Ta mapa ni podprta</string>
     <string name="lbl_author_name">Razvil Alexander Capehart</string>
@@ -104,7 +101,6 @@
     <string name="lbl_copied">Kopirano</string>
     <string name="err_index_failed">Nalaganje glasbe ni uspelo</string>
     <string name="lbl_album">Album</string>
-    <string name="set_pre_amp_without">Prilagoditev brez oznak</string>
     <string name="lbl_playlist_add">Dodaj na seznam predvajanja</string>
     <string name="lbl_date_added">Datum vnosa</string>
     <string name="lbl_share">Deli</string>
@@ -181,13 +177,11 @@
     <string name="lbl_ok">Vredu</string>
     <string name="lbl_single">Singl</string>
     <string name="lng_playlist_deleted">Seznam predvajanja odstranjen</string>
-    <string name="set_pre_amp_with">Prilagoditev z oznakami</string>
     <string name="desc_auxio_icon">Auxio ikona</string>
     <string name="desc_track_number">Skladba %d</string>
     <string name="lbl_filter">Filtriraj</string>
     <string name="set_exclude_non_music_desc">Prezri avdio datoteke, ki niso glasba, na primer podkaste</string>
     <string name="lbl_soundtrack">Glasbena podlaga</string>
-    <string name="lbl_reset">Ponastavi nastavitve</string>
     <string name="lbl_report">Prijavi napako</string>
     <string name="set_exclude_non_music">Izključi ne-glasbo</string>
     <string name="lbl_play_next">Predvajaj naslednje</string>

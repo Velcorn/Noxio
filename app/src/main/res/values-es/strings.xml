@@ -118,8 +118,6 @@
     <string name="lbl_shuffle_shortcut_long">Mezclar todo</string>
     <string name="lbl_ok">Aceptar</string>
     <string name="lbl_library_counts">Estadísticas de la biblioteca</string>
-    <string name="set_pre_amp_without">Ajuste sin etiquetas</string>
-    <string name="set_pre_amp_warning">Advertencia: Cambiar el pre-amp a un valor alto puede resultar en picos en algunas pistas de audio.</string>
     <string name="cdc_flac">Códec de audio sin pérdida libre (FLAC)</string>
     <string name="cdc_aac">Codificación de sonido avanzado (AAC)</string>
     <string name="fmt_indexing">Cargando tu biblioteca de música… (%1$d/%2$d)</string>
@@ -151,9 +149,6 @@
     <string name="lbl_mixtapes">Mixtapes (recopilación de canciones)</string>
     <string name="lbl_mixtape">Mixtape (recopilación de canciones)</string>
     <string name="lbl_remix_group">Remezclas</string>
-    <string name="set_pre_amp">Pre-amp ReplayGain</string>
-    <string name="set_pre_amp_desc">El pre-amp se aplica al ajuste existente durante la reproducción</string>
-    <string name="set_pre_amp_with">Ajuste con etiquetas</string>
     <string name="fmt_db_pos">+%.1f dB</string>
     <string name="fmt_sample_rate">%d Hz</string>
     <string name="fmt_lib_album_count">Álbumes cargados: %d</string>
@@ -192,7 +187,6 @@
     <string name="fmt_selected">%d seleccionados</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="fmt_list">%1$s, %2$s</string>
-    <string name="lbl_reset">Restablecer</string>
     <string name="set_replay_gain">Normalización del volumen</string>
     <string name="set_content_desc">Controla cómo se cargan la música y las imágenes</string>
     <string name="set_music">Música</string>

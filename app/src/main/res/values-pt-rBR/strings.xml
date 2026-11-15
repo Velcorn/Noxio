@@ -66,8 +66,6 @@
     <string name="lbl_shuffle_shortcut_long">Reprodução aleatória</string>
     <string name="lbl_save">Salvar</string>
     <string name="lbl_library_counts">Estatísticas da biblioteca</string>
-    <string name="set_pre_amp_desc">A pré-amplificação é aplicada em cima da normalização de volume</string>
-    <string name="set_pre_amp_warning">Aviso: Alterar a pré-amplificação para um valor positivo muito alto pode resultar em picos de volume em algumas faixas.</string>
     <string name="set_locations">Fontes de música</string>
     <string name="set_locations_desc">Gerencie de onde as músicas devem ser carregadas</string>
     <string name="err_index_failed">Falha ao carregar músicas</string>
@@ -129,8 +127,6 @@
     <string name="fmt_lib_genre_count">Gêneros carregados: %d</string>
     <string name="fmt_lib_album_count">Álbuns carregados: %d</string>
     <string name="fmt_lib_artist_count">Artistas carregados: %d</string>
-    <string name="set_pre_amp_without">Ajuste em faixas sem metadados</string>
-    <string name="set_pre_amp">Pré-amplificação da normalização de volume</string>
     <string name="lbl_ok">OK</string>
     <string name="set_replay_gain_mode">Modo de normalização de volume (ReplayGain)</string>
     <string name="set_replay_gain_mode_album">Preferir álbum</string>
@@ -149,7 +145,6 @@
     <string name="lng_observing">Monitorando alterações na sua biblioteca de músicas…</string>
     <string name="set_lib_tabs">Abas da biblioteca</string>
     <string name="lbl_genre">Gênero</string>
-    <string name="set_pre_amp_with">Ajuste em faixas com metadados</string>
     <string name="lbl_indexer">Carregamento de músicas</string>
     <string name="lbl_indexing">Carregando músicas</string>
     <string name="lbl_observing">Monitorando a biblioteca de músicas</string>
@@ -191,7 +186,6 @@
     <string name="set_hide_collaborators_desc">Exibir apenas artistas que foram creditados diretamente no álbum (funciona melhor em músicas com metadados completos)</string>
     <string name="fmt_selected">%d selecionadas</string>
     <string name="lbl_wiki">Wiki</string>
-    <string name="lbl_reset">Redefinir</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="set_audio_desc">Configure o comportamento de som e reprodução</string>
     <string name="set_ui_desc">Mude o tema e as cores do aplicativo</string>

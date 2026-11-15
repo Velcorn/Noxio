@@ -157,7 +157,6 @@
     <string name="fmt_lib_album_count">Įkelti albumai: %d</string>
     <string name="fmt_lib_artist_count">Įkelti atlikėjai: %d</string>
     <string name="fmt_indexing">Įkeliama jūsų muzikos biblioteka… (%1$d / %2$d)</string>
-    <string name="set_pre_amp_warning">Įspėjimas: keičiant išankstinį stiprintuvą į didelę teigiamą reikšmę, kai kuriuose garso takeliuose gali atsirasti tarpų.</string>
     <string name="desc_album_cover">Albumo viršelis, skirtas „%s“</string>
     <string name="desc_artist_image">Atlikėjo vaizdas, skirtas %s</string>
     <string name="def_playback">Nėra leidžiama muzika</string>
@@ -165,7 +164,6 @@
     <string name="set_locations">Muzikos šaltiniai</string>
     <string name="set_reindex">Atnaujinti muziką</string>
     <string name="set_reindex_desc">Įkelti iš naujo muzikos biblioteką, naudojant podėlio žymes, kai įmanoma.</string>
-    <string name="set_pre_amp">„ReplayGain“ išankstinis stiprintuvas</string>
     <string name="set_locations_desc">Tvarkykite, iš kur turėtų muzika būti įkeliama.</string>
     <string name="desc_genre_image">Žanro vaizdas, skirtas „%s“</string>
     <string name="desc_shuffle">Įjungti arba išjungti maišymą</string>
@@ -177,11 +175,8 @@
     <string name="lbl_mix">DJ miksas</string>
     <string name="lbl_compilation_live">Gyvas rinkinys</string>
     <string name="lbl_compilation_remix">Remikso rinkinys</string>
-    <string name="set_pre_amp_without">Koreguoti be žymių</string>
     <string name="set_exclude_non_music">Neįtraukti nemuzikinių</string>
     <string name="set_exclude_non_music_desc">Nepaisyti garso įrašų failus, kurie nėra muzika, tokius kaip tinklalaides.</string>
-    <string name="set_pre_amp_desc">Išankstinis stiprintuvas taikomas esamam koregavimui įrašo perklausos metu.</string>
-    <string name="set_pre_amp_with">Koreguoti su žymėmis</string>
     <string name="set_hide_collaborators">Slėpti bendradarbius</string>
     <string name="set_hide_collaborators_desc">Rodyti tik atlikėjus, kurie yra tiesiogiai įvardyti albume (geriausiai veikia gerai pažymėtose bibliotekose).</string>
     <plurals name="fmt_artist_count">
@@ -195,7 +190,6 @@
     <string name="fmt_selected">%d pasirinkta</string>
     <string name="lbl_wiki">Viki</string>
     <string name="fmt_list">%1$s, %2$s</string>
-    <string name="lbl_reset">Atkurti</string>
     <string name="set_library">Biblioteka</string>
     <string name="set_ui_desc">Pakeiskite programos temą ir spalvas.</string>
     <string name="set_content_desc">Valdykite, kaip muzika ir vaizdai yra įkelti.</string>

@@ -79,11 +79,6 @@
     <string name="set_black_mode_desc">Saf siyah koyu tema kullan</string>
     <string name="set_lib_tabs">Kitaplık sekmeleri</string>
     <string name="set_lib_tabs_desc">Kitaplık sekmelerinin görünürlüğünü ve sırasını değiştirin</string>
-    <string name="set_pre_amp_desc">Ön amfi, oynatma sırasında mevcut ayara uygulanır</string>
-    <string name="set_pre_amp">ReplayGain ön amfi</string>
-    <string name="set_pre_amp_without">Etiketsiz ayarla</string>
-    <string name="set_pre_amp_with">Etiket ile ayarla</string>
-    <string name="set_pre_amp_warning">Uyarı: Ön amfinin yüksek bir pozitif değere değiştirilmesi bazı ses parçalarında pik yapmaya neden olabilir.</string>
     <string name="set_locations">Müzik kaynakları</string>
     <string name="desc_album_cover">%s albümünün kapağı</string>
     <string name="desc_artist_image">%s sanatçısının resmi</string>
@@ -169,7 +164,6 @@
     <string name="lbl_compilations">Derlemeler</string>
     <string name="lbl_compilation">Derleme</string>
     <string name="lbl_live_group">Canlı</string>
-    <string name="lbl_reset">Sıfırla</string>
     <string name="lbl_genre">Tür</string>
     <string name="lbl_eps">EP\'ler</string>
     <string name="lbl_ep">EP</string>

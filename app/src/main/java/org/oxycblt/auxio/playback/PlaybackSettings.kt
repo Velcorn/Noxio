@@ -44,8 +44,8 @@ interface PlaybackSettings : Settings<PlaybackSettings.Listener> {
      * false, the measured loudness is used for every song that has been measured.
      */
     val replayGainPreferTags: Boolean
-    /** The current ReplayGain pre-amp configuration. */
-    var replayGainPreAmp: ReplayGainPreAmp
+    /** The ReplayGain pre-amp, which Noxio has no setting for any more: always 0 dB. */
+    val replayGainPreAmp: ReplayGainPreAmp
     /** How to play a song from a general list of songs, specified by [PlaySong] */
     val playInListWith: PlaySong
     /**
@@ -96,19 +96,8 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
         get() =
             sharedPreferences.getBoolean(getString(R.string.set_key_replay_gain_prefer_tags), true)
 
-    override var replayGainPreAmp: ReplayGainPreAmp
-        get() =
-            ReplayGainPreAmp(
-                sharedPreferences.getFloat(getString(R.string.set_key_pre_amp_with), 0f),
-                sharedPreferences.getFloat(getString(R.string.set_key_pre_amp_without), 0f),
-            )
-        set(value) {
-            sharedPreferences.edit {
-                putFloat(getString(R.string.set_key_pre_amp_with), value.with)
-                putFloat(getString(R.string.set_key_pre_amp_without), value.without)
-                apply()
-            }
-        }
+    override val replayGainPreAmp: ReplayGainPreAmp
+        get() = ReplayGainPreAmp(0f, 0f)
 
     override val keepShuffle: Boolean
         get() = sharedPreferences.getBoolean(getString(R.string.set_key_keep_shuffle), true)
@@ -176,9 +165,7 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
     override fun onSettingChanged(key: String, listener: PlaybackSettings.Listener) {
         when (key) {
             getString(R.string.set_key_replay_gain),
-            getString(R.string.set_key_replay_gain_prefer_tags),
-            getString(R.string.set_key_pre_amp_with),
-            getString(R.string.set_key_pre_amp_without) -> {
+            getString(R.string.set_key_replay_gain_prefer_tags) -> {
                 L.d("Dispatching ReplayGain setting change")
                 listener.onReplayGainSettingsChanged()
             }

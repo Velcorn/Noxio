@@ -124,7 +124,6 @@
     <string name="lbl_mixes">Mixes DJ</string>
     <string name="lbl_mix">Mix DJ</string>
     <string name="err_bad_location">Ce dossier n\'est pas pris en charge</string>
-    <string name="lbl_reset">Réinitialiser</string>
     <string name="cdc_ogg">Audio Ogg</string>
     <string name="clr_deep_purple">Violet foncé</string>
     <string name="cdc_mp3">Audio MPEG-1</string>
@@ -148,7 +147,6 @@
     <string name="lbl_playlists">Playlists</string>
     <string name="set_exclude_non_music_desc">Ignore les fichiers audio qui ne sont pas de la musique, tels que les podcasts</string>
     <string name="set_exclude_non_music">Exclure non-musique</string>
-    <string name="set_pre_amp_with">Ajustement avec balises</string>
     <string name="set_locations">Sources de la musique</string>
     <string name="set_locations_desc">Gérer d\'où la musique doit être chargée</string>
     <string name="set_replay_gain_mode">Stratégie ReplayGain</string>
@@ -160,10 +158,7 @@
     <string name="set_rescan_desc">Efface le cache de balises et recharge entièrement la bibliothèque musicale (lent, mais plus complet)</string>
     <string name="err_no_app">Aucune application trouvée qui puisse gérer cette tâche</string>
     <string name="set_rescan">Scanner à nouveau la musique</string>
-    <string name="set_pre_amp_without">Ajustement sans balises</string>
     <string name="set_replay_gain">Normalisation du volume</string>
-    <string name="set_pre_amp_desc">Le préampli s\'ajoute à l\'ajustement ReplayGain pendant la lecture</string>
-    <string name="set_pre_amp">Préampli ReplayGain</string>
     <string name="set_reindex_desc">Recharge la bibliothèque musicale, en se servant de balises en cache si possible</string>
     <string name="lbl_new_playlist">Nouvelle playlist</string>
     <string name="desc_skip_next">Passer au titre suivant</string>
@@ -202,7 +197,6 @@
     <string name="fmt_db_pos">+%.1f dB</string>
     <string name="fmt_db_neg">-%.1f dB</string>
     <string name="fmt_deletion_info">Supprimer %s ? Cette opération ne peut pas être annulée.</string>
-    <string name="set_pre_amp_warning">Attention&amp;nbsp;: Le fait de régler le préampli très fort peut entraîner des distortions audibles sur certaines pistes audio.</string>
     <string name="fmt_def_playlist">Playlist %d</string>
     <string name="lbl_appears_on">Apparaît sur</string>
     <string name="lbl_rename_playlist">Renommer la playlist</string>

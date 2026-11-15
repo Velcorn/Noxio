@@ -92,7 +92,6 @@
     <string name="lbl_ok">โอเค</string>
     <string name="lbl_cancel">ยกเลิก</string>
     <string name="lbl_save">บันทึก</string>
-    <string name="lbl_reset">รีเซ็ต</string>
     <string name="lbl_more">เพิ่ม</string>
     <string name="lbl_path_style">ลักษณะพาธ</string>
     <string name="lbl_path_style_absolute">เด็ดขาด</string>

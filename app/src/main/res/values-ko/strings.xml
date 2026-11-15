@@ -60,11 +60,6 @@
     <string name="set_replay_gain_mode_track">트랙 선호</string>
     <string name="set_replay_gain_mode_album">앨범 선호</string>
     <string name="set_replay_gain_mode_dynamic">앨범 재생 중인 경우 앨범 선호</string>
-    <string name="set_pre_amp">ReplayGain 프리앰프</string>
-    <string name="set_pre_amp_desc">재생 중에 프리앰프를 적용하여 조정</string>
-    <string name="set_pre_amp_with">태그로 조정</string>
-    <string name="set_pre_amp_without">태그 없이 조정</string>
-    <string name="set_pre_amp_warning">주의: 프리앰프를 높게 설정하면 일부 오디오 트랙이 왜곡될 수 있습니다.</string>
     <string name="set_keep_shuffle">무작위 재생 기억</string>
     <string name="set_keep_shuffle_desc">새로운 곡을 재생할 때 무작위 재생 모드 유지</string>
     <string name="set_rewind_prev">이전 곡으로 가기 전에 되감기</string>
@@ -195,7 +190,6 @@
     </plurals>
     <string name="set_rescan_desc">태그 캐시를 지우고 음악 라이브러리를 처음부터 다시 생성합니다. 느리지만 더 완벽한 방식입니다.</string>
     <string name="fmt_selected">%d 선택됨</string>
-    <string name="lbl_reset">재설정</string>
     <string name="lbl_wiki">위키</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="set_replay_gain">ReplayGain 볼륨 조정</string>

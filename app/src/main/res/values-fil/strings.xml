@@ -69,8 +69,6 @@
     <string name="set_lib_tabs">Mga library tab</string>
     <string name="set_audio">Tunog</string>
     <string name="set_replay_gain_mode_dynamic">Naisin ang album kung may isang tumutugtog</string>
-    <string name="set_pre_amp">ReplayGain pre-amp</string>
-    <string name="set_pre_amp_with">Ayos gamit ang mga tag</string>
     <string name="lbl_songs">Mga Kanta</string>
     <string name="info_app_desc">Isang magaan at makatwirang manunugtog para sa android.</string>
     <string name="lbl_ep_remix">Remix EP</string>
@@ -84,8 +82,5 @@
     <string name="lng_widget">Tignan at ayusin ang pagtugtog ng kanta</string>
     <string name="set_theme">Tema</string>
     <string name="set_lib_tabs_desc">Ibahin ang pagkakita at ayos ng mga library tab</string>
-    <string name="set_pre_amp_desc">Inilalapat ang pre-amp sa kasalukuyang ayos habang ito\'y tumutugtog</string>
     <string name="set_replay_gain_mode_track">Naisin ang track</string>
-    <string name="set_pre_amp_warning">Babala: Ang pag-iba ng pre-amp sa mataas na positibong ayos ay maaaring magdulot ng karurukan sa ilang mga audio track.</string>
-    <string name="set_pre_amp_without">Ayos na \'di gamit ang mga tag</string>
 </resources>

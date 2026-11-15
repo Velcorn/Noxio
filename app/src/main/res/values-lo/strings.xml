@@ -93,7 +93,6 @@
     <string name="lbl_ok">ຕົກລົງ</string>
     <string name="lbl_cancel">ຍົກເລີກ</string>
     <string name="lbl_save">ບັນທຶກ</string>
-    <string name="lbl_reset">ຕັ້ງຄ່າໃໝ່</string>
     <string name="lbl_more">ເພີ່ມເຕີມ</string>
     <string name="lbl_path_style">ຮູບແບບທີ່ຢູ່ໄຟລ໌</string>
     <string name="lbl_path_style_absolute">ເດັດຂາດ</string>
@@ -174,11 +173,6 @@
     <string name="set_replay_gain_mode_track">ເນັ້ນແທຣັກ</string>
     <string name="set_replay_gain_mode_album">ເນັ້ນອາລະບໍາ</string>
     <string name="set_replay_gain_mode_dynamic">ເນັ້ນອາລະບໍາຖ້າກຳລັງຫຼິ້ນອາລະບໍາຢູ່</string>
-    <string name="set_pre_amp">ຕົວຂະຫຍາຍສຽງ ReplayGain</string>
-    <string name="set_pre_amp_desc">Pre-amp ຈະຖືກນຳໃຊ້ກັບການປັບສຽງທີ່ມີຢູ່ລະຫວ່າງການຫຼິ້ນ</string>
-    <string name="set_pre_amp_with">ການປັບສຽງສຳລັບເພງທີ່ມີແທັກ</string>
-    <string name="set_pre_amp_without">ການປັບສຽງສຳລັບເພງທີ່ບໍ່ມີແທັກ</string>
-    <string name="set_pre_amp_warning">ຄຳເຕືອນ: ການປ່ຽນຄ່າ pre-amp ເປັນຄ່າບວກທີ່ສູງເກີນໄປ ອາດເຮັດໃຫ້ສຽງແຕກໃນບາງແທັກໄດ້.</string>
     <string name="set_library">ຄັງເພງ</string>
     <string name="set_locations">ແຫຼ່ງທີ່ມາຂອງເພງ</string>
     <string name="set_locations_desc">ຈັດການບ່ອນທີ່ຈະໂຫຼດເພງມາ</string>

@@ -120,13 +120,11 @@
     <string name="lbl_disc">Диск</string>
     <string name="lbl_track">Трек</string>
     <string name="lbl_cancel">Отмена</string>
-    <string name="set_pre_amp_warning">Внимание: Изменение предусиления на большое положительное значение может привести к появлению искажений на некоторых звуковых дорожках.</string>
     <string name="lbl_song_detail">Сведения</string>
     <string name="lbl_props">Свойства трека</string>
     <string name="lbl_format">Формат</string>
     <string name="lbl_size">Размер</string>
     <string name="lbl_sample_rate">Частота дискретизации</string>
-    <string name="set_pre_amp_desc">Предусиление применяется к существующей настройке во время воспроизведения</string>
     <string name="lbl_library_counts">Статистика библиотеки</string>
     <string name="lbl_duration">Продолжительность</string>
     <string name="lbl_ep">Мини-альбом</string>
@@ -134,7 +132,6 @@
     <string name="lbl_single">Сингл</string>
     <string name="lbl_date_added">Дата добавления</string>
     <string name="lbl_singles">Синглы</string>
-    <string name="set_pre_amp">Предусиление ReplayGain</string>
     <string name="cdc_aac">AAC</string>
     <string name="set_locations_desc">Укажите, откуда надо загружать музыку</string>
     <string name="fmt_bitrate">%d кбит/с</string>
@@ -180,8 +177,6 @@
     <string name="desc_exit">Остановить воспроизведение</string>
     <string name="set_exclude_non_music_desc">Игнорировать аудиофайлы, которые не являются музыкой. Например, подкасты</string>
     <string name="lbl_mix">DJ Микс</string>
-    <string name="set_pre_amp_with">Изменение по тегам</string>
-    <string name="set_pre_amp_without">Изменения без тегов</string>
     <string name="lbl_compilation_live">Сборник концертных записей</string>
     <string name="set_rescan">Пересканировать музыку</string>
     <string name="set_rescan_desc">Очистить кэш тегов и полностью обновить библиотеку (медленно, но более точно)</string>
@@ -194,7 +189,6 @@
     </plurals>
     <string name="fmt_selected">%d выбрано</string>
     <string name="lbl_wiki">Вики</string>
-    <string name="lbl_reset">Сбросить</string>
     <string name="fmt_list">%1$s,%2$s</string>
     <string name="set_replay_gain">Выравнивание громкости</string>
     <string name="set_music">Музыка</string>

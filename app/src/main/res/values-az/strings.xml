@@ -66,7 +66,6 @@
     <string name="lbl_more">Daha çox</string>
     <string name="lbl_start_playback">Səsləndirməni başlat</string>
     <string name="lbl_cancel">İmtina et</string>
-    <string name="lbl_reset">Sıfırla</string>
     <string name="lbl_queue">Növbə</string>
     <string name="lbl_shuffle_shortcut_short">Qarışdır</string>
     <string name="lbl_artist_details">İfaçıya bax</string>
@@ -190,11 +189,6 @@
     <string name="set_replay_gain_mode_track">Trekə üstünlük ver</string>
     <string name="set_replay_gain_mode_album">Alboma üstünlük ver</string>
     <string name="set_replay_gain_mode_dynamic">Alboma üstünlük ver əgər biri səsləndirilirsə</string>
-    <string name="set_pre_amp">ReplayGain pre-amp</string>
-    <string name="set_pre_amp_desc">Pre-amp səsləndirmə zamanı mövcud tənzimləmə üçün tətbiq edilir</string>
-    <string name="set_pre_amp_with">Teqlərlə tənzimləmə</string>
-    <string name="set_pre_amp_without">Teqlərsiz tənzimləmə</string>
-    <string name="set_pre_amp_warning">Xəbərdarlıq: Pre-ampi yüksək müsbət dəyərə dəyişdirmək bəzi mahnılarda pikləşməyə səbəb ola bilər.</string>
     <string name="set_library">Musiqi kitabxanası</string>
     <string name="set_locations">Musiqi mənbələri</string>
     <string name="set_locations_desc">Musiqinin hardan yüklənəcəyini idarə et</string>

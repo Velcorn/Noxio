@@ -135,7 +135,6 @@
     <string name="lbl_sort_dsc">تنازلي</string>
     <string name="lbl_song_detail">عرض الخصائص</string>
     <string name="lbl_live_group">مباشر</string>
-    <string name="lbl_reset">اعادة ضبط</string>
     <string name="lng_indexing">يتم تحمل مكتبتك الموسيقية …</string>
     <string name="lbl_genre">النوع</string>
     <string name="lng_observing">مراقبة تغييرات في مكتبتك الموسيقية…</string>
@@ -227,12 +226,10 @@
     <string name="lng_empty_genres">الفئات الخاصة بك ستضهر هنا.</string>
     <string name="set_audio_desc">تحديد الصوت وسلوك العرض</string>
     <string name="set_hide_collaborators_desc">اظهر فقط الفنانينالذين ذكرو مباشرة في الالبوم(يعمل بشكل افضل على المكتبات التي تم اضافة العلامات لها بشكل جيد)</string>
-    <string name="set_pre_amp_warning">تحذير: تغيير التضخيم المسبق الى ايجابي عالي قد ينتج عنه قمم في بعض الملفات الصوتية</string>
     <string name="desc_playlist_image">صور قائمة التشغيل %s</string>
     <string name="desc_selection_image">اختيار الصور</string>
     <string name="set_reindex">تحديث الموسيقى</string>
     <string name="def_album">البوم غير معروف</string>
-    <string name="set_pre_amp_with">تعديل مع الاشارات</string>
     <string name="set_replay_gain">تسوية الصوت</string>
     <string name="set_excluded_locations">مجلد مستثنى</string>
     <string name="set_excluded_locations_desc">تحكم بالمجلدات المستثناة من تحميل الموسيقى</string>
@@ -242,7 +239,6 @@
     <string name="set_hide_collaborators">اخفاء المتعاونين</string>
     <string name="set_library">مكتبة</string>
     <string name="set_replay_gain_mode_off">ايقاف</string>
-    <string name="set_pre_amp_without">تغيير مع الاشارات</string>
     <string name="set_locations_desc">تحكم بالمكان الذي يجب ان تحمل منه الموسيقى</string>
     <string name="set_rescan">اعادة البحث للموسيقى</string>
     <string name="err_import_failed">لا يمكن استيراد قائمة التشغيل من الملف</string>

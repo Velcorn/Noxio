@@ -68,11 +68,7 @@
     <fragment
         android:id="@+id/audio_preferences_fragment"
         android:name="org.oxycblt.auxio.settings.categories.AudioPreferenceFragment"
-        android:label="personalize_preferences_fragment">
-        <action
-            android:id="@+id/pre_amp_settings"
-            app:destination="@id/pre_amp_dialog" />
-    </fragment>
+        android:label="personalize_preferences_fragment" />
 
     <dialog
         android:id="@+id/accent_dialog"
@@ -84,11 +80,6 @@
         android:name="org.oxycblt.auxio.home.tabs.TabCustomizeDialog"
         android:label="tab_dialog"
         tools:layout="@layout/dialog_tabs" />
-    <dialog
-        android:id="@+id/pre_amp_dialog"
-        android:name="org.oxycblt.auxio.playback.replaygain.PreAmpCustomizeDialog"
-        android:label="pre_amp_dialog"
-        tools:layout="@layout/dialog_pre_amp" />
     <dialog
         android:id="@+id/music_locations_dialog"
         android:name="org.oxycblt.auxio.music.locations.LocationsDialog"

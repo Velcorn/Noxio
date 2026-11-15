@@ -56,7 +56,6 @@
     <string name="fmt_selected">%d തിരഞ്ഞെടുത്തു</string>
     <string name="desc_remove_song">വരിയിലെ ഈ ഗാനം നീക്കം ചെയ്യുക</string>
     <string name="desc_song_handle">വരിയിലെ ഈ ഗാനം നീക്കുക</string>
-    <string name="lbl_reset">പുനഃസജ്ജമാക്കുക</string>
     <string name="clr_brown">തവിട്ട്</string>
     <string name="fmt_list">%1$s, %2$s</string>
     <string name="info_app_desc">ആൻഡ്രോയിഡിനുള്ള ലളിതവും യുക്തിസഹവുമായ സംഗീത കളിക്കാരൻ.</string>

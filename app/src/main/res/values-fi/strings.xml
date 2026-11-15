@@ -49,7 +49,6 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Peruuta</string>
     <string name="lbl_save">Tallenna</string>
-    <string name="lbl_reset">Palauta oletus</string>
     <string name="lng_observing">Valvotaa musiikkikirjastoa muutosten varalta…</string>
     <string name="lbl_shuffle_shortcut_short">Sekoita</string>
     <string name="lbl_shuffle_shortcut_long">Sekoita kaikki</string>
@@ -62,7 +61,6 @@
     <string name="set_audio">Ääni</string>
     <string name="set_audio_desc">Määritä äänen ja toiston toimintaa</string>
     <string name="set_replay_gain_mode_track">Suosi kappaletta</string>
-    <string name="set_pre_amp">ReplayGainin esivahvistus</string>
     <string name="set_library">Kirjasto</string>
     <string name="set_locations">Musiikkilähteet</string>
     <string name="set_locations_desc">Määritä mistä musiikki tulee ladata</string>
@@ -247,15 +245,11 @@
     <string name="lbl_demos">Demot</string>
     <string name="lbl_error_info">Virhetiedot</string>
     <string name="set_keep_shuffle_desc">Pidä sekoitus päällä kun toistetaan uutta kappaletta</string>
-    <string name="set_pre_amp_warning">Varoitus: Esivahvistuksen asettaminen korkeaan positiiviseen arvoon saattaa johtaa säröilyyn joissain kappaleissa.</string>
     <string name="lbl_github">Ilmoita viasta GitHubissa</string>
     <string name="lbl_email">Lähetä sähköpostia</string>
     <string name="lbl_more">Lisää</string>
     <string name="lbl_feedback">Palaute</string>
     <string name="lng_tasker_start">Käynnistää Auxion käyttämällä aiemmin tallennettua tilaa. Jos tallennettua tilaa ei ole saatavilla, kaikki kappaleet sekoitetaan. Toisto alkaa välittömästi.\n\nVaroitus: Ole varovainen tämän palvelun hallinnassa. Jos suljet sen ja yrität sitten käyttää sitä uudelleen, sovellus todennäköisesti kaatuu.</string>
-    <string name="set_pre_amp_without">Säätö ilman tunnisteita</string>
-    <string name="set_pre_amp_desc">Esivahvistinta käytetään olemassa olevaan säätöön toiston aikana</string>
-    <string name="set_pre_amp_with">Säätö tunnisteilla</string>
     <string name="def_album">Tuntematon albumi</string>
     <string name="cnt_mp4">MPEG-4 sisältäen %s</string>
     <string name="cdc_unknown">Tuntematon</string>

@@ -125,7 +125,6 @@
     <string name="lbl_windows_paths">Kasuta Windowsiga ühilduvaid asukohti</string>
     <string name="lbl_code">Lähtekood</string>
     <string name="lng_widget">Vaata ja halda muusika esitamist</string>
-    <string name="lbl_reset">Lähtesta</string>
     <string name="lng_queue_added">Lisatud esitusjärjekorda</string>
     <string name="lng_supporters_promo">Kui soovid siin näha oma nime, siis toeta rahaliselt meie arendust!</string>
     <string name="lng_search_library">Otsi oma muusikakogust…</string>
@@ -176,7 +175,6 @@
     <string name="set_replay_gain_mode_track">Eelista lookohast esitusvaljuse tundlikkust</string>
     <string name="set_replay_gain_mode_album">Eelista albumikohast esitusvaljuse tundlikkust</string>
     <string name="set_replay_gain_mode_dynamic">Kui album juba on esitamisel, siis eelista albumikohast esitusvaljuse tundlikkust</string>
-    <string name="set_pre_amp">Esitusvaljuse tundlikkuse eelvõimendus</string>
     <string name="set_content_desc">Halda muusika ja piltide laadimist</string>
     <string name="set_music">Muusika</string>
     <string name="set_exclude_non_music">Välista failid, kus pole muusikat</string>
@@ -186,10 +184,6 @@
     <string name="set_content">Sisu</string>
     <string name="set_exclude_non_music_desc">Eira selliseid helifaile, kus pole muusikat (näiteks taskuhäälingud)</string>
     <string name="set_hide_collaborators_desc">Näita vaid esitajaid, kes on otsesõnu nimetatud albumi autoriteks (eeldab, et muusikakogu on korralikult sildistatud)</string>
-    <string name="set_pre_amp_desc">Eelvõimenduse väärtus lisatakse taasesituse ajal olemasolevale valjuse seadistusele</string>
-    <string name="set_pre_amp_with">Kohandamine siltide alusel</string>
-    <string name="set_pre_amp_without">Kohandamine ilma siltides leiduvate väärtusteta</string>
-    <string name="set_pre_amp_warning">Hoiatus: kui muudad eelvõimenduse väärtuse suureks positiivseks väärtuseks, siis mõnede lugude puhul võib see tähendada liiga kõrgeid toone.</string>
     <string name="set_library">Muusikakogu</string>
     <string name="set_locations">Muusika allikad</string>
     <string name="set_locations_desc">Halda kaustu, kust otsime ja laadime muusikat</string>

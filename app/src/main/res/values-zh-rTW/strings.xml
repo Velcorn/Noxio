@@ -51,7 +51,6 @@
     <string name="lbl_bitrate">位元速率</string>
     <string name="lbl_sample_rate">取樣率</string>
     <string name="set_black_mode_desc">使用純黑色主題</string>
-    <string name="lbl_reset">重設</string>
     <string name="lng_indexing">正在載入媒體…</string>
     <string name="lbl_genre">類型</string>
     <string name="lbl_save">儲存</string>
@@ -167,9 +166,6 @@
     <string name="set_hide_collaborators_desc">專輯封面僅顯示單一演出者（對標籤完善的媒體庫效果最佳）</string>
     <string name="set_replay_gain_mode">重播增益模式</string>
     <string name="set_replay_gain_mode_album">偏好專輯</string>
-    <string name="set_pre_amp">重播增益前級擴大</string>
-    <string name="set_pre_amp_desc">播放期間為現有調整套用前級擴大</string>
-    <string name="set_pre_amp_with">調整標籤</string>
     <string name="set_rescan_desc">清除所有標籤快取並重新載入媒體（完整但速度較慢）</string>
     <string name="err_no_app">找不到可處理這項操作的應用程式</string>
     <string name="desc_remove_song">刪除歌曲</string>
@@ -236,8 +232,6 @@
     <string name="lbl_demos">試聽帶</string>
     <string name="lbl_author">作者</string>
     <string name="lbl_author_name">由 Alexander Capehart 開發</string>
-    <string name="set_pre_amp_without">不調整標籤</string>
-    <string name="set_pre_amp_warning">警告：變更前級擴大可能會導致某些音軌達到上限.</string>
     <string name="set_library">媒體庫</string>
     <string name="set_locations_desc">管理讀取音樂位置</string>
     <string name="set_reindex_desc">盡可能透過標籤快取更新媒體</string>

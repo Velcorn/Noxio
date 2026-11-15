@@ -120,12 +120,8 @@
     <string name="fmt_db_pos">+%.1f dB</string>
     <string name="fmt_sample_rate">%d Hz</string>
     <string name="fmt_indexing">Caricamento della tua libreria musicale… (%1$d/%2$d)</string>
-    <string name="set_pre_amp_warning">Attenzione: impostare alti valori positivi può provocare la distorsione di alcune tracce.</string>
-    <string name="set_pre_amp_without">Regolazione senza tag</string>
     <string name="lbl_shuffle_shortcut_short">Casuale</string>
     <string name="lbl_shuffle_shortcut_long">Tutto in casuale</string>
-    <string name="set_pre_amp_with">Regolazione in base ai tag</string>
-    <string name="set_pre_amp_desc">Il pre-amp è applicato alla regolazione esistente durante la riproduzione</string>
     <string name="set_locations_desc">Gestisci le cartelle da dove caricare la musica</string>
     <string name="set_locations">Cartelle musicali</string>
     <string name="cdc_flac">Free Lossless Audio Codec (FLAC)</string>
@@ -148,7 +144,6 @@
     <string name="lbl_size">Dimensione</string>
     <string name="lbl_bitrate">Velocità in bit</string>
     <string name="lbl_cancel">Annulla</string>
-    <string name="set_pre_amp">Pre-amp ReplayGain</string>
     <string name="lng_observing">Monitoraggio dei cambiamenti nella libreria musicale…</string>
     <string name="lbl_indexing">Caricamento musica</string>
     <string name="lbl_observing">Monitoraggio libreria musicale</string>
@@ -193,7 +188,6 @@
     <string name="fmt_selected">%d selezionati</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="fmt_list">%1$s, %2$s</string>
-    <string name="lbl_reset">Ripristina</string>
     <string name="set_music">Musica</string>
     <string name="set_library">Libreria</string>
     <string name="set_ui_desc">Cambia il tema e i colori dell\'app</string>

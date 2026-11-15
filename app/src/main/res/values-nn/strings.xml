@@ -73,7 +73,6 @@
     <string name="lbl_replaygain_album">ReplayGain-albumjustering</string>
     <string name="lbl_shuffle_shortcut_short">Blanda</string>
     <string name="lbl_cancel">Bryt av</string>
-    <string name="lbl_reset">Stilla atter</string>
     <string name="lbl_more">Fleire</string>
     <string name="lbl_path_style">Banestil</string>
     <string name="lbl_path_style_relative">Relativ</string>
@@ -148,10 +147,6 @@
     <string name="set_replay_gain_mode_track">Føretrekk spor</string>
     <string name="set_replay_gain_mode_album">Føretrekk album</string>
     <string name="set_replay_gain_mode_dynamic">Føretrekk album om eit album vert avspela</string>
-    <string name="set_pre_amp">ReplayGain-førestyrking</string>
-    <string name="set_pre_amp_desc">Førestyrking vert nøytt på justeringa alt teken i bruk under avspeling</string>
-    <string name="set_pre_amp_with">Justering med etikettar</string>
-    <string name="set_pre_amp_without">Justering utan etikettar</string>
     <string name="set_library">Samling</string>
     <string name="set_locations_desc">Handsam kvar musikk skal ladast inn ifrå</string>
     <string name="set_reindex">Atteroppfrisk musikk</string>
@@ -205,7 +200,6 @@
     <string name="set_keep_shuffle_desc">Varetak blanding når ein ny song vert spela</string>
     <string name="set_exclude_non_music_desc">Ignorer ljodfiler som ikkje er musikk, som t.d. podkastar</string>
     <string name="set_audio">Ljod</string>
-    <string name="set_pre_amp_warning">Varing: Å brigda førestyrkinga til høge positive verdiar kan føra til renging ved høge ljodtrykk på somme spor.</string>
     <string name="set_locations">Musikkkjelder</string>
     <string name="set_reindex_desc">Lad inn musikksamlinga på nytt og nøyt hurtiglagra etikettar når mogleg</string>
     <string name="set_rescan">Skann musikk på nytt</string>

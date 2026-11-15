@@ -29,11 +29,6 @@
             app:key="@string/set_key_replay_gain"
             app:title="@string/set_replay_gain_mode" />
 
-        <org.oxycblt.auxio.settings.ui.WrappedDialogPreference
-            app:key="@string/set_key_pre_amp"
-            app:summary="@string/set_pre_amp_desc"
-            app:title="@string/set_pre_amp" />
-
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="@string/set_key_replay_gain_prefer_tags"

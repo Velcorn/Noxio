@@ -109,7 +109,6 @@
     <string name="set_black_mode_desc">Tiszta fekete sötét téma használata</string>
     <string name="clr_dynamic">Dinamikus</string>
     <string name="set_rewind_prev_desc">Visszatekerés az előző dalra való ugrás előtt</string>
-    <string name="set_pre_amp_warning">Figyelem: Az előerősítő magas pozitív értékre módosítása egyes hangsávoknál csúcsosodást eredményezhet.</string>
     <string name="set_library">Könyvtár</string>
     <string name="lbl_playlist">Lejátszólista</string>
     <string name="lbl_playlists">Lejátszólisták</string>
@@ -122,8 +121,6 @@
     <string name="lbl_soundtracks">Hangsáv</string>
     <string name="set_keep_shuffle_desc">Új dal lejátszásakor a keverési mód bekapcsolva tartása</string>
     <string name="lbl_shuffle_shortcut_long">Az összes keverése</string>
-    <string name="set_pre_amp">Visszajátszás előerősítő</string>
-    <string name="set_pre_amp_desc">Az előerősítő a lejátszás során a létező beállítással kerül alkalmazásra</string>
     <string name="desc_song_handle">Helyezze át ezt a dalt</string>
     <string name="desc_artist_image">%s előadó fotója</string>
     <string name="fmt_lib_total_duration">Teljes időtartam: %s</string>
@@ -144,7 +141,6 @@
     <string name="lbl_rename">Átnevez</string>
     <string name="lbl_date_added">Hozzáadás dátuma</string>
     <string name="lbl_save">Ment</string>
-    <string name="lbl_reset">Alaphelyzet</string>
     <string name="lbl_author_name">Fejlesztő Alexander Capehart</string>
     <string name="set_content">Tartalom</string>
     <string name="set_locations">Zene könyvtárak</string>
@@ -165,7 +161,6 @@
     <string name="set_black_mode">Fekete téma</string>
     <string name="set_lib_tabs">Könyvtár fülek</string>
     <string name="cdc_flac">Free Lossless Audio Codec (FLAC)</string>
-    <string name="set_pre_amp_with">Beállítás címkékkel</string>
     <string name="fmt_bitrate">%d kbps</string>
     <string name="fmt_lib_genre_count">Betöltött műfaj: %d</string>
     <string name="lbl_indexer">Zene betöltés</string>
@@ -202,7 +197,6 @@
     <string name="set_hide_collaborators">Közreműködők elrejtése</string>
     <string name="set_hide_collaborators_desc">Csak az albumon közvetlenül feltüntetett előadók megjelenítése (a jól címkézett könyvtárakban működik a legjobban)</string>
     <string name="set_audio_desc">Hang és lejátszási viselkedés konfigurálása</string>
-    <string name="set_pre_amp_without">Beállítás címkék nélkül</string>
     <string name="set_locations_desc">Kezelje, hogy honnan töltsön be zenét</string>
     <string name="set_rescan">Zene újraolvasása</string>
     <string name="set_rescan_desc">A címkék gyorsítótárának törlése és a zenei könyvtár teljes újratöltése (lassabb, de teljesebb)</string>

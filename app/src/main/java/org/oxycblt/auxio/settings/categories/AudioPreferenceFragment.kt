@@ -28,7 +28,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -40,8 +39,6 @@ import org.oxycblt.auxio.replaygain.ReplayGainScanner
 import org.oxycblt.auxio.replaygain.ReplayGainService
 import org.oxycblt.auxio.replaygain.ScanState
 import org.oxycblt.auxio.settings.BasePreferenceFragment
-import org.oxycblt.auxio.settings.ui.WrappedDialogPreference
-import org.oxycblt.auxio.util.navigateSafe
 import org.oxycblt.auxio.util.showToast
 import timber.log.Timber as L
 
@@ -184,13 +181,6 @@ class AudioPreferenceFragment : BasePreferenceFragment(R.xml.preferences_audio) 
             equalizerLauncher.launch(equalizerIntent)
         } catch (e: ActivityNotFoundException) {
             requireContext().showToast(R.string.err_no_app)
-        }
-    }
-
-    override fun onOpenDialogPreference(preference: WrappedDialogPreference) {
-        if (preference.key == getString(R.string.set_key_pre_amp)) {
-            L.d("Navigating to pre-amp dialog")
-            findNavController().navigateSafe(AudioPreferenceFragmentDirections.preAmpSettings())
         }
     }
 }

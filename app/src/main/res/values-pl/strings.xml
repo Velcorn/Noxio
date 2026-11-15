@@ -154,10 +154,8 @@
     <string name="set_locations_desc">Wybierz z których folderów importowane są utwory</string>
     <string name="set_rewind_prev">Przewiń przed odtworzeniem poprzedniego utworu</string>
     <string name="set_rewind_prev_desc">Przewiń do początku obecnie odtwarzanego utworu zamiast odtworzenia poprzedniego</string>
-    <string name="set_pre_amp">Preamplifier ReplayGain</string>
     <string name="lbl_live_group">Na żywo</string>
     <string name="lbl_indexing">Importowanie utworów</string>
-    <string name="set_pre_amp_warning">Uwaga: Ustawienie wysokich pozytywnych wartości preamplifiera może skutkować przycinaniem dźwięku w niektórych utworach.</string>
     <string name="set_keep_shuffle">Zapamiętaj losowe odtwarzanie</string>
     <string name="err_no_app">Nie znaleziono odpowiedniej aplikacji</string>
     <string name="lbl_library_counts">Statystyki biblioteki</string>
@@ -165,9 +163,6 @@
     <string name="desc_clear_search">Wyczyść zapytanie wyszukiwania</string>
     <string name="desc_genre_image">Okładka gatunku %s</string>
     <string name="lng_widget">Podgląd i sterowanie odtwarzanianiem muzyki</string>
-    <string name="set_pre_amp_with">Regulacja w oparciu o tagi</string>
-    <string name="set_pre_amp_without">Regulacja bez tagów</string>
-    <string name="set_pre_amp_desc">Wzmocnienie dźwięku przez preamplifier jest nakładane na wcześniej ustawione wzmocnienie podczas odtwarzania</string>
     <string name="err_bad_location">Ten folder nie jest wspierany</string>
     <string name="def_playback">Utwory nie są odtwarzane</string>
     <string name="fmt_indexing">Importuję bibliotekę muzyczną… (%1$d/%2$d)</string>
@@ -190,7 +185,6 @@
     <string name="set_audio_desc">Zarządzaj dźwiękiem i odtwarzaniem muzyki</string>
     <string name="fmt_selected">Wybrano %d</string>
     <string name="set_replay_gain">Normalizacja głośności</string>
-    <string name="lbl_reset">Resetuj</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="set_rescan_desc">Wyczyść pamięć cache z tagami i zaimportuj ponownie bibliotekę (wolniej, ale dokładniej)</string>
     <string name="set_rescan">Zaimportuj ponownie bibliotekę</string>

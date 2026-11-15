@@ -107,9 +107,14 @@ class PlaybackSettingsTest {
     }
 
     @Test
-    fun thePreAmpIsKept() {
-        settings.replayGainPreAmp = ReplayGainPreAmp(3.5f, -1.5f)
-        assertEquals(ReplayGainPreAmp(3.5f, -1.5f), PlaybackSettingsImpl(context).replayGainPreAmp)
+    fun thePreAmpIsAlwaysZeroEvenWithAnOldValue() {
+        // Noxio has no pre-amp setting any more, a value from an older version or a backup is
+        // ignored.
+        preferences.edit {
+            putFloat("auxio_pre_amp_with", 3.5f)
+            putFloat("auxio_pre_amp_without", -1.5f)
+        }
+        assertEquals(ReplayGainPreAmp(0f, 0f), PlaybackSettingsImpl(context).replayGainPreAmp)
     }
 
     @Test
@@ -174,14 +179,13 @@ class PlaybackSettingsTest {
         preferences.edit {
             putInt(key(R.string.set_key_replay_gain), IntegerTable.REPLAY_GAIN_MODE_OFF)
         }
-        preferences.edit { putFloat(key(R.string.set_key_pre_amp_with), 2f) }
-        preferences.edit { putFloat(key(R.string.set_key_pre_amp_without), 2f) }
+        preferences.edit { putBoolean(key(R.string.set_key_replay_gain_prefer_tags), false) }
         preferences.edit { putBoolean(key(R.string.set_key_repeat_pause), true) }
         preferences.edit { putBoolean(key(R.string.set_key_keep_shuffle), false) }
         settings.unregisterListener(listener)
         preferences.edit { putBoolean(key(R.string.set_key_repeat_pause), false) }
         assertEquals(
-            listOf("replay gain", "replay gain", "replay gain", "pause on repeat"),
+            listOf("replay gain", "replay gain", "pause on repeat"),
             reported,
         )
     }

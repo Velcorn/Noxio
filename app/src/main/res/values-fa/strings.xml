@@ -93,7 +93,6 @@
     <string name="lbl_ok">تایید</string>
     <string name="lbl_cancel">لغو</string>
     <string name="lbl_save">ذخیره</string>
-    <string name="lbl_reset">بازنشانی</string>
     <string name="lbl_more">بیشتر</string>
     <string name="lbl_path_style">شیوه مسیر</string>
     <string name="lbl_path_style_absolute">مطلق</string>
@@ -183,11 +182,6 @@
     <string name="set_replay_gain_mode_track">ترجیح نوار</string>
     <string name="set_replay_gain_mode_album">ترجیح آلبوم</string>
     <string name="set_replay_gain_mode_dynamic">ترجیح آلبوم اگر یکی از آنها در حال پخش است</string>
-    <string name="set_pre_amp">پیش تقویت کننده ReplayGain</string>
-    <string name="set_pre_amp_desc">پیش تقویت کننده به تنظیمات فعلی هنگام پخش افزوده شد</string>
-    <string name="set_pre_amp_with">تنظیم با برچسب‌ها</string>
-    <string name="set_pre_amp_without">تنظیم بدون برچسب‌ها</string>
-    <string name="set_pre_amp_warning">هشدار: تغییر این پیش تقویت کننده به مقدار بزرگ مثبت ممکن است باعث به اوج رسیدن برخی نوار های شنیداری شود.</string>
     <string name="set_library">کتابخانه</string>
     <string name="set_locations">منابع موسیقی</string>
     <string name="set_locations_desc">مدیریت مکان بارگیری موسیقی</string>

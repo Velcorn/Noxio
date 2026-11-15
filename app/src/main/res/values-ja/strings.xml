@@ -119,7 +119,6 @@
     <string name="fmt_lib_genre_count">読み込みが完了したジャンル数: %d</string>
     <string name="fmt_db_neg">-%.1f デシベル</string>
     <string name="fmt_lib_album_count">読み込みが完了したアルバム数: %d</string>
-    <string name="lbl_reset">リセット</string>
     <string name="lbl_about">Auxioについて</string>
     <string name="lbl_code">ソースコード</string>
     <string name="lbl_wiki">Wiki</string>
@@ -147,13 +146,11 @@
     <string name="set_content_desc">音楽と画像の読み込み方法をコントロール</string>
     <string name="set_audio">オーディオ</string>
     <string name="set_library">ライブラリ</string>
-    <string name="set_pre_amp_without">タグ無しで調整</string>
     <string name="desc_change_repeat">繰り返しモードを変更</string>
     <string name="desc_shuffle">シャフルのオン・オフ</string>
     <string name="desc_skip_next">次の曲にスキップ</string>
     <string name="fmt_sample_rate">%d ヘルツ</string>
     <string name="fmt_bitrate">%d kbps</string>
-    <string name="set_pre_amp_with">タグで調整</string>
     <string name="lbl_indexer">音楽の読み込み中</string>
     <string name="lbl_observing">音楽ライブラリをモニタリング</string>
     <string name="lbl_indexing">音楽の読み込み</string>
@@ -186,13 +183,10 @@
     <string name="set_replay_gain_mode_dynamic">再生中の場合はアルバムを優先</string>
     <string name="set_audio_desc">サウンドと再生の動作を構成する</string>
     <string name="set_rewind_prev">戻る前に巻き戻す</string>
-    <string name="set_pre_amp_warning">警告: プリアンプを高い正の値に変更すると、一部のオーディオ トラックでピーキングが発生する場合があります。</string>
     <string name="desc_queue_bar">キューを開く</string>
     <string name="lng_widget">音楽再生の表示と制御</string>
     <string name="set_replay_gain_mode">ラウドネスイコライゼーション</string>
-    <string name="set_pre_amp_desc">プリアンプは、再生中に既存の調整に適用されます</string>
     <string name="set_rescan_desc">タグ キャッシュをクリアし、音楽ライブラリを完全にリロードします (遅くなりますが、より完全になります)</string>
-    <string name="set_pre_amp">ReplayGain プリアンプ</string>
     <string name="fmt_list">%1$s、%2$s</string>
     <string name="lbl_playlist">プレイリスト</string>
     <string name="lbl_playlists">プレイリスト</string>

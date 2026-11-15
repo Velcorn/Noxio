@@ -8,7 +8,6 @@
     <string name="lbl_song_count">பாடல் எண்ணிக்கை</string>
     <string name="lbl_disc">வட்டு</string>
     <string name="lbl_track">மின்தடம்</string>
-    <string name="lbl_reset">மீட்டமை</string>
     <string name="set_root_title">அமைப்புகள்</string>
     <string name="set_ui">பார்த்து உணருங்கள்</string>
     <string name="set_theme_night">இருண்ட</string>
@@ -184,11 +183,6 @@
     <string name="set_replay_gain_mode_track">பாதையை விரும்புகிறேன்</string>
     <string name="set_replay_gain_mode_album">ஆல்பத்தை விரும்புங்கள்</string>
     <string name="set_replay_gain_mode_dynamic">ஒருவர் விளையாடினால் ஆல்பத்தை விரும்புங்கள்</string>
-    <string name="set_pre_amp">Replaygain pre-amp</string>
-    <string name="set_pre_amp_desc">பிளேபேக்கின் போது இருக்கும் சரிசெய்தலுக்கு முன் ஆம்ப் பயன்படுத்தப்படுகிறது</string>
-    <string name="set_pre_amp_with">குறிச்சொற்களுடன் சரிசெய்தல்</string>
-    <string name="set_pre_amp_without">குறிச்சொற்கள் இல்லாமல் சரிசெய்தல்</string>
-    <string name="set_pre_amp_warning">எச்சரிக்கை: முன் ஆம்பை அதிக நேர்மறையான மதிப்புக்கு மாற்றுவது சில ஆடியோ தடங்களில் உயர்ந்தது.</string>
     <string name="set_library">நூலகம்</string>
     <string name="set_locations">இசை ஆதாரங்கள்</string>
     <string name="set_locations_desc">இசையை எங்கிருந்து ஏற்ற வேண்டும் என்பதை நிர்வகிக்கவும்</string>

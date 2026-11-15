@@ -52,10 +52,6 @@
     <string name="fmt_replay_gain_clear_count">%1$d Titel gemessen</string>
     <string name="fmt_replay_gain_clear_ask">Das gemessene ReplayGain von %1$d Titeln löschen? Die ReplayGain-Tags in deinen Dateien bleiben unberührt. Titel ohne Tag werden nicht angepasst, bis sie wieder gemessen sind.</string>
     <string name="err_replay_gain_busy">Beende zuerst die Berechnung</string>
-    <string name="set_pre_amp">ReplayGain-Vorverstärkung</string>
-    <string name="set_pre_amp_desc">Die Vorverstärkung wird während der Wiedergabe auf die existierende Einstellung angewendet</string>
-    <string name="set_pre_amp_with">Abgleich mit Metadaten</string>
-    <string name="set_pre_amp_without">Abgleich ohne Metadaten</string>
     <string name="set_replay_gain_mode_track">Titel bevorzugen</string>
     <string name="set_replay_gain_mode_album">Album bevorzugen</string>
     <string name="set_keep_shuffle">Zufällig-Einstellung merken</string>
@@ -141,7 +137,6 @@
     <string name="fmt_lib_genre_count">Geladene Genres: %d</string>
     <string name="fmt_lib_total_duration">Gesamtdauer: %s</string>
     <string name="lbl_cancel">Abbrechen</string>
-    <string name="set_pre_amp_warning">Warnung: Das Erhöhen der Vorverstärkung zu einem hohen positiven Wert könnte zu einer Übersteuerung bei einigen Audiospuren führen.</string>
     <string name="set_locations">Musikquellen</string>
     <string name="set_locations_desc">Verwalten, von wo die Musik geladen werden soll</string>
     <string name="def_track">Kein Titel</string>
@@ -206,7 +201,6 @@
     <string name="fmt_selected">%d ausgewählt</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="fmt_list">%1$s, %2$s</string>
-    <string name="lbl_reset">Zurücksetzen</string>
     <string name="set_ui_desc">Thema, Farben, Tabs, App-Icon und Cover</string>
     <string name="set_content_desc">Musikquellen, Einlesen und Tags</string>
     <string name="set_music">Musik</string>

@@ -9,7 +9,6 @@
     <string name="set_theme_auto">Automatisk</string>
     <string name="set_replay_gain">Volumnormalisering</string>
     <string name="set_reindex">Gjenoppfrisk musikk</string>
-    <string name="set_pre_amp_without">Justering uten etiketter</string>
     <string name="desc_tab_handle">Flytt denne fanen</string>
     <string name="desc_clear_search">Tøm søket</string>
     <string name="desc_auxio_icon">Auxio-ikon</string>
@@ -76,7 +75,6 @@
     <string name="set_audio">Lyd</string>
     <string name="set_replay_gain_mode">ReplayGain-strategi</string>
     <string name="set_locations_desc">Håndter hvor musikk lastes inn fra</string>
-    <string name="set_pre_amp_desc">Forforsterkning brukes for eksisterende justering under avspilling</string>
     <string name="set_rescan_desc">Tøm etiketthurtiglager og last inn hele musikkbiblioteket igjen (tregere, men mer fullstendig)</string>
     <string name="desc_track_number">Spor %d</string>
     <string name="desc_no_cover">Albumomslag</string>
@@ -104,7 +102,6 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_version">Versjon</string>
     <string name="lbl_wiki">Wiki</string>
-    <string name="lbl_reset">Tilbakestill</string>
     <string name="set_accent">Fargedrakt</string>
     <string name="set_black_mode">Svart drakt</string>
     <string name="set_black_mode_desc">Bruk en helsvart mørk drakt</string>
@@ -118,8 +115,6 @@
     <string name="set_reindex_desc">Last inn musikkbiblioteket igjen, ved bruk av hurtiglagrede etiketter når mulig</string>
     <string name="fmt_lib_album_count">Album innlastet: %d</string>
     <string name="lbl_library_counts">Bibliotekstatistikk</string>
-    <string name="set_pre_amp">ReplayGain-forforsterkning</string>
-    <string name="set_pre_amp_with">Justering med etiketter</string>
     <string name="set_content">Innhold</string>
     <string name="set_locations">Musikkmapper</string>
     <string name="err_index_failed">Klarte ikke laste inn musikk</string>
@@ -170,7 +165,6 @@
     <string name="set_replay_gain_mode_track">Foretrekk spor</string>
     <string name="set_rewind_prev">Spol tilbake før spor hoppes over</string>
     <string name="set_rewind_prev_desc">Spol tilbake før hopp til forrige spor</string>
-    <string name="set_pre_amp_warning">Advarsel: Endring av forforsterkning til høy positiv verdi kan resultere i forvrengning ved høyt lydtrykk på noen spor.</string>
     <string name="fmt_disc_no">Plate %d</string>
     <string name="fmt_disc_no_subtitle">Plate %1$d – %2$s</string>
     <string name="set_lib_tabs">Bibliotekfaner</string>

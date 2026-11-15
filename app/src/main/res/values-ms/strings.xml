@@ -93,7 +93,6 @@
     <string name="lbl_ok">Ok</string>
     <string name="lbl_cancel">Batal</string>
     <string name="lbl_save">Simpan</string>
-    <string name="lbl_reset">Set semula</string>
     <string name="lbl_more">Lagi</string>
     <string name="lbl_path_style">Gaya laluan</string>
     <string name="lbl_path_style_absolute">Mutlak</string>
@@ -174,11 +173,6 @@
     <string name="set_replay_gain_mode_track">Utamakan trek</string>
     <string name="set_replay_gain_mode_album">Utamakan album</string>
     <string name="set_replay_gain_mode_dynamic">Utamakan album jika ia sedang dimainkan</string>
-    <string name="set_pre_amp">Pre-amp ReplayGain</string>
-    <string name="set_pre_amp_desc">Pra-amp digunakan pada pelarasan sedia ada semasa main balik</string>
-    <string name="set_pre_amp_with">Pelarasan dengan tag</string>
-    <string name="set_pre_amp_without">Pelarasan tanpa tag</string>
-    <string name="set_pre_amp_warning">Amaran: Mengubah pra-amp ke nilai positif yang tinggi boleh menyebabkan herotan kemuncak pada sesetengah trek audio.</string>
     <string name="set_library">Pustaka</string>
     <string name="set_locations">Sumber muzik</string>
     <string name="set_locations_desc">Urus dari mana muzik patut dimuatkan</string>

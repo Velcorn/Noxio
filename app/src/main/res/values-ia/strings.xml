@@ -66,7 +66,6 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Cancellar</string>
     <string name="lbl_save">Salveguardar</string>
-    <string name="lbl_reset">Reinitialisar</string>
     <string name="lbl_path_style">Stylo de percurso</string>
     <string name="lbl_windows_paths">Usar percursos compatibile con Windows</string>
     <string name="lbl_about">A proposito de</string>
@@ -174,7 +173,6 @@
     <string name="fmt_indexing">Cargante le bibliotheca de musica… (%1$d/%2$d)</string>
     <string name="lbl_import_playlist">Importar lista de reproduction</string>
     <string name="set_content_desc">Controlar le cargamento del musica e imagines</string>
-    <string name="set_pre_amp_without">Adjustamento sin etiquettas</string>
     <string name="set_rescan">Rescannar le musica</string>
     <string name="desc_clear_search">Rader le requestas de recerca</string>
     <string name="desc_artist_image">Imagine de artista pro %s</string>

@@ -16,7 +16,6 @@
     <string name="lbl_play_next">تشغيل التالي</string>
     <string name="lbl_queue_add">إضافة للطابور</string>
     <string name="lbl_playlist_add">إضافة لقائمة التشغيل</string>
-    <string name="lbl_reset">إعادة ضبط</string>
     <string name="lng_indexing">يحمّل مكتبتك الصوتية…</string>
     <string name="lng_queue_added">أضيفت للطابور</string>
     <string name="lng_playlist_created">تم إنشاء قائمة التشغيل</string>
@@ -170,12 +169,10 @@
     <string name="desc_genre_image">صورة النوع لـ %s</string>
     <string name="def_artist">فنان غير معروف</string>
     <string name="set_replay_gain_mode">استراتيجية الريبلاي جين</string>
-    <string name="set_pre_amp_without">ضبط بدون علامات</string>
     <string name="lbl_empty_playlist">قائمة تشغيل فارغة</string>
     <string name="set_exclude_non_music_desc">تجاهل ملفات الصوت التي ليست موسيقى، مثل البودكاست</string>
     <string name="set_exclude_non_music">استبعاد الملفات غير الموسيقية</string>
     <string name="set_audio">صوت</string>
-    <string name="set_pre_amp_warning">تحذير: تغيير مكبر الصوت المسبق إلى قيمة إيجابية عالية قد يؤدي إلى ظهور ذروات صوتية على بعض المسارات الصوتية.</string>
     <string name="set_library">مكتبة</string>
     <string name="set_locations">مجلدات الموسيقى</string>
     <string name="set_locations_desc">إدارة موقع تحميل الموسيقى</string>
@@ -194,10 +191,7 @@
     <string name="set_theme_day">فاتح</string>
     <string name="set_replay_gain_mode_dynamic">تفضيل الألبوم إذا كان أحد الألبومات يُشغّل</string>
     <string name="set_replay_gain_mode_track">تفضيل المسار</string>
-    <string name="set_pre_amp">مكبر الصوت المسبق لـ ReplayGain</string>
     <string name="set_replay_gain_mode_album">تفضيل الألبوم</string>
-    <string name="set_pre_amp_desc">يتم تطبيق مكبر الصوت المسبق على التعديل الحالي أثناء التشغيل</string>
-    <string name="set_pre_amp_with">ضبط مع العلامات</string>
     <string name="set_reindex">تحديث الموسيقى</string>
     <string name="def_track">لا مسار</string>
     <string name="def_playback">لا يوجد تشغيل الموسيقى</string>

@@ -78,10 +78,6 @@
     <string name="lbl_shuffle_shortcut_long">Acak semua</string>
     <string name="set_replay_gain_mode_track">Utamakan trek</string>
     <string name="set_replay_gain_mode_album">Utamakan album</string>
-    <string name="set_pre_amp">Pra-amp ReplayGain</string>
-    <string name="set_pre_amp_desc">Pre-amp diterapkan ke penyesuaian yang ada selama pemutaran</string>
-    <string name="set_pre_amp_with">Penyesuaian dengan tag</string>
-    <string name="set_pre_amp_warning">Peringatan: Mengubah pre-amp ke nilai positif yang tinggi dapat mengakibatkan puncak pada beberapa trek audio.</string>
     <string name="set_keep_shuffle_desc">Tetap mengacak saat memutar lagu baru</string>
     <string name="set_rewind_prev">Putar balik sebelum melompat ke belakang</string>
     <string name="set_rewind_prev_desc">Putar mundur sebelum melompat ke lagu sebelumnya</string>
@@ -119,7 +115,6 @@
     <string name="desc_artist_image">Gambar artis untuk %s</string>
     <string name="desc_remove_song">Hapus lagu antrian ini</string>
     <string name="desc_clear_search">Hapus kueri pencarian</string>
-    <string name="set_pre_amp_without">Penyesuaian tanpa tag</string>
     <string name="set_locations">Sumber musik</string>
     <string name="desc_skip_prev">Loncat ke lagu terakhir</string>
     <string name="def_date">Tidak ada tanggal</string>
@@ -231,7 +226,6 @@
     <string name="lbl_empty_playlist">Daftar putar kosong</string>
     <string name="lbl_import_playlist">Impor daftar putar</string>
     <string name="lbl_equalizer">Ekualiser</string>
-    <string name="lbl_reset">Atur ulang</string>
     <string name="set_rescan">Pindai ulang musik</string>
     <string name="lbl_share">Bagikan</string>
     <string name="lbl_playlist">Daftar putar</string>

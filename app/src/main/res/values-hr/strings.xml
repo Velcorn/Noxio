@@ -68,11 +68,6 @@
     <string name="set_replay_gain_mode_track">Preferiraj zvučni zapis</string>
     <string name="set_replay_gain_mode_album">Preferiraj album</string>
     <string name="set_replay_gain_mode_dynamic">Preferiraj album ako se jedan reproducira</string>
-    <string name="set_pre_amp">Pretpojačalo normalizacije glasnoće</string>
-    <string name="set_pre_amp_desc">Pretpojačalo se tijekom reprodukcije primijenjue na postojeću podešavanje</string>
-    <string name="set_pre_amp_with">Prilagođavanje s oznakama</string>
-    <string name="set_pre_amp_without">Prilagođavanje bez oznaka</string>
-    <string name="set_pre_amp_warning">Upozorenje: Postavljanje pretpojačala na visoke razine može uzrokovati vrhunce tonova u nekim zvučnim zapisima.</string>
     <string name="set_reindex">Aktualiziraj glazbu</string>
     <string name="set_reindex_desc">Ponovo učitaj glazbenu biblioteku, koristeći predmemorirane oznake kada je to moguće</string>
     <string name="set_locations">Izvori glazbe</string>
@@ -192,7 +187,6 @@
     <string name="fmt_selected">Odabrano: %d</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="fmt_list">%1$s, %2$s</string>
-    <string name="lbl_reset">Resetiraj</string>
     <string name="set_replay_gain">Normalizacija glasnoće</string>
     <string name="lbl_sort_dsc">Silazno</string>
     <string name="set_ui_desc">Promijenite temu i boje aplikacije</string>

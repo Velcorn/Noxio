@@ -68,7 +68,6 @@
     <string name="lbl_ok">Добре</string>
     <string name="lbl_cancel">Отказ</string>
     <string name="lbl_save">Запази</string>
-    <string name="lbl_reset">Нулирай</string>
     <string name="lbl_path_style">Стил на пътя</string>
     <string name="lbl_path_style_relative">Относително</string>
     <string name="lbl_windows_paths">Използване на съвместими с Windows пътища</string>
@@ -154,10 +153,6 @@
     <string name="set_replay_gain_mode_track">Предпочитам песен</string>
     <string name="set_replay_gain_mode_album">Предпочитам албум</string>
     <string name="set_replay_gain_mode_dynamic">Предпочитам албум, ако се пуска такъв</string>
-    <string name="set_pre_amp">ReplayGain предусилвател</string>
-    <string name="set_pre_amp_desc">Предусилвателят се прилага към съществуващата настройка по време на възпроизвеждане</string>
-    <string name="set_pre_amp_with">Регулиране с етикети</string>
-    <string name="set_pre_amp_without">Регулиране без етикети</string>
     <string name="set_library">Библиотека</string>
     <string name="set_locations">Музикални източници</string>
     <string name="set_locations_desc">Управление откъде да се зарежда музиката</string>
@@ -176,7 +171,6 @@
     <string name="desc_queue_bar">Отвори опашката</string>
     <string name="desc_selection_image">Избор на изображение</string>
     <string name="desc_tab_handle">Премести този раздел</string>
-    <string name="set_pre_amp_warning">Предупреждение: Промяната на предусилвателя на висока положителна стойност може да доведе до пикове на звука в някои аудио записи.</string>
     <string name="desc_clear_search">Изчисти заявката за търсене</string>
     <string name="desc_music_location_delete">Премахни папка</string>
     <string name="err_import_failed">Не може да се внесе плейлист от този файл</string>

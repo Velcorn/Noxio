@@ -61,7 +61,6 @@
     <string name="lbl_ok">ਠੀਕ</string>
     <string name="lbl_cancel">ਰੱਦ ਕਰੋ</string>
     <string name="lbl_save">ਸਾਂਭੋ</string>
-    <string name="lbl_reset">ਰੀਸੈਟ ਕਰੋ</string>
     <string name="lbl_about">ਦੇ ਬਾਰੇ</string>
     <string name="lbl_version">ਸੰਸਕਰਣ</string>
     <string name="lbl_code">ਸ੍ਰੋਤ ਕੋਡ</string>
@@ -98,7 +97,6 @@
     <string name="set_replay_gain_mode">ਰੀਪਲੇਅ-ਗੇਨ ਰਣਨੀਤੀ</string>
     <string name="set_replay_gain_mode_track">ਟਰੈਕ ਨੂੰ ਤਰਜੀਹ</string>
     <string name="set_replay_gain_mode_album">ਐਲਬਮ ਨੂੰ ਤਰਜੀਹ</string>
-    <string name="set_pre_amp_without">ਬਿਨਾਂ ਟੈਗਾਂ ਦੇ ਐਡਜਸਟਮੈਂਟ</string>
     <string name="set_locations_desc">ਪ੍ਰਬੰਧਿਤ ਕਰੋ ਕਿ ਸੰਗੀਤ ਕਿੱਥੋਂ ਲੋਡ ਕੀਤਾ ਜਾਣਾ ਚਾਹੀਦਾ ਹੈ</string>
     <string name="set_reindex">ਸੰਗੀਤ ਤਾਜ਼ਾ-ਤਰੀਨ ਕਰੋ</string>
     <string name="err_no_app">ਕੋਈ ਐਪ ਨਹੀਂ ਮਿਲੀ ਜੋ ਇਸ ਕਾਰਜ ਨੂੰ ਸੰਭਾਲ ਸਕਦੀ ਹੈ</string>
@@ -110,10 +108,6 @@
     <string name="set_replay_gain_mode_dynamic">ਜੇਕਰ ਕੋਈ ਇੱਕ ਚੱਲ ਹੋਵੇ ਤਾਂ ਐਲਬਮ ਨੂੰ ਤਰਜੀਹ ਦਿਓ</string>
     <string name="set_rescan">ਸੰਗੀਤ ਰੀਸਕੈਨ ਕਰੋ</string>
     <string name="set_reindex_desc">ਜਦੋਂ ਸੰਭਵ ਹੋਵੇ ਤਾਂ ਕੈਸ਼ ਕੀਤੇ ਟੈਗਸ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ, ਸੰਗੀਤ ਲਾਇਬ੍ਰੇਰੀ ਨੂੰ ਰੀਲੋਡ ਕਰੋ</string>
-    <string name="set_pre_amp">ਰੀਪਲੇ-ਗੇਨ ਪ੍ਰੀ-ਐਂਪ</string>
-    <string name="set_pre_amp_desc">ਪ੍ਰੀ-ਐਂਪ ਨੂੰ ਪਲੇਬੈਕ ਦੌਰਾਨ ਮੌਜੂਦਾ ਵਿਵਸਥਾ \'ਤੇ ਲਾਗੂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ</string>
-    <string name="set_pre_amp_with">ਟੈਗਸ ਨਾਲ ਐਡਜਸਟਮੈਂਟ</string>
-    <string name="set_pre_amp_warning">ਚੇਤਾਵਨੀ: ਪ੍ਰੀ-ਐਂਪ ਨੂੰ ਉੱਚ ਸਕਾਰਾਤਮਕ ਮੁੱਲ ਵਿੱਚ ਬਦਲਣ ਦੇ ਨਤੀਜੇ ਵਜੋਂ ਕੁਝ ਆਡੀਓ ਟਰੈਕਾਂ \'ਤੇ ਸਿਖਰ ਹੋ ਸਕਦਾ ਹੈ।</string>
     <string name="set_rescan_desc">ਟੈਗ ਕੈਸ਼ ਨੂੰ ਸਾਫ਼ ਕਰੋ ਅਤੇ ਸੰਗੀਤ ਲਾਇਬ੍ਰੇਰੀ ਨੂੰ ਪੂਰੀ ਤਰ੍ਹਾਂ ਰੀਲੋਡ ਕਰੋ (ਹੌਲੀ, ਪਰ ਵਧੇਰੇ ਸੰਪੂਰਨ)</string>
     <string name="err_index_failed">ਸੰਗੀਤ ਲੋਡ ਕਰਨਾ ਅਸਫਲ ਰਿਹਾ</string>
     <string name="desc_track_number">%d ਨੂੰ ਟਰੈਕ ਕਰੋ</string>

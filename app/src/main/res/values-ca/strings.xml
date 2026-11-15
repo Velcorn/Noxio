@@ -93,7 +93,6 @@
     <string name="lbl_ok">D\'acord</string>
     <string name="lbl_cancel">Cancel·la</string>
     <string name="lbl_save">Desa</string>
-    <string name="lbl_reset">Restableix</string>
     <string name="lbl_more">Més</string>
     <string name="lbl_path_style">Estil del camí</string>
     <string name="lbl_path_style_absolute">Absolut</string>
@@ -165,7 +164,6 @@
     <string name="set_exclude_non_music_desc">Ignora els fitxers d\'àudio que no són música, com ara els pòdcasts</string>
     <string name="set_hide_collaborators">Amaga els col·laboradors</string>
     <string name="set_hide_collaborators_desc">Mostra només els artistes acreditats directament en un àlbum (funciona millor amb fonoteques ben etiquetades)</string>
-    <string name="set_pre_amp_warning">Avís: Si poseu la preamplificació en un valor positiu alt, és possible que algunes pistes saturin.</string>
     <string name="set_audio">Àudio</string>
     <string name="set_audio_desc">Configureu el so i el comportament de la reproducció</string>
     <string name="set_rewind_prev">Retrocedeix abans de saltar enrere</string>
@@ -176,10 +174,6 @@
     <string name="set_replay_gain_mode_track">Prioritza la cançó</string>
     <string name="set_replay_gain_mode_album">Prioritza l\'àlbum</string>
     <string name="set_replay_gain_mode_dynamic">Prioritza l\'àlbum si se\'n reprodueix un</string>
-    <string name="set_pre_amp">Preamplificació de ReplayGain</string>
-    <string name="set_pre_amp_desc">La preamplificació s\'aplica sobre l\'ajust existent durant la reproducció</string>
-    <string name="set_pre_amp_with">Ajust amb etiquetes</string>
-    <string name="set_pre_amp_without">Ajust sense etiquetes</string>
     <string name="set_library">Fonoteca</string>
     <string name="set_locations">Fonts de música</string>
     <string name="set_locations_desc">Gestioneu d\'on s\'ha de carregar la música</string>

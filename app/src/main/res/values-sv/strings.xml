@@ -95,7 +95,6 @@
     <string name="lbl_sort">Sortera</string>
     <string name="lbl_queue_add">Lägg till i kö</string>
     <string name="lbl_bitrate">Överföringskapacitet</string>
-    <string name="lbl_reset">Återställ</string>
     <string name="lbl_version">Version</string>
     <string name="lbl_library_counts">Bibliotekstatistik</string>
     <string name="lng_playlist_renamed">Bytt namn på spellista</string>
@@ -152,10 +151,7 @@
     <string name="fmt_editing">Redigerar %s</string>
     <string name="clr_orange">Orange</string>
     <string name="clr_brown">Brun</string>
-    <string name="set_pre_amp">ReplayGain försteg</string>
-    <string name="set_pre_amp_without">Justering utan etiketter</string>
     <string name="set_locations">Musikmappar</string>
-    <string name="set_pre_amp_warning">Varning: Att ändra förförstärkaren till ett högt positivt värde kan leda till ett förhöjt ljudtryck på vissa ljudspår.</string>
     <string name="set_locations_desc">Hantera var musik läses in ifrån</string>
     <string name="set_rescan">Skanna om musik</string>
     <string name="set_rescan_desc">Rensa etikettbiblioteket och ladda komplett om musikbiblioteket (långsammare, men mer komplett)</string>
@@ -195,7 +191,6 @@
     <string name="fmt_lib_album_count">Inlästa album: %d</string>
     <string name="fmt_lib_genre_count">Inlästa genrer: %d</string>
     <string name="set_rewind_prev_desc">Spola tillbaka innan att hoppa till föregående låt</string>
-    <string name="set_pre_amp_with">Justering med etiketter</string>
     <string name="desc_exit">Stoppa uppspelning</string>
     <string name="desc_remove_song">Ta bort låt</string>
     <string name="desc_auxio_icon">Auxio-ikon</string>
@@ -220,7 +215,6 @@
     <string name="set_replay_gain_mode_track">Föredra spår</string>
     <string name="set_replay_gain_mode_album">Föredra album</string>
     <string name="set_replay_gain_mode_dynamic">Föredra album om ett album spelar</string>
-    <string name="set_pre_amp_desc">Förförstarkning användas för befintliga justeringar vid uppspelning</string>
     <string name="clr_red">Röd</string>
     <string name="lbl_song">Låt</string>
     <string name="lbl_imported_playlist">Importerad spellista</string>

@@ -91,7 +91,6 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Zrušiť</string>
     <string name="lbl_save">Uložiť</string>
-    <string name="lbl_reset">Resetovať</string>
     <string name="lbl_more">Viac</string>
     <string name="lbl_path_style">Štýl cesty</string>
     <string name="lbl_path_style_absolute">Absolutná</string>

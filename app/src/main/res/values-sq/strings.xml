@@ -89,7 +89,6 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_cancel">Anulo</string>
     <string name="lbl_save">Ruaj</string>
-    <string name="lbl_reset">Rivendos</string>
     <string name="lbl_more">Më shumë</string>
     <string name="lbl_path_style_absolute">Absolute</string>
     <string name="lbl_path_style_relative">Relativ</string>
@@ -190,11 +189,6 @@
     <string name="def_song_count">Nuk ka këngë</string>
     <string name="set_replay_gain_mode_album">Prefero albumin</string>
     <string name="set_replay_gain_mode_dynamic">Prefero albumin nëse njëri është duke luajtur</string>
-    <string name="set_pre_amp">ReplayGain pre-amp</string>
-    <string name="set_pre_amp_desc">Përforcuesi paraprak aplikohet në rregullimin ekzistues gjatë riprodhimit.</string>
-    <string name="set_pre_amp_with">Rregullim me etiketa</string>
-    <string name="set_pre_amp_without">Rregullim pa etiketa</string>
-    <string name="set_pre_amp_warning">Kujdes: Ndryshimi i pre-amplitudës në një vlerë të lartë pozitive mund të shkaktojë teprim në disa shtegtarë audio.</string>
     <string name="set_library">Biblioteka</string>
     <string name="set_locations_desc">Menaxho se nga ku duhet të ngarkohet muzika</string>
     <string name="set_reindex">Rifresko muzikën</string>

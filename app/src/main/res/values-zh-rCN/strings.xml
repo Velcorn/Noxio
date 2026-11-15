@@ -106,11 +106,6 @@
     <string name="lbl_shuffle_shortcut_short">随机</string>
     <string name="lbl_shuffle_shortcut_long">随机所有</string>
     <string name="lbl_library_counts">音乐库数据</string>
-    <string name="set_pre_amp">前置回放增益</string>
-    <string name="set_pre_amp_desc">前置增益将在播放过程中应用至现有设置</string>
-    <string name="set_pre_amp_with">带有标签的调节项</string>
-    <string name="set_pre_amp_without">没有标签的调节项</string>
-    <string name="set_pre_amp_warning">警告：将前置增益更改为正向高数值或导致某些音轨峰值过高。</string>
     <string name="set_locations">音乐源</string>
     <string name="set_locations_desc">管理音乐的加载位置</string>
     <string name="cdc_mp3">MPEG-1 音频</string>
@@ -186,7 +181,6 @@
     <string name="fmt_selected">选中了 %d 项</string>
     <string name="lbl_wiki">Wiki</string>
     <string name="fmt_list">%1$s, %2$s</string>
-    <string name="lbl_reset">重置</string>
     <string name="set_replay_gain">音量正常化</string>
     <string name="set_ui_desc">更改应用的主题和颜色</string>
     <string name="set_content_desc">控制音乐和图片加载方式</string>
