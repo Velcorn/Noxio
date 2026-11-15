@@ -218,7 +218,14 @@ constructor(
         when (type) {
             MusicType.ALBUMS -> {
                 val album = detailGenerator.album(currentAlbum.value?.uid ?: return)
-                refreshDetail(album, currentAlbum, albumSongList, albumSongInstructions, replace)
+                refreshDetail(
+                    album,
+                    currentAlbum,
+                    albumSongList,
+                    albumSongInstructions,
+                    replace,
+                    albumSongHeader(album),
+                )
             }
             MusicType.ARTISTS -> {
                 refreshArtist(currentArtist.value?.uid ?: return, replace)
@@ -341,7 +348,14 @@ constructor(
             return
         }
         val album = detailGenerator.album(uid)
-        refreshDetail(album, currentAlbum, albumSongList, albumSongInstructions, null)
+        refreshDetail(
+            album,
+            currentAlbum,
+            albumSongList,
+            albumSongInstructions,
+            null,
+            albumSongHeader(album),
+        )
         if (currentAlbum.value == null) {
             L.w("Given album UID was invalid")
         }
@@ -665,6 +679,12 @@ constructor(
                 )
             }
         }
+    }
+
+    /** Noxio: an album with one song has nothing to sort, its header has no sort button. */
+    private fun albumSongHeader(album: Detail<Album>?): (Int) -> PlainHeader {
+        val sortable = (album?.parent?.songs?.size ?: 0) > 1
+        return { SortHeader(it, sortable) }
     }
 
     private inline fun <T : MusicParent> refreshDetail(

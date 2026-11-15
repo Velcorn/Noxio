@@ -21,6 +21,7 @@ package org.oxycblt.auxio.detail.list
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.TooltipCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import org.oxycblt.auxio.IntegerTable
@@ -115,9 +116,11 @@ abstract class DetailListAdapter(
  * A header variation that displays a button to open a sort menu.
  *
  * @param titleRes The string resource to use as the header title
+ * @param sortable Noxio: whether the sort button is shown; one song has nothing to sort.
  * @author Alexander Capehart (OxygenCobalt)
  */
-data class SortHeader(@StringRes override val titleRes: Int) : PlainHeader
+data class SortHeader(@StringRes override val titleRes: Int, val sortable: Boolean = true) :
+    PlainHeader
 
 /**
  * A [RecyclerView.ViewHolder] that displays a [SortHeader] and it's actions. Use [from] to create
@@ -136,6 +139,7 @@ private class SortHeaderViewHolder(private val binding: ItemSortHeaderBinding) :
     fun bind(sortHeader: SortHeader, listener: DetailListAdapter.Listener<*>) {
         binding.headerTitle.text = binding.context.getString(sortHeader.titleRes)
         binding.headerSort.apply {
+            isVisible = sortHeader.sortable
             // Add a Tooltip based on the content description so that the purpose of this
             // button can be clear.
             TooltipCompat.setTooltipText(this, contentDescription)

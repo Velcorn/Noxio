@@ -298,6 +298,10 @@ class MainFragment :
         collectImmediately(detailModel.currentPlaylist) { updateSearchHint(binding) }
         collectImmediately(detailModel.artistTab) { selectCurrentTab(binding) }
         collectImmediately(homeModel.songList, homeModel.isFastScrolling, ::updateFab)
+        // Noxio: the album that is shown decides whether there is anything to shuffle.
+        collectImmediately(detailModel.currentAlbum) {
+            updateFab(homeModel.songList.value, homeModel.isFastScrolling.value)
+        }
         collectImmediately(musicModel.indexingState, ::updateIndexerState)
         collectImmediately(listModel.selected, selectionBackCallback::invalidateEnabled)
         collectImmediately(playbackModel.song, ::updateSong)
@@ -1202,6 +1206,9 @@ class MainFragment :
         isFastScrolling: Boolean,
     ) =
         currentNavMode(binding) == NavMode.NONE ||
+            // Noxio: an album with one song has nothing to shuffle.
+            (currentNavMode(binding) == NavMode.ALBUM &&
+                detailModel.currentAlbum.value?.songs?.size == 1) ||
             sheetRising == true ||
             songs.isEmpty() ||
             isFastScrolling

@@ -260,6 +260,18 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      */
     private var bottomAlignGap = 0
 
+    /**
+     * Noxio: whether a short list sits at the bottom. Off on album pages, whose songs belong right
+     * under the header.
+     */
+    var bottomAligned = true
+        set(value) {
+            if (field != value) {
+                field = value
+                requestLayout()
+            }
+        }
+
     var popupProvider: PopupProvider? = null
     var listener: Listener? = null
 
@@ -326,7 +338,11 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
         var gap = 0
         var reserve = true
         if (
-            lm != null && (lm !is GridLayoutManager || lm.spanCount == 1) && count > 0 && height > 0
+            bottomAligned &&
+                lm != null &&
+                (lm !is GridLayoutManager || lm.spanCount == 1) &&
+                count > 0 &&
+                height > 0
         ) {
             val first = lm.findViewByPosition(0)
             val last = lm.findViewByPosition(count - 1)

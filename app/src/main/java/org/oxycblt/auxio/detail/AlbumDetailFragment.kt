@@ -155,6 +155,9 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
             text = context.getString(R.string.fmt_three, date, songCount, duration)
         }
 
+        // Noxio: the songs of an album start right under the header, also when there are few.
+        binding.detailRecycler.bottomAligned = false
+
         binding.detailPlayButton?.setOnClickListener { playbackModel.play(album) }
         binding.detailShuffleButton?.setOnClickListener { playbackModel.shuffle(album) }
         setToolbarPlaybackButtonsEnabled(true)
