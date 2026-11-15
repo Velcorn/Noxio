@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.15.1
+
+## What's Improved
+- Album pages: the songs start right under the album header, also on short albums
+- An album with only one song has no sort button and no shuffle button
+
 ## v1.15.0
 
 ## What's New
