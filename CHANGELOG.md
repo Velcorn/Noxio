@@ -3,6 +3,21 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.15.0
+
+## What's New
+- Edit tags in Song properties: title, artists, album, album artists, date, track and disc. Playlists and measured ReplayGain follow the song
+- *Write calculated ReplayGain to tags* (Settings > Playback) saves the measured values in the song files. Android asks before any file is changed
+- Album ReplayGain: once every song of an album is measured, the album is measured as a whole, for *Prefer album*. Songs measured before are measured once more
+- After a restart the song that played is ready right away, before the library has loaded; the rest of the queue follows
+
+## What's Fixed
+- On an album with only one song, the song was below the screen and could not be tapped
+
+## What's Changed
+- Song properties no longer show the genre
+- Noxio now changes your music files when you ask it to (editing tags, writing ReplayGain); it never does on its own
+
 ## v1.14.0
 
 ## What's New
