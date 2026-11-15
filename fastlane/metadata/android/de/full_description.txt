@@ -4,11 +4,13 @@ Noxio ist ein lokaler Musikplayer für Android, gemacht zum Hören durch die Nac
 
 - Sleep-Timer: Play/Pause gedrückt halten, 30 Min., 60 Min. oder eine eigene Zeit wählen, letztes Lied zu Ende spielen, ausblenden, durch Schütteln neu starten. Der Countdown steht im Play-Knopf und in einer ruhigen Benachrichtigung mit +10 Min. und Stopp
 - Hörstatistik: Top-Künstler, -Alben und -Lieder pro Woche, Monat, Jahr oder gesamt, ein genauerer Blick auf jeden Eintrag und bunte Karten zum Teilen oder Speichern als Bild
+- ReplayGain berechnen: misst die Lautstärke deiner Lieder im Hintergrund, damit leise und laute Lieder gleich klingen, deine eigenen Tags haben Vorrang; deine Dateien bleiben unverändert
 - Wiedergaben aus Musicolet importieren, auch Wochen- und Monatslisten
-- Backup von Einstellungen, Hörverlauf und Wiedergabelisten nach einem Zeitplan deiner Wahl, mit Schutz davor, dass ein leeres Backup ein gutes ersetzt, und Wiederherstellen
+- Backup von Einstellungen, Hörverlauf, Wiedergabelisten und berechnetem ReplayGain nach einem Zeitplan deiner Wahl, mit Schutz davor, dass ein leeres Backup ein gutes ersetzt, und Wiederherstellen
 - Einhändige Bedienung: Suche, Sortierung und Tabs unten, ein schwebender Zufallsknopf und Gesten statt Zurück-Knöpfen
-- Warteschlange mit Suche und Sortierung
-- Reines Schwarz, eine wellige Fortschrittsleiste, die sich ausschalten lässt, und ein minimales weißes Icon
+- Warteschlange mit Suche und Sortierung, per Wischen nach oben auf dem Player geöffnet, und Warteschlange leeren; Wiedergabelisten mit Suche und Sortierung
+- Lädt deine Bibliothek etwa 2,5- bis 3-mal schneller
+- Reines Schwarz, eine wellige Fortschrittsleiste, und ein minimales weißes Icon
 - Kurze Einstellungen auf vier Seiten
 
 <b>Von Auxio</b>

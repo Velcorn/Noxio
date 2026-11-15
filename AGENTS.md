@@ -1,6 +1,6 @@
 # Working on Noxio (for coding agents)
 
-Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features: sleep timer, listening stats (Room), switchable minimal launcher icon. See `README.md`, `ROADMAP.md` and `musikr/ARCHITECTURE.md`.
+Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features: sleep timer, listening stats (Room), a full backup, ReplayGain calculation (`replaygain/`, values in Noxio's own database), keyboard phone mode, faster library loading, a switchable minimal launcher icon and more (the list is in `README.md`). See `README.md`, `ROADMAP.md` and `musikr/ARCHITECTURE.md`.
 
 ## Building
 - A Windows build is not supported. Use Linux, macOS or WSL with JDK 21, NDK `28.2.13676358`, cmake, ninja and the git submodules (`git submodule update --init --recursive`).

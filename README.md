@@ -30,31 +30,35 @@ stats, stays in its own database or in files you export.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
   cards to share or save. A **year in review** with five cards to swipe through.
+- **ReplayGain calculation:** Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs in
+  the background, so quiet and loud songs play alike. Tags are preferred by default, a switch uses the measured value
+  instead, and the measured values can be deleted. A song's details show what Noxio measured. Values stay in Noxio
+  (and in its backup), your files are not changed.
+- **Backup:** settings, listening history, playlists and calculated ReplayGain as `noxio_YYYY-MM-DD.zip`, daily, weekly
+  or monthly, the last five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
+- **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
+  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
+- **Queue and playlists:** the queue has search and sort, opens at the song that plays, opens with a swipe up on the
+  player, and can be cleared or saved as a playlist. Playlists can be searched, sorted and have songs taken out,
+  with no song added twice and duplicates removed in one go.
 - **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
   floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),
   shorter item menus.
-- **Backup:** settings, listening history, playlists and calculated ReplayGain as `noxio_YYYY-MM-DD.zip`, daily, weekly or monthly, the last
-  five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
-- **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
-  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
-- **Queue** with search and sort, opening at the song that plays, opened by swiping up on the player, and saving as a playlist; **playlists** you can
-  search, sort and take songs out of, with no song added twice and duplicates removed in one go.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
   a keyboard the search row stays, so it can always be switched off.
-- **ReplayGain calculation:** Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs in the
-  background, so quiet and loud songs play alike. Tags are preferred by default; a switch uses the measured value instead.
-  Values stay in Noxio, your files are not changed.
 - **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
 - **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed;
   short lists and page titles at the bottom, fixed appearance defaults, hidden files excluded and manual refresh.
+- **Faster loading:** the library loads about 2.5 to 3 times faster than in Auxio (the name preparation was the
+  bottleneck), with the same result.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
 - **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
 
-Everything else comes from Auxio: Media3 playback, gapless, ReplayGain, rich tag support, playlists, Android Auto,
+Everything else comes from Auxio: Media3 playback, gapless, ReplayGain from tags, rich tag support, playlists, Android Auto,
 widgets, completely private and offline. Progress and what still needs a check on a phone are in
 [ROADMAP.md](/ROADMAP.md).
 
