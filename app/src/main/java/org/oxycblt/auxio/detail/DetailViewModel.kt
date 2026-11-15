@@ -43,6 +43,7 @@ import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.MusicType
 import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackSettings
+import org.oxycblt.auxio.replaygain.ReplayGainStore
 import org.oxycblt.auxio.util.Event
 import org.oxycblt.auxio.util.MutableEvent
 import org.oxycblt.auxio.util.unlikelyToBeNull
@@ -69,6 +70,7 @@ constructor(
     private val listSettings: ListSettings,
     private val musicRepository: MusicRepository,
     private val playbackSettings: PlaybackSettings,
+    private val measuredGains: ReplayGainStore,
     detailGeneratorFactory: DetailGenerator.Factory,
 ) : ViewModel(), DetailGenerator.Invalidator {
     /**
@@ -650,6 +652,10 @@ constructor(
             }
             song.replayGainAdjustment.album?.let {
                 add(SongProperty(R.string.lbl_replaygain_album, SongProperty.Value.Decibels(it)))
+            }
+            // Noxio: the loudness it measured itself, if it has.
+            measuredGains.gainFor(song)?.let {
+                add(SongProperty(R.string.lbl_replaygain_measured, SongProperty.Value.Decibels(it)))
             }
         }
     }

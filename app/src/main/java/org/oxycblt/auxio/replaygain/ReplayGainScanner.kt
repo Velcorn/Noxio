@@ -43,6 +43,8 @@ sealed interface ScanState {
         val lastMeasured: Int = 0,
         val lastFailed: Int = 0,
         val finished: Boolean = false,
+        /** How long the scan took, in milliseconds (only when [finished]). */
+        val durationMs: Long = 0,
     ) : ScanState
 
     /** [done] of [total] songs are done, [failed] of those could not be measured. */
@@ -66,6 +68,13 @@ constructor(
     private val mutableState = MutableStateFlow<ScanState>(ScanState.Idle())
     val state: StateFlow<ScanState>
         get() = mutableState
+
+    /** How many songs have a measured value. */
+    val measuredCount: Int
+        get() = store.size
+
+    /** Forget all measured values. Songs go back to their tags. */
+    suspend fun clearMeasured() = store.clear()
 
     /**
      * The songs a scan would measure: not measured yet, and, when tags are preferred, without a
@@ -93,6 +102,7 @@ constructor(
         val done = AtomicInteger()
         val failed = AtomicInteger()
         val measured = AtomicInteger()
+        val startedAt = System.nanoTime()
         mutableState.value = ScanState.Running(0, songs.size, 0)
         try {
             withContext(Dispatchers.Default) {
@@ -128,7 +138,13 @@ constructor(
                     }
                 }
             }
-            mutableState.value = ScanState.Idle(measured.get(), failed.get(), finished = true)
+            mutableState.value =
+                ScanState.Idle(
+                    measured.get(),
+                    failed.get(),
+                    finished = true,
+                    durationMs = (System.nanoTime() - startedAt) / 1_000_000,
+                )
         } catch (e: CancellationException) {
             mutableState.value = ScanState.Idle(measured.get(), failed.get())
             throw e
@@ -136,7 +152,7 @@ constructor(
     }
 
     private companion object {
-        /** Decoding is the slow part, so a few songs are measured at once. */
-        val WORKERS = (Runtime.getRuntime().availableProcessors() / 2).coerceIn(1, 4)
+        /** Decoding is the slow part, so several songs are measured at once. */
+        val WORKERS = (Runtime.getRuntime().availableProcessors() - 1).coerceIn(1, 6)
     }
 }

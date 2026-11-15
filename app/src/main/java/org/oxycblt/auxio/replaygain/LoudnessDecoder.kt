@@ -54,6 +54,9 @@ object LoudnessDecoder {
             extractor.selectTrack(track)
             val format = extractor.getTrackFormat(track)
             val mime = format.getString(MediaFormat.KEY_MIME) ?: return null
+            // Not playing, so the decoder may run as fast as it can.
+            format.setInteger(MediaFormat.KEY_PRIORITY, 1)
+            format.setInteger(MediaFormat.KEY_OPERATING_RATE, Short.MAX_VALUE.toInt())
             codec = MediaCodec.createDecoderByType(mime)
             codec.configure(format, null, null, 0)
             codec.start()

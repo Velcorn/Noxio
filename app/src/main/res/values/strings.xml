@@ -157,9 +157,9 @@
     <string name="lbl_stats_exported">Exported</string>
     <string name="err_stats_export">Could not write the file</string>
     <string name="set_backup">Backup</string>
-    <string name="set_backup_summary">Settings, listening history and playlists</string>
+    <string name="set_backup_summary">Settings, listening history, playlists and calculated ReplayGain</string>
     <string name="set_backup_frequency">Automatic backup</string>
-    <string name="set_backup_frequency_desc">Saves your settings, listening history and playlists in a folder you choose. Every backup is its own file, noxio_YYYY-MM-DD.zip, and the last 5 are kept</string>
+    <string name="set_backup_frequency_desc">Saves your settings, listening history, playlists and calculated ReplayGain in a folder you choose. Every backup is its own file, noxio_YYYY-MM-DD.zip, and the last 5 are kept</string>
     <string name="set_backup_off">Off</string>
     <string name="set_backup_daily">Every day</string>
     <string name="set_backup_weekly">Every week</string>
@@ -189,10 +189,11 @@
     <string name="fmt_backup_small_desc">Plays now: %1$d, playlists: %2$d. The last good backup had plays: %3$d, playlists: %4$d. Save it anyway? It gets the ending _small and the older backups stay as they are.</string>
     <string name="lbl_backup_small_ok">Save anyway</string>
     <string name="set_backup_restore">Restore from backup</string>
-    <string name="set_backup_restore_desc">Puts the settings, plays and playlists of a backup file back</string>
+    <string name="set_backup_restore_desc">Puts the settings, plays, playlists and calculated ReplayGain of a backup file back</string>
     <string name="lbl_backup_restore_title">Restore this backup?</string>
     <string name="fmt_backup_restore_desc">Made on %1$s with Noxio %2$s. It holds plays: %3$d, playlists: %4$d, settings: %5$d.\n\nThe settings are replaced. Plays and playlists are added to what is there, nothing is deleted.</string>
     <string name="lbl_backup_restore_ok">Restore</string>
+    <string name="fmt_backup_restored_gains" tools:ignore="PluralsCandidate">Calculated ReplayGain restored for %1$d songs</string>
     <string name="fmt_backup_restored">Restored plays: %1$d, playlists: %2$d, settings: %3$d</string>
     <string name="fmt_backup_missing_songs">Songs of the playlists that are not in your library: %d</string>
     <string name="lng_backup_no_library">Playlists were not restored because the library is not loaded yet. Restore again once it is</string>
@@ -265,6 +266,8 @@
     <string name="lbl_sample_rate">Sample rate</string>
     <string name="lbl_replaygain_track">ReplayGain track adjustment</string>
     <string name="lbl_replaygain_album">ReplayGain album adjustment</string>
+    <string name="lbl_replaygain_measured">ReplayGain measured by Noxio</string>
+    <string name="lbl_replay_gain_calculating">Calculating ReplayGain</string>
 
     <!-- Limit to 10 characters -->
     <string name="lbl_shuffle_shortcut_short">Shuffle</string>
@@ -423,9 +426,14 @@
     <string name="fmt_replay_gain_nothing">Nothing left to measure</string>
     <string name="fmt_replay_gain_progress" tools:ignore="PluralsCandidate">%1$d of %2$d songs</string>
     <string name="fmt_replay_gain_running" tools:ignore="PluralsCandidate">Measuring: %1$d of %2$d songs. Tap to stop</string>
-    <string name="fmt_replay_gain_done" tools:ignore="PluralsCandidate">Done: %1$d songs measured, %2$d could not be read</string>
+    <string name="fmt_replay_gain_done" tools:ignore="PluralsCandidate">Done: %1$d songs measured, %2$d could not be read, in %3$s</string>
     <string name="fmt_replay_gain_ask" tools:ignore="PluralsCandidate">Measure %1$d songs? This decodes every song and takes a while, and runs in the background with a notification.</string>
     <string name="lbl_replay_gain_start">Start</string>
+    <string name="set_replay_gain_clear">Delete calculated ReplayGain</string>
+    <string name="set_replay_gain_clear_none">No songs measured yet</string>
+    <string name="fmt_replay_gain_clear_count" tools:ignore="PluralsCandidate">%1$d songs measured</string>
+    <string name="fmt_replay_gain_clear_ask" tools:ignore="PluralsCandidate">Delete the measured ReplayGain of %1$d songs? The ReplayGain tags in your files are not touched. Songs without a tag play unadjusted until they are measured again.</string>
+    <string name="err_replay_gain_busy">Stop the calculation first</string>
     <string name="set_pre_amp_desc">The pre-amp is applied to the existing adjustment during playback</string>
     <string name="set_pre_amp_with">Adjustment with tags</string>
     <string name="set_pre_amp_without">Adjustment without tags</string>

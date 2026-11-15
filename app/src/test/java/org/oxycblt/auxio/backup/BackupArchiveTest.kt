@@ -50,6 +50,7 @@ class BackupArchiveTest {
                 ),
                 BackupPlaylist("Empty", emptyList()),
             ),
+            listOf(BackupGain(BackupSong("Music/a.mp3", "Song, A", "Artist; B", "Album"), -6.25f)),
         )
 
     private fun bytes(data: BackupData) =
@@ -97,5 +98,28 @@ class BackupArchiveTest {
                 emptyList(),
             )
         assertEquals(empty.info, BackupArchive.read(ByteArrayInputStream(bytes(empty)))!!.info)
+    }
+
+    @Test
+    fun aBackupWithoutReplayGainStillReadsWithNone() {
+        // An older backup: the same zip without replaygain.json.
+        val out = ByteArrayOutputStream()
+        val zip = java.util.zip.ZipOutputStream(out)
+        for ((name, content) in
+            mapOf(
+                "info.json" to
+                    """{"format":1,"appVersion":"1.0.0","createdAt":1,"plays":0,"playlists":0,"settings":0}""",
+                "settings.json" to "{}",
+                "history.csv" to "FILE_PATH\n",
+                "playlists.json" to "[]",
+            )) {
+            zip.putNextEntry(java.util.zip.ZipEntry(name))
+            zip.write(content.toByteArray())
+            zip.closeEntry()
+        }
+        zip.finish()
+        val read = BackupArchive.read(ByteArrayInputStream(out.toByteArray()))!!
+        assertEquals(0, read.info.gains)
+        assertEquals(emptyList<BackupGain>(), read.gains)
     }
 }

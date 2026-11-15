@@ -238,6 +238,14 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                             )
                             .show()
                     }
+                    if (restored.gains > 0) {
+                        android.widget.Toast.makeText(
+                                context,
+                                getString(R.string.fmt_backup_restored_gains, restored.gains),
+                                android.widget.Toast.LENGTH_LONG,
+                            )
+                            .show()
+                    }
                     if (restored.libraryMissing) {
                         context.showToast(R.string.lng_backup_no_library)
                     }

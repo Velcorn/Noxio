@@ -51,6 +51,7 @@ class ReplayGainService : Service() {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var scan: Job? = null
+    private var progress: Job? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -58,7 +59,7 @@ class ReplayGainService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == ACTION_STOP) {
             scan?.cancel()
-            stopSelf()
+            finish()
             return START_NOT_STICKY
         }
         if (scan?.isActive == true) {
@@ -76,33 +77,45 @@ class ReplayGainService : Service() {
             notification(0, 0),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
         )
-        scanner.state
-            .onEach {
-                if (it is ScanState.Running) {
-                    @Suppress("MissingPermission")
-                    manager.notify(NOTIFICATION, notification(it.done, it.total))
+        progress =
+            scanner.state
+                .onEach {
+                    if (it is ScanState.Running) {
+                        @Suppress("MissingPermission")
+                        manager.notify(NOTIFICATION, notification(it.done, it.total))
+                    }
                 }
-            }
-            .launchIn(scope)
+                .launchIn(scope)
         scan = scope.launch {
             try {
                 scanner.scan()
             } finally {
-                stopSelf()
+                finish()
             }
         }
         return START_NOT_STICKY
     }
 
+    /**
+     * Stops, and makes sure the notification is gone, also if a last update was still on its way.
+     */
+    private fun finish() {
+        progress?.cancel()
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+        NotificationManagerCompat.from(this).cancel(NOTIFICATION)
+        stopSelf()
+    }
+
     override fun onDestroy() {
         scope.cancel()
+        NotificationManagerCompat.from(this).cancel(NOTIFICATION)
         super.onDestroy()
     }
 
     private fun notification(done: Int, total: Int) =
         NotificationCompat.Builder(this, CHANNEL)
             .setSmallIcon(R.drawable.ic_indexer_24)
-            .setContentTitle(getString(R.string.lbl_replay_gain_scan))
+            .setContentTitle(getString(R.string.lbl_replay_gain_calculating))
             .setContentText(getString(R.string.fmt_replay_gain_progress, done, total))
             .setProgress(total, done, total == 0)
             .setOngoing(true)

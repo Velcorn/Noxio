@@ -45,6 +45,10 @@
             app:summary="@string/set_replay_gain_prefer_tags_desc"
             app:title="@string/set_replay_gain_prefer_tags" />
 
+        <Preference
+            app:key="@string/set_key_replay_gain_clear"
+            app:title="@string/set_replay_gain_clear" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

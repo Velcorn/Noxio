@@ -31,6 +31,9 @@ import org.json.JSONObject
 /** One song of a backed up playlist, with what is needed to find it again in the library. */
 data class BackupSong(val path: String, val title: String, val artist: String, val album: String)
 
+/** The loudness Noxio measured for one song, found again by the same means as playlist songs. */
+data class BackupGain(val song: BackupSong, val gainDb: Float)
+
 /** A playlist of a backup. */
 data class BackupPlaylist(val name: String, val songs: List<BackupSong>)
 
@@ -43,6 +46,7 @@ data class BackupPlaylist(val name: String, val songs: List<BackupSong>)
  * @param plays How many plays of the listening history it holds.
  * @param playlists How many playlists it holds.
  * @param settings How many settings it holds.
+ * @param gains How many measured ReplayGain values it holds (0 in older backups).
  */
 data class BackupInfo(
     val format: Int,
@@ -51,6 +55,7 @@ data class BackupInfo(
     val plays: Int,
     val playlists: Int,
     val settings: Int,
+    val gains: Int = 0,
 )
 
 /**
@@ -59,17 +64,20 @@ data class BackupInfo(
  * @param settings The settings by key. A value is a Boolean, Int, Long, Float, String or a set of
  *   strings.
  * @param history The listening history as CSV, see [org.oxycblt.auxio.stats.StatsCsv].
+ * @param gains The measured ReplayGain values, empty in older backups.
  */
 data class BackupData(
     val info: BackupInfo,
     val settings: Map<String, Any>,
     val history: ByteArray,
     val playlists: List<BackupPlaylist>,
+    val gains: List<BackupGain> = emptyList(),
 )
 
 /**
- * The file of a full backup: a zip with `info.json`, `settings.json`, `history.csv` and
- * `playlists.json`. Everything in it is plain text, so a backup can be opened and read by hand.
+ * The file of a full backup: a zip with `info.json`, `settings.json`, `history.csv`,
+ * `playlists.json` and `replaygain.json` (optional, older backups have none). Everything in it is
+ * plain text, so a backup can be opened and read by hand.
  */
 object BackupArchive {
     /** The layout of the files that this version writes and reads. */
@@ -79,6 +87,7 @@ object BackupArchive {
     private const val SETTINGS = "settings.json"
     private const val HISTORY = "history.csv"
     private const val PLAYLISTS = "playlists.json"
+    private const val GAINS = "replaygain.json"
 
     fun write(data: BackupData, out: OutputStream) {
         val zip = ZipOutputStream(out)
@@ -96,12 +105,14 @@ object BackupArchive {
                 .put("plays", data.info.plays)
                 .put("playlists", data.info.playlists)
                 .put("settings", data.info.settings)
+                .put("gains", data.info.gains)
                 .toString(2)
                 .toByteArray(),
         )
         entry(SETTINGS, settingsToJson(data.settings).toString(2).toByteArray())
         entry(HISTORY, data.history)
         entry(PLAYLISTS, playlistsToJson(data.playlists).toString(2).toByteArray())
+        entry(GAINS, gainsToJson(data.gains).toString(2).toByteArray())
         zip.finish()
         zip.flush()
     }
@@ -131,6 +142,7 @@ object BackupArchive {
                 settingsOf(entries[SETTINGS] ?: return null),
                 entries[HISTORY] ?: return null,
                 playlistsOf(entries[PLAYLISTS] ?: return null),
+                entries[GAINS]?.let(::gainsOf).orEmpty(),
             )
         } catch (e: java.io.IOException) {
             return null
@@ -139,7 +151,7 @@ object BackupArchive {
         }
     }
 
-    private val WANTED = setOf(INFO, SETTINGS, HISTORY, PLAYLISTS)
+    private val WANTED = setOf(INFO, SETTINGS, HISTORY, PLAYLISTS, GAINS)
 
     private fun infoOf(bytes: ByteArray): BackupInfo {
         val json = JSONObject(String(bytes))
@@ -150,6 +162,7 @@ object BackupArchive {
             plays = json.optInt("plays"),
             playlists = json.optInt("playlists"),
             settings = json.optInt("settings"),
+            gains = json.optInt("gains"),
         )
     }
 
@@ -233,6 +246,34 @@ object BackupArchive {
                         song.optString("album"),
                     )
                 },
+            )
+        }
+    }
+
+    private fun gainsToJson(gains: List<BackupGain>) =
+        JSONArray(
+            gains.map {
+                JSONObject()
+                    .put("path", it.song.path)
+                    .put("title", it.song.title)
+                    .put("artist", it.song.artist)
+                    .put("album", it.song.album)
+                    .put("gainDb", it.gainDb.toDouble())
+            }
+        )
+
+    private fun gainsOf(bytes: ByteArray): List<BackupGain> {
+        val array = JSONArray(String(bytes))
+        return (0 until array.length()).map { index ->
+            val item = array.getJSONObject(index)
+            BackupGain(
+                BackupSong(
+                    item.optString("path"),
+                    item.optString("title"),
+                    item.optString("artist"),
+                    item.optString("album"),
+                ),
+                item.getDouble("gainDb").toFloat(),
             )
         }
     }

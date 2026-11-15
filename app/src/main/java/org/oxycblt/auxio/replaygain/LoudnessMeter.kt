@@ -96,7 +96,8 @@ class LoudnessMeter(private val sampleRate: Int, private val channels: Int) {
     private val subBlockSize = max(1, (sampleRate * 0.1).roundToInt())
     private var subBlockFill = 0
     private var subBlockEnergy = 0.0
-    private val subBlocks = ArrayList<Double>()
+    private var subBlocks = DoubleArray(1024)
+    private var subBlockCount = 0
     private var channel = 0
     private var peak = 0f
 
@@ -113,7 +114,10 @@ class LoudnessMeter(private val sampleRate: Int, private val channels: Int) {
             if (++channel == channels) {
                 channel = 0
                 if (++subBlockFill == subBlockSize) {
-                    subBlocks += subBlockEnergy / subBlockSize
+                    if (subBlockCount == subBlocks.size) {
+                        subBlocks = subBlocks.copyOf(subBlocks.size * 2)
+                    }
+                    subBlocks[subBlockCount++] = subBlockEnergy / subBlockSize
                     subBlockFill = 0
                     subBlockEnergy = 0.0
                 }
@@ -124,11 +128,14 @@ class LoudnessMeter(private val sampleRate: Int, private val channels: Int) {
     /** The loudness of everything fed so far, or null if it was silent or too short. */
     fun result(): Loudness? {
         // A gating block is four sub-blocks, moving ahead by one.
-        val blocks = subBlocks.size - 3
+        val blocks = subBlockCount - 3
         if (blocks <= 0) {
             return null
         }
-        val energy = DoubleArray(blocks) { (0 until 4).sumOf { k -> subBlocks[it + k] } / 4 }
+        val energy =
+            DoubleArray(blocks) {
+                (subBlocks[it] + subBlocks[it + 1] + subBlocks[it + 2] + subBlocks[it + 3]) / 4
+            }
 
         val absolute = energy.filter { lufs(it) > ABSOLUTE_GATE }
         if (absolute.isEmpty()) {

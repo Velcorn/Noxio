@@ -33,7 +33,7 @@ stats, stays in its own database or in files you export.
 - **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
   floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),
   shorter item menus.
-- **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly or monthly, the last
+- **Backup:** settings, listening history, playlists and calculated ReplayGain as `noxio_YYYY-MM-DD.zip`, daily, weekly or monthly, the last
   five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
   estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).

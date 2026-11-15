@@ -41,6 +41,7 @@ import javax.inject.Singleton
 import org.oxycblt.auxio.BuildConfig
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.resolve
+import org.oxycblt.auxio.replaygain.ReplayGainStore
 import org.oxycblt.auxio.stats.PlayEvent
 import org.oxycblt.auxio.stats.SafeDocumentWriter
 import org.oxycblt.auxio.stats.StatsBackupWorker
@@ -49,10 +50,10 @@ import org.oxycblt.auxio.stats.StatsRepository
 import timber.log.Timber as L
 
 /**
- * The full backup: the settings, the listening history and the playlists in one zip, written on a
- * [BackupSchedule] into a folder the user picked. Every backup has its own file
- * (`noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much less
- * than the one before is not written on its own, see [BackupPolicy.check].
+ * The full backup: the settings, the listening history, the playlists and the measured ReplayGain
+ * in one zip, written on a [BackupSchedule] into a folder the user picked. Every backup has its own
+ * file (`noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much
+ * less than the one before is not written on its own, see [BackupPolicy.check].
  */
 @Singleton
 class AppBackup
@@ -60,6 +61,7 @@ internal constructor(
     private val context: Context,
     private val repository: StatsRepository,
     private val music: MusicRepository,
+    private val measuredGains: ReplayGainStore,
     private val openFolder: (Context, Uri) -> DocumentFile?,
     private val today: () -> LocalDate,
 ) {
@@ -68,10 +70,12 @@ internal constructor(
         @ApplicationContext context: Context,
         repository: StatsRepository,
         music: MusicRepository,
+        measuredGains: ReplayGainStore,
     ) : this(
         context,
         repository,
         music,
+        measuredGains,
         { c, uri -> DocumentFile.fromTreeUri(c, uri) },
         { LocalDate.now() },
     )
@@ -200,7 +204,7 @@ internal constructor(
                 .maxByOrNull { BackupPolicy.parse(it.name!!)!!.date }
         val lastInfo = newestGood?.let { readInfo(it) }
 
-        val data = collect(fallbackPlaylists = newestGood?.let { readPlaylists(it) })
+        val data = collect(fallback = newestGood?.let { read(it.uri) })
         val now = BackupCounts(data.info.plays, data.info.playlists)
         val verdict =
             BackupPolicy.check(now, lastInfo?.let { BackupCounts(it.plays, it.playlists) })
@@ -236,12 +240,13 @@ internal constructor(
     }
 
     /** Gather everything a backup holds. */
-    private suspend fun collect(fallbackPlaylists: List<BackupPlaylist>?): BackupData {
+    private suspend fun collect(fallback: BackupData?): BackupData {
         val history = ByteArrayOutputStream().also { repository.exportCsv(it) }.toByteArray()
         val plays = repository.summary(PlayEvent.BASELINE_TIME until Long.MAX_VALUE).plays
         // Without a loaded library the playlists cannot be read, the ones of the last backup are
         // carried over instead of being lost.
-        val playlists = readLibraryPlaylists() ?: fallbackPlaylists ?: emptyList()
+        val playlists = readLibraryPlaylists() ?: fallback?.playlists ?: emptyList()
+        val gains = readLibraryGains() ?: fallback?.gains ?: emptyList()
         val settings = settings()
         return BackupData(
             BackupInfo(
@@ -251,10 +256,12 @@ internal constructor(
                 plays = plays,
                 playlists = playlists.size,
                 settings = settings.size,
+                gains = gains.size,
             ),
             settings,
             history,
             playlists,
+            gains,
         )
     }
 
@@ -262,17 +269,22 @@ internal constructor(
         music.library?.playlists?.map { playlist ->
             BackupPlaylist(
                 playlist.name.resolve(context),
-                playlist.songs.map { song ->
-                    BackupSong(
-                        song.path.components.toString(),
-                        song.name.resolve(context),
-                        song.artists.joinToString(PlayEvent.ARTIST_SEPARATOR) {
-                            it.name.resolve(context)
-                        },
-                        song.album.name.resolve(context),
-                    )
-                },
+                playlist.songs.map(::backupSong),
             )
+        }
+
+    private fun backupSong(song: org.oxycblt.musikr.Song) =
+        BackupSong(
+            song.path.components.toString(),
+            song.name.resolve(context),
+            artistsOf(song),
+            song.album.name.resolve(context),
+        )
+
+    /** The measured ReplayGain values of the songs in the library, or null if it is not loaded. */
+    private fun readLibraryGains(): List<BackupGain>? =
+        music.library?.songs?.mapNotNull { song ->
+            measuredGains.gainFor(song)?.let { BackupGain(backupSong(song), it) }
         }
 
     /** The settings of the user, which is everything in the preferences except what is local. */
@@ -287,8 +299,6 @@ internal constructor(
         } catch (e: IOException) {
             null
         }
-
-    private fun readPlaylists(file: DocumentFile): List<BackupPlaylist>? = read(file.uri)?.playlists
 
     /** Read a backup file. Null if it is unreadable. */
     fun read(uri: Uri): BackupData? =
@@ -308,6 +318,8 @@ internal constructor(
         val missingSongs: Int,
         /** Whether the playlists could not be restored because the library is not loaded. */
         val libraryMissing: Boolean,
+        /** How many songs got their measured ReplayGain back. */
+        val gains: Int = 0,
     )
 
     /**
@@ -337,16 +349,19 @@ internal constructor(
         val library = music.library
         var created = 0
         var missing = 0
+        val byPath by lazy {
+            library?.songs.orEmpty().associateBy { it.path.components.toString() }
+        }
+        val byName by lazy {
+            library?.songs.orEmpty().groupBy {
+                songIdentity(
+                    it.name.resolve(context),
+                    artistsOf(it),
+                    it.album.name.resolve(context),
+                )
+            }
+        }
         if (library != null && data.playlists.isNotEmpty()) {
-            val byPath = library.songs.associateBy { it.path.components.toString() }
-            val byName =
-                library.songs.groupBy {
-                    songIdentity(
-                        it.name.resolve(context),
-                        artistsOf(it),
-                        it.album.name.resolve(context),
-                    )
-                }
             val known = library.playlists.map { it.name.resolve(context) }.toMutableSet()
             for (playlist in data.playlists) {
                 if (!known.add(playlist.name)) continue
@@ -363,12 +378,30 @@ internal constructor(
                 }
             }
         }
+        // Measured ReplayGain only fills in songs that have none yet.
+        var gains = 0
+        if (library != null) {
+            for (saved in data.gains) {
+                val song =
+                    byPath[saved.song.path]
+                        ?: byName[
+                                songIdentity(saved.song.title, saved.song.artist, saved.song.album)]
+                            ?.firstOrNull()
+                        ?: continue
+                if (measuredGains.gainFor(song) == null) {
+                    measuredGains.save(song, saved.gainDb)
+                    gains++
+                }
+            }
+        }
         return Restored(
             plays = plays,
             settings = data.settings.keys.count { !isLocal(it) },
             playlists = created,
             missingSongs = missing,
-            libraryMissing = library == null && data.playlists.isNotEmpty(),
+            libraryMissing =
+                library == null && (data.playlists.isNotEmpty() || data.gains.isNotEmpty()),
+            gains = gains,
         )
     }
 

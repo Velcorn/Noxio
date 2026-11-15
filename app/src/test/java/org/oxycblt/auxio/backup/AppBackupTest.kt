@@ -39,6 +39,9 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.oxycblt.auxio.music.MusicRepository
+import org.oxycblt.auxio.replaygain.MeasuredGain
+import org.oxycblt.auxio.replaygain.MeasuredGainDao
+import org.oxycblt.auxio.replaygain.ReplayGainStore
 import org.oxycblt.auxio.stats.PlayEvent
 import org.oxycblt.auxio.stats.StatsCsvImport
 import org.oxycblt.auxio.stats.StatsRepository
@@ -90,6 +93,20 @@ class AppBackupTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val repository = FakeRepository()
     private val music = mockk<MusicRepository>(relaxed = true)
+
+    private class FakeGainDao : MeasuredGainDao {
+        val saved = mutableMapOf<String, Float>()
+
+        override suspend fun save(gain: MeasuredGain) {
+            saved[gain.songUid] = gain.gainDb
+        }
+
+        override suspend fun all() = saved.map { MeasuredGain(it.key, it.value, 0) }
+
+        override suspend fun deleteAll() = saved.clear()
+    }
+
+    private val gains = ReplayGainStore(FakeGainDao())
     private var day = LocalDate.of(2026, 11, 9)
 
     @get:Rule val folder = TemporaryFolder()
@@ -97,7 +114,14 @@ class AppBackupTest {
     private val treeUri = Uri.parse("content://tree/backups")
 
     private fun backupInto(dir: File = folder.root) =
-        AppBackup(context, repository, music, { _, _ -> DocumentFile.fromFile(dir) }, { day })
+        AppBackup(
+                context,
+                repository,
+                music,
+                gains,
+                { _, _ -> DocumentFile.fromFile(dir) },
+                { day },
+            )
             .also { it.folder = treeUri }
 
     private fun files() = folder.root.list()!!.sorted()
@@ -109,7 +133,7 @@ class AppBackupTest {
 
     @Test
     fun withoutAFolderThereIsNothingToWrite() = runBlocking {
-        val backup = AppBackup(context, repository, music, { _, _ -> null }, { day })
+        val backup = AppBackup(context, repository, music, gains, { _, _ -> null }, { day })
         assertNull(backup.folder)
         assertNull(backup.folderName)
         assertEquals(AppBackup.Outcome.NoFolder, backup.run())
@@ -120,9 +144,12 @@ class AppBackupTest {
     fun theFolderIsRememberedAndCanBeForgotten() {
         val uri =
             Uri.parse("content://com.android.externalstorage.documents/tree/primary%3ADocuments")
-        val backup = AppBackup(context, repository, music, { _, _ -> null }, { day })
+        val backup = AppBackup(context, repository, music, gains, { _, _ -> null }, { day })
         backup.folder = uri
-        assertEquals(uri, AppBackup(context, repository, music, { _, _ -> null }, { day }).folder)
+        assertEquals(
+            uri,
+            AppBackup(context, repository, music, gains, { _, _ -> null }, { day }).folder,
+        )
         backup.folder = null
         assertNull(backup.folder)
     }
@@ -384,6 +411,7 @@ class AppBackupTest {
                 context,
                 repository,
                 withoutLibrary,
+                gains,
                 { _, _ -> DocumentFile.fromFile(folder.root) },
                 { day },
             )
@@ -453,6 +481,7 @@ class AppBackupTest {
                     context,
                     repository,
                     music,
+                    gains,
                     { _, _ -> DocumentFile.fromFile(folder.root) },
                     { day },
                 )
@@ -482,6 +511,7 @@ class AppBackupTest {
                     context,
                     repository,
                     libraryWith(listOf(a), listOf(playlist("Gym", listOf(a)))),
+                    gains,
                     { _, _ -> DocumentFile.fromFile(folder.root) },
                     { day },
                 )
@@ -495,6 +525,7 @@ class AppBackupTest {
                 context,
                 repository,
                 noLibrary,
+                gains,
                 { _, _ -> DocumentFile.fromFile(folder.root) },
                 { day },
             )
@@ -513,6 +544,7 @@ class AppBackupTest {
                 context,
                 repository,
                 music,
+                gains,
                 { _, _ -> DocumentFile.fromFile(folder.root) },
                 { day },
             )
@@ -575,5 +607,98 @@ class AppBackupTest {
             work.getWorkInfosByTag(org.oxycblt.auxio.stats.StatsBackupWorker::class.java.name).get()
         assertEquals(1, queued.size)
         assertTrue(work.getWorkInfosForUniqueWork(AppBackup.WORK_NAME).get().isEmpty())
+    }
+
+    // --- measured ReplayGain ---
+
+    @Test
+    fun theMeasuredReplayGainOfTheLibraryIsInTheBackup() = runBlocking {
+        val a = song("Music/a.mp3", "A", "X", "Al")
+        val b = song("Music/b.mp3", "B", "Y", "Bl")
+        val withLibrary = libraryWith(listOf(a, b))
+        gains.save(a, -4.5f)
+        val backup =
+            AppBackup(
+                    context,
+                    repository,
+                    withLibrary,
+                    gains,
+                    { _, _ -> DocumentFile.fromFile(folder.root) },
+                    { day },
+                )
+                .also { it.folder = treeUri }
+        backup.run()
+        val read = backup.read(Uri.fromFile(File(folder.root, "noxio_2026-11-09.zip")))!!
+        assertEquals(1, read.info.gains)
+        assertEquals(
+            listOf(BackupGain(BackupSong("Music/a.mp3", "A", "X", "Al"), -4.5f)),
+            read.gains,
+        )
+    }
+
+    @Test
+    fun restoringFillsInMeasuredReplayGainOnlyWhereThereIsNone() = runBlocking {
+        val a = song("Music/a.mp3", "A", "X", "Al")
+        val b = song("Music/b.mp3", "B", "Y", "Bl")
+        val withLibrary = libraryWith(listOf(a, b))
+        gains.save(b, -1f)
+        val backup =
+            AppBackup(
+                context,
+                repository,
+                withLibrary,
+                gains,
+                { _, _ -> DocumentFile.fromFile(folder.root) },
+                { day },
+            )
+        val restored =
+            backup.restore(
+                data(emptyMap())
+                    .copy(
+                        gains =
+                            listOf(
+                                BackupGain(BackupSong("Music/a.mp3", "A", "X", "Al"), -4.5f),
+                                // Found by its tags when the path has changed.
+                                BackupGain(BackupSong("Other/b.mp3", "B", "Y", "Bl"), -9f),
+                                BackupGain(BackupSong("gone.mp3", "Gone", "Z", "Zl"), -2f),
+                            )
+                    )
+            )
+        assertEquals(1, restored.gains)
+        assertEquals(-4.5f, gains.gainFor(a))
+        assertEquals(-1f, gains.gainFor(b))
+    }
+
+    @Test
+    fun measuredReplayGainOfALostLibraryIsCarriedOverFromTheLastBackup() = runBlocking {
+        val a = song("Music/a.mp3", "A", "X", "Al")
+        gains.save(a, -4.5f)
+        val withLibrary = libraryWith(listOf(a))
+        AppBackup(
+                context,
+                repository,
+                withLibrary,
+                gains,
+                { _, _ -> DocumentFile.fromFile(folder.root) },
+                { day },
+            )
+            .also { it.folder = treeUri }
+            .run()
+        val withoutLibrary = mockk<MusicRepository>(relaxed = true)
+        io.mockk.every { withoutLibrary.library } returns null
+        day = day.plusDays(1)
+        val later =
+            AppBackup(
+                    context,
+                    repository,
+                    withoutLibrary,
+                    gains,
+                    { _, _ -> DocumentFile.fromFile(folder.root) },
+                    { day },
+                )
+                .also { it.folder = treeUri }
+        later.run()
+        val read = later.read(Uri.fromFile(File(folder.root, "noxio_2026-11-10.zip")))!!
+        assertEquals(1, read.gains.size)
     }
 }

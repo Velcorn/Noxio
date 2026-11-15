@@ -35,6 +35,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.playback.PlaybackViewModel
+import org.oxycblt.auxio.playback.formatDurationMs
 import org.oxycblt.auxio.replaygain.ReplayGainScanner
 import org.oxycblt.auxio.replaygain.ReplayGainService
 import org.oxycblt.auxio.replaygain.ScanState
@@ -64,6 +65,7 @@ class AudioPreferenceFragment : BasePreferenceFragment(R.xml.preferences_audio) 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupReplayGainScan()
+        setupReplayGainClear()
         findPreference<androidx.preference.Preference>(getString(R.string.set_key_equalizer))
             ?.setOnPreferenceClickListener {
                 openEqualizer()
@@ -112,12 +114,57 @@ class AudioPreferenceFragment : BasePreferenceFragment(R.xml.preferences_audio) 
                                         R.string.fmt_replay_gain_done,
                                         state.lastMeasured,
                                         state.lastFailed,
+                                        state.durationMs.formatDurationMs(true),
                                     )
                                 } else {
                                     getString(R.string.set_replay_gain_scan_desc)
                                 }
                         }
                 }
+            }
+        }
+    }
+
+    /** The measured values can be deleted, which sends every song back to its tags. */
+    private fun setupReplayGainClear() {
+        val preference =
+            findPreference<androidx.preference.Preference>(
+                getString(R.string.set_key_replay_gain_clear)
+            ) ?: return
+        fun showCount() {
+            val count = scanner.measuredCount
+            preference.summary =
+                if (count == 0) {
+                    getString(R.string.set_replay_gain_clear_none)
+                } else {
+                    getString(R.string.fmt_replay_gain_clear_count, count)
+                }
+        }
+        preference.setOnPreferenceClickListener {
+            val context = requireContext()
+            val count = scanner.measuredCount
+            when {
+                scanner.state.value is ScanState.Running ->
+                    context.showToast(R.string.err_replay_gain_busy)
+                count == 0 -> context.showToast(R.string.set_replay_gain_clear_none)
+                else ->
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.set_replay_gain_clear)
+                        .setMessage(getString(R.string.fmt_replay_gain_clear_ask, count))
+                        .setPositiveButton(R.string.lbl_delete) { _, _ ->
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                scanner.clearMeasured()
+                                showCount()
+                            }
+                        }
+                        .setNegativeButton(R.string.lbl_cancel, null)
+                        .show()
+            }
+            true
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                scanner.state.collect { showCount() }
             }
         }
     }
