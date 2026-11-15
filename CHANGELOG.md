@@ -3,6 +3,20 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.13.0
+
+## What's New
+- The backup holds the calculated ReplayGain, and a restore puts it back for songs that have none yet
+- *Delete calculated ReplayGain* in Settings > Playback removes the loudness Noxio measured (the tags in your files are not touched)
+- A song's details show the ReplayGain Noxio measured
+- The result of a calculation shows how long it took
+
+## What's Improved
+- Calculating ReplayGain measures up to 6 songs at once and its notification says "Calculating ReplayGain"
+
+## What's Fixed
+- The notification of the ReplayGain calculation no longer stays after it is done
+
 ## v1.12.0
 
 ## What's New
