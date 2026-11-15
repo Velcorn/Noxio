@@ -21,18 +21,17 @@ package org.oxycblt.auxio.playback.state
 /** Noxio: when a queue can take new song objects without the player starting over. */
 object QueueSwap {
     /**
-     * Whether [new] is [current] with other objects for the same songs: the same songs (by UID and
-     * file) in the same order, the same shuffle and the same song playing. Then the player's items
-     * can be replaced in place.
+     * Whether [new] is [current] with other objects for the same songs: the same files in the same
+     * order (the tags may have changed), the same shuffle and the same song playing. Then the
+     * player's items can be replaced in place.
      */
     fun isSameQueue(current: RawQueue, new: RawQueue): Boolean =
         current.heap.isNotEmpty() &&
             current.heap.size == new.heap.size &&
             current.heapIndex == new.heapIndex &&
             current.shuffledMapping == new.shuffledMapping &&
-            current.heap.indices.all {
-                current.heap[it].uid == new.heap[it].uid && current.heap[it].uri == new.heap[it].uri
-            }
+            // By file: a song whose tags were edited is the same file with a new UID.
+            current.heap.indices.all { current.heap[it].uri == new.heap[it].uri }
 
     /**
      * Whether [new] is the whole queue around the only song of [current] (a song restored before

@@ -49,6 +49,10 @@ class ReplayGainStoreTest {
         override suspend fun all() = saved.values.toList()
 
         override suspend fun deleteAll() = saved.clear()
+
+        override suspend fun delete(songUid: String) {
+            saved.remove(songUid)
+        }
     }
 
     private fun uid(name: String) =
@@ -117,5 +121,24 @@ class ReplayGainStoreTest {
         assertEquals(-3f, store.gainFor(a))
         assertTrue(store.isComplete(a))
         assertFalse(store.isComplete(b))
+    }
+
+    @Test
+    fun aSongWithANewUidKeepsWhatWasMeasured() = runBlocking {
+        val dao = FakeDao()
+        val store = ReplayGainStore(dao, music)
+        store.save(a, -2f, loudness(-20.0))
+        store.save(b, -3f, loudness(-20.0, peak = 0.75f))
+        store.updateAlbums()
+        val renamed = song("a2")
+        every { album.songs } returns listOf(renamed, b)
+        store.rekey(mapOf(a.uid to renamed.uid))
+        assertNull(store.gainFor(a))
+        assertEquals(-2f, store.gainFor(renamed))
+        assertTrue(store.isComplete(renamed))
+        assertEquals(setOf("a2", "b"), dao.saved.keys)
+        // The album is still complete, with its loudest sample.
+        assertNotNull(store.albumGainFor(album))
+        assertEquals(0.75f, store.albumPeakFor(album))
     }
 }

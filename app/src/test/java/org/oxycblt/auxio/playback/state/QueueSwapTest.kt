@@ -78,6 +78,17 @@ class QueueSwapTest {
     }
 
     @Test
+    fun aSongWithEditedTagsIsStillTheSameQueue() {
+        // Its UID changed with its tags, the file is the same.
+        val edited =
+            mockk<Song> {
+                every { uid } returns uids[2]
+                every { uri } returns Uri.parse("content://media/0")
+            }
+        assertTrue(QueueSwap.isSameQueue(queue(song(0), song(1)), queue(edited, song(1))))
+    }
+
+    @Test
     fun aSongWhoseFileMovedIsNot() {
         // The player would have to open the new file, so it starts over.
         assertFalse(

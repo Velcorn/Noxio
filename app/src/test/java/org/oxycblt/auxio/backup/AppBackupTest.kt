@@ -105,6 +105,10 @@ class AppBackupTest {
         override suspend fun all() = saved.values.toList()
 
         override suspend fun deleteAll() = saved.clear()
+
+        override suspend fun delete(songUid: String) {
+            saved.remove(songUid)
+        }
     }
 
     private val gains = ReplayGainStore(FakeGainDao(), music)

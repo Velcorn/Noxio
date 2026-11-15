@@ -628,7 +628,6 @@ constructor(
             add(SongProperty(R.string.lbl_name, SongProperty.Value.MusicName(song)))
             add(SongProperty(R.string.lbl_album, SongProperty.Value.MusicName(song.album)))
             add(SongProperty(R.string.lbl_artists, SongProperty.Value.MusicNames(song.artists)))
-            add(SongProperty(R.string.lbl_genres, SongProperty.Value.MusicNames(song.genres)))
             song.date?.let { add(SongProperty(R.string.lbl_date, SongProperty.Value.ItemDate(it))) }
             song.track?.let {
                 add(SongProperty(R.string.lbl_track, SongProperty.Value.Number(it, null)))

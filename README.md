@@ -21,8 +21,9 @@ Noxio is a fork of [Auxio](https://github.com/OxygenCobalt/Auxio) by Alexander C
 music player. The name merges **Auxio** with **Nocturne**: it started because a player to fall asleep to needs a sleep
 timer. Noxio is **not** affiliated with the Auxio project, so please don't report its issues upstream.
 
-**Noxio only reads your files.** It never edits tags or writes to your music. What it works out, like listening
-stats, stays in its own database or in files you export.
+**Noxio only changes your files when you ask it to:** when you edit a song's tags, or write the measured
+ReplayGain into them. Android asks before every change. What it works out, like listening stats, stays in its own
+database or in files you export.
 
 ## What's different from Auxio
 
@@ -31,10 +32,11 @@ stats, stays in its own database or in files you export.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
   cards to share or save. A **year in review** with five cards to swipe through.
 - **ReplayGain calculation:** Settings > Playback > Calculate ReplayGain measures the loudness (EBU R128) of songs, and
-  of whole albums once all their songs are, in the background, so quiet and loud songs play alike. Tags are preferred by default, a switch uses the measured value
-  instead, and the measured values can be deleted. A song's details show what Noxio measured. Values stay in Noxio
-  (and in its backup), your files are not changed. The target is the standard -18 LUFS
-  (ReplayGain 2.0).
+  of whole albums once all their songs are, in the background, so quiet and loud songs play alike. Tags are preferred
+  by default, a switch uses the measured value instead. Values stay in Noxio (and in its backup) unless you write them
+  into the files' tags. The target is the standard -18 LUFS (ReplayGain 2.0).
+- **Tag editing:** Song properties > Edit tags changes title, artists, album, album artists, date, track and disc.
+  Playlists and measured values follow the song. ReplayGain is written only from what Noxio measured.
 - **Backup:** settings, listening history, playlists and calculated ReplayGain as `noxio_YYYY-MM-DD.zip`, daily, weekly
   or monthly, the last five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
 - **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)

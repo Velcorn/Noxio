@@ -25,6 +25,8 @@
 #include "util.h"
 
 #include "taglib/fileref.h"
+#include "taglib/tfilestream.h"
+#include "taglib/tpropertymap.h"
 #include "taglib/flacfile.h"
 #include "taglib/mp4file.h"
 #include "taglib/mp4properties.h"
@@ -319,5 +321,91 @@ Java_org_oxycblt_musikr_metadata_TagLibJNI_openNative(JNIEnv *env,
         LOGE("Unable to parse metadata in %s: %s", name.c_str(), e.what());
         delete overriddenFile;
         return metadataResultProviderFailed(env);
+    }
+}
+
+// Noxio: write tags. The file is opened from [fd] (read and write; TagLib closes it), and every
+// key is replaced by its values (TagLib property names, like TITLE or REPLAYGAIN_TRACK_GAIN), or
+// removed when it has none. Keys that are not given are left alone. Returns whether it was saved.
+extern "C" JNIEXPORT jboolean JNICALL
+Java_org_oxycblt_musikr_metadata_TagWriter_writeNative(JNIEnv *env,
+        jobject /* this */,
+        jint fd,
+        jstring jExtension,
+        jobjectArray keys,
+        jobjectArray values) {
+    TagLib::File *contentFile = nullptr;
+    try {
+        TagLib::FileStream stream {fd, false};
+        if (!stream.isOpen() || stream.readOnly()) {
+            LOGE("Unable to open file descriptor %d for writing", fd);
+            return false;
+        }
+        // A descriptor has no file name, so TagLib cannot go by the extension itself. The
+        // format is picked from the extension given, then from the content.
+        const char *rawExtension = env->GetStringUTFChars(jExtension, nullptr);
+        std::string extension {rawExtension};
+        env->ReleaseStringUTFChars(jExtension, rawExtension);
+        auto style = TagLib::AudioProperties::Fast;
+        if (extension == "mp3" || extension == "mp2" || extension == "mpga") {
+            contentFile = new TagLib::MPEG::File(&stream, false, style);
+        } else if (extension == "flac") {
+            contentFile = new TagLib::FLAC::File(&stream, false, style);
+        } else if (extension == "ogg" || extension == "oga") {
+            contentFile = new TagLib::Ogg::Vorbis::File(&stream, false, style);
+        } else if (extension == "opus") {
+            contentFile = new TagLib::Ogg::Opus::File(&stream, false, style);
+        } else if (extension == "m4a" || extension == "mp4" || extension == "m4b"
+                || extension == "aac" || extension == "alac") {
+            contentFile = new TagLib::MP4::File(&stream, false, style);
+        } else if (extension == "wav") {
+            contentFile = new TagLib::RIFF::WAV::File(&stream, false, style);
+        }
+        if (contentFile != nullptr && !contentFile->isValid()) {
+            delete contentFile;
+            contentFile = nullptr;
+        }
+        if (contentFile == nullptr) {
+            stream.seek(0, TagLib::IOStream::Beginning);
+            contentFile = createFileFromContent(&stream, false, style);
+        }
+        TagLib::File *file = contentFile;
+        if (file == nullptr) {
+            LOGE("Unable to detect the format of file descriptor %d", fd);
+            return false;
+        }
+        TagLib::PropertyMap properties = file->properties();
+        jsize count = env->GetArrayLength(keys);
+        for (jsize i = 0; i < count; i++) {
+            auto jKey = (jstring) env->GetObjectArrayElement(keys, i);
+            const char *rawKey = env->GetStringUTFChars(jKey, nullptr);
+            TagLib::String key {rawKey, TagLib::String::UTF8};
+            env->ReleaseStringUTFChars(jKey, rawKey);
+            env->DeleteLocalRef(jKey);
+            auto jValues = (jobjectArray) env->GetObjectArrayElement(values, i);
+            jsize valueCount = env->GetArrayLength(jValues);
+            TagLib::StringList list;
+            for (jsize j = 0; j < valueCount; j++) {
+                auto jValue = (jstring) env->GetObjectArrayElement(jValues, j);
+                const char *rawValue = env->GetStringUTFChars(jValue, nullptr);
+                list.append(TagLib::String {rawValue, TagLib::String::UTF8});
+                env->ReleaseStringUTFChars(jValue, rawValue);
+                env->DeleteLocalRef(jValue);
+            }
+            env->DeleteLocalRef(jValues);
+            if (list.isEmpty()) {
+                properties.erase(key);
+            } else {
+                properties.replace(key, list);
+            }
+        }
+        file->setProperties(properties);
+        bool saved = file->save();
+        delete contentFile;
+        return saved;
+    } catch (std::exception &e) {
+        LOGE("Unable to write tags to file descriptor %d: %s", fd, e.what());
+        delete contentFile;
+        return false;
     }
 }

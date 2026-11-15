@@ -53,3 +53,5 @@ replaygain/ReplayGainChoice.kt
 replaygain/ReplayGainStore.kt
 stats/TextWrap.kt
 playback/state/QueueSwap.kt
+tags/TagEdit.kt
+tags/TagEditMigration.kt

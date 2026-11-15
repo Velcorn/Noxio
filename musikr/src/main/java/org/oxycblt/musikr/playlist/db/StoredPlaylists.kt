@@ -30,6 +30,12 @@ abstract class StoredPlaylists {
 
     internal abstract suspend fun read(): List<PlaylistFile>
 
+    /**
+     * Noxio: point the playlists at songs whose UID changed (their tags were edited), keeping their
+     * place. Returns whether a playlist was changed.
+     */
+    abstract suspend fun replaceSongs(renamed: Map<Music.UID, Music.UID>): Boolean
+
     companion object {
         fun from(context: Context): StoredPlaylists =
             StoredPlaylistsImpl(PlaylistDatabase.from(context).playlistDao())
@@ -41,6 +47,18 @@ private class StoredPlaylistsImpl(private val playlistDao: PlaylistDao) : Stored
         val info = PlaylistInfo(Music.UID.auxio(Music.UID.Item.PLAYLIST), name)
         playlistDao.insertPlaylist(RawPlaylist(info, songs.map { PlaylistSong(it.uid) }))
         return StoredPlaylistHandle(info, playlistDao)
+    }
+
+    override suspend fun replaceSongs(renamed: Map<Music.UID, Music.UID>): Boolean {
+        if (renamed.isEmpty()) return false
+        var changed = false
+        for (raw in playlistDao.readRawPlaylists()) {
+            if (raw.songs.none { it.songUid in renamed }) continue
+            val songs = raw.songs.map { PlaylistSong(renamed[it.songUid] ?: it.songUid) }
+            playlistDao.replacePlaylistSongs(raw.playlistInfo.playlistUid, songs)
+            changed = true
+        }
+        return changed
     }
 
     override suspend fun read() =

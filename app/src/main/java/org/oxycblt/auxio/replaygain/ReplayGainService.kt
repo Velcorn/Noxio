@@ -48,6 +48,7 @@ import org.oxycblt.auxio.R
 @AndroidEntryPoint
 class ReplayGainService : Service() {
     @Inject lateinit var scanner: ReplayGainScanner
+    @Inject lateinit var tagWriter: ReplayGainTagWriter
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private var scan: Job? = null
@@ -71,24 +72,39 @@ class ReplayGainService : Service() {
                 .setName(getString(R.string.lbl_replay_gain_scan))
                 .build()
         )
+        // Noxio: the same service writes the measured values into the files.
+        val writing = intent?.action == ACTION_WRITE
+        val title =
+            if (writing) R.string.lbl_replay_gain_writing else R.string.lbl_replay_gain_calculating
         ServiceCompat.startForeground(
             this,
             NOTIFICATION,
-            notification(0, 0),
+            notification(title, 0, 0),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
         )
         progress =
-            scanner.state
-                .onEach {
-                    if (it is ScanState.Running) {
-                        @Suppress("MissingPermission")
-                        manager.notify(NOTIFICATION, notification(it.done, it.total))
+            if (writing) {
+                tagWriter.state
+                    .onEach {
+                        if (it is TagWriteState.Running) {
+                            @Suppress("MissingPermission")
+                            manager.notify(NOTIFICATION, notification(title, it.done, it.total))
+                        }
                     }
-                }
-                .launchIn(scope)
+                    .launchIn(scope)
+            } else {
+                scanner.state
+                    .onEach {
+                        if (it is ScanState.Running) {
+                            @Suppress("MissingPermission")
+                            manager.notify(NOTIFICATION, notification(title, it.done, it.total))
+                        }
+                    }
+                    .launchIn(scope)
+            }
         scan = scope.launch {
             try {
-                scanner.scan()
+                if (writing) tagWriter.write() else scanner.scan()
             } finally {
                 finish()
             }
@@ -112,10 +128,10 @@ class ReplayGainService : Service() {
         super.onDestroy()
     }
 
-    private fun notification(done: Int, total: Int) =
+    private fun notification(title: Int, done: Int, total: Int) =
         NotificationCompat.Builder(this, CHANNEL)
             .setSmallIcon(R.drawable.ic_indexer_24)
-            .setContentTitle(getString(R.string.lbl_replay_gain_calculating))
+            .setContentTitle(getString(title))
             .setContentText(getString(R.string.fmt_replay_gain_progress, done, total))
             .setProgress(total, done, total == 0)
             .setOngoing(true)
@@ -136,6 +152,7 @@ class ReplayGainService : Service() {
         private const val CHANNEL = "org.oxycblt.auxio.channel.REPLAYGAIN"
         private const val NOTIFICATION = 0xA0A2
         private const val ACTION_STOP = "de.devfin.noxio.replaygain.STOP"
+        private const val ACTION_WRITE = "de.devfin.noxio.replaygain.WRITE"
 
         /** Start measuring in the background. */
         fun start(context: Context) {
@@ -145,7 +162,15 @@ class ReplayGainService : Service() {
             )
         }
 
-        /** Stop a running scan. What was measured is kept. */
+        /** Write the values [ReplayGainTagWriter.plan] worked out into the files. */
+        fun write(context: Context) {
+            ContextCompat.startForegroundService(
+                context,
+                Intent(context, ReplayGainService::class.java).setAction(ACTION_WRITE),
+            )
+        }
+
+        /** Stop a running scan or write. What was done is kept. */
         fun stop(context: Context) {
             context.startService(
                 Intent(context, ReplayGainService::class.java).setAction(ACTION_STOP)

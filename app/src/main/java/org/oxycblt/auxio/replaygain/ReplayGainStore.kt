@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.musikr.Album
+import org.oxycblt.musikr.Music
 import org.oxycblt.musikr.Song
 
 /**
@@ -77,6 +78,8 @@ interface MeasuredGainDao {
     @Query("SELECT * FROM MeasuredGain") suspend fun all(): List<MeasuredGain>
 
     @Query("DELETE FROM MeasuredGain") suspend fun deleteAll()
+
+    @Query("DELETE FROM MeasuredGain WHERE songUid = :songUid") suspend fun delete(songUid: String)
 }
 
 @Database(entities = [MeasuredGain::class], version = 2, exportSchema = false)
@@ -107,6 +110,7 @@ constructor(private val dao: MeasuredGainDao, private val music: MusicRepository
     /** The songs whose measurement can be part of an album adjustment. */
     private val complete = ConcurrentHashMap.newKeySet<String>()
     private val albumGains = ConcurrentHashMap<String, Float>()
+    private val albumPeaks = ConcurrentHashMap<String, Float>()
 
     // One at a time, so the album adjustments are never worked out from half-loaded values.
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -134,6 +138,9 @@ constructor(private val dao: MeasuredGainDao, private val music: MusicRepository
      * The measured album adjustment in dB for [album], or null if not all its songs are measured.
      */
     fun albumGainFor(album: Album): Float? = albumGains[album.uid.toString()]
+
+    /** The highest sample of [album], if its album adjustment was measured. */
+    fun albumPeakFor(album: Album): Float? = albumPeaks[album.uid.toString()]
 
     /** Whether the song has been measured. */
     fun isMeasured(song: Song) = gains.containsKey(song.uid.toString())
@@ -172,18 +179,39 @@ constructor(private val dao: MeasuredGainDao, private val music: MusicRepository
         val albums = music.library?.albums ?: return
         val measured = dao.all().associateBy { it.songUid }
         val result = HashMap<String, Float>()
+        val peaks = HashMap<String, Float>()
         for (album in albums) {
             val songs = album.songs.map { measured[it.uid.toString()]?.loudness() }
-            AlbumGain.of(songs)?.let { result[album.uid.toString()] = it }
+            AlbumGain.of(songs)?.let {
+                result[album.uid.toString()] = it
+                peaks[album.uid.toString()] = songs.maxOf { song -> song!!.peak }
+            }
         }
         albumGains.keys.retainAll(result.keys)
         albumGains.putAll(result)
+        albumPeaks.keys.retainAll(peaks.keys)
+        albumPeaks.putAll(peaks)
     }
+
+    /** Move what was measured to the new UIDs of songs whose tags were edited ([renamed]). */
+    suspend fun rekey(renamed: Map<Music.UID, Music.UID>) =
+        withContext(worker) {
+            val rows = dao.all().associateBy { it.songUid }
+            for ((old, new) in renamed) {
+                val row = rows[old.toString()] ?: continue
+                dao.save(row.copy(songUid = new.toString()))
+                dao.delete(old.toString())
+                gains.remove(old.toString())?.let { gains[new.toString()] = it }
+                if (complete.remove(old.toString())) complete.add(new.toString())
+            }
+            updateAlbumsNow()
+        }
 
     suspend fun clear() {
         gains.clear()
         complete.clear()
         albumGains.clear()
+        albumPeaks.clear()
         withContext(worker) { dao.deleteAll() }
     }
 }

@@ -51,6 +51,11 @@
             app:title="@string/lbl_replay_gain_scan" />
 
         <Preference
+            app:key="@string/set_key_replay_gain_write"
+            app:summary="@string/set_replay_gain_write_desc"
+            app:title="@string/set_replay_gain_write" />
+
+        <Preference
             app:key="@string/set_key_replay_gain_clear"
             app:title="@string/set_replay_gain_clear" />
 

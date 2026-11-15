@@ -36,6 +36,7 @@ import org.oxycblt.auxio.music.locations.LocationMode
 import org.oxycblt.auxio.playback.state.PlaybackStateManager
 import org.oxycblt.auxio.util.getSystemServiceCompat
 import org.oxycblt.musikr.MusicParent
+import org.oxycblt.musikr.Song
 import org.oxycblt.musikr.fs.mediastore.MediaStore
 import org.oxycblt.musikr.fs.saf.SAF
 import timber.log.Timber as L
@@ -159,11 +160,16 @@ private constructor(
         // to a listener as it is bad practice for a shared object to attach to
         // the listener system of another.
         playbackManager.toSavedState()?.let { savedState ->
+            // Noxio: a song whose tags were edited can have a new UID, its file finds it.
+            fun Song.inLibrary() = library.findSong(uid) ?: library.findSongByPath(path)
+            val heap = savedState.heap.map { song -> song?.inLibrary() }
+            val playing = savedState.heap.indexOfFirst { it?.uid == savedState.songUid }
             playbackManager.applySavedState(
                 savedState.copy(
                     parent =
                         savedState.parent?.let { musicRepository.find(it.uid) as? MusicParent? },
-                    heap = savedState.heap.map { song -> song?.let { library.findSong(it.uid) } },
+                    heap = heap,
+                    songUid = heap.getOrNull(playing)?.uid ?: savedState.songUid,
                 ),
                 true,
             )
