@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.17.1
+
+## What's Fixed
+- The keyboard opens when editing a song's tags
+
 ## v1.17.0
 
 ## What's New

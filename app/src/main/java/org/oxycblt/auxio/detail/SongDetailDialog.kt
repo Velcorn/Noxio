@@ -21,6 +21,8 @@ package org.oxycblt.auxio.detail
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -99,6 +101,7 @@ class SongDetailDialog : ViewBindingMaterialDialogFragment<DialogSongDetailBindi
     override fun onStart() {
         super.onStart()
         val dialog = requireDialog() as AlertDialog
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
             if (editAdapter == null) startEditing() else stopEditing()
         }
@@ -115,6 +118,20 @@ class SongDetailDialog : ViewBindingMaterialDialogFragment<DialogSongDetailBindi
         val adapter = TagEditAdapter(original, editSeparator)
         editAdapter = adapter
         requireBinding().detailProperties.adapter = adapter
+        requireBinding().detailProperties.post {
+            val firstField =
+                requireBinding()
+                    .detailProperties
+                    .findViewHolderForAdapterPosition(0)
+                    ?.itemView
+                    ?.findViewById<android.widget.EditText>(R.id.tag_value) ?: return@post
+            firstField.requestFocus()
+            firstField.post {
+                val inputMethod =
+                    firstField.context.getSystemService(InputMethodManager::class.java)
+                inputMethod?.showSoftInput(firstField, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
         updateButtons()
     }
 
