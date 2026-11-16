@@ -45,7 +45,6 @@ import org.oxycblt.auxio.music.MusicType
 import org.oxycblt.auxio.music.PrimaryAlbumArtists
 import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackSettings
-import org.oxycblt.auxio.replaygain.ReplayGainStore
 import org.oxycblt.auxio.util.Event
 import org.oxycblt.auxio.util.MutableEvent
 import org.oxycblt.auxio.util.unlikelyToBeNull
@@ -72,7 +71,6 @@ constructor(
     private val listSettings: ListSettings,
     private val musicRepository: MusicRepository,
     private val playbackSettings: PlaybackSettings,
-    private val measuredGains: ReplayGainStore,
     private val homeSettings: HomeSettings,
     detailGeneratorFactory: DetailGenerator.Factory,
 ) : ViewModel(), DetailGenerator.Invalidator {
@@ -647,15 +645,18 @@ constructor(
     private fun refreshAudioInfo(song: Song) {
         currentSongProperties.value = buildList {
             add(SongProperty(R.string.lbl_name, SongProperty.Value.MusicName(song)))
-            add(SongProperty(R.string.lbl_album, SongProperty.Value.MusicName(song.album)))
             add(SongProperty(R.string.lbl_artists, SongProperty.Value.MusicNames(song.artists)))
-            song.date?.let { add(SongProperty(R.string.lbl_date, SongProperty.Value.ItemDate(it))) }
+            add(SongProperty(R.string.lbl_album, SongProperty.Value.MusicName(song.album)))
+            add(
+                SongProperty(
+                    R.string.lbl_album_artists,
+                    SongProperty.Value.MusicNames(song.album.artists),
+                )
+            )
             song.track?.let {
                 add(SongProperty(R.string.lbl_track, SongProperty.Value.Number(it, null)))
             }
-            song.disc?.let {
-                add(SongProperty(R.string.lbl_disc, SongProperty.Value.Number(it.number, it.name)))
-            }
+            song.date?.let { add(SongProperty(R.string.lbl_date, SongProperty.Value.ItemDate(it))) }
             add(SongProperty(R.string.lbl_path, SongProperty.Value.ItemPath(song.path)))
             add(SongProperty(R.string.lbl_size, SongProperty.Value.Size(song.size)))
             add(SongProperty(R.string.lbl_duration, SongProperty.Value.Duration(song.durationMs)))
@@ -672,18 +673,6 @@ constructor(
             }
             song.replayGainAdjustment.album?.let {
                 add(SongProperty(R.string.lbl_replaygain_album, SongProperty.Value.Decibels(it)))
-            }
-            // Noxio: the loudness it measured itself, if it has.
-            measuredGains.gainFor(song)?.let {
-                add(SongProperty(R.string.lbl_replaygain_measured, SongProperty.Value.Decibels(it)))
-            }
-            measuredGains.albumGainFor(song.album)?.let {
-                add(
-                    SongProperty(
-                        R.string.lbl_replaygain_measured_album,
-                        SongProperty.Value.Decibels(it),
-                    )
-                )
             }
         }
     }

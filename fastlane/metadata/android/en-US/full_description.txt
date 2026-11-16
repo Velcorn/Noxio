@@ -4,9 +4,8 @@ Noxio is a local music player for Android, built for listening through the night
 
 - Sleep timer: hold play/pause, pick 30 min, 60 min or your own time, finish the last song, fade out, shake the phone to restart it. The countdown shows in the play button and in a quiet notification with +10 min and Stop
 - Listening stats: top artists, albums and songs per week, month, year or all time, a closer look at each one, and colorful cards to share or save as an image
-- ReplayGain calculation: measures the loudness of your songs in the background so quiet and loud songs play alike, with your own tags preferred; the values can also be written into the tags
 - Import your play counts from Musicolet, weekly and monthly lists included
-- Backup of settings, listening history, playlists and calculated ReplayGain on a schedule you pick, with a safeguard against an empty backup replacing a good one, and restore
+- Backup of settings, listening history and playlists on a schedule you pick, with a safeguard against an empty backup replacing a good one, and restore
 - One-handed layout: search, sort and tabs at the bottom, a floating shuffle button, and gestures instead of back buttons
 - Queue with search and sort, opened by swiping up on the player, and clear queue; playlists with search and sort
 - Loads your library about 2.5 to 3 times faster
@@ -21,4 +20,4 @@ Noxio is a local music player for Android, built for listening through the night
 - External equalizer support
 - Completely private and offline
 
-Noxio changes your music files only when you edit their tags or write ReplayGain into them, and Android asks first. It is a personal project, not affiliated with the Auxio project.
+Noxio changes your music files only when you edit their tags, and Android asks first. It is a personal project, not affiliated with the Auxio project.

@@ -57,4 +57,7 @@ data class Interpretation(
 
     /** What separators delimit multi-value audio tags. */
     val separators: Separators,
+
+    /** Separators for artist and album-artist names, independent of other tags. */
+    val artistSeparators: Separators = separators,
 )

@@ -18,8 +18,6 @@
  
 package org.oxycblt.auxio.tags
 
-import java.util.Locale
-import kotlin.math.abs
 import org.oxycblt.musikr.Song
 import org.oxycblt.musikr.metadata.TagWriter
 import org.oxycblt.musikr.tag.Date
@@ -31,9 +29,8 @@ enum class TagField(val key: String) {
     ARTIST(TagWriter.ARTIST),
     ALBUM(TagWriter.ALBUM),
     ALBUM_ARTIST(TagWriter.ALBUM_ARTIST),
-    DATE(TagWriter.DATE),
     TRACK(TagWriter.TRACK),
-    DISC(TagWriter.DISC),
+    DATE(TagWriter.DATE),
 }
 
 /** What came of checking an edit. */
@@ -47,19 +44,19 @@ sealed interface TagEditResult {
 
 /** Noxio: editing the tags of a song, as text. */
 object TagEdit {
-    /** How several artists are shown in one field, and split again when saved. */
-    const val SEPARATOR = "; "
+    private fun delimiter(separator: String) =
+        if (separator == ";" || separator == ",") "$separator " else " $separator "
 
     /** The tags of [song] as the editor shows them. Unknown names are empty. */
-    fun of(song: Song): Map<TagField, String> =
+    fun of(song: Song, separator: String): Map<TagField, String> =
         mapOf(
             TagField.TITLE to song.name.text(),
-            TagField.ARTIST to song.artists.joinToString(SEPARATOR) { it.name.text() },
+            TagField.ARTIST to song.artists.joinToString(delimiter(separator)) { it.name.text() },
             TagField.ALBUM to song.album.name.text(),
-            TagField.ALBUM_ARTIST to song.album.artists.joinToString(SEPARATOR) { it.name.text() },
-            TagField.DATE to (song.date?.toString() ?: ""),
+            TagField.ALBUM_ARTIST to
+                song.album.artists.joinToString(delimiter(separator)) { it.name.text() },
             TagField.TRACK to (song.track?.toString() ?: ""),
-            TagField.DISC to (song.disc?.number?.toString() ?: ""),
+            TagField.DATE to (song.date?.toString() ?: ""),
         )
 
     private fun Name.text() = (this as? Name.Known)?.raw ?: ""
@@ -68,14 +65,18 @@ object TagEdit {
      * Check what was edited: the fields that differ from [before] (after trimming) and are valid. A
      * field that was emptied is removed from the file.
      */
-    fun changes(before: Map<TagField, String>, after: Map<TagField, String>): TagEditResult {
+    fun changes(
+        before: Map<TagField, String>,
+        after: Map<TagField, String>,
+        separator: String,
+    ): TagEditResult {
         val fields = LinkedHashMap<String, List<String>>()
         val invalid = mutableSetOf<TagField>()
         for (field in TagField.entries) {
             val old = before[field]?.trim() ?: ""
             val new = after[field]?.trim() ?: old
             if (new == old) continue
-            val values = if (new.isEmpty()) emptyList() else valuesOf(field, new)
+            val values = if (new.isEmpty()) emptyList() else valuesOf(field, new, separator)
             if (values == null) {
                 invalid.add(field)
             } else {
@@ -87,56 +88,14 @@ object TagEdit {
     }
 
     /** What is written for the text [value] of [field], or null if it is not valid. */
-    private fun valuesOf(field: TagField, value: String): List<String>? =
+    private fun valuesOf(field: TagField, value: String, separator: String): List<String>? =
         when (field) {
             TagField.ARTIST,
             TagField.ALBUM_ARTIST ->
-                value.split(SEPARATOR.trim()).map { it.trim() }.filter { it.isNotEmpty() }
+                value.split(separator).map { it.trim() }.filter { it.isNotEmpty() }
             TagField.DATE -> Date.from(value)?.let { listOf(value) }
-            TagField.TRACK,
-            TagField.DISC -> value.toIntOrNull()?.takeIf { it > 0 }?.let { listOf(it.toString()) }
+            TagField.TRACK -> value.toIntOrNull()?.takeIf { it > 0 }?.let { listOf(it.toString()) }
             TagField.TITLE,
             TagField.ALBUM -> listOf(value)
         }
-
-    /** A gain as ReplayGain writes it: "-6.52 dB". */
-    fun formatGain(db: Float): String = String.format(Locale.ROOT, "%.2f dB", db)
-
-    /** A peak as ReplayGain writes it: "0.987654". */
-    fun formatPeak(peak: Float): String = String.format(Locale.ROOT, "%.6f", peak)
-}
-
-/** Noxio: which measured ReplayGain values are written into a song's tags. */
-object ReplayGainTags {
-    /**
-     * The fields to write for one song: the measured track and album values, each only where it is
-     * the value the song plays with (no tag, or tags not preferred) and differs from the tag. The
-     * peaks go with them when they are known.
-     */
-    fun fields(
-        trackTag: Float?,
-        albumTag: Float?,
-        measuredTrack: Float?,
-        measuredAlbum: Float?,
-        trackPeak: Float?,
-        albumPeak: Float?,
-        preferTags: Boolean,
-    ): Map<String, List<String>> {
-        val fields = LinkedHashMap<String, List<String>>()
-        if (measuredTrack != null && needed(trackTag, measuredTrack, preferTags)) {
-            fields[TagWriter.TRACK_GAIN] = listOf(TagEdit.formatGain(measuredTrack))
-            trackPeak?.let { fields[TagWriter.TRACK_PEAK] = listOf(TagEdit.formatPeak(it)) }
-        }
-        if (measuredAlbum != null && needed(albumTag, measuredAlbum, preferTags)) {
-            fields[TagWriter.ALBUM_GAIN] = listOf(TagEdit.formatGain(measuredAlbum))
-            albumPeak?.let { fields[TagWriter.ALBUM_PEAK] = listOf(TagEdit.formatPeak(it)) }
-        }
-        return fields
-    }
-
-    private fun needed(tag: Float?, measured: Float, preferTags: Boolean) =
-        // 0 dB changes nothing, and is read back as no tag at all, so it is not written.
-        abs(measured) >= 0.005f &&
-            (tag == null || !preferTags) &&
-            (tag == null || abs(tag - measured) >= 0.005f)
 }

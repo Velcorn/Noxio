@@ -106,10 +106,10 @@ private class TagInterpreterImpl(private val interpretation: Interpretation) : T
                     update(song.tags.track)
                     update(song.tags.disc)
 
-                    val artistNames = interpretation.separators.split(song.tags.artistNames)
+                    val artistNames = interpretation.artistSeparators.split(song.tags.artistNames)
                     update(artistNames.ifEmpty { listOf(null) })
                     val albumArtistNames =
-                        interpretation.separators.split(song.tags.albumArtistNames)
+                        interpretation.artistSeparators.split(song.tags.albumArtistNames)
                     update(albumArtistNames.ifEmpty { artistNames }.ifEmpty { listOf(null) })
                 }
 
@@ -187,9 +187,9 @@ private class TagInterpreterImpl(private val interpretation: Interpretation) : T
         rawSortNames: List<String>,
         interpretation: Interpretation,
     ): List<PreArtist> {
-        val musicBrainzIds = interpretation.separators.split(rawMusicBrainzIds)
-        val names = interpretation.separators.split(rawNames)
-        val sortNames = interpretation.separators.split(rawSortNames)
+        val musicBrainzIds = interpretation.artistSeparators.split(rawMusicBrainzIds)
+        val names = interpretation.artistSeparators.split(rawNames)
+        val sortNames = interpretation.artistSeparators.split(rawSortNames)
         return names.mapIndexed { i, name ->
             makePreArtist(musicBrainzIds.getOrNull(i), name, sortNames.getOrNull(i), interpretation)
         }

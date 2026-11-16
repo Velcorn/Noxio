@@ -47,13 +47,25 @@ class MusicSettingsTest {
     }
 
     @Test
-    fun oldSeparatorsCannotSplitArtistNamesButNativeMultiValueTagsRemainIntact() {
+    fun artistSeparatorDefaultsToSemicolonWithoutUsingOldGlobalSeparators() {
         preferences.edit(commit = true) { putString("auxio_separators", ",;/+&") }
         assertEquals("", settings.separators)
-        val parser = Separators.from(settings.separators)
-        val names = listOf("AC/DC", "Earth, Wind & Fire", "Florence + The Machine")
-        for (name in names) assertEquals(listOf(name), parser.split(listOf(name)))
-        assertEquals(names, parser.split(names))
+        assertEquals(";", settings.artistSeparator)
+        assertEquals(
+            listOf("Lil Peep", "Lil Tray"),
+            Separators.from(settings.artistSeparator).split(listOf("Lil Peep; Lil Tray")),
+        )
+        assertEquals(
+            listOf("AC/DC"),
+            Separators.from(settings.separators).split(listOf("AC/DC")),
+        )
+        preferences.edit(commit = true) { putString("noxio_artist_separator", "&") }
+        assertEquals(
+            listOf("Lil Peep", "Lil Tray"),
+            Separators.from(settings.artistSeparator).split(listOf("Lil Peep & Lil Tray")),
+        )
+        preferences.edit(commit = true) { putString("noxio_artist_separator", "") }
+        assertEquals(";", settings.artistSeparator)
     }
 
     @Test

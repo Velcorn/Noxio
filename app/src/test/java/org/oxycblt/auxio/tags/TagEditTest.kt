@@ -62,10 +62,10 @@ class TagEditTest {
             every { replayGainAdjustment } returns ReplayGainAdjustment(-6.523f, null)
         }
 
-    private val before = TagEdit.of(song)
+    private val before = TagEdit.of(song, ";")
 
     private fun edit(vararg changes: Pair<TagField, String>) =
-        TagEdit.changes(before, before + changes)
+        TagEdit.changes(before, before + changes, ";")
 
     @Test
     fun aSongIsShownAsText() {
@@ -74,19 +74,18 @@ class TagEditTest {
         assertEquals("A", before[TagField.ALBUM_ARTIST])
         assertEquals("2020", before[TagField.DATE])
         assertEquals("3", before[TagField.TRACK])
-        assertEquals("1", before[TagField.DISC])
     }
 
     @Test
     fun anUnknownNameIsEmpty() {
         val unknown = mockk<Artist> { every { name } returns Name.Unknown(Placeholder.ARTIST) }
         every { album.artists } returns listOf(unknown)
-        assertEquals("", TagEdit.of(song)[TagField.ALBUM_ARTIST])
+        assertEquals("", TagEdit.of(song, ";")[TagField.ALBUM_ARTIST])
     }
 
     @Test
     fun nothingChangedWritesNothing() {
-        assertEquals(TagEditResult.Write(emptyMap()), TagEdit.changes(before, before))
+        assertEquals(TagEditResult.Write(emptyMap()), TagEdit.changes(before, before, ";"))
         // Spaces around do not count as a change.
         assertEquals(TagEditResult.Write(emptyMap()), edit(TagField.TITLE to "  Song "))
     }
@@ -110,6 +109,24 @@ class TagEditTest {
     }
 
     @Test
+    fun albumArtistsUseTheSameEditorDelimiter() {
+        assertEquals(
+            TagEditResult.Write(mapOf(TagWriter.ALBUM_ARTIST to listOf("A", "B"))),
+            edit(TagField.ALBUM_ARTIST to "A; B"),
+        )
+    }
+
+    @Test
+    fun configuredAmpersandIsUsedInTheEditorAndWhenSaving() {
+        val original = TagEdit.of(song, "&")
+        assertEquals("A & B", original[TagField.ARTIST])
+        assertEquals(
+            TagEditResult.Write(mapOf(TagWriter.ARTIST to listOf("A", "C"))),
+            TagEdit.changes(original, original + (TagField.ARTIST to "A & C"), "&"),
+        )
+    }
+
+    @Test
     fun anEmptiedFieldIsRemoved() {
         assertEquals(
             TagEditResult.Write(mapOf(TagWriter.DATE to emptyList())),
@@ -120,47 +137,12 @@ class TagEditTest {
     @Test
     fun invalidFieldsAreNamed() {
         assertEquals(
-            TagEditResult.Invalid(setOf(TagField.TRACK, TagField.DISC, TagField.DATE)),
+            TagEditResult.Invalid(setOf(TagField.TRACK, TagField.DATE)),
             edit(
                 TagField.TRACK to "three",
-                TagField.DISC to "0",
                 TagField.DATE to "yesterday",
                 TagField.TITLE to "Fine",
             ),
-        )
-    }
-
-    @Test
-    fun measuredValuesAreWrittenWhereTheyAreUsed() {
-        // No tags: both values with their peaks.
-        assertEquals(
-            mapOf(
-                TagWriter.TRACK_GAIN to listOf("-5.00 dB"),
-                TagWriter.TRACK_PEAK to listOf("0.900000"),
-                TagWriter.ALBUM_GAIN to listOf("-6.00 dB"),
-                TagWriter.ALBUM_PEAK to listOf("0.950000"),
-            ),
-            ReplayGainTags.fields(null, null, -5f, -6f, 0.9f, 0.95f, preferTags = true),
-        )
-        // A tag that is preferred stays.
-        assertEquals(
-            mapOf(TagWriter.ALBUM_GAIN to listOf("-6.00 dB")),
-            ReplayGainTags.fields(-3f, null, -5f, -6f, null, null, preferTags = true),
-        )
-        // A tag that is not preferred is replaced, unless it is the same.
-        assertEquals(
-            mapOf(TagWriter.TRACK_GAIN to listOf("-5.00 dB")),
-            ReplayGainTags.fields(-3f, -6f, -5f, -6.001f, null, null, preferTags = false),
-        )
-        // 0 dB is no adjustment, and reads back as no tag.
-        assertEquals(
-            mapOf(TagWriter.ALBUM_GAIN to listOf("-6.00 dB")),
-            ReplayGainTags.fields(null, null, -0.004f, -6f, null, null, preferTags = true),
-        )
-        // Nothing measured, nothing written.
-        assertEquals(
-            emptyMap<String, List<String>>(),
-            ReplayGainTags.fields(null, null, null, null, 1f, 1f, preferTags = false),
         )
     }
 

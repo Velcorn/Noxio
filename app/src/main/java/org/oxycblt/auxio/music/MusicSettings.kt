@@ -58,6 +58,9 @@ interface MusicSettings : Settings<MusicSettings.Listener> {
     /** A [String] of characters representing the desired characters to denote multi-value tags. */
     val separators: String
 
+    /** A character that separates artist and album-artist names in single-value tags. */
+    val artistSeparator: String
+
     /** Whether to enable more advanced sorting by articles and numbers. */
     val intelligentSorting: Boolean
 
@@ -100,6 +103,12 @@ class MusicSettingsImpl @Inject constructor(@ApplicationContext private val cont
     // Keep native multi-value tags intact without splitting punctuation in names.
     override val separators: String
         get() = ""
+
+    override val artistSeparator: String
+        get() =
+            sharedPreferences.getString(getString(R.string.set_key_artist_separator), ";")?.takeIf {
+                it in listOf(";", "&", "/", "+", ",")
+            } ?: ";"
 
     // Noxio has no setting for this any more, it is always on.
     override val intelligentSorting: Boolean
@@ -228,6 +237,7 @@ class MusicSettingsImpl @Inject constructor(@ApplicationContext private val cont
             getString(R.string.set_key_filter_mode),
             getString(R.string.set_key_filtered_locations),
             getString(R.string.set_key_exclude_non_music),
+            getString(R.string.set_key_artist_separator),
             getString(R.string.set_key_auto_sort_names) -> {
                 L.d("Dispatching indexing setting change for $key")
                 listener.onIndexingSettingChanged()

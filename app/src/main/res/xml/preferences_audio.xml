@@ -34,31 +34,4 @@
 
     </org.oxycblt.auxio.settings.ui.InfoCategory>
 
-    <org.oxycblt.auxio.settings.ui.InfoCategory
-        app:infoMessage="@string/lbl_replay_gain_info"
-        app:infoTitle="@string/lbl_replay_gain_info_title"
-        app:title="@string/set_replay_gain_calculated">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/set_key_replay_gain_prefer_tags"
-            app:summary="@string/set_replay_gain_prefer_tags_desc"
-            app:title="@string/set_replay_gain_prefer_tags" />
-
-        <Preference
-            app:key="@string/set_key_replay_gain_scan"
-            app:summary="@string/set_replay_gain_scan_desc"
-            app:title="@string/lbl_replay_gain_scan" />
-
-        <Preference
-            app:key="@string/set_key_replay_gain_write"
-            app:summary="@string/set_replay_gain_write_desc"
-            app:title="@string/set_replay_gain_write" />
-
-        <Preference
-            app:key="@string/set_key_replay_gain_clear"
-            app:title="@string/set_replay_gain_clear" />
-
-    </org.oxycblt.auxio.settings.ui.InfoCategory>
-
 </PreferenceScreen>

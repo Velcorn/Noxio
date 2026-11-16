@@ -30,6 +30,14 @@
         app:infoTitle="@string/lbl_info_content_title"
         app:title="@string/set_content">
 
+        <ListPreference
+            app:defaultValue=";"
+            app:entries="@array/set_artist_separator_entries"
+            app:entryValues="@array/set_artist_separator_values"
+            app:key="@string/set_key_artist_separator"
+            app:title="@string/set_artist_separator"
+            app:useSimpleSummaryProvider="true" />
+
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="@string/set_key_hide_collaborators"

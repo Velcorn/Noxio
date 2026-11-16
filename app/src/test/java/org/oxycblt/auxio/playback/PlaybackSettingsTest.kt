@@ -50,7 +50,6 @@ class PlaybackSettingsTest {
         assertNull(settings.inParentPlaybackMode)
         assertEquals(ReplayGainMode.DYNAMIC, settings.replayGainMode)
         assertEquals(ReplayGainPreAmp(0f, 0f), settings.replayGainPreAmp)
-        assertTrue(settings.replayGainPreferTags)
         assertFalse(settings.headsetAutoplay)
         assertTrue(settings.keepShuffle)
         assertTrue(settings.rewindWithPrev)
@@ -89,21 +88,6 @@ class PlaybackSettingsTest {
         assertEquals(PlaySong.FromAll, settings.playInListWith)
         assertNull(settings.inParentPlaybackMode)
         assertEquals(ReplayGainMode.ALBUM, settings.replayGainMode)
-    }
-
-    @Test
-    fun preferringTagsCanBeSwitchedOffAndReportsAChange() {
-        var reported = 0
-        settings.registerListener(
-            object : PlaybackSettings.Listener {
-                override fun onReplayGainSettingsChanged() {
-                    reported++
-                }
-            }
-        )
-        preferences.edit { putBoolean(key(R.string.set_key_replay_gain_prefer_tags), false) }
-        assertFalse(settings.replayGainPreferTags)
-        assertEquals(1, reported)
     }
 
     @Test
@@ -179,13 +163,12 @@ class PlaybackSettingsTest {
         preferences.edit {
             putInt(key(R.string.set_key_replay_gain), IntegerTable.REPLAY_GAIN_MODE_OFF)
         }
-        preferences.edit { putBoolean(key(R.string.set_key_replay_gain_prefer_tags), false) }
         preferences.edit { putBoolean(key(R.string.set_key_repeat_pause), true) }
         preferences.edit { putBoolean(key(R.string.set_key_keep_shuffle), false) }
         settings.unregisterListener(listener)
         preferences.edit { putBoolean(key(R.string.set_key_repeat_pause), false) }
         assertEquals(
-            listOf("replay gain", "replay gain", "pause on repeat"),
+            listOf("replay gain", "pause on repeat"),
             reported,
         )
     }

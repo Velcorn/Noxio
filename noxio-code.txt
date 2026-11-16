@@ -48,10 +48,6 @@ search/SearchRank.kt
 music/PlaylistSongs.kt
 playback/service/AutoSaver.kt
 playback/SwipeUp.kt
-replaygain/LoudnessHistogram.kt
-replaygain/LoudnessMeter.kt
-replaygain/ReplayGainChoice.kt
-replaygain/ReplayGainStore.kt
 stats/TextWrap.kt
 playback/state/QueueSwap.kt
 tags/TagEdit.kt

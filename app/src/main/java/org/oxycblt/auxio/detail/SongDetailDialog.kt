@@ -38,6 +38,7 @@ import org.oxycblt.auxio.detail.list.SongProperty
 import org.oxycblt.auxio.detail.list.SongPropertyAdapter
 import org.oxycblt.auxio.detail.list.TagEditAdapter
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
+import org.oxycblt.auxio.music.MusicSettings
 import org.oxycblt.auxio.tags.TagEdit
 import org.oxycblt.auxio.tags.TagEditMigration
 import org.oxycblt.auxio.tags.TagEditResult
@@ -64,10 +65,12 @@ class SongDetailDialog : ViewBindingMaterialDialogFragment<DialogSongDetailBindi
 
     @Inject lateinit var tagEditor: TagEditor
     @Inject lateinit var tagEditMigration: TagEditMigration
+    @Inject lateinit var musicSettings: MusicSettings
 
     // Noxio: editing the tags. Null while the properties are only shown.
     private var editAdapter: TagEditAdapter? = null
     private var original: Map<TagField, String> = emptyMap()
+    private var editSeparator = ";"
     private var pendingFields: Map<String, List<String>>? = null
 
     private val writeLauncher =
@@ -107,8 +110,9 @@ class SongDetailDialog : ViewBindingMaterialDialogFragment<DialogSongDetailBindi
 
     private fun startEditing() {
         val song = detailModel.currentSong.value ?: return
-        original = TagEdit.of(song)
-        val adapter = TagEditAdapter(original)
+        editSeparator = musicSettings.artistSeparator
+        original = TagEdit.of(song, editSeparator)
+        val adapter = TagEditAdapter(original, editSeparator)
         editAdapter = adapter
         requireBinding().detailProperties.adapter = adapter
         updateButtons()
@@ -133,7 +137,7 @@ class SongDetailDialog : ViewBindingMaterialDialogFragment<DialogSongDetailBindi
 
     private fun checkAndSave() {
         val adapter = editAdapter ?: return
-        when (val result = TagEdit.changes(original, adapter.values)) {
+        when (val result = TagEdit.changes(original, adapter.values, editSeparator)) {
             is TagEditResult.Invalid -> adapter.showInvalid(result.fields)
             is TagEditResult.Write ->
                 if (result.fields.isEmpty()) stopEditing() else save(result.fields, ask = true)

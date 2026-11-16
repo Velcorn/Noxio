@@ -1,6 +1,6 @@
 # Working on Noxio (for coding agents)
 
-Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features: sleep timer, listening stats (Room), a full backup, ReplayGain calculation (`replaygain/`, values in Noxio's own database), keyboard phone mode, faster library loading, a switchable minimal launcher icon and more (the list is in `README.md`). See `README.md`, `ROADMAP.md` and `musikr/ARCHITECTURE.md`.
+Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features: sleep timer, listening stats (Room), a full backup, tag editing, keyboard phone mode, faster library loading, a switchable minimal launcher icon and more (the list is in `README.md`). See `README.md`, `ROADMAP.md` and `musikr/ARCHITECTURE.md`.
 
 ## Building
 - A Windows build is not supported. Use Linux, macOS or WSL with JDK 21, NDK `28.2.13676358`, cmake, ninja and the git submodules (`git submodule update --init --recursive`).
@@ -28,7 +28,7 @@ Noxio is a fork of Auxio (Android music player, Kotlin, Media3). Added features:
 
 ## Rules
 - The code stays in the `org.oxycblt.auxio` package on purpose, so upstream Auxio changes merge with few conflicts. Only the application ID (`de.devfin.noxio`) and branding differ. Keep Noxio changes small and self-contained (new files such as `stats/`, `ui/LauncherIcon.kt`) rather than rewriting upstream code.
-- Noxio writes to the user's music files only when the user asks for it (Edit tags in Song properties, Write calculated ReplayGain to tags), and Android asks first (`tags/TagEditor`). Never write on its own or in the background without that. Writing goes through `TagWriter` in `musikr/`; tag edits can change a song's UID, so `TagEditMigration` moves what points at songs by UID. Things Noxio works out are otherwise kept in its own database or in exported files.
+- Noxio writes to the user's music files only when the user asks for it (Edit tags in Song properties), and Android asks first (`tags/TagEditor`). Never write on its own or in the background without that. Writing goes through `TagWriter` in `musikr/`; tag edits can change a song's UID, so `TagEditMigration` moves what points at songs by UID. Things Noxio works out are otherwise kept in its own database or in exported files.
 - `musikr/` and the vendored Media3/taglib trees are upstream code; do not edit them unless unavoidable.
 - New UI strings go in `values/strings.xml` (English) and `values-de/strings.xml` (German), in the same commit; when an English text of Auxio changes meaning, fix the German one too. Do not hand-write the other `values-*` translations; they come from upstream and show Noxio's own texts in English.
 - Settings keys and defaults live in `values/settings.xml`, UI in `xml/preferences_*.xml`.

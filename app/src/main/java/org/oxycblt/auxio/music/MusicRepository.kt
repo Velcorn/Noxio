@@ -412,7 +412,11 @@ constructor(
             } else {
                 Naming.simple()
             }
-        return Interpretation(nameFactory, separators)
+        return Interpretation(
+            nameFactory,
+            separators,
+            Separators.from(musicSettings.artistSeparator),
+        )
     }
 
     private suspend fun indexImpl(withCache: Boolean) {
@@ -441,7 +445,8 @@ constructor(
             }
         L.d("FS: $fs")
         val storage = Storage(cache, covers, storedPlaylists)
-        val interpretation = Interpretation(nameFactory, separators)
+        val interpretation =
+            Interpretation(nameFactory, separators, Separators.from(musicSettings.artistSeparator))
         val config = Config(fs, storage, interpretation)
         L.d("Running index...")
         val start = System.currentTimeMillis()

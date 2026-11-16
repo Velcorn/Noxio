@@ -41,9 +41,6 @@ import javax.inject.Singleton
 import org.oxycblt.auxio.BuildConfig
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.resolve
-import org.oxycblt.auxio.replaygain.LoudnessHistogram
-import org.oxycblt.auxio.replaygain.ReplayGainStore
-import org.oxycblt.auxio.replaygain.SongLoudness
 import org.oxycblt.auxio.stats.PlayEvent
 import org.oxycblt.auxio.stats.SafeDocumentWriter
 import org.oxycblt.auxio.stats.StatsBackupWorker
@@ -52,10 +49,10 @@ import org.oxycblt.auxio.stats.StatsRepository
 import timber.log.Timber as L
 
 /**
- * The full backup: the settings, the listening history, the playlists and the measured ReplayGain
- * in one zip, written on a [BackupSchedule] into a folder the user picked. Every backup has its own
- * file (`noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much
- * less than the one before is not written on its own, see [BackupPolicy.check].
+ * The full backup: the settings, listening history and playlists in one zip, written on a
+ * [BackupSchedule] into a folder the user picked. Every backup has its own file
+ * (`noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much less
+ * than the one before is not written on its own, see [BackupPolicy.check].
  */
 @Singleton
 class AppBackup
@@ -63,7 +60,6 @@ internal constructor(
     private val context: Context,
     private val repository: StatsRepository,
     private val music: MusicRepository,
-    private val measuredGains: ReplayGainStore,
     private val openFolder: (Context, Uri) -> DocumentFile?,
     private val today: () -> LocalDate,
 ) {
@@ -72,12 +68,10 @@ internal constructor(
         @ApplicationContext context: Context,
         repository: StatsRepository,
         music: MusicRepository,
-        measuredGains: ReplayGainStore,
     ) : this(
         context,
         repository,
         music,
-        measuredGains,
         { c, uri -> DocumentFile.fromTreeUri(c, uri) },
         { LocalDate.now() },
     )
@@ -248,7 +242,6 @@ internal constructor(
         // Without a loaded library the playlists cannot be read, the ones of the last backup are
         // carried over instead of being lost.
         val playlists = readLibraryPlaylists() ?: fallback?.playlists ?: emptyList()
-        val gains = readLibraryGains() ?: fallback?.gains ?: emptyList()
         val settings = settings()
         return BackupData(
             BackupInfo(
@@ -258,12 +251,10 @@ internal constructor(
                 plays = plays,
                 playlists = playlists.size,
                 settings = settings.size,
-                gains = gains.size,
             ),
             settings,
             history,
             playlists,
-            gains,
         )
     }
 
@@ -282,17 +273,6 @@ internal constructor(
             artistsOf(song),
             song.album.name.resolve(context),
         )
-
-    /** The measured ReplayGain values of the songs in the library, or null if it is not loaded. */
-    private suspend fun readLibraryGains(): List<BackupGain>? {
-        val songs = music.library?.songs ?: return null
-        val stored = measuredGains.all()
-        return songs.mapNotNull { song ->
-            val gain = measuredGains.gainFor(song) ?: return@mapNotNull null
-            val row = stored[song.uid.toString()]
-            BackupGain(backupSong(song), gain, row?.peak, row?.blocks)
-        }
-    }
 
     /** The settings of the user, which is everything in the preferences except what is local. */
     fun settings(): Map<String, Any> =
@@ -325,8 +305,6 @@ internal constructor(
         val missingSongs: Int,
         /** Whether the playlists could not be restored because the library is not loaded. */
         val libraryMissing: Boolean,
-        /** How many songs got their measured ReplayGain back. */
-        val gains: Int = 0,
     )
 
     /**
@@ -385,42 +363,12 @@ internal constructor(
                 }
             }
         }
-        // Measured ReplayGain only fills in songs that have none yet.
-        var gains = 0
-        if (library != null) {
-            for (saved in data.gains) {
-                val song =
-                    byPath[saved.song.path]
-                        ?: byName[
-                                songIdentity(saved.song.title, saved.song.artist, saved.song.album)]
-                            ?.firstOrNull()
-                        ?: continue
-                val loudness =
-                    saved.peak?.let { peak ->
-                        saved.blocks?.let(LoudnessHistogram::decode)?.let {
-                            SongLoudness(it, peak)
-                        }
-                    }
-                // A song that has a value is only given the backup's one if that one is
-                // complete and the song's is not (measured before album adjustments).
-                if (
-                    measuredGains.gainFor(song) == null ||
-                        (loudness != null && !measuredGains.isComplete(song))
-                ) {
-                    measuredGains.save(song, saved.gainDb, loudness)
-                    gains++
-                }
-            }
-            measuredGains.updateAlbums()
-        }
         return Restored(
             plays = plays,
             settings = data.settings.keys.count { !isLocal(it) },
             playlists = created,
             missingSongs = missing,
-            libraryMissing =
-                library == null && (data.playlists.isNotEmpty() || data.gains.isNotEmpty()),
-            gains = gains,
+            libraryMissing = library == null && data.playlists.isNotEmpty(),
         )
     }
 
@@ -429,10 +377,11 @@ internal constructor(
 
     private fun songIdentity(title: String, artist: String, album: String) = "$title|$artist|$album"
 
-    /** Settings that belong to this phone and are neither saved nor restored. */
+    /** Settings local to this phone, or from removed features, are not backed up or restored. */
     private fun isLocal(key: String) =
         key.startsWith("noxio_stats_backup") ||
             key.startsWith("noxio_backup_") ||
+            key.startsWith("noxio_replay_gain_") ||
             key == "noxio_home_tabs_reset"
 
     companion object {

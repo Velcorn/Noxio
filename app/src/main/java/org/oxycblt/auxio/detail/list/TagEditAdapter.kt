@@ -33,7 +33,7 @@ import org.oxycblt.auxio.util.inflater
  *
  * @author Noxio
  */
-class TagEditAdapter(initial: Map<TagField, String>) :
+class TagEditAdapter(initial: Map<TagField, String>, private val separator: String) :
     RecyclerView.Adapter<TagEditAdapter.ViewHolder>() {
     val values = initial.toMutableMap()
     private var invalid = emptySet<TagField>()
@@ -69,7 +69,7 @@ class TagEditAdapter(initial: Map<TagField, String>) :
             binding.tagField.hint = context.getString(labelOf(field))
             binding.tagField.helperText =
                 if (field == TagField.ARTIST || field == TagField.ALBUM_ARTIST) {
-                    context.getString(R.string.lng_tags_artists)
+                    context.getString(R.string.lng_tags_artists, separator)
                 } else {
                     null
                 }
@@ -77,8 +77,7 @@ class TagEditAdapter(initial: Map<TagField, String>) :
                 if (field in invalid) context.getString(R.string.err_tags_field) else null
             binding.tagValue.inputType =
                 when (field) {
-                    TagField.TRACK,
-                    TagField.DISC -> InputType.TYPE_CLASS_NUMBER
+                    TagField.TRACK -> InputType.TYPE_CLASS_NUMBER
                     TagField.DATE -> InputType.TYPE_CLASS_DATETIME
                     else -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
                 }
@@ -95,6 +94,5 @@ class TagEditAdapter(initial: Map<TagField, String>) :
             TagField.ALBUM_ARTIST -> R.string.lbl_album_artists
             TagField.DATE -> R.string.lbl_date
             TagField.TRACK -> R.string.lbl_track
-            TagField.DISC -> R.string.lbl_disc
         }
 }

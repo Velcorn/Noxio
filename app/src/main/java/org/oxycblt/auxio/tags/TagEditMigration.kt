@@ -26,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.oxycblt.auxio.music.MusicRepository
-import org.oxycblt.auxio.replaygain.ReplayGainStore
 import org.oxycblt.musikr.Library
 import org.oxycblt.musikr.Music
 import org.oxycblt.musikr.Song
@@ -35,9 +34,9 @@ import org.oxycblt.musikr.playlist.db.StoredPlaylists
 
 /**
  * Noxio: a song without a MusicBrainz ID gets its UID from its tags, so editing them gives it a new
- * one. Playlists and measured ReplayGain point at songs by UID; after the library has loaded the
- * edited files again, they are moved over to the new UIDs. (The listening stats keep names, not
- * UIDs, and the queue finds its songs by their file.)
+ * one. Playlists point at songs by UID; after the library has loaded the edited files again, they
+ * are moved over to the new UIDs. (The listening stats keep names, and the queue finds songs by
+ * their file.)
  */
 @Singleton
 class TagEditMigration
@@ -45,7 +44,6 @@ class TagEditMigration
 constructor(
     private val musicRepository: MusicRepository,
     private val storedPlaylists: StoredPlaylists,
-    private val replayGainStore: ReplayGainStore,
 ) : MusicRepository.UpdateListener {
     private val pending = ConcurrentHashMap<Path, Edited>()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -66,7 +64,6 @@ constructor(
         val renamed = resolve(library)
         if (renamed.isEmpty()) return
         scope.launch {
-            replayGainStore.rekey(renamed)
             // The playlists are read with the library, so it is loaded once more to show them.
             if (storedPlaylists.replaceSongs(renamed)) musicRepository.requestIndex(true)
         }

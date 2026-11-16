@@ -3,6 +3,19 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.17.0
+
+## What's New
+- Artist separator in Library settings: semicolon by default, with ampersand, slash, plus and comma available for artist and album artist tags
+
+## What's Improved
+- Song properties and Edit tags show the fields in the same order: title, artists, album, album artists, track and date
+- Library settings put the separator before the two artist visibility options, with clearer names and a short explanation
+
+## What's Changed
+- Removed calculated ReplayGain and its scan, saved measurements and backup entry; ReplayGain tags in music files still work
+- The selected artist separator also applies when editing tags
+
 ## v1.16.0
 
 ## What's New
