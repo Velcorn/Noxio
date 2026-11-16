@@ -223,6 +223,8 @@
     <string name="set_exclude_non_music_desc">Audio-Dateien, die keine Musik sind (wie Podcasts), ignorieren</string>
     <string name="set_hide_collaborators">Mitarbeitende ausblenden</string>
     <string name="set_hide_collaborators_desc">Nur Künstler zeigen, die auf einem Album genannt sind</string>
+    <string name="set_primary_album_artists">Nur erster Albuminterpret</string>
+    <string name="set_primary_album_artists_desc">Alben und Titel dem ersten Albuminterpreten zuordnen</string>
     <plurals name="fmt_artist_count">
         <item quantity="one">%d Künstler</item>
         <item quantity="other">%d Künstler</item>

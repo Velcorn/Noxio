@@ -43,6 +43,8 @@ import org.oxycblt.auxio.IntegerTable
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.image.BitmapProvider
 import org.oxycblt.auxio.image.ImageSettings
+import org.oxycblt.auxio.music.displayArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.music.service.MediaSessionUID
@@ -222,7 +224,8 @@ private constructor(
         // Populate MediaMetadataCompat. For efficiency, cache some fields that are re-used
         // several times.
         val title = song.name.resolve(context)
-        val artist = song.artists.resolveNames(context)
+        val primaryOnly = context.primaryAlbumArtistsOnly()
+        val artist = song.displayArtists(primaryOnly).resolveNames(context)
         val album = song.album.name.resolve(context)
         val builder =
             MediaMetadataCompat.Builder()
@@ -233,7 +236,7 @@ private constructor(
                 .putText(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
                 .putText(
                     MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST,
-                    song.album.artists.resolveNames(context),
+                    song.album.displayArtists(primaryOnly).resolveNames(context),
                 )
                 .putText(MediaMetadataCompat.METADATA_KEY_AUTHOR, artist)
                 .putText(MediaMetadataCompat.METADATA_KEY_COMPOSER, artist)

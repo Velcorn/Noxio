@@ -32,6 +32,8 @@ import org.oxycblt.auxio.list.ListFragment
 import org.oxycblt.auxio.list.menu.Menu
 import org.oxycblt.auxio.music.PlaylistDecision
 import org.oxycblt.auxio.music.PlaylistMessage
+import org.oxycblt.auxio.music.displayArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.playback.PlaybackDecision
@@ -139,7 +141,7 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
         binding.detailName.text = name
         // Artist name maps to the subhead text
         binding.detailSubhead.apply {
-            text = album.artists.resolveNames(context)
+            text = album.displayArtists(context.primaryAlbumArtistsOnly()).resolveNames(context)
 
             // Add a QoL behavior where navigation to the artist will occur if the artist
             // name is pressed.

@@ -419,6 +419,8 @@
     <string name="set_exclude_non_music_desc">Ignore audio files that are not music, such as podcasts</string>
     <string name="set_hide_collaborators">Hide collaborators</string>
     <string name="set_hide_collaborators_desc">Only show artists credited on an album</string>
+    <string name="set_primary_album_artists">First album artist only</string>
+    <string name="set_primary_album_artists_desc">Group albums and songs under the first album artist</string>
 
     <string name="set_audio">Playback</string>
     <string name="set_audio_desc">Shuffle, skipping, equalizer and ReplayGain</string>

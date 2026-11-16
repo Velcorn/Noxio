@@ -29,6 +29,9 @@ import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.music.PlaylistSongs
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
+import org.oxycblt.auxio.music.displayArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.playback.PlaySong
@@ -67,7 +70,8 @@ class SongMenuDialogFragment : MenuDialogFragment<Menu.ForSong>() {
         binding.menuCover.bind(menu.song)
         binding.menuType.text = getString(R.string.lbl_song)
         binding.menuName.text = menu.song.name.resolve(context)
-        binding.menuInfo.text = menu.song.artists.resolveNames(context)
+        binding.menuInfo.text =
+            menu.song.displayArtists(context.primaryAlbumArtistsOnly()).resolveNames(context)
     }
 
     override fun onClick(item: MenuItem, menu: Menu.ForSong) {
@@ -122,7 +126,8 @@ class AlbumMenuDialogFragment : MenuDialogFragment<Menu.ForAlbum>() {
         binding.menuCover.bind(menu.album)
         binding.menuType.text = menu.album.releaseType.resolve(context)
         binding.menuName.text = menu.album.name.resolve(context)
-        binding.menuInfo.text = menu.album.artists.resolveNames(context)
+        binding.menuInfo.text =
+            menu.album.displayArtists(context.primaryAlbumArtistsOnly()).resolveNames(context)
     }
 
     override fun onClick(item: MenuItem, menu: Menu.ForAlbum) {
@@ -181,19 +186,26 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
 
     override fun updateMenu(binding: DialogMenuBinding, menu: Menu.ForArtist) {
         val context = requireContext()
+        val primaryOnly = context.primaryAlbumArtistsOnly()
+        val albums =
+            if (primaryOnly) PrimaryAlbumArtists.albums(menu.artist, menu.artist.explicitAlbums)
+            else menu.artist.explicitAlbums
+        val songs =
+            if (primaryOnly) PrimaryAlbumArtists.songs(menu.artist, menu.artist.explicitAlbums)
+            else menu.artist.songs
         binding.menuCover.bind(menu.artist)
         binding.menuType.text = getString(R.string.lbl_artist)
         binding.menuName.text = menu.artist.name.resolve(context)
         binding.menuInfo.text =
             getString(
                 R.string.fmt_two,
-                if (menu.artist.explicitAlbums.isNotEmpty()) {
-                    context.getPlural(R.plurals.fmt_album_count, menu.artist.explicitAlbums.size)
+                if (albums.isNotEmpty()) {
+                    context.getPlural(R.plurals.fmt_album_count, albums.size)
                 } else {
                     context.getString(R.string.def_album_count)
                 },
-                if (menu.artist.songs.isNotEmpty()) {
-                    context.getPlural(R.plurals.fmt_song_count, menu.artist.songs.size)
+                if (songs.isNotEmpty()) {
+                    context.getPlural(R.plurals.fmt_song_count, songs.size)
                 } else {
                     getString(R.string.def_song_count)
                 },
@@ -201,20 +213,34 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
     }
 
     override fun onClick(item: MenuItem, menu: Menu.ForArtist) {
+        val primarySongs =
+            if (requireContext().primaryAlbumArtistsOnly())
+                PrimaryAlbumArtists.songs(menu.artist, menu.artist.explicitAlbums)
+            else null
         when (item.itemId) {
-            R.id.action_play -> playbackModel.play(menu.artist)
-            R.id.action_shuffle -> playbackModel.shuffle(menu.artist)
+            R.id.action_play ->
+                if (primarySongs != null) playbackModel.play(primarySongs)
+                else playbackModel.play(menu.artist)
+            R.id.action_shuffle ->
+                if (primarySongs != null) playbackModel.shuffle(primarySongs)
+                else playbackModel.shuffle(menu.artist)
             R.id.action_detail -> detailModel.showArtist(menu.artist)
             R.id.action_play_next -> {
-                playbackModel.playNext(menu.artist)
+                if (primarySongs != null) playbackModel.playNext(primarySongs)
+                else playbackModel.playNext(menu.artist)
                 requireContext().showToast(R.string.lng_play_next)
             }
             R.id.action_queue_add -> {
-                playbackModel.addToQueue(menu.artist)
+                if (primarySongs != null) playbackModel.addToQueue(primarySongs)
+                else playbackModel.addToQueue(menu.artist)
                 requireContext().showToast(R.string.lng_queue_added)
             }
-            R.id.action_playlist_add -> musicModel.addToPlaylist(menu.artist)
-            R.id.action_share -> requireContext().share(menu.artist)
+            R.id.action_playlist_add ->
+                if (primarySongs != null) musicModel.addToPlaylist(primarySongs)
+                else musicModel.addToPlaylist(menu.artist)
+            R.id.action_share ->
+                if (primarySongs != null) requireContext().share(primarySongs)
+                else requireContext().share(menu.artist)
             else -> error("Unexpected menu item $item")
         }
     }

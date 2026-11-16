@@ -32,6 +32,7 @@ import org.oxycblt.auxio.detail.list.DiscHeader
 import org.oxycblt.auxio.detail.list.EditHeader
 import org.oxycblt.auxio.detail.list.SongProperty
 import org.oxycblt.auxio.detail.list.SortHeader
+import org.oxycblt.auxio.home.HomeSettings
 import org.oxycblt.auxio.list.BasicHeader
 import org.oxycblt.auxio.list.Item
 import org.oxycblt.auxio.list.ListSettings
@@ -41,6 +42,7 @@ import org.oxycblt.auxio.list.adapter.UpdateInstructions
 import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.MusicType
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
 import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackSettings
 import org.oxycblt.auxio.replaygain.ReplayGainStore
@@ -71,6 +73,7 @@ constructor(
     private val musicRepository: MusicRepository,
     private val playbackSettings: PlaybackSettings,
     private val measuredGains: ReplayGainStore,
+    private val homeSettings: HomeSettings,
     detailGeneratorFactory: DetailGenerator.Factory,
 ) : ViewModel(), DetailGenerator.Invalidator {
     /**
@@ -270,7 +273,9 @@ constructor(
      */
     fun showArtist(song: Song) =
         showImpl(
-            if (song.artists.size > 1) {
+            if (homeSettings.primaryAlbumArtistsOnly && PrimaryAlbumArtists.first(song) != null) {
+                Show.ArtistDetails(requireNotNull(PrimaryAlbumArtists.first(song)))
+            } else if (song.artists.size > 1) {
                 Show.SongArtistDecision(song)
             } else {
                 Show.ArtistDetails(song.artists.first())
@@ -285,7 +290,9 @@ constructor(
      */
     fun showArtist(album: Album) =
         showImpl(
-            if (album.artists.size > 1) {
+            if (homeSettings.primaryAlbumArtistsOnly && PrimaryAlbumArtists.first(album) != null) {
+                Show.ArtistDetails(requireNotNull(PrimaryAlbumArtists.first(album)))
+            } else if (album.artists.size > 1) {
                 Show.AlbumArtistDecision(album)
             } else {
                 Show.ArtistDetails(album.artists.first())

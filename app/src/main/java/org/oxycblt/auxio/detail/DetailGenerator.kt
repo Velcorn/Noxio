@@ -21,10 +21,12 @@ package org.oxycblt.auxio.detail
 import androidx.annotation.StringRes
 import javax.inject.Inject
 import org.oxycblt.auxio.R
+import org.oxycblt.auxio.home.HomeSettings
 import org.oxycblt.auxio.list.ListSettings
 import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.MusicType
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
 import org.oxycblt.musikr.Album
 import org.oxycblt.musikr.Artist
 import org.oxycblt.musikr.Genre
@@ -62,19 +64,24 @@ interface DetailGenerator {
 
 class DetailGeneratorFactoryImpl
 @Inject
-constructor(private val listSettings: ListSettings, private val musicRepository: MusicRepository) :
-    DetailGenerator.Factory {
+constructor(
+    private val listSettings: ListSettings,
+    private val musicRepository: MusicRepository,
+    private val homeSettings: HomeSettings,
+) : DetailGenerator.Factory {
     override fun create(invalidator: DetailGenerator.Invalidator): DetailGenerator =
-        DetailGeneratorImpl(invalidator, listSettings, musicRepository)
+        DetailGeneratorImpl(invalidator, listSettings, musicRepository, homeSettings)
 }
 
 private class DetailGeneratorImpl(
     private val invalidator: DetailGenerator.Invalidator,
     private val listSettings: ListSettings,
     private val musicRepository: MusicRepository,
-) : DetailGenerator, MusicRepository.UpdateListener, ListSettings.Listener {
+    private val homeSettings: HomeSettings,
+) : DetailGenerator, MusicRepository.UpdateListener, ListSettings.Listener, HomeSettings.Listener {
     override fun attach() {
         listSettings.registerListener(this)
+        homeSettings.registerListener(this)
         musicRepository.addUpdateListener(this)
     }
 
@@ -90,6 +97,10 @@ private class DetailGeneratorImpl(
 
     override fun onArtistAlbumSortChanged() {
         super.onArtistAlbumSortChanged()
+        invalidator.invalidate(MusicType.ARTISTS, -1)
+    }
+
+    override fun onPrimaryAlbumArtistsChanged() {
         invalidator.invalidate(MusicType.ARTISTS, -1)
     }
 
@@ -111,6 +122,7 @@ private class DetailGeneratorImpl(
 
     override fun release() {
         listSettings.unregisterListener(this)
+        homeSettings.unregisterListener(this)
         musicRepository.removeUpdateListener(this)
     }
 
@@ -140,8 +152,13 @@ private class DetailGeneratorImpl(
 
     override fun artist(uid: Music.UID): Detail<Artist>? {
         val artist = musicRepository.library?.findArtist(uid) ?: return null
+        val primaryOnly = homeSettings.primaryAlbumArtistsOnly
+        val libraryAlbums = artist.explicitAlbums
+        val explicitAlbums =
+            if (primaryOnly) PrimaryAlbumArtists.albums(artist, libraryAlbums)
+            else artist.explicitAlbums
         val grouping =
-            artist.explicitAlbums.groupByTo(sortedMapOf()) {
+            explicitAlbums.groupByTo(sortedMapOf()) {
                 // Remap the complicated ReleaseType data structure into detail sections
                 when (it.releaseType.refinement) {
                     ReleaseType.Refinement.LIVE -> DetailSection.Albums.Category.LIVE
@@ -160,7 +177,7 @@ private class DetailGeneratorImpl(
                 }
             }
 
-        if (artist.implicitAlbums.isNotEmpty()) {
+        if (!primaryOnly && artist.implicitAlbums.isNotEmpty()) {
             L.d("Implicit albums present, adding to list")
             grouping[DetailSection.Albums.Category.APPEARANCES] =
                 artist.implicitAlbums.toMutableList()
@@ -170,8 +187,10 @@ private class DetailGeneratorImpl(
             grouping.mapTo(mutableListOf<DetailSection>()) { (category, albums) ->
                 DetailSection.Albums(category, listSettings.artistAlbumSort.albums(albums))
             }
-        if (artist.songs.isNotEmpty()) {
-            val songs = DetailSection.Songs(listSettings.artistSongSort.songs(artist.songs))
+        val artistSongs =
+            if (primaryOnly) PrimaryAlbumArtists.songs(artist, libraryAlbums) else artist.songs
+        if (artistSongs.isNotEmpty()) {
+            val songs = DetailSection.Songs(listSettings.artistSongSort.songs(artistSongs))
             sections.add(songs)
         }
         return Detail(artist, sections)

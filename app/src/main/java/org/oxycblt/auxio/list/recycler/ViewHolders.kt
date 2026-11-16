@@ -32,7 +32,10 @@ import org.oxycblt.auxio.list.PlainDivider
 import org.oxycblt.auxio.list.SelectableListListener
 import org.oxycblt.auxio.list.adapter.SelectionIndicatorAdapter
 import org.oxycblt.auxio.list.adapter.SimpleDiffCallback
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
 import org.oxycblt.auxio.music.areNamesTheSame
+import org.oxycblt.auxio.music.displayArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.util.context
@@ -61,7 +64,10 @@ class SongViewHolder private constructor(private val binding: ItemSongBinding) :
         listener.bind(song, this, menuButton = binding.songMenu)
         binding.songAlbumCover.bind(song)
         binding.songName.text = song.name.resolve(binding.context)
-        binding.songInfo.text = song.artists.resolveNames(binding.context)
+        binding.songInfo.text =
+            song
+                .displayArtists(binding.context.primaryAlbumArtistsOnly())
+                .resolveNames(binding.context)
     }
 
     override fun updatePlayingIndicator(isActive: Boolean, isPlaying: Boolean) {
@@ -112,7 +118,10 @@ class AlbumViewHolder private constructor(private val binding: ItemParentBinding
         listener.bind(album, this, menuButton = binding.parentMenu)
         binding.parentImage.bind(album)
         binding.parentName.text = album.name.resolve(binding.context)
-        binding.parentInfo.text = album.artists.resolveNames(binding.context)
+        binding.parentInfo.text =
+            album
+                .displayArtists(binding.context.primaryAlbumArtistsOnly())
+                .resolveNames(binding.context)
     }
 
     override fun updatePlayingIndicator(isActive: Boolean, isPlaying: Boolean) {
@@ -165,16 +174,23 @@ class ArtistViewHolder private constructor(private val binding: ItemParentBindin
         listener.bind(artist, this, menuButton = binding.parentMenu)
         binding.parentImage.bind(artist)
         binding.parentName.text = artist.name.resolve(binding.context)
+        val primaryOnly = binding.context.primaryAlbumArtistsOnly()
+        val albums =
+            if (primaryOnly) PrimaryAlbumArtists.albums(artist, artist.explicitAlbums)
+            else artist.explicitAlbums
+        val songs =
+            if (primaryOnly) PrimaryAlbumArtists.songs(artist, artist.explicitAlbums)
+            else artist.songs
         binding.parentInfo.text =
             binding.context.getString(
                 R.string.fmt_two,
-                if (artist.explicitAlbums.isNotEmpty()) {
-                    binding.context.getPlural(R.plurals.fmt_album_count, artist.explicitAlbums.size)
+                if (albums.isNotEmpty()) {
+                    binding.context.getPlural(R.plurals.fmt_album_count, albums.size)
                 } else {
                     binding.context.getString(R.string.def_album_count)
                 },
-                if (artist.songs.isNotEmpty()) {
-                    binding.context.getPlural(R.plurals.fmt_song_count, artist.songs.size)
+                if (songs.isNotEmpty()) {
+                    binding.context.getPlural(R.plurals.fmt_song_count, songs.size)
                 } else {
                     binding.context.getString(R.string.def_song_count)
                 },

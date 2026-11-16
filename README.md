@@ -27,6 +27,9 @@ database or in files you export.
 
 ## What's different from Auxio
 
+- **First album artist only:** an optional Library setting groups albums and songs under the first album artist and keeps secondary credits out of the Artists tab.
+- **Detail pages:** album and artist artwork and lists start at the top; long titles move to reveal the full name.
+
 - **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and

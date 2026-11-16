@@ -33,8 +33,11 @@ import org.oxycblt.auxio.list.ListFragment
 import org.oxycblt.auxio.list.menu.Menu
 import org.oxycblt.auxio.music.PlaylistDecision
 import org.oxycblt.auxio.music.PlaylistMessage
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
+import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackDecision
 import org.oxycblt.auxio.ui.HorizontalSwipeDetector
 import org.oxycblt.auxio.util.collect
@@ -57,6 +60,9 @@ import timber.log.Timber as L
  */
 @AndroidEntryPoint
 class ArtistDetailFragment : DetailFragment<Artist, Music>() {
+    private fun primarySongs(artist: Artist): List<Song> =
+        detailModel.artistSongSort.songs(PrimaryAlbumArtists.songs(artist, artist.explicitAlbums))
+
     // Information about what artist to display is initially within the navigation arguments
     // as a UID, as that is the only safe way to parcel an artist.
     private val args: ArtistDetailFragmentArgs by navArgs()
@@ -72,6 +78,7 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
         // The controls are in the main navigation along the bottom, so the top toolbar is only
         // needed for the actions of selected items.
         DetailBottomBar.setTopToolbarShown(binding, false)
+        binding.detailRecycler.bottomAligned = false
 
         setupSwipeBetweenTabs(binding)
 
@@ -102,17 +109,24 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
     }
 
     override fun onPlayParent(parent: Artist) {
-        playbackModel.play(parent)
+        if (requireContext().primaryAlbumArtistsOnly()) playbackModel.play(primarySongs(parent))
+        else playbackModel.play(parent)
     }
 
     override fun onShuffleParent(parent: Artist) {
-        playbackModel.shuffle(parent)
+        if (requireContext().primaryAlbumArtistsOnly()) playbackModel.shuffle(primarySongs(parent))
+        else playbackModel.shuffle(parent)
     }
 
     override fun onRealClick(item: Music) {
         when (item) {
             is Album -> detailModel.showAlbum(item)
-            is Song -> playbackModel.play(item, detailModel.playInArtistWith)
+            is Song -> {
+                if (requireContext().primaryAlbumArtistsOnly()) {
+                    val artist = detailModel.currentArtist.value ?: return
+                    playbackModel.play(item, primarySongs(artist))
+                } else playbackModel.play(item, detailModel.playInArtistWith)
+            }
             else -> error("Unexpected datatype: ${item::class.simpleName}")
         }
     }
@@ -124,7 +138,13 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
 
     override fun onOpenMenu(item: Music) {
         when (item) {
-            is Song -> listModel.openMenu(R.menu.artist_song, item, detailModel.playInArtistWith)
+            is Song ->
+                listModel.openMenu(
+                    R.menu.artist_song,
+                    item,
+                    if (requireContext().primaryAlbumArtistsOnly()) PlaySong.FromAlbum
+                    else detailModel.playInArtistWith,
+                )
             is Album -> listModel.openMenu(R.menu.artist_album, item)
             else -> error("Unexpected datatype: ${item::class.simpleName}")
         }
@@ -170,18 +190,30 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
             context.getString(
                 R.string.fmt_two,
                 if (artist.explicitAlbums.isNotEmpty()) {
-                    context.getPlural(R.plurals.fmt_album_count, artist.explicitAlbums.size)
+                    context.getPlural(
+                        R.plurals.fmt_album_count,
+                        if (context.primaryAlbumArtistsOnly())
+                            PrimaryAlbumArtists.albums(artist, artist.explicitAlbums).size
+                        else artist.explicitAlbums.size,
+                    )
                 } else {
                     context.getString(R.string.def_album_count)
                 },
-                if (artist.songs.isNotEmpty()) {
-                    context.getPlural(R.plurals.fmt_song_count, artist.songs.size)
+                if (artist.songs.isNotEmpty() || context.primaryAlbumArtistsOnly()) {
+                    context.getPlural(
+                        R.plurals.fmt_song_count,
+                        if (context.primaryAlbumArtistsOnly()) primarySongs(artist).size
+                        else artist.songs.size,
+                    )
                 } else {
                     context.getString(R.string.def_song_count)
                 },
             )
 
-        if (artist.songs.isNotEmpty()) {
+        if (
+            if (context.primaryAlbumArtistsOnly()) primarySongs(artist).isNotEmpty()
+            else artist.songs.isNotEmpty()
+        ) {
             // Information about the artist's genre(s) map to the sub-head text
             // Hide the subhead if all genres are unknown (no genre tags in music files)
             val hasKnownGenres = artist.genres.any { it.name is Name.Known }

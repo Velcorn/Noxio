@@ -36,6 +36,12 @@
             app:summary="@string/set_hide_collaborators_desc"
             app:title="@string/set_hide_collaborators" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="@string/set_key_primary_album_artists"
+            app:summary="@string/set_primary_album_artists_desc"
+            app:title="@string/set_primary_album_artists" />
+
     </org.oxycblt.auxio.settings.ui.InfoCategory>
 
 </PreferenceScreen>

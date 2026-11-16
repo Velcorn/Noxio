@@ -72,11 +72,13 @@
         <org.oxycblt.auxio.image.CoverView
             android:id="@+id/detail_cover"
             style="@style/Widget.Auxio.Image.Large"
+            android:layout_marginTop="@dimen/spacing_medium"
             app:enablePlaybackIndicator="false"
             app:enableSelectionBadge="false"
             app:layout_constraintBottom_toTopOf="@+id/materialButtonGroup"
             app:layout_constraintStart_toStartOf="@+id/materialButtonGroup"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintVertical_chainStyle="packed"
             tools:ignore="ContentDescription" />
 
@@ -99,6 +101,9 @@
             style="@style/Widget.Auxio.TextView.Detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
             app:layout_constraintBottom_toTopOf="@+id/detail_subhead"
             app:layout_constraintEnd_toEndOf="@+id/detail_type"
             app:layout_constraintStart_toStartOf="@+id/detail_type"

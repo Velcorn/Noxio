@@ -26,6 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentPlaybackBarBinding
 import org.oxycblt.auxio.detail.DetailViewModel
+import org.oxycblt.auxio.music.displayArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.ui.KeyboardMode
@@ -107,7 +109,8 @@ class PlaybackBarFragment : ViewBindingFragment<FragmentPlaybackBarBinding>() {
         val binding = requireBinding()
         binding.playbackCover.bind(song)
         binding.playbackSong.text = song.name.resolve(context)
-        binding.playbackInfo.text = song.artists.resolveNames(context)
+        binding.playbackInfo.text =
+            song.displayArtists(context.primaryAlbumArtistsOnly()).resolveNames(context)
         binding.playbackProgressBar.max = song.durationMs.msToDs().toInt()
     }
 

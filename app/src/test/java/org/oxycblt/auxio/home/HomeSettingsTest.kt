@@ -92,4 +92,27 @@ class HomeSettingsTest {
             HomeSettingsImpl(context).also { it.migrate() }.homeTabs.last(),
         )
     }
+
+    @Test
+    fun primaryAlbumArtistsSettingIsOffByDefaultAndNotifiesListeners() {
+        val settings = HomeSettingsImpl(context)
+        var changes = 0
+        val listener =
+            object : HomeSettings.Listener {
+                override fun onPrimaryAlbumArtistsChanged() {
+                    changes++
+                }
+            }
+        assertEquals(false, settings.primaryAlbumArtistsOnly)
+        settings.registerListener(listener)
+        PreferenceManager.getDefaultSharedPreferences(context).edit(commit = true) {
+            putBoolean(
+                context.getString(org.oxycblt.auxio.R.string.set_key_primary_album_artists),
+                true,
+            )
+        }
+        assertEquals(true, settings.primaryAlbumArtistsOnly)
+        assertEquals(1, changes)
+        settings.unregisterListener(listener)
+    }
 }

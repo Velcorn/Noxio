@@ -38,6 +38,8 @@ import org.oxycblt.auxio.list.recycler.FastScrollRecyclerView
 import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.IndexingState
 import org.oxycblt.auxio.music.MusicViewModel
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.playback.formatDurationMsPopup
 import org.oxycblt.auxio.util.collectImmediately
@@ -115,15 +117,26 @@ class ArtistListFragment :
 
             // Duration -> Use compact bucket duration
             is Sort.Mode.ByDuration ->
-                artist.durationMs?.formatDurationMsPopup()?.let {
-                    FastScrollRecyclerView.PopupProvider.PopupData(it)
-                }
+                (if (requireContext().primaryAlbumArtistsOnly())
+                        PrimaryAlbumArtists.songs(artist, artist.explicitAlbums).sumOf {
+                            it.durationMs
+                        }
+                    else artist.durationMs)
+                    ?.formatDurationMsPopup()
+                    ?.let {
+                        FastScrollRecyclerView.PopupProvider.PopupData(it)
+                    }
 
             // Count -> Use song count
             is Sort.Mode.ByCount ->
-                artist.songs.size.positiveOrNull()?.toString()?.let {
-                    FastScrollRecyclerView.PopupProvider.PopupData(it)
-                }
+                (if (requireContext().primaryAlbumArtistsOnly())
+                        PrimaryAlbumArtists.songs(artist, artist.explicitAlbums).size
+                    else artist.songs.size)
+                    .positiveOrNull()
+                    ?.toString()
+                    ?.let {
+                        FastScrollRecyclerView.PopupProvider.PopupData(it)
+                    }
 
             // Unsupported sort, error gracefully
             else -> null

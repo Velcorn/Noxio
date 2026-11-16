@@ -22,8 +22,10 @@ import javax.inject.Inject
 import org.oxycblt.auxio.home.tabs.Tab
 import org.oxycblt.auxio.list.ListSettings
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
+import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.MusicType
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
 import org.oxycblt.musikr.Album
 import org.oxycblt.musikr.Artist
 import org.oxycblt.musikr.Genre
@@ -97,6 +99,12 @@ private class HomeGeneratorImpl(
         invalidator.invalidateMusic(MusicType.ARTISTS, UpdateInstructions.Diff)
     }
 
+    override fun onPrimaryAlbumArtistsChanged() {
+        invalidator.invalidateMusic(MusicType.ARTISTS, UpdateInstructions.Replace(0))
+        invalidator.invalidateMusic(MusicType.ALBUMS, UpdateInstructions.Replace(0))
+        invalidator.invalidateMusic(MusicType.SONGS, UpdateInstructions.Replace(0))
+    }
+
     override fun onSongSortChanged() {
         super.onSongSortChanged()
         invalidator.invalidateMusic(MusicType.SONGS, UpdateInstructions.Replace(0))
@@ -151,15 +159,53 @@ private class HomeGeneratorImpl(
     override fun empty() = musicRepository.library?.empty() ?: true
 
     override fun songs() =
-        musicRepository.library?.let { listSettings.songSort.songs(it.songs) } ?: emptyList()
+        musicRepository.library?.let {
+            val sort = listSettings.songSort
+            val sorted = sort.songs(it.songs)
+            if (homeSettings.primaryAlbumArtistsOnly && sort.mode == Sort.Mode.ByArtist) {
+                if (sort.direction == Sort.Direction.ASCENDING) {
+                    sorted.sortedBy { song -> PrimaryAlbumArtists.first(song)?.name }
+                } else {
+                    sorted.sortedByDescending { song -> PrimaryAlbumArtists.first(song)?.name }
+                }
+            } else sorted
+        } ?: emptyList()
 
     override fun albums() =
-        musicRepository.library?.let { listSettings.albumSort.albums(it.albums) } ?: emptyList()
+        musicRepository.library?.let {
+            val sort = listSettings.albumSort
+            val sorted = sort.albums(it.albums)
+            if (homeSettings.primaryAlbumArtistsOnly && sort.mode == Sort.Mode.ByArtist) {
+                if (sort.direction == Sort.Direction.ASCENDING) {
+                    sorted.sortedBy { album -> PrimaryAlbumArtists.first(album)?.name }
+                } else {
+                    sorted.sortedByDescending { album -> PrimaryAlbumArtists.first(album)?.name }
+                }
+            } else sorted
+        } ?: emptyList()
 
     override fun artists() =
         musicRepository.library?.let { deviceLibrary ->
             val sorted = listSettings.artistSort.artists(deviceLibrary.artists)
-            if (homeSettings.shouldHideCollaborators) {
+            if (homeSettings.primaryAlbumArtistsOnly) {
+                val visible = PrimaryAlbumArtists.visible(sorted, deviceLibrary.albums)
+                val sort = listSettings.artistSort
+                val key: ((Artist) -> Long)? =
+                    when (sort.mode) {
+                        Sort.Mode.ByCount -> { artist ->
+                            PrimaryAlbumArtists.songs(artist, artist.explicitAlbums).size.toLong()
+                        }
+                        Sort.Mode.ByDuration -> { artist ->
+                            PrimaryAlbumArtists.songs(artist, artist.explicitAlbums).sumOf {
+                                it.durationMs
+                            }
+                        }
+                        else -> null
+                    }
+                if (key == null) visible
+                else if (sort.direction == Sort.Direction.ASCENDING) visible.sortedBy(key)
+                else visible.sortedByDescending(key)
+            } else if (homeSettings.shouldHideCollaborators) {
                 sorted.filter { it.explicitAlbums.isNotEmpty() }
             } else {
                 sorted

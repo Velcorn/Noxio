@@ -125,6 +125,8 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
 
         binding.detailRecycler.apply { adapter = getDetailListAdapter() }
 
+        binding.detailName.isSelected = true
+
         spacingSmall = requireContext().getDimenPixels(R.dimen.spacing_small)
     }
 

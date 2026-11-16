@@ -404,6 +404,10 @@ constructor(
         playImpl(commandFactory.songs(songs, ShuffleMode.OFF))
     }
 
+    fun play(song: Song, songs: List<Song>) {
+        playImpl(commandFactory.songFromSongs(song, songs, ShuffleMode.IMPLICIT))
+    }
+
     /**
      * Shuffle a list of [Song]s.
      *

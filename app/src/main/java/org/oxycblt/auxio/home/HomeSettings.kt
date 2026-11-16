@@ -39,6 +39,7 @@ interface HomeSettings : Settings<HomeSettings.Listener> {
     var homeTabs: Array<Tab>
     /** Whether to hide artists considered "collaborators" from the home UI. */
     val shouldHideCollaborators: Boolean
+    val primaryAlbumArtistsOnly: Boolean
 
     interface Listener {
         /** Called when the [homeTabs] configuration changes. */
@@ -46,6 +47,8 @@ interface HomeSettings : Settings<HomeSettings.Listener> {
 
         /** Called when the [shouldHideCollaborators] configuration changes. */
         fun onHideCollaboratorsChanged() {}
+
+        fun onPrimaryAlbumArtistsChanged() {}
     }
 }
 
@@ -68,6 +71,10 @@ class HomeSettingsImpl @Inject constructor(@ApplicationContext context: Context)
 
     override val shouldHideCollaborators: Boolean
         get() = sharedPreferences.getBoolean(getString(R.string.set_key_hide_collaborators), false)
+
+    override val primaryAlbumArtistsOnly: Boolean
+        get() =
+            sharedPreferences.getBoolean(getString(R.string.set_key_primary_album_artists), false)
 
     override fun migrate() {
         resetOldDefaultTabs()
@@ -126,6 +133,8 @@ class HomeSettingsImpl @Inject constructor(@ApplicationContext context: Context)
                 L.d("Dispatching collaborator setting change")
                 listener.onHideCollaboratorsChanged()
             }
+            getString(R.string.set_key_primary_album_artists) ->
+                listener.onPrimaryAlbumArtistsChanged()
         }
     }
 

@@ -3,6 +3,14 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.16.0
+
+## What's New
+- *First album artist only* in Library settings shows albums and songs under the first album artist and hides secondary album artists from the Artists tab
+
+## What's Improved
+- Album and artist pages start their artwork and short lists at the top; long titles scroll to show the full name
+
 ## v1.15.1
 
 ## What's Improved

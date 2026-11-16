@@ -39,6 +39,8 @@ import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentPlaybackPanelBinding
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.list.ListViewModel
+import org.oxycblt.auxio.music.displayArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.music.resolveNames
 import org.oxycblt.auxio.playback.queue.QueueViewModel
@@ -266,7 +268,8 @@ class PlaybackPanelFragment :
         val context = requireContext()
         L.d("Updating song display: $song")
         binding.playbackSong.text = song.name.resolve(context)
-        binding.playbackArtist.text = song.artists.resolveNames(context)
+        binding.playbackArtist.text =
+            song.displayArtists(context.primaryAlbumArtistsOnly()).resolveNames(context)
         binding.playbackAlbum?.text = song.album.name.resolve(context)
         binding.playbackSeekBar?.durationDs = song.durationMs.msToDs()
     }
