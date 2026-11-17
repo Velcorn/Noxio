@@ -101,7 +101,13 @@ class SongDetailDialog : ViewBindingMaterialDialogFragment<DialogSongDetailBindi
     override fun onStart() {
         super.onStart()
         val dialog = requireDialog() as AlertDialog
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        dialog.window?.apply {
+            // An AlertDialog marks its window as not for typing when its content has no text
+            // field as it opens, which the read-only properties are not. That flag keeps the
+            // keyboard away for good, also once the fields to edit are there, so it is cleared.
+            clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+            setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
             if (editAdapter == null) startEditing() else stopEditing()
         }
