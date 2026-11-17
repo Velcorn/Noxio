@@ -159,7 +159,7 @@ internal constructor(
             .enqueue(
                 OneTimeWorkRequestBuilder<StatsBackupWorker>()
                     .setInputData(workDataOf(StatsBackupWorker.KEY_ONCE to true))
-                    .build()
+                    .build(),
             )
     }
 

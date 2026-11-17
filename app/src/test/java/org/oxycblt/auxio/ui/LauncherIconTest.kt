@@ -37,7 +37,7 @@ class LauncherIconTest {
 
     private fun enabled(alias: String) =
         context.packageManager.getComponentEnabledSetting(
-            ComponentName(context.packageName, "org.oxycblt.auxio.$alias")
+            ComponentName(context.packageName, "org.oxycblt.auxio.$alias"),
         ) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
 
     @Test

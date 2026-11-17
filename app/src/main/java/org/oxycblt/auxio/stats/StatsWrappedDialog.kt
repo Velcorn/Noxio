@@ -106,7 +106,7 @@ class StatsWrappedDialog : ViewBindingBottomSheetDialogFragment<DialogStatsWrapp
         binding.wrappedPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) = page(position)
-            }
+            },
         )
     }
 
@@ -129,7 +129,7 @@ class StatsWrappedDialog : ViewBindingBottomSheetDialogFragment<DialogStatsWrapp
                         )
                     scaleType = ImageView.ScaleType.FIT_CENTER
                     contentDescription = parent.context.getString(R.string.lbl_stats_share_preview)
-                }
+                },
             )
 
         override fun onBindViewHolder(holder: Holder, position: Int) {

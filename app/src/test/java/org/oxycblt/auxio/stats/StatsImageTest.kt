@@ -58,7 +58,7 @@ class StatsImageTest {
         val long =
             content(rows = 1)
                 .copy(
-                    rows = listOf(StatsImageContent.Row("N".repeat(500), null, "1 play", "1 min"))
+                    rows = listOf(StatsImageContent.Row("N".repeat(500), null, "1 play", "1 min")),
                 )
         assertEquals(StatsImage.HEIGHT, StatsImage.render(context, long).height)
     }

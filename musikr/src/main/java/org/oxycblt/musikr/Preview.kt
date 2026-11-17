@@ -124,8 +124,8 @@ object Preview {
                 }
             builder.add(
                 interpreter.interpret(
-                    RawSong(file, audio.properties, audio.tags, cover, cached.addedMs)
-                )
+                    RawSong(file, audio.properties, audio.tags, cover, cached.addedMs),
+                ),
             )
         }
         // The playlists too, so a queue played from one still knows it. They only hold the

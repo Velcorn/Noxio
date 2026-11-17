@@ -92,7 +92,7 @@ class StatsRepositoryTest {
                     play("Tie B", listenedMs = 900),
                     play("Tie A", listenedMs = 500),
                     play("Tie B", listenedMs = 900),
-                )
+                ),
             )
         assertEquals(listOf("Tie B", "Tie A", "Twice", "Once"), stats.songs.map { it.name })
         assertEquals(2, stats.songs.first().plays)
@@ -120,7 +120,7 @@ class StatsRepositoryTest {
                 listOf(
                     play("One", artists = "A", album = "Greatest Hits"),
                     play("Two", artists = "B", album = "Greatest Hits"),
-                )
+                ),
             )
         assertEquals(2, stats.albums.size)
     }
@@ -284,7 +284,7 @@ class StatsRepositoryTest {
     fun importingAHistoryTwiceDoesNotDuplicateIt() = runBlocking {
         val history =
             StatsCsvImport.Parsed.History(
-                listOf(play("A", startedAt = 5_000), play("B", startedAt = 9_000))
+                listOf(play("A", startedAt = 5_000), play("B", startedAt = 9_000)),
             )
         assertEquals(2, repository.importCsv(listOf(history)))
         assertEquals(0, repository.importCsv(listOf(history)))
@@ -295,7 +295,7 @@ class StatsRepositoryTest {
     fun aMostPlayedListBecomesUndatedPlays() = runBlocking {
         val added =
             repository.importCsv(
-                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 3), row("B", 2))))
+                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 3), row("B", 2)))),
             )
         assertEquals(5, added)
         assertTrue(dao.events.all { it.startedAt == PlayEvent.BASELINE_TIME })
@@ -332,7 +332,7 @@ class StatsRepositoryTest {
         assertEquals(
             0,
             repository.importCsv(
-                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 40)), month))
+                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("A", 40)), month)),
             ),
         )
         assertEquals(3, dao.events.size)
@@ -342,7 +342,7 @@ class StatsRepositoryTest {
         assertEquals(
             10,
             repository.importCsv(
-                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("B", 10)), june))
+                listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("B", 10)), june)),
             ),
         )
 
@@ -389,7 +389,7 @@ class StatsRepositoryTest {
     fun importingDatedPlaysKeepsTheBaseline() = runBlocking {
         repository.importCsv(listOf(StatsCsvImport.Parsed.MostPlayed(listOf(row("Old", 2)))))
         repository.importCsv(
-            listOf(StatsCsvImport.Parsed.History(listOf(play("New", startedAt = 5_000))))
+            listOf(StatsCsvImport.Parsed.History(listOf(play("New", startedAt = 5_000)))),
         )
         assertEquals(3, dao.events.size)
     }
@@ -402,7 +402,7 @@ class StatsRepositoryTest {
                 listOf(
                     play("Kept", startedAt = PlayEvent.BASELINE_TIME),
                     play("Dated", startedAt = 5_000),
-                )
+                ),
             )
         repository.importCsv(listOf(backup))
         assertEquals(setOf("Kept", "Dated"), dao.events.map { it.title }.toSet())

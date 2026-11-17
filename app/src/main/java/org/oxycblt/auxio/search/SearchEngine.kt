@@ -95,36 +95,35 @@ class SearchEngineImpl @Inject constructor(@ApplicationContext private val conte
     private inline fun <T : Music> Collection<T>.searchListImpl(
         query: String,
         fallback: (String, T) -> Boolean = { _, _ -> false },
-    ): List<T>? =
-        mapNotNull {
-                // See if the plain resolved name matches the query. This works for most
-                // situations.
-                val name = it.name
-                val resolvedName = name.resolve(context)
+    ): List<T>? = mapNotNull {
+        // See if the plain resolved name matches the query. This works for most
+        // situations.
+        val name = it.name
+        val resolvedName = name.resolve(context)
 
-                // The sort name can sometimes be helpful as certain libraries will tag sort names
-                // to have a alphabetized version of the title.
-                val sortName = (name as? Name.Known)?.sort
+        // The sort name can sometimes be helpful as certain libraries will tag sort names
+        // to have a alphabetized version of the title.
+        val sortName = (name as? Name.Known)?.sort
 
-                // As a last-ditch effort, see if the normalized name matches. This will replace
-                // any non-alphabetical characters with their alphabetical representations, which
-                // could make it match the query.
-                val normalizedName =
-                    NORMALIZE_POST_PROCESSING_REGEX.replace(
-                        Normalizer.normalize(resolvedName, Normalizer.Form.NFKD),
-                        "",
-                    )
+        // As a last-ditch effort, see if the normalized name matches. This will replace
+        // any non-alphabetical characters with their alphabetical representations, which
+        // could make it match the query.
+        val normalizedName =
+            NORMALIZE_POST_PROCESSING_REGEX.replace(
+                Normalizer.normalize(resolvedName, Normalizer.Form.NFKD),
+                "",
+            )
 
-                val rank = SearchRank.best(listOf(resolvedName, sortName, normalizedName), query)
-                when {
-                    rank != SearchRank.NONE -> it to rank
-                    fallback(query, it) -> it to SearchRank.OTHER
-                    else -> null
-                }
-            }
-            .sortedBy { it.second }
-            .map { it.first }
-            .ifEmpty { null }
+        val rank = SearchRank.best(listOf(resolvedName, sortName, normalizedName), query)
+        when {
+            rank != SearchRank.NONE -> it to rank
+            fallback(query, it) -> it to SearchRank.OTHER
+            else -> null
+        }
+    }
+        .sortedBy { it.second }
+        .map { it.first }
+        .ifEmpty { null }
 
     private companion object {
         /**

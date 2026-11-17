@@ -212,10 +212,10 @@ object BackupArchive {
                                     .put("title", it.title)
                                     .put("artist", it.artist)
                                     .put("album", it.album)
-                            }
+                            },
                         ),
                     )
-            }
+            },
         )
 
     private fun playlistsOf(bytes: ByteArray): List<BackupPlaylist> {

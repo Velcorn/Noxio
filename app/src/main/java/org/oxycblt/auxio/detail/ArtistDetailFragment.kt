@@ -166,7 +166,7 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
                     detector.onTouchEvent(e)
                     return false
                 }
-            }
+            },
         )
     }
 

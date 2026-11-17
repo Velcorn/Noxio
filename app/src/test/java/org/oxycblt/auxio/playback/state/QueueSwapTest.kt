@@ -52,7 +52,7 @@ class QueueSwapTest {
             QueueSwap.isSameQueue(
                 queue(song(0), song(1), song(2), mapping = listOf(2, 0, 1), index = 2),
                 queue(song(0), song(1), song(2), mapping = listOf(2, 0, 1), index = 2),
-            )
+            ),
         )
     }
 
@@ -73,7 +73,7 @@ class QueueSwapTest {
             QueueSwap.isSameQueue(
                 current,
                 queue(song(0), song(1), mapping = listOf(0, 1), index = 1),
-            )
+            ),
         )
     }
 
@@ -92,7 +92,7 @@ class QueueSwapTest {
     fun aSongWhoseFileMovedIsNot() {
         // The player would have to open the new file, so it starts over.
         assertFalse(
-            QueueSwap.isSameQueue(queue(song(0)), queue(song(0, file = "content://media/moved")))
+            QueueSwap.isSameQueue(queue(song(0)), queue(song(0, file = "content://media/moved"))),
         )
     }
 
@@ -107,7 +107,7 @@ class QueueSwapTest {
             QueueSwap.isGrowth(
                 queue(song(1)),
                 queue(song(0), song(1), song(2), mapping = listOf(2, 1, 0), index = 1),
-            )
+            ),
         )
     }
 

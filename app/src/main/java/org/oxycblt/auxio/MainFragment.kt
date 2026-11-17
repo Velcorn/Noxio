@@ -217,7 +217,7 @@ class MainFragment :
                     }
 
                     override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-                }
+                },
             )
         } else {
             // Dual-pane mode, manually style the static queue sheet.
@@ -423,7 +423,7 @@ class MainFragment :
                             MusicType.GENRES -> HomeFragmentDirections.sortGenres()
                             MusicType.PLAYLISTS -> HomeFragmentDirections.sortPlaylists()
                         }
-                }
+                },
             )
         }
         binding.mainMore.setOnClickListener(::showMore)
@@ -500,7 +500,7 @@ class MainFragment :
                 override fun onTabUnselected(tab: TabLayout.Tab) {}
 
                 override fun onTabReselected(tab: TabLayout.Tab) {}
-            }
+            },
         )
         shownTabTypes = emptyList()
         navMode = NavMode.NONE
@@ -522,7 +522,7 @@ class MainFragment :
         binding.mainMore.isVisible = !ownHeader && (!keyboardMode || touchOnly)
         if (filter) {
             binding.mainSearchInput.setText(
-                if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery
+                if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery,
             )
             updateSearchHint(binding)
         }
@@ -1052,7 +1052,7 @@ class MainFragment :
         strip.translationZ = if (atBottom) 4 * resources.displayMetrics.density else 0f
         if (atBottom) {
             strip.setBackgroundColor(
-                MaterialColors.getColor(strip, com.google.android.material.R.attr.colorSurface)
+                MaterialColors.getColor(strip, com.google.android.material.R.attr.colorSurface),
             )
         } else {
             strip.background = null

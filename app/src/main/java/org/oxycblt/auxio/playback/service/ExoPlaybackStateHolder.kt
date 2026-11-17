@@ -213,7 +213,7 @@ class ExoPlaybackStateHolder(
                     // Where it plays now, not where it was saved.
                     playbackManager.applySavedState(
                         state.copy(
-                            positionMs = playbackManager.progression.calculateElapsedPositionMs()
+                            positionMs = playbackManager.progression.calculateElapsedPositionMs(),
                         ),
                         true,
                     )

@@ -261,7 +261,7 @@ class StatsViewModelTest {
                             .timeInMillis,
                     listenedMs = 1,
                     durationMs = 1,
-                )
+                ),
             )
         repository.review = yearInReview(events, 2026)
         val wrapped = model.loadWrapped(2026)

@@ -455,7 +455,7 @@ constructor(
                         section.copy(
                             items =
                                 if (needle.isEmpty()) section.items
-                                else section.items.filter { matches(it, needle) }
+                                else section.items.filter { matches(it, needle) },
                         )
                     else -> null
                 }
@@ -651,7 +651,7 @@ constructor(
                 SongProperty(
                     R.string.lbl_album_artists,
                     SongProperty.Value.MusicNames(song.album.artists),
-                )
+                ),
             )
             song.track?.let {
                 add(SongProperty(R.string.lbl_track, SongProperty.Value.Number(it, null)))
@@ -755,7 +755,7 @@ constructor(
                     } else {
                         section
                     }
-                }
+                },
         )
     }
 

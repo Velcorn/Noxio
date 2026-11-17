@@ -128,7 +128,7 @@ class StatsShareDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBi
                         StatsCategory.ARTISTS -> R.string.lbl_stats_top_artists
                         StatsCategory.ALBUMS -> R.string.lbl_stats_top_albums
                         StatsCategory.SONGS -> R.string.lbl_stats_top_songs
-                    }
+                    },
                 ),
             rangeLabel = StatsFormat.range(context, ui.query.period, ui.range),
             rows =

@@ -137,7 +137,7 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
             val minutes = sharedPreferences.getInt(KEY_LAST_MINUTES, 0)
             return SleepTimerMode.Minutes(
                 if (minutes > 0) minutes.coerceAtMost(SleepTimer.MAX_MINUTES)
-                else SleepTimer.DEFAULT_MINUTES
+                else SleepTimer.DEFAULT_MINUTES,
             )
         }
 
@@ -178,7 +178,7 @@ class SleepTimerImpl @Inject constructor(@ApplicationContext private val context
             when (mode) {
                 is SleepTimerMode.Minutes ->
                     SleepTimerMode.Minutes(
-                        mode.minutes.coerceIn(SleepTimer.MIN_MINUTES, SleepTimer.MAX_MINUTES)
+                        mode.minutes.coerceIn(SleepTimer.MIN_MINUTES, SleepTimer.MAX_MINUTES),
                     )
                 SleepTimerMode.EndOfTrack -> mode
             }

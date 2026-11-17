@@ -48,7 +48,7 @@ class BottomAlignedPreferenceLayoutManagerTest {
                         View(context).apply {
                             layoutParams =
                                 RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80)
-                        }
+                        },
                     ) {}
 
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
@@ -70,7 +70,7 @@ class BottomAlignedPreferenceLayoutManagerTest {
                     ) {
                         outRect.bottom = 10
                     }
-                }
+                },
             )
         }
 

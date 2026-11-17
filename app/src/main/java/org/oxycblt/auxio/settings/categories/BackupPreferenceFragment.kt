@@ -179,7 +179,7 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                     outcome.now.playlists,
                     outcome.last.plays,
                     outcome.last.playlists,
-                )
+                ),
             )
             .setPositiveButton(R.string.lbl_backup_small_ok) { _, _ -> backUpNow(force = true) }
             .setNegativeButton(R.string.lbl_cancel, null)
@@ -214,7 +214,7 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                     info.plays,
                     info.playlists,
                     info.settings,
-                )
+                ),
             )
             .setPositiveButton(R.string.lbl_backup_restore_ok) { _, _ ->
                 viewLifecycleOwner.lifecycleScope.launch {
@@ -299,7 +299,7 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                     Frequency.DAILY -> R.string.set_backup_daily
                     Frequency.WEEKLY -> R.string.set_backup_weekly
                     Frequency.MONTHLY -> R.string.set_backup_monthly
-                }
+                },
             )
         val next =
             statsBackup.nextRun()?.let {

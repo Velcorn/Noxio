@@ -102,12 +102,12 @@ class StatsDatabaseTest {
                 "CREATE TABLE `PlayEvent` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                     "`songUid` TEXT NOT NULL, `title` TEXT NOT NULL, `artists` TEXT NOT NULL, " +
                     "`album` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, " +
-                    "`listenedMs` INTEGER NOT NULL, `durationMs` INTEGER NOT NULL)"
+                    "`listenedMs` INTEGER NOT NULL, `durationMs` INTEGER NOT NULL)",
             )
             old.execSQL("CREATE INDEX `index_PlayEvent_startedAt` ON `PlayEvent` (`startedAt`)")
             old.execSQL(
                 "INSERT INTO PlayEvent (songUid, title, artists, album, startedAt, listenedMs, " +
-                    "durationMs) VALUES ('u', 'Kept', 'A', 'B', 5, 6, 7)"
+                    "durationMs) VALUES ('u', 'Kept', 'A', 'B', 5, 6, 7)",
             )
             old.version = 1
         }
@@ -138,13 +138,13 @@ class StatsDatabaseTest {
                     "`album` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, " +
                     "`listenedMs` INTEGER NOT NULL, `durationMs` INTEGER NOT NULL, " +
                     "`filePath` TEXT NOT NULL DEFAULT '', `albumArtist` TEXT NOT NULL DEFAULT '', " +
-                    "`genre` TEXT NOT NULL DEFAULT '', `year` INTEGER NOT NULL DEFAULT 0)"
+                    "`genre` TEXT NOT NULL DEFAULT '', `year` INTEGER NOT NULL DEFAULT 0)",
             )
             old.execSQL("CREATE INDEX `index_PlayEvent_startedAt` ON `PlayEvent` (`startedAt`)")
             old.execSQL(
                 "INSERT INTO PlayEvent (songUid, title, artists, album, startedAt, listenedMs, " +
                     "durationMs) VALUES ('u', 'Undated', 'A', 'B', 0, 6, 7), " +
-                    "('v', 'Dated', 'A', 'B', 5, 6, 7)"
+                    "('v', 'Dated', 'A', 'B', 5, 6, 7)",
             )
             old.version = 2
         }

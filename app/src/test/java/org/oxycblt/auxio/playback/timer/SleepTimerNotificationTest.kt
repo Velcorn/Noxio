@@ -52,13 +52,16 @@ class SleepTimerNotificationTest {
             )
         notification.show(active)
         assertTrue(
-            manager.allNotifications.single().extras.getBoolean(Notification.EXTRA_SHOW_CHRONOMETER)
+            manager.allNotifications
+                .single()
+                .extras
+                .getBoolean(Notification.EXTRA_SHOW_CHRONOMETER),
         )
         notification.show(active.copy(pausedRemainingMs = 5_999_500L))
         val paused = manager.allNotifications.single()
         assertFalse(paused.extras.getBoolean(Notification.EXTRA_SHOW_CHRONOMETER))
         assertTrue(
-            paused.extras.getCharSequence(Notification.EXTRA_TEXT).toString().contains("1:40:00")
+            paused.extras.getCharSequence(Notification.EXTRA_TEXT).toString().contains("1:40:00"),
         )
         assertEquals(
             listOf("+10 min", "Restart", "Stop"),
@@ -66,7 +69,10 @@ class SleepTimerNotificationTest {
         )
         notification.show(active)
         assertTrue(
-            manager.allNotifications.single().extras.getBoolean(Notification.EXTRA_SHOW_CHRONOMETER)
+            manager.allNotifications
+                .single()
+                .extras
+                .getBoolean(Notification.EXTRA_SHOW_CHRONOMETER),
         )
         notification.show(SleepTimerState.Off)
         assertEquals(0, manager.allNotifications.size)

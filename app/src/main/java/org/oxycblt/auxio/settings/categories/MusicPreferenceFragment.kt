@@ -123,7 +123,7 @@ class MusicPreferenceFragment : BasePreferenceFragment(R.xml.preferences_music) 
                     requireContext()
                         .showToast(
                             if (state.error == null) R.string.lbl_scan_done
-                            else R.string.err_index_failed
+                            else R.string.err_index_failed,
                         )
                 }
             }

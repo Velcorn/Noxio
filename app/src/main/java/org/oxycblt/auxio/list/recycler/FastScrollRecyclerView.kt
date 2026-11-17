@@ -291,7 +291,7 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
                         outRect.top = bottomAlignGap
                     }
                 }
-            }
+            },
         )
 
         addItemDecoration(

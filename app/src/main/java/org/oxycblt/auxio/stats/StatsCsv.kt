@@ -56,14 +56,14 @@ object StatsCsv {
                     ""
                 } else {
                     DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(
-                        Instant.ofEpochMilli(event.startedAt).atZone(zone).withNano(0)
+                        Instant.ofEpochMilli(event.startedAt).atZone(zone).withNano(0),
                     )
                 }
             writer.write(
                 row(
                     songColumns(event, plays = 1) +
-                        listOf(time, "${event.listenedMs}", if (event.hasGuessedTime) "1" else "0")
-                )
+                        listOf(time, "${event.listenedMs}", if (event.hasGuessedTime) "1" else "0"),
+                ),
             )
         }
         writer.flush()

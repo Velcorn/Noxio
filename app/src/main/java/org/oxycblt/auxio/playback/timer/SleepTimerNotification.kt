@@ -46,7 +46,7 @@ class SleepTimerNotification(private val context: Context) {
             NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_LOW)
                 .setName(context.getString(R.string.lbl_sleep_notification_channel))
                 .setShowBadge(false)
-                .build()
+                .build(),
         )
     }
 
@@ -85,7 +85,7 @@ class SleepTimerNotification(private val context: Context) {
                             context.getString(
                                 R.string.fmt_sleep_notification_paused,
                                 DateUtils.formatElapsedTime((state.remainingMs() + 999) / 1000),
-                            )
+                            ),
                         )
                 } else
                     builder
@@ -96,7 +96,7 @@ class SleepTimerNotification(private val context: Context) {
                             context.getString(
                                 R.string.fmt_sleep_notification_until,
                                 DateFormat.getTimeFormat(context).format(Date(endsAtWallClock)),
-                            )
+                            ),
                         )
                 builder.addAction(
                     0,

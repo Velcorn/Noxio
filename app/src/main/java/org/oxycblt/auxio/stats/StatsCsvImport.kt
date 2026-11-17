@@ -154,7 +154,7 @@ object StatsCsvImport {
                         year = cell(row, "YEAR").toIntOrNull() ?: 0,
                         estimated = cell(row, "ESTIMATED") == "1",
                     )
-                }
+                },
             )
         } else {
             Parsed.MostPlayed(

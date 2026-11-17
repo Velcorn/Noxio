@@ -216,7 +216,7 @@ class SleepTimerController(
         val vibrator = context.getSystemService(Vibrator::class.java) ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(
-                VibrationEffect.createOneShot(VIBRATE_MS, VibrationEffect.DEFAULT_AMPLITUDE)
+                VibrationEffect.createOneShot(VIBRATE_MS, VibrationEffect.DEFAULT_AMPLITUDE),
             )
         } else {
             @Suppress("DEPRECATION") vibrator.vibrate(VIBRATE_MS)

@@ -272,7 +272,7 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
                 binding.sleepRemainingNote.setText(
                     if (active.pausedRemainingMs != null) R.string.lbl_sleep_paused
                     else if (active.finishSong) R.string.lbl_sleep_stops_after_song_over
-                    else R.string.lbl_sleep_stops_when_over
+                    else R.string.lbl_sleep_stops_when_over,
                 )
                 binding.sleepRestart.visibility = View.VISIBLE
                 // collectLatest cancels this suspend function as soon as the state changes.

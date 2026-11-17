@@ -136,7 +136,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 StatsPeriod.MONTH -> R.id.stats_month
                 StatsPeriod.YEAR -> R.id.stats_year
                 StatsPeriod.ALL -> R.id.stats_all
-            }
+            },
         )
         binding.statsPeriodGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
@@ -146,7 +146,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                         R.id.stats_year -> StatsPeriod.YEAR
                         R.id.stats_all -> StatsPeriod.ALL
                         else -> StatsPeriod.WEEK
-                    }
+                    },
                 )
             }
         }
@@ -157,7 +157,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                         R.id.stats_albums -> StatsCategory.ALBUMS
                         R.id.stats_songs -> StatsCategory.SONGS
                         else -> StatsCategory.ARTISTS
-                    }
+                    },
                 )
             }
         }
@@ -226,7 +226,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         binding.statsHeroTime.text = StatsFormat.listened(context, stats.listenedMs)
         binding.statsHeroPlays.text = StatsFormat.plays(context, stats.plays)
         binding.statsMore.setText(
-            if (expanded) R.string.lbl_stats_show_five else R.string.lbl_stats_show_ten
+            if (expanded) R.string.lbl_stats_show_five else R.string.lbl_stats_show_ten,
         )
 
         binding.statsCard.setBackgroundResource(
@@ -234,14 +234,14 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 StatsCategory.ARTISTS -> R.drawable.bg_stats_artists
                 StatsCategory.ALBUMS -> R.drawable.bg_stats_albums
                 StatsCategory.SONGS -> R.drawable.bg_stats_songs
-            }
+            },
         )
         binding.statsCardTitle.setText(
             when (category) {
                 StatsCategory.ARTISTS -> R.string.lbl_stats_top_artists
                 StatsCategory.ALBUMS -> R.string.lbl_stats_top_albums
                 StatsCategory.SONGS -> R.string.lbl_stats_top_songs
-            }
+            },
         )
 
         binding.statsList.removeAllViews()
@@ -318,7 +318,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             button.backgroundTintList =
                 ColorStateList.valueOf(
                     if (selected) StatsImage.gradientOf(context, buttonCategory).first
-                    else Color.TRANSPARENT
+                    else Color.TRANSPARENT,
                 )
             button.setTextColor(if (selected) Color.WHITE else onSurface)
         }
@@ -403,7 +403,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                     }
                 }
             context.showToast(
-                if (exported) R.string.lbl_stats_exported else R.string.err_stats_export
+                if (exported) R.string.lbl_stats_exported else R.string.err_stats_export,
             )
         }
     }

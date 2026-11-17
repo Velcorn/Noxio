@@ -78,7 +78,7 @@ class ArtistSeparatorsTest {
         val nativeSong =
             TagInterpreter.new(interpretation)
                 .interpret(
-                    RawSong(file, Properties("audio/mpeg", 1000, 128, 44100), nativeTags, null, 0)
+                    RawSong(file, Properties("audio/mpeg", 1000, 128, 44100), nativeTags, null, 0),
                 )
         assertEquals(listOf("A", "B"), nativeSong.preArtists.map { it.rawName })
     }

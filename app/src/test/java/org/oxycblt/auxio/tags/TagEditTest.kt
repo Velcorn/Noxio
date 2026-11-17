@@ -94,7 +94,7 @@ class TagEditTest {
     fun onlyTheChangedFieldsAreWritten() {
         assertEquals(
             TagEditResult.Write(
-                mapOf(TagWriter.TITLE to listOf("New"), TagWriter.TRACK to listOf("12"))
+                mapOf(TagWriter.TITLE to listOf("New"), TagWriter.TRACK to listOf("12")),
             ),
             edit(TagField.TITLE to "New", TagField.TRACK to "12"),
         )

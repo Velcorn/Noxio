@@ -165,7 +165,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
                 sharedPreferences.getInt(
                     getString(R.string.set_key_artist_albums_sort),
                     Int.MIN_VALUE,
-                )
+                ),
             ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {

@@ -70,14 +70,14 @@ class AppBackupTest {
                         listenedMs = 1,
                         durationMs = 1,
                     )
-                }
+                },
             )
 
         override suspend fun exportCsv(out: OutputStream) {
             exports += 1
             out.write(
                 "FILE_PATH,TITLE,ARTIST,ALBUM,ALBUM_ARTIST,COMPOSER,GENRE,YEAR,DURATION_MS,PLAY_COUNT,PLAYED_AT,LISTENED_MS,ESTIMATED\n"
-                    .toByteArray()
+                    .toByteArray(),
             )
         }
 
@@ -287,7 +287,7 @@ class AppBackupTest {
         // Storing it once makes that stick, the old switch is gone.
         backup.schedule = backup.schedule
         assertFalse(
-            PreferenceManager.getDefaultSharedPreferences(context).contains("noxio_stats_backup")
+            PreferenceManager.getDefaultSharedPreferences(context).contains("noxio_stats_backup"),
         )
         assertEquals(BackupSchedule.Frequency.WEEKLY, backupInto().schedule.frequency)
     }
@@ -343,7 +343,7 @@ class AppBackupTest {
         assertTrue(
             work.getWorkInfosForUniqueWork(AppBackup.OLD_WORK_NAME).get().all {
                 it.state == androidx.work.WorkInfo.State.CANCELLED
-            }
+            },
         )
     }
 
@@ -371,8 +371,8 @@ class AppBackupTest {
                         "s" to "x",
                         "tags" to setOf("a"),
                         "noxio_stats_backup_folder_uri" to "content://other",
-                    )
-                )
+                    ),
+                ),
             )
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         assertEquals(true, prefs.getBoolean("flag", false))
@@ -403,7 +403,7 @@ class AppBackupTest {
                 data(
                     emptyMap(),
                     listOf(BackupPlaylist("Gym", listOf(BackupSong("a.mp3", "T", "A", "B")))),
-                )
+                ),
             )
         assertTrue(restored.libraryMissing)
         assertEquals(0, restored.playlists)
@@ -479,7 +479,7 @@ class AppBackupTest {
                         BackupSong("Music/b.mp3", "B", "Y", "Bl"),
                         BackupSong("Music/a.mp3", "A", "X", "Al"),
                     ),
-                )
+                ),
             ),
             read.playlists,
         )
@@ -551,7 +551,7 @@ class AppBackupTest {
                         // None of its songs is there, so there is nothing to make.
                         BackupPlaylist("Gone", listOf(BackupSong("x.mp3", "X", "X", "X"))),
                     ),
-                )
+                ),
             )
         io.mockk.coVerify(exactly = 1) { music.createPlaylist("Night", listOf(same, moved)) }
         io.mockk.coVerify(exactly = 0) { music.createPlaylist("Existing", any()) }

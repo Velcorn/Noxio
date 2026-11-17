@@ -69,18 +69,18 @@ class KeyboardModeTest {
     fun keysAreOnlyThereWhenAKeyboardIsOut() {
         assertTrue(
             KeyboardMode.hasKeys(
-                config(Configuration.KEYBOARD_QWERTY, Configuration.HARDKEYBOARDHIDDEN_NO)
-            )
+                config(Configuration.KEYBOARD_QWERTY, Configuration.HARDKEYBOARDHIDDEN_NO),
+            ),
         )
         assertFalse(
             KeyboardMode.hasKeys(
-                config(Configuration.KEYBOARD_QWERTY, Configuration.HARDKEYBOARDHIDDEN_YES)
-            )
+                config(Configuration.KEYBOARD_QWERTY, Configuration.HARDKEYBOARDHIDDEN_YES),
+            ),
         )
         assertFalse(
             KeyboardMode.hasKeys(
-                config(Configuration.KEYBOARD_NOKEYS, Configuration.HARDKEYBOARDHIDDEN_YES)
-            )
+                config(Configuration.KEYBOARD_NOKEYS, Configuration.HARDKEYBOARDHIDDEN_YES),
+            ),
         )
     }
 

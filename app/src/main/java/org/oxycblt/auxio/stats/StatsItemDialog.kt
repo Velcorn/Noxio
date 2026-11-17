@@ -187,7 +187,7 @@ internal fun itemImageContent(
         sectionTitle =
             context.getString(
                 if (stats.topSongs.isEmpty()) R.string.lbl_stats_item_over_time
-                else R.string.lbl_stats_top_songs
+                else R.string.lbl_stats_top_songs,
             ),
         rows =
             stats.topSongs.map {

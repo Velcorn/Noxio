@@ -347,14 +347,14 @@ class SleepTimerControllerTest {
     private fun addAccelerometer(): android.hardware.SensorManager {
         val manager =
             androidx.test.core.app.ApplicationProvider.getApplicationContext<
-                    android.content.Context
+                    android.content.Context,
                 >()
                 .getSystemService(android.hardware.SensorManager::class.java)
         org.robolectric.Shadows.shadowOf(manager)
             .addSensor(
                 org.robolectric.shadows.ShadowSensor.newInstance(
-                    android.hardware.Sensor.TYPE_ACCELEROMETER
-                )
+                    android.hardware.Sensor.TYPE_ACCELEROMETER,
+                ),
             )
         return manager
     }

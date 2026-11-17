@@ -51,7 +51,7 @@ class MenuGroupDividerTest {
         return MenuItemAdapter(
                 object : ClickableListListener<MenuItem> {
                     override fun onClick(item: MenuItem, viewHolder: RecyclerView.ViewHolder) {}
-                }
+                },
             )
             .apply { update(menu.children.toList(), null) }
     }

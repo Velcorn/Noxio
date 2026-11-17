@@ -88,7 +88,7 @@ object BackupPolicy {
                 // Newest first; a good file comes before a small one of the same day.
                 .sortedWith(
                     compareByDescending<Pair<String, Name>> { it.second.date }
-                        .thenBy { it.second.small }
+                        .thenBy { it.second.small },
                 )
         var good = backups.count { !it.second.small }
         val delete = mutableListOf<String>()

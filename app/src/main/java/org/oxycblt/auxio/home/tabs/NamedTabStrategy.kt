@@ -34,7 +34,7 @@ class NamedTabStrategy(private val homeTabs: List<MusicType>) : TabConfiguration
                 MusicType.ARTISTS -> R.drawable.ic_artist_20
                 MusicType.GENRES -> R.drawable.ic_genre_20
                 MusicType.PLAYLISTS -> R.drawable.ic_playlist_20
-            }
+            },
         )
     }
 }

@@ -120,7 +120,7 @@ interface PlayEventDao {
 
     /** Remove the made up plays of a week, so a new import of that week can replace them. */
     @Query(
-        "DELETE FROM PlayEvent WHERE estimated = 1 AND startedAt >= :fromMs AND startedAt < :toMs"
+        "DELETE FROM PlayEvent WHERE estimated = 1 AND startedAt >= :fromMs AND startedAt < :toMs",
     )
     suspend fun deleteEstimatedBetween(fromMs: Long, toMs: Long)
 

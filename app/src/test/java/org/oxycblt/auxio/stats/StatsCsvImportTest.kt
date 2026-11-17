@@ -85,7 +85,7 @@ class StatsCsvImportTest {
             mostPlayed(
                 "$header\n" +
                     "Music/a.mp3,Song A,Artist,Album,<unknown>,<unknown>,Rock,2019,180000,42\n" +
-                    "Music/b.mp3,\"Song, B\",Artist 2,<unknown>,<unknown>,<unknown>,<unknown>,0,1,7\n"
+                    "Music/b.mp3,\"Song, B\",Artist 2,<unknown>,<unknown>,<unknown>,<unknown>,0,1,7\n",
             )
         assertEquals(2, rows.size)
         assertEquals("Music/a.mp3", rows[0].filePath)
@@ -108,7 +108,7 @@ class StatsCsvImportTest {
                     "a,Negative,x,x,x,x,x,0,0,-3\n" +
                     "a,Text,x,x,x,x,x,0,0,many\n" +
                     "a,,x,x,x,x,x,0,0,5\n" +
-                    "a,Good,x,x,x,x,x,0,0,5\n"
+                    "a,Good,x,x,x,x,x,0,0,5\n",
             )
         assertEquals(listOf("Good"), rows.map { it.title })
     }
@@ -172,7 +172,7 @@ class StatsCsvImportTest {
             history(
                 "$header,PLAYED_AT,LISTENED_MS\n" +
                     "a,Bad,x,x,x,x,x,0,1,1,yesterday,1\n" +
-                    "a,Good,x,x,x,x,x,0,1,1,2023-11-14T22:13:20Z,1\n"
+                    "a,Good,x,x,x,x,x,0,1,1,2023-11-14T22:13:20Z,1\n",
             )
         assertEquals(listOf("Good"), events.map { it.title })
     }
@@ -233,7 +233,7 @@ class StatsCsvImportTest {
         assertNotNull(StatsCsvImport.historyKey(base))
         assertTrue(
             StatsCsvImport.historyKey(base) !=
-                StatsCsvImport.historyKey(base.copy(startedAt = 6_000))
+                StatsCsvImport.historyKey(base.copy(startedAt = 6_000)),
         )
     }
 
@@ -317,7 +317,7 @@ class StatsCsvImportTest {
         assertTrue(
             StatsCsvImport.spreadEvents(rows, week).all {
                 it.startedAt in week.startMs until week.endMs
-            }
+            },
         )
     }
 

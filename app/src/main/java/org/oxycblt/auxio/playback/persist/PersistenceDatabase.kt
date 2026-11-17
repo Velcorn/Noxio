@@ -79,7 +79,7 @@ abstract class PersistenceDatabase : RoomDatabase() {
                     "CREATE TABLE IF NOT EXISTS `QueueFileItem` (`id` INTEGER NOT NULL, " +
                         "`uri` TEXT NOT NULL, `volume` TEXT NOT NULL, `path` TEXT NOT NULL, " +
                         "`mimeType` TEXT NOT NULL, `size` INTEGER NOT NULL, " +
-                        "`modifiedMs` INTEGER NOT NULL, PRIMARY KEY(`id`))"
+                        "`modifiedMs` INTEGER NOT NULL, PRIMARY KEY(`id`))",
                 )
             }
     }
