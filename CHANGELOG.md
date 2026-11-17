@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.19.0
+
+## What's New
+- Changelog in the app: About has a Changelog row that lists every Noxio release
+
 ## v1.18.0
 
 ## What's New
