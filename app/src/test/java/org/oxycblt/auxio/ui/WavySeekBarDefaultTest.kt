@@ -45,7 +45,6 @@ class WavySeekBarDefaultTest {
     private val obsoleteKeys =
         listOf(
             "auxio_round_covers",
-            "noxio_wavy_seek_bar",
             "noxio_wavy_default_on",
             "auxio_square_covers",
         )
@@ -117,22 +116,43 @@ class WavySeekBarDefaultTest {
         }
     }
 
-    @Test
-    fun waveFollowsPlaybackEvenWhenAnOldBackupDisablesIt() {
-        preferences.edit(commit = true) { putBoolean("noxio_wavy_seek_bar", false) }
-        val themed = ContextThemeWrapper(context, R.style.Theme_Auxio_Black)
-        val seekBar = StyledSeekBar(themed)
+    private fun waveOf(seekBar: StyledSeekBar): Boolean {
         val slider = seekBar.findViewById<WavySlider>(R.id.seek_bar_slider)
-        val waveEnabled =
-            WavySlider::class.java.getDeclaredField("waveEnabled").apply {
-                isAccessible = true
-            }
+        return WavySlider::class.java.getDeclaredField("waveEnabled").run {
+            isAccessible = true
+            getBoolean(slider)
+        }
+    }
+
+    private fun seekBar() = StyledSeekBar(ContextThemeWrapper(context, R.style.Theme_Auxio_Black))
+
+    @Test
+    fun theWaveIsOnByDefaultAndFollowsPlayback() {
+        val seekBar = seekBar()
         seekBar.setWaveEnabled(true)
-        assertTrue(waveEnabled.getBoolean(slider))
+        assertTrue(waveOf(seekBar))
         seekBar.setWaveEnabled(false)
-        assertFalse(waveEnabled.getBoolean(slider))
+        assertFalse(waveOf(seekBar))
         seekBar.setWaveEnabled(true)
-        assertTrue(waveEnabled.getBoolean(slider))
+        assertTrue(waveOf(seekBar))
+    }
+
+    @Test
+    fun theSettingTurnsTheWaveOffAndOnAgain() {
+        val seekBar = seekBar()
+        preferences.edit(commit = true) { putBoolean("noxio_wavy_seek_bar", false) }
+        seekBar.setWaveEnabled(true)
+        assertFalse(waveOf(seekBar))
+        preferences.edit(commit = true) { putBoolean("noxio_wavy_seek_bar", true) }
+        seekBar.setWaveEnabled(true)
+        assertTrue(waveOf(seekBar))
+    }
+
+    @Test
+    fun theSettingSurvivesTheMigration() {
+        preferences.edit(commit = true) { putBoolean("noxio_wavy_seek_bar", false) }
+        UISettingsImpl(context).migrate()
+        assertFalse(preferences.getBoolean("noxio_wavy_seek_bar", true))
     }
 
     @Test

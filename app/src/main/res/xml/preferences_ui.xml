@@ -23,6 +23,12 @@
         app:summary="@string/set_black_mode_desc"
         app:title="@string/set_black_mode" />
 
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="@string/set_key_wavy_seek_bar"
+        app:summary="@string/set_wavy_seek_bar_desc"
+        app:title="@string/set_wavy_seek_bar" />
+
     <org.oxycblt.auxio.settings.ui.WrappedDialogPreference
         app:key="@string/set_key_home_tabs"
         app:summary="@string/set_lib_tabs_desc"

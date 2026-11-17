@@ -113,6 +113,8 @@
     <string name="lbl_date">Jahr</string>
     <string name="set_black_mode">Schwarzes Farbschema</string>
     <string name="set_black_mode_desc">Ein rein schwarzes dunkles Farbschema verwenden</string>
+    <string name="set_wavy_seek_bar">Wellige Fortschrittsleiste</string>
+    <string name="set_wavy_seek_bar_desc">Lässt die Fortschrittsleiste des Players beim Abspielen wellen. Schalte es aus für weniger Bewegung</string>
     <string name="desc_shuffle">Zufällig an- oder ausschalten</string>
     <string name="desc_song_handle">Lied in der Warteschlange verschieben</string>
     <string name="desc_music_location_delete">Verzechnis entfernen</string>

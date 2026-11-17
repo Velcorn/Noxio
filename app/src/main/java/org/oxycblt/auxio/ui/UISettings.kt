@@ -78,10 +78,9 @@ class UISettingsImpl @Inject constructor(@ApplicationContext context: Context) :
         get() = true
 
     override fun migrate() {
-        // These appearance choices are fixed now; discard the old switches and migration flag.
+        // The round mode switch is gone and the wavy seek bar flag of 1.1.2 is not needed anymore.
         sharedPreferences.edit {
             remove("auxio_round_covers")
-            remove("noxio_wavy_seek_bar")
             remove("noxio_wavy_default_on")
         }
         if (sharedPreferences.contains(OLD_KEY_ACCENT3)) {

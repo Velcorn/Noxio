@@ -369,6 +369,8 @@
     <string name="set_accent">Color scheme</string>
     <string name="set_black_mode">Black theme</string>
     <string name="set_black_mode_desc">Use a pure black dark theme</string>
+    <string name="set_wavy_seek_bar">Wavy seek bar</string>
+    <string name="set_wavy_seek_bar_desc">Let the seek bar of the player wave while playing. Turn it off for less motion</string>
 
     <string name="set_lib_tabs">Library tabs</string>
     <string name="set_lib_tabs_desc">Change visibility and order of library tabs</string>
