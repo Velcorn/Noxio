@@ -124,7 +124,10 @@ class SongListFragment :
 
             // Date -> Use song first, *then* year of the range minimum
             is Sort.Mode.ByDate -> {
-                val year = (song.date ?: song.album.dates?.min?.year) ?: return null
+                // Noxio: the year of the song's date (upstream passed the Date itself, which the
+                // number
+                // format cannot take).
+                val year = (song.date?.year ?: song.album.dates?.min?.year) ?: return null
                 FastScrollRecyclerView.PopupProvider.PopupData(getString(R.string.fmt_number, year))
             }
 
