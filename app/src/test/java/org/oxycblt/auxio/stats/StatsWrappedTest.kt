@@ -149,4 +149,31 @@ class StatsWrappedTest {
         assertEquals(at(2026, 1, 1) - 12 * 3600_000L, range.first)
         assertEquals(at(2027, 1, 1) - 12 * 3600_000L, range.last + 1)
     }
+
+    @Test
+    fun possessiveCardTitlesFollowEnglishAndGermanRules() {
+        assertEquals("Will's 2026", possessive("Will", 2026, Locale.US))
+        assertEquals("James's 2026", possessive("James", 2026, Locale.US))
+        assertEquals("Wills 2026", possessive("Will", 2026, Locale.GERMANY))
+        assertEquals("Klaus' 2026", possessive("Klaus", 2026, Locale.GERMANY))
+    }
+
+    @Test
+    fun listeningHourLabelsSkipEmptyAndShowSubHourTime() {
+        assertNull(listeningHoursLabel(0))
+        assertEquals("<1 h", listeningHoursLabel(3_599_999))
+        assertEquals("62 h", listeningHoursLabel(62 * 3_600_000L))
+    }
+
+    @Test
+    fun reviewIncludesDailyHeatLevelsAndMonthlyListeningTime() {
+        val events =
+            listOf(
+                play("A", startedAt = at(2026, 2, 3), listenedMs = 10),
+                play("B", startedAt = at(2026, 2, 3), listenedMs = 20),
+            )
+        val result = review(events)
+        assertEquals(30L, result.monthListenedMs[Calendar.FEBRUARY])
+        assertEquals(4, result.dailyLevels.values.single())
+    }
 }

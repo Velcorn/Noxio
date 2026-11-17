@@ -42,13 +42,14 @@ fun dailyTotals(plays: List<PlayTime>, calendar: Calendar): Map<Long, Long> {
     return result
 }
 
-/** Map positive totals into four quartile levels. */
+/** Map positive totals into four quartile levels; the highest total is always level 4. */
 fun heatLevels(totals: Map<Long, Long>): Map<Long, Int> {
     val values = totals.values.filter { it > 0 }.sorted()
     if (values.isEmpty()) return totals.keys.associateWith { 0 }
     return totals.mapValues { (_, value) ->
         if (value <= 0) 0
-        else 1 + values.count { it < value }.let { (it * 4 / values.size).coerceAtMost(3) }
+        // By the share of periods at or below this one, so the busiest always gets the top level.
+        else (values.count { it <= value } * 4 + values.size - 1) / values.size
     }
 }
 
@@ -95,12 +96,12 @@ fun heatmapWeeks(
     return weeks
 }
 
-/** One month or year in the period picker. */
+/** One week, month or year in the period picker. */
 data class HeatPeriod(val startMs: Long, val totalMs: Long, val level: Int)
 
 /**
- * Add up [totals] (by day) into calendar months or years, from the one holding [firstMs] up to the
- * one holding [nowMs], oldest first. Periods without plays are included with level 0.
+ * Add up [totals] (by day) into periods from the one holding [firstMs] up to the one holding
+ * [nowMs], oldest first. Periods without plays are included with level 0.
  */
 fun heatPeriods(
     totals: Map<Long, Long>,
@@ -109,13 +110,19 @@ fun heatPeriods(
     nowMs: Long,
     calendar: Calendar,
 ): List<HeatPeriod> {
-    if (firstMs == null || (period != StatsPeriod.MONTH && period != StatsPeriod.YEAR)) {
+    if (firstMs == null || period == StatsPeriod.ALL) {
         return emptyList()
     }
+    calendar.firstDayOfWeek = Calendar.MONDAY
+    calendar.minimalDaysInFirstWeek = 4
     fun periodStart(time: Long): Long {
         calendar.timeInMillis = time
-        if (period == StatsPeriod.YEAR) calendar.set(Calendar.DAY_OF_YEAR, 1)
-        else calendar.set(Calendar.DAY_OF_MONTH, 1)
+        when (period) {
+            StatsPeriod.YEAR -> calendar.set(Calendar.DAY_OF_YEAR, 1)
+            StatsPeriod.MONTH -> calendar.set(Calendar.DAY_OF_MONTH, 1)
+            StatsPeriod.WEEK -> calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+            StatsPeriod.ALL -> return time
+        }
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
@@ -138,4 +145,14 @@ fun heatPeriods(
     }
     val levels = heatLevels(starts.associateWith { sums[it] ?: 0L })
     return starts.map { HeatPeriod(it, sums[it] ?: 0L, levels[it] ?: 0) }
+}
+
+/** ISO week number and its Thursday year for a Monday week start. */
+fun isoWeek(startMs: Long, calendar: Calendar): Pair<Int, Int> {
+    calendar.firstDayOfWeek = Calendar.MONDAY
+    calendar.minimalDaysInFirstWeek = 4
+    calendar.timeInMillis = startMs
+    val number = calendar.get(Calendar.WEEK_OF_YEAR)
+    calendar.add(Calendar.DAY_OF_MONTH, 3)
+    return number to calendar.get(Calendar.YEAR)
 }

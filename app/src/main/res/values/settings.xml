@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="set_key_sleep_presets" translatable="false">noxio_sleep_presets</string>
+    <string name="set_key_wrapped_name" translatable="false">noxio_wrapped_name</string>
     <integer-array name="def_sleep_presets">
         <item>30</item>
         <item>45</item>

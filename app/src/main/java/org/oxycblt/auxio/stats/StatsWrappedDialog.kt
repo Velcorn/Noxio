@@ -23,14 +23,18 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DateFormatSymbols
 import java.util.Calendar
@@ -51,6 +55,7 @@ class StatsWrappedDialog : ViewBindingBottomSheetDialogFragment<DialogStatsWrapp
         viewModels(ownerProducer = { requireParentFragment() })
     private var cards = listOf<Bitmap>()
     private var names = listOf<String>()
+    private var wrapped: StatsViewModel.Wrapped? = null
     private val saveLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("image/png")) { uri ->
             val image = cards.getOrNull(requireBinding().wrappedPager.currentItem)
@@ -81,10 +86,8 @@ class StatsWrappedDialog : ViewBindingBottomSheetDialogFragment<DialogStatsWrapp
                 dismiss()
                 return@launch
             }
-            val built = wrappedCards(requireContext(), wrapped)
-            cards = built.map { StatsImage.renderItem(requireContext(), it.second) }
-            names = built.map { it.first }
-            show(binding)
+            this@StatsWrappedDialog.wrapped = wrapped
+            redraw(binding)
         }
         binding.shareSend.setOnClickListener {
             cards.getOrNull(binding.wrappedPager.currentItem)?.let {
@@ -94,6 +97,44 @@ class StatsWrappedDialog : ViewBindingBottomSheetDialogFragment<DialogStatsWrapp
         binding.shareSave.setOnClickListener {
             names.getOrNull(binding.wrappedPager.currentItem)?.let { saveLauncher.launch(it) }
         }
+        binding.shareName.setOnClickListener { editName(binding) }
+    }
+
+    private fun redraw(binding: DialogStatsWrappedBinding) {
+        val data = wrapped ?: return
+        val name =
+            PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getString(getString(R.string.set_key_wrapped_name), "")
+                .orEmpty()
+                .trim()
+        val built = wrappedCards(requireContext(), data, name)
+        cards = built.map { StatsImage.renderItem(requireContext(), it.second) }
+        names = built.map { it.first }
+        show(binding)
+    }
+
+    private fun editName(binding: DialogStatsWrappedBinding) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val field =
+            EditText(requireContext()).apply {
+                setSingleLine(true)
+                setText(prefs.getString(getString(R.string.set_key_wrapped_name), ""))
+                setSelection(text.length)
+            }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.lbl_stats_wrapped_name)
+            .setView(field)
+            .setNegativeButton(R.string.lbl_cancel, null)
+            .setPositiveButton(R.string.lbl_ok) { _, _ ->
+                prefs.edit {
+                    putString(
+                        getString(R.string.set_key_wrapped_name),
+                        field.text.toString().trim(),
+                    )
+                }
+                redraw(binding)
+            }
+            .show()
     }
 
     private fun show(binding: DialogStatsWrappedBinding) {
@@ -154,10 +195,12 @@ class StatsWrappedDialog : ViewBindingBottomSheetDialogFragment<DialogStatsWrapp
 internal fun wrappedCards(
     context: Context,
     wrapped: StatsViewModel.Wrapped,
+    name: String = "",
     locale: Locale = Locale.getDefault(),
 ): List<Pair<String, StatsItemImageContent>> {
     val review = wrapped.review
     val year = review.year.toString()
+    val title = if (name.isBlank()) year else possessive(name.trim(), review.year, locale)
     val months = DateFormatSymbols.getInstance(locale).months
     val weekdays = DateFormatSymbols.getInstance(locale).weekdays
     val busiestMonth =
@@ -176,7 +219,6 @@ internal fun wrappedCards(
                 (review.year - 1).toString(),
             )
         }
-    val mostMonthPlays = review.monthPlays.maxOrNull() ?: 0
     val calendar = Calendar.getInstance()
     val monthStarts =
         (0 until 12).map {
@@ -193,7 +235,7 @@ internal fun wrappedCards(
         "noxio-$year.png" to
             StatsItemImageContent(
                 category = StatsCategory.ARTISTS,
-                name = context.getString(R.string.fmt_stats_wrapped_title, year),
+                name = title,
                 lines =
                     listOfNotNull(context.getString(R.string.lbl_stats_wrapped_subtitle), change),
                 tiles =
@@ -215,14 +257,16 @@ internal fun wrappedCards(
                             context.getString(R.string.lbl_stats_wrapped_artists),
                         ),
                     ),
-                sectionTitle = context.getString(R.string.lbl_stats_item_over_time),
+                sectionTitle = context.getString(R.string.lbl_stats_wrapped_chart_title),
                 rows = emptyList(),
                 bars =
-                    if (mostMonthPlays == 0) emptyList()
+                    if (review.monthListenedMs.maxOrNull() == 0L) emptyList()
                     else
-                        review.monthPlays.mapIndexed { index, plays ->
+                        review.monthListenedMs.mapIndexed { index, ms ->
                             StatsItemImageContent.Bar(
-                                plays.toFloat() / mostMonthPlays,
+                                if (review.monthListenedMs.maxOrNull() == 0L) 0f
+                                else ms.toFloat() / (review.monthListenedMs.maxOrNull() ?: 1L),
+                                listeningHoursLabel(ms),
                                 monthLabels[index],
                             )
                         },
@@ -266,8 +310,9 @@ internal fun wrappedCards(
         "noxio-$year-summary.png" to
             StatsItemImageContent(
                 category = StatsCategory.ALBUMS,
-                name = context.getString(R.string.fmt_stats_wrapped_summary, year),
-                lines = listOfNotNull(change),
+                name = title,
+                // No subtitle: the heatmap of the year takes its place.
+                lines = emptyList(),
                 tiles =
                     listOfNotNull(
                         StatsItemImageContent.Tile(
@@ -304,6 +349,8 @@ internal fun wrappedCards(
                 bars = emptyList(),
                 footerStart = busiestMonth,
                 footerEnd = busiestDay,
+                heatLevels = review.dailyLevels,
+                heatYear = review.year,
             )
     return cards
 }

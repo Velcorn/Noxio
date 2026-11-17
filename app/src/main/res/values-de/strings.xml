@@ -487,9 +487,10 @@
     <string name="fmt_sleep_range">1–%d Min.</string>
     <string name="desc_sleep_timer_hold">Wiedergabe starten oder pausieren; für den Sleep-Timer gedrückt halten</string>
     <string name="lbl_stats_wrapped">Jahresrückblick</string>
-    <string name="fmt_stats_wrapped_title">Dein %s</string>
-    <string name="lbl_stats_wrapped_subtitle">Dein Jahr in Musik</string>
-    <string name="fmt_stats_wrapped_summary">Mein %s</string>
+    <string name="lbl_stats_wrapped_subtitle">Jahr in Musik</string>
+    <string name="lbl_stats_wrapped_name_action">Name</string>
+    <string name="lbl_stats_wrapped_name">Name für den Jahresrückblick</string>
+    <string name="lbl_stats_wrapped_chart_title">Hörzeit pro Monat</string>
     <string name="fmt_stats_wrapped_more">%1$s mehr als %2$s</string>
     <string name="fmt_stats_wrapped_less">%1$s weniger als %2$s</string>
     <string name="lbl_stats_wrapped_songs">Verschiedene Lieder</string>

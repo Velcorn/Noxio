@@ -32,8 +32,8 @@ timer** and **tag editing**. Its "Most Played" playlist is also on that list; No
 
 - **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
-- **Listening stats:** top artists, albums and songs per week, month, year or all time, picked from a heatmap calendar,
-  a closer look at each, and cards to share or save. A **year in review** with five cards to swipe through.
+- **Listening stats:** top artists, albums and songs per week, month, year or all time, picked by week number, month or year,
+  a closer look at each, and cards to share or save. A named **year in review** with a listening heatmap and monthly listening time.
 - **Tag editing:** deliberately basic, for quick fixes on the phone: title, artists, album, album artists, track and
   date of one song at a time, from Song properties. Playlists follow the song when an edit changes its identity. For
   bigger jobs (many files, covers, lookups) use a real tag editor such as Picard or kid3.

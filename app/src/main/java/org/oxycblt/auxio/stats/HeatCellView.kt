@@ -36,6 +36,7 @@ class HeatCellView @JvmOverloads constructor(context: Context, attrs: AttributeS
     var sublabel = ""
     var level = 0
     var selectedPeriod = false
+    var compact = false
 
     private val density = resources.displayMetrics.density
     private val primary = MaterialColors.getColor(this, androidx.appcompat.R.attr.colorPrimary)
@@ -65,16 +66,29 @@ class HeatCellView @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     private val rect = RectF()
 
-    fun bind(label: String, sublabel: String, level: Int, selected: Boolean) {
+    fun bind(
+        label: String,
+        sublabel: String,
+        level: Int,
+        selected: Boolean,
+        compact: Boolean = false,
+    ) {
         this.label = label
         this.sublabel = sublabel
         this.level = level
         selectedPeriod = selected
+        if (this.compact != compact) {
+            this.compact = compact
+            requestLayout()
+        }
         invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), (64 * density).toInt())
+        setMeasuredDimension(
+            MeasureSpec.getSize(widthMeasureSpec),
+            ((if (compact) 44 else 64) * density).toInt(),
+        )
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -103,8 +117,13 @@ class HeatCellView @JvmOverloads constructor(context: Context, attrs: AttributeS
         text.alpha = if (selectedPeriod) 255 else 153
         small.alpha = text.alpha
         val center = rect.centerY()
-        canvas.drawText(label, rect.centerX(), center - 2 * density, text)
-        if (sublabel.isNotEmpty()) {
+        text.textSize = (if (compact) 12 else 14) * resources.displayMetrics.scaledDensity
+        if (compact || sublabel.isEmpty()) {
+            // Centered alone.
+            canvas.drawText(label, rect.centerX(), center + text.textSize / 3, text)
+        } else {
+            // The label above the middle, the time below it.
+            canvas.drawText(label, rect.centerX(), center - 2 * density, text)
             canvas.drawText(sublabel, rect.centerX(), center + 14 * density, small)
         }
     }

@@ -20,7 +20,6 @@ package org.oxycblt.auxio.stats
 
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +27,6 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -56,68 +54,22 @@ class StatsPickerDialog : ViewBindingBottomSheetDialogFragment<DialogStatsPicker
                 }
         binding.pickerTitle.text = getString(org.oxycblt.auxio.R.string.stats_pick_period)
         // A fixed height lets the list itself scroll, so it can open at the shown period.
+        // Years are few and stay short.
         if (ui.query.period != StatsPeriod.YEAR) {
             binding.pickerWeeks.layoutParams.height =
                 (resources.displayMetrics.heightPixels * 0.6f).toInt()
         }
-        val days =
-            listOf(
-                Calendar.MONDAY,
-                Calendar.TUESDAY,
-                Calendar.WEDNESDAY,
-                Calendar.THURSDAY,
-                Calendar.FRIDAY,
-                Calendar.SATURDAY,
-                Calendar.SUNDAY,
-            )
-        days.forEach { weekday ->
-            val c = Calendar.getInstance().apply { set(Calendar.DAY_OF_WEEK, weekday) }
-            binding.pickerWeekdays.addView(
-                TextView(requireContext()).apply {
-                    text = SimpleDateFormat("EEEEE", Locale.getDefault()).format(c.time)
-                    gravity = android.view.Gravity.CENTER
-                    layoutParams =
-                        android.widget.LinearLayout.LayoutParams(
-                            0,
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            1f,
-                        )
-                },
-            )
-        }
-        if (ui.query.period != StatsPeriod.WEEK) {
-            bindPeriods(binding, ui)
-            return
-        }
-        val adapter =
-            WeekAdapter(ui.range) { day ->
-                val offset = firstOffset(ui.query.period, day, System.currentTimeMillis())
-                model.goTo(offset)
-                dismiss()
-            }
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.pickerWeeks.layoutManager = layoutManager
-        binding.pickerWeeks.adapter = adapter
-        viewLifecycleOwner.lifecycleScope.launch {
-            val weeks = model.heatmap()
-            adapter.submit(weeks)
-            val selectedDay =
-                weeks
-                    .asSequence()
-                    .flatMap { it.days.asSequence() }
-                    .filterNotNull()
-                    .firstOrNull { it.dayMs in ui.range }
-            if (selectedDay != null) {
-                val position = adapter.positionForDay(selectedDay.dayMs)
-                layoutManager.scrollToPositionWithOffset(position, 0)
-            }
-        }
+        bindPeriods(binding, ui)
     }
 
     private fun bindPeriods(binding: DialogStatsPickerBinding, ui: StatsViewModel.Ui) {
-        binding.pickerWeekdays.visibility = View.GONE
         val period = ui.query.period
-        val columns = if (period == StatsPeriod.YEAR) 3 else 4
+        val columns =
+            when (period) {
+                StatsPeriod.WEEK -> 7
+                StatsPeriod.MONTH -> 4
+                else -> 6
+            }
         val adapter =
             PeriodAdapter(period, ui.range) { startMs ->
                 model.goTo(firstOffset(period, startMs, System.currentTimeMillis()))
@@ -126,8 +78,7 @@ class StatsPickerDialog : ViewBindingBottomSheetDialogFragment<DialogStatsPicker
         val layoutManager = GridLayoutManager(requireContext(), columns)
         layoutManager.spanSizeLookup =
             object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int) =
-                    if (adapter.isHeader(position)) columns else 1
+                override fun getSpanSize(position: Int) = adapter.spanOf(position, columns)
             }
         binding.pickerWeeks.layoutManager = layoutManager
         binding.pickerWeeks.adapter = adapter
@@ -137,7 +88,7 @@ class StatsPickerDialog : ViewBindingBottomSheetDialogFragment<DialogStatsPicker
         }
     }
 
-    /** Months under a header per year, or years, oldest first. */
+    /** Week numbers under an ISO year header, months under a calendar year, or years. */
     private class PeriodAdapter(
         private val period: StatsPeriod,
         private val range: LongRange,
@@ -147,32 +98,46 @@ class StatsPickerDialog : ViewBindingBottomSheetDialogFragment<DialogStatsPicker
             data class Header(val text: String) : Item
 
             data class Cell(val period: HeatPeriod, val sublabel: String) : Item
+
+            /** Empty room in front of fewer than three years, so they sit in the middle. */
+            data class Spacer(val span: Int) : Item
         }
 
         private var items = emptyList<Item>()
 
         fun isHeader(position: Int) = items[position] is Item.Header
 
+        fun spanOf(position: Int, columns: Int) =
+            when (val item = items[position]) {
+                is Item.Header -> columns
+                is Item.Spacer -> item.span
+                is Item.Cell -> if (period == StatsPeriod.YEAR) 2 else 1
+            }
+
         fun selectedPosition() =
             items.indexOfFirst { it is Item.Cell && it.period.startMs in range }.coerceAtLeast(0)
 
         fun submit(context: android.content.Context, periods: List<HeatPeriod>) {
             val result = mutableListOf<Item>()
+            // Years take two of six columns; one or two years get room in front to be centered.
+            if (period == StatsPeriod.YEAR && periods.size < 3) {
+                result += Item.Spacer(3 - periods.size)
+            }
             val calendar = Calendar.getInstance()
             var lastYear = -1
             for (heat in periods) {
                 calendar.timeInMillis = heat.startMs
                 val year = calendar.get(Calendar.YEAR)
-                if (period == StatsPeriod.MONTH && year != lastYear) {
-                    result += Item.Header(year.toString())
-                    // Months before the first play keep their place in the year, empty.
-                    repeat(calendar.get(Calendar.MONTH)) {
-                        result += Item.Cell(HeatPeriod(-1, 0, 0), "")
-                    }
-                    lastYear = year
+                val labelYear =
+                    if (period == StatsPeriod.WEEK) isoWeek(heat.startMs, calendar).second else year
+                if (period != StatsPeriod.YEAR && labelYear != lastYear) {
+                    result += Item.Header(labelYear.toString())
+                    lastYear = labelYear
                 }
                 val sublabel =
-                    if (heat.totalMs > 0) StatsFormat.listened(context, heat.totalMs) else ""
+                    if (period != StatsPeriod.WEEK && heat.totalMs > 0) {
+                        StatsFormat.listened(context, heat.totalMs)
+                    } else ""
                 result += Item.Cell(heat, sublabel)
             }
             // Filled once, from empty.
@@ -182,7 +147,12 @@ class StatsPickerDialog : ViewBindingBottomSheetDialogFragment<DialogStatsPicker
 
         override fun getItemCount() = items.size
 
-        override fun getItemViewType(position: Int) = if (isHeader(position)) 0 else 1
+        override fun getItemViewType(position: Int) =
+            when (items[position]) {
+                is Item.Header -> 0
+                is Item.Cell -> 1
+                is Item.Spacer -> 2
+            }
 
         override fun onCreateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder =
             if (type == 0) {
@@ -211,162 +181,39 @@ class StatsPickerDialog : ViewBindingBottomSheetDialogFragment<DialogStatsPicker
                             )
                         },
                     ) {}
+            } else if (type == 2) {
+                object : RecyclerView.ViewHolder(View(parent.context)) {}
             } else object : RecyclerView.ViewHolder(HeatCellView(parent.context)) {}
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             when (val item = items[position]) {
                 is Item.Header -> (holder.itemView as TextView).text = item.text
+                is Item.Spacer -> Unit
                 is Item.Cell -> {
                     val view = holder.itemView as HeatCellView
                     val heat = item.period
-                    if (heat.startMs < 0) {
-                        view.visibility = View.INVISIBLE
-                        view.setOnClickListener(null)
-                        return
-                    }
-                    view.visibility = View.VISIBLE
-                    val pattern = if (period == StatsPeriod.YEAR) "yyyy" else "LLL"
+                    val label =
+                        when (period) {
+                            StatsPeriod.YEAR ->
+                                SimpleDateFormat("yyyy", Locale.getDefault())
+                                    .format(Date(heat.startMs))
+                            StatsPeriod.MONTH ->
+                                SimpleDateFormat("LLL", Locale.getDefault())
+                                    .format(Date(heat.startMs))
+                            StatsPeriod.WEEK ->
+                                isoWeek(heat.startMs, Calendar.getInstance()).first.toString()
+                            StatsPeriod.ALL -> ""
+                        }
                     view.bind(
-                        SimpleDateFormat(pattern, Locale.getDefault()).format(Date(heat.startMs)),
+                        label,
                         item.sublabel,
                         heat.level,
                         heat.startMs in range,
+                        compact = period == StatsPeriod.WEEK,
                     )
                     view.setOnClickListener { onClick(heat.startMs) }
                 }
             }
-        }
-    }
-
-    private class WeekAdapter(private val range: LongRange, private val onClick: (Long) -> Unit) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        private sealed interface Row {
-            data class Header(val monthMs: Long) : Row
-
-            data class Week(val week: HeatWeek) : Row
-        }
-
-        private var rows = emptyList<Row>()
-
-        fun positionForDay(dayMs: Long): Int {
-            val index = rows.indexOfFirst { row ->
-                row is Row.Week && row.week.days.any { it?.dayMs == dayMs }
-            }
-            return if (
-                index > 0 &&
-                    rows[index - 1] is Row.Header &&
-                    (rows[index - 1] as Row.Header).monthMs == monthStart(dayMs)
-            ) {
-                index - 1
-            } else {
-                index
-            }
-        }
-
-        fun submit(items: List<HeatWeek>) {
-            val result = mutableListOf<Row>()
-            var previousMonth: Long? = null
-            // Like a calendar: oldest at the top, each month from its 1st down to its last day.
-            items.asReversed().forEach { week ->
-                val months =
-                    week.days.filterNotNull().map { monthStart(it.dayMs) }.distinct().sorted()
-                months.forEach { month ->
-                    if (month != previousMonth) result += Row.Header(month)
-                    val days =
-                        week.days.map { day -> day?.takeIf { monthStart(it.dayMs) == month } }
-                    result += Row.Week(HeatWeek(week.startMs, days))
-                    previousMonth = month
-                }
-            }
-            // Filled once, from empty.
-            rows = result
-            notifyItemRangeInserted(0, result.size)
-        }
-
-        override fun getItemCount() = rows.size
-
-        override fun getItemViewType(position: Int) =
-            if (rows[position] is Row.Header) HEADER else WEEK
-
-        override fun onCreateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder =
-            if (type == HEADER) {
-                object :
-                    RecyclerView.ViewHolder(
-                        TextView(parent.context).apply {
-                            val appearance = TypedValue()
-                            context.theme.resolveAttribute(
-                                com.google.android.material.R.attr.textAppearanceLabelLarge,
-                                appearance,
-                                true,
-                            )
-                            setTextAppearance(appearance.resourceId)
-                            setTextColor(
-                                com.google.android.material.color.MaterialColors.getColor(
-                                    this,
-                                    com.google.android.material.R.attr.colorOnSurfaceVariant,
-                                ),
-                            )
-                            gravity = Gravity.START
-                            val density = resources.displayMetrics.density
-                            setPadding(0, (16 * density).toInt(), 0, (4 * density).toInt())
-                            layoutParams =
-                                RecyclerView.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                                )
-                        },
-                    ) {}
-            } else object : RecyclerView.ViewHolder(HeatmapWeekView(parent.context)) {}
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            when (val row = rows[position]) {
-                is Row.Header -> {
-                    val view = holder.itemView as TextView
-                    val density = view.resources.displayMetrics.density
-                    val gap = 4 * density
-                    view.post {
-                        val cell = (view.width - gap * 6) / 7f
-                        val size = minOf(cell, 28 * density)
-                        view.setPadding(
-                            ((cell - size) / 2).toInt(),
-                            (16 * density).toInt(),
-                            0,
-                            (4 * density).toInt(),
-                        )
-                    }
-                    view.text =
-                        SimpleDateFormat("LLLL yyyy", Locale.getDefault()).format(Date(row.monthMs))
-                }
-                is Row.Week -> bindWeek(holder, row.week)
-            }
-        }
-
-        private fun bindWeek(holder: RecyclerView.ViewHolder, week: HeatWeek) {
-            val view = holder.itemView as HeatmapWeekView
-            view.week = week
-            view.selectedRange = range
-            view.onDayClick = onClick
-            view.contentDescription =
-                week.days.filterNotNull().joinToString {
-                    SimpleDateFormat("MMM d", Locale.getDefault()).format(Date(it.dayMs))
-                }
-            view.setOnClickListener {}
-        }
-
-        private fun monthStart(dayMs: Long): Long =
-            Calendar.getInstance().run {
-                timeInMillis = dayMs
-                set(Calendar.DAY_OF_MONTH, 1)
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-                timeInMillis
-            }
-
-        companion object {
-            private const val HEADER = 0
-            private const val WEEK = 1
         }
     }
 

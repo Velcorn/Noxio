@@ -634,9 +634,10 @@
     <string name="fmt_sleep_range">1–%d min</string>
     <string name="desc_sleep_timer_hold">Play or pause; hold for sleep timer</string>
     <string name="lbl_stats_wrapped">Year in review</string>
-    <string name="fmt_stats_wrapped_title">Your %s</string>
-    <string name="lbl_stats_wrapped_subtitle">Your year in music</string>
-    <string name="fmt_stats_wrapped_summary">My %s</string>
+    <string name="lbl_stats_wrapped_subtitle">Year in music</string>
+    <string name="lbl_stats_wrapped_name_action">Name</string>
+    <string name="lbl_stats_wrapped_name">Name for year in review</string>
+    <string name="lbl_stats_wrapped_chart_title">Listening time per month</string>
     <string name="fmt_stats_wrapped_more">%1$s more than in %2$s</string>
     <string name="fmt_stats_wrapped_less">%1$s less than in %2$s</string>
     <string name="lbl_stats_wrapped_songs">Different songs</string>

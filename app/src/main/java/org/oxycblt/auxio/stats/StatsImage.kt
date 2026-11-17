@@ -58,6 +58,8 @@ data class StatsItemImageContent(
     val bars: List<Bar>,
     val footerStart: String,
     val footerEnd: String,
+    val heatLevels: Map<Long, Int> = emptyMap(),
+    val heatYear: Int? = null,
 ) {
     data class Tile(val value: String, val label: String)
 
@@ -67,7 +69,7 @@ data class StatsItemImageContent(
      * @param fraction Its height, from 0 to 1.
      * @param label What is written under it. Null for nothing.
      */
-    data class Bar(val fraction: Float, val label: String?)
+    data class Bar(val fraction: Float, val label: String?, val bottomLabel: String? = null)
 }
 
 /** Draws the shareable card as a portrait bitmap. The size does not depend on screen density. */
@@ -81,6 +83,7 @@ object StatsImage {
 
     private const val CONTENT_WIDTH = WIDTH - 2 * MARGIN
     private const val FIRST_TILE_Y = 410f
+    private const val HEATMAP_TILE_SHIFT = 30f
     private const val TILE_HEIGHT = 136f
     private const val TILE_GAP = 20f
     private const val FOOTER_GAP = 40f
@@ -166,7 +169,9 @@ object StatsImage {
 
         content.tiles.take(4).forEachIndexed { index, tile ->
             val left = MARGIN + (index % 2) * (TILE_WIDTH + TILE_GAP)
-            val top = FIRST_TILE_Y + (index / 2) * (TILE_HEIGHT + TILE_GAP)
+            // The year's heatmap above the tiles needs some of the room before the section.
+            val shift = if (content.heatYear != null) HEATMAP_TILE_SHIFT else 0f
+            val top = FIRST_TILE_Y + shift + (index / 2) * (TILE_HEIGHT + TILE_GAP)
             paint.color = 0x33FFFFFF
             canvas.drawRoundRect(
                 RectF(left, top, left + TILE_WIDTH, top + TILE_HEIGHT),
@@ -217,6 +222,7 @@ object StatsImage {
                 )
             }
         } else {
+            if (content.heatYear != null) drawYearHeatmap(canvas, paint, text, content)
             content.rows.take(3).forEachIndexed { index, row ->
                 drawRow(
                     canvas,
@@ -237,6 +243,66 @@ object StatsImage {
             drawFooter(canvas, paint, text, content.footerStart, content.footerEnd, small = true)
         }
         return bitmap
+    }
+
+    private fun drawYearHeatmap(
+        canvas: Canvas,
+        paint: Paint,
+        text: TextPaint,
+        content: StatsItemImageContent,
+    ) {
+        val year = content.heatYear ?: return
+        val calendar = java.util.Calendar.getInstance()
+        calendar.clear()
+        calendar.set(year, java.util.Calendar.JANUARY, 1)
+        calendar.firstDayOfWeek = java.util.Calendar.MONDAY
+        val first = calendar.timeInMillis
+        calendar.set(year, java.util.Calendar.DECEMBER, 31)
+        val last = calendar.timeInMillis
+        calendar.timeInMillis = first
+        calendar.set(java.util.Calendar.DAY_OF_WEEK, java.util.Calendar.MONDAY)
+        val monday = calendar.timeInMillis
+        // 53 weeks of square days between the title and the tiles.
+        val gap = 3f
+        val cell = 13.5f
+        // Columns spread over the full width; rows keep the small gap so the strip fits above the
+        // tiles.
+        val columnStep = (CONTENT_WIDTH - cell) / 52
+        val left = MARGIN
+        val top = 306f
+        var previousMonth = -1
+        for (week in 0 until 53) {
+            calendar.timeInMillis = monday
+            calendar.add(java.util.Calendar.DAY_OF_MONTH, week * 7)
+            val weekStart = calendar.timeInMillis
+            calendar.add(java.util.Calendar.DAY_OF_MONTH, 3)
+            val month = calendar.get(java.util.Calendar.MONTH)
+            if (month != previousMonth) {
+                text.textSize = 15f
+                text.alpha = 204
+                canvas.drawText(
+                    java.text.DateFormatSymbols.getInstance().months[month].take(1),
+                    left + week * columnStep,
+                    top - 6f,
+                    text,
+                )
+            }
+            previousMonth = month
+            for (day in 0..6) {
+                calendar.timeInMillis = weekStart
+                calendar.add(java.util.Calendar.DAY_OF_MONTH, day)
+                val time = calendar.timeInMillis
+                if (time !in first..last) continue
+                val level = content.heatLevels[time] ?: 0
+                paint.color = WHITE
+                paint.alpha = intArrayOf(31, 64, 115, 179, 255)[level.coerceIn(0, 4)]
+                val x = left + week * columnStep
+                val y = top + day * (cell + gap)
+                canvas.drawRoundRect(RectF(x, y, x + cell, y + cell), 2f, 2f, paint)
+            }
+        }
+        paint.alpha = 255
+        text.alpha = 255
     }
 
     /** The gradient, the two circles and the name of the app. Leaves [text] white and bold. */
@@ -336,7 +402,6 @@ object StatsImage {
         val slot = CONTENT_WIDTH / bars.size
         val width = (slot * 0.7f).coerceAtMost(90f)
         text.typeface = Typeface.DEFAULT
-        text.textSize = 28f
         text.textAlign = Paint.Align.CENTER
         text.alpha = 204
         bars.forEachIndexed { index, bar ->
@@ -350,10 +415,16 @@ object StatsImage {
                 paint,
             )
             if (bar.label != null) {
-                // The labels at the two ends are kept inside the image.
-                val half = text.measureText(bar.label) / 2
-                val x = center.coerceIn(MARGIN + half, WIDTH - MARGIN - half)
-                canvas.drawText(bar.label, x, bottom + 44f, text)
+                text.textSize = 30f
+                while (text.textSize > 16f && text.measureText(bar.label) > slot - 4f) {
+                    text.textSize -= 1f
+                }
+                val barTop = bottom - height
+                canvas.drawText(bar.label, center, (barTop - 8f).coerceAtLeast(top + 28f), text)
+            }
+            bar.bottomLabel?.let {
+                text.textSize = 24f
+                canvas.drawText(it, center, bottom + 34f, text)
             }
         }
         text.alpha = 255

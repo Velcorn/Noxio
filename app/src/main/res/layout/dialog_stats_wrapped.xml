@@ -41,6 +41,15 @@
             android:text="@string/lbl_stats_share" />
 
         <org.oxycblt.auxio.ui.RippleFixMaterialButton
+            android:id="@+id/share_name"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_small"
+            android:layout_weight="1"
+            android:text="@string/lbl_stats_wrapped_name_action" />
+
+        <org.oxycblt.auxio.ui.RippleFixMaterialButton
             android:id="@+id/share_save"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"

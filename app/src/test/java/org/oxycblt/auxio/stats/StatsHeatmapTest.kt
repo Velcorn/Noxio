@@ -54,7 +54,9 @@ class StatsHeatmapTest {
             listOf(1, 2, 3, 4),
             heatLevels(mapOf(1L to 10, 2L to 20, 3L to 30, 4L to 10000)).values.toList(),
         )
-        assertEquals(1, heatLevels(mapOf(1L to 5)).values.single())
+        assertEquals(4, heatLevels(mapOf(1L to 5)).values.single())
+        assertEquals(listOf(2, 4), heatLevels(mapOf(1L to 5, 2L to 9)).values.toList())
+        assertEquals(listOf(4, 4, 0), heatLevels(mapOf(1L to 7, 2L to 7, 3L to 0)).values.toList())
     }
 
     @Test
@@ -97,14 +99,50 @@ class StatsHeatmapTest {
     }
 
     @Test
-    fun periodsAreEmptyWithoutPlaysOrForWeeks() {
+    fun periodsAreEmptyWithoutPlays() {
         assertTrue(
             heatPeriods(emptyMap(), StatsPeriod.MONTH, null, at(2026, 1, 1), utc()).isEmpty(),
         )
-        assertTrue(
-            heatPeriods(emptyMap(), StatsPeriod.WEEK, at(2025, 1, 1), at(2026, 1, 1), utc())
-                .isEmpty(),
-        )
+    }
+
+    @Test
+    fun weekPeriodsAreMondayFirstAndCrossNewYearByThursdayYear() {
+        val weeks =
+            heatPeriods(
+                mapOf(dayStart(at(2026, 12, 30)) to 5L),
+                StatsPeriod.WEEK,
+                at(2026, 12, 30),
+                at(2027, 1, 6),
+                utc(),
+            )
+        assertEquals(2, weeks.size)
+        assertEquals(at(2026, 12, 28) - 12 * 60 * 60_000L, weeks[0].startMs)
+        assertEquals(53 to 2026, isoWeek(weeks[0].startMs, utc()))
+        assertEquals(1 to 2027, isoWeek(weeks[1].startMs, utc()))
+    }
+
+    @Test
+    fun weekPeriodsUseCalendarStepsAcrossDst() {
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"))
+        val weeks =
+            heatPeriods(
+                emptyMap(),
+                StatsPeriod.WEEK,
+                at(2026, 3, 23, "Europe/Berlin"),
+                at(2026, 4, 6, "Europe/Berlin"),
+                calendar,
+            )
+        assertEquals(3, weeks.size)
+        calendar.timeInMillis = weeks[0].startMs
+        calendar.add(Calendar.DAY_OF_MONTH, 7)
+        assertEquals(weeks[1].startMs, calendar.timeInMillis)
+    }
+
+    @Test
+    fun isoWeekUsesThursdayYear() {
+        assertEquals(53 to 2026, isoWeek(at(2026, 12, 28), utc()))
+        assertEquals(1 to 2027, isoWeek(at(2027, 1, 4), utc()))
+        assertEquals(1 to 2025, isoWeek(at(2024, 12, 30), utc()))
     }
 
     @Test

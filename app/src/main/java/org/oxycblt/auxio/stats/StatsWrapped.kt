@@ -19,6 +19,7 @@
 package org.oxycblt.auxio.stats
 
 import java.util.Calendar
+import java.util.Locale
 
 /**
  * The numbers of a year in review ("Wrapped").
@@ -48,6 +49,8 @@ data class YearInReview(
     val topAlbum: RankedItem?,
     val topSongs: List<RankedItem>,
     val monthPlays: List<Int>,
+    val monthListenedMs: List<Long>,
+    val dailyLevels: Map<Long, Int>,
     val busiestMonth: Int?,
     val weekdayPlays: List<Int>,
     val busiestWeekday: Int?,
@@ -112,6 +115,9 @@ fun yearInReview(
         topAlbum = summary.albums.firstOrNull(),
         topSongs = summary.songs.take(topSongs),
         monthPlays = monthPlays.toList(),
+        monthListenedMs = monthListened.toList(),
+        dailyLevels =
+            heatLevels(dailyTotals(inYear.map { PlayTime(it.startedAt, it.listenedMs) }, calendar)),
         busiestMonth =
             if (inYear.isEmpty()) null
             else
@@ -120,6 +126,23 @@ fun yearInReview(
         busiestWeekday =
             busiestWeekdayIndex?.takeIf { weekdayPlays[it] > 0 }?.let { (it + 1) % 7 + 1 },
     )
+}
+
+/** Make a card title using a localized possessive form of [name]. */
+fun possessive(name: String, year: Int, locale: Locale): String {
+    val german = locale.language == "de"
+    val suffix =
+        if (german) {
+            if (name.lastOrNull()?.lowercaseChar()?.let { it in "sßxz" } == true) "'" else "s"
+        } else "'s"
+    return "$name$suffix $year"
+}
+
+/** A compact label for monthly listening time, or null when the month is empty. */
+fun listeningHoursLabel(listenedMs: Long): String? {
+    if (listenedMs <= 0) return null
+    val hours = listenedMs / 3_600_000
+    return if (hours == 0L) "<1 h" else "$hours h"
 }
 
 /** The start (inclusive) and end (exclusive) of [year] in the time zone of [calendar]. */
