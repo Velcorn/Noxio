@@ -70,6 +70,9 @@ android {
         }
     }
 
+    // CHANGELOG.md is bundled as an asset, so the changelog can be read in the app (About).
+    sourceSets.main.assets.srcDir(layout.buildDirectory.dir("generated/changelog").get().asFile)
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -268,3 +271,11 @@ dependencies {
     // Fuzzy search
     implementation 'org.apache.commons:commons-text:1.15.0'
 }
+
+// Copy the changelog of the repository into the assets before every build.
+def copyChangelog = tasks.register("copyChangelog", Copy) {
+    from rootProject.file("CHANGELOG.md")
+    into layout.buildDirectory.dir("generated/changelog")
+    rename { "changelog.md" }
+}
+tasks.named("preBuild") { dependsOn copyChangelog }

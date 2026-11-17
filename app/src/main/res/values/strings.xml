@@ -297,6 +297,7 @@
 
     <string name="lbl_about">About</string>
     <string name="lbl_version">Version</string>
+    <string name="lbl_changelog">Changelog</string>
     <string name="lbl_code">Source code</string>
     <string name="lbl_wiki" tools:ignore="UnusedResources">Wiki</string>
     <string name="lbl_licenses">Licenses</string>

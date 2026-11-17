@@ -51,6 +51,7 @@ timer. Noxio is **not** affiliated with the Auxio project, so please don't repor
 - **Artist visibility:** Library settings can hide song-only artists or secondary album artists, crediting albums and songs to the first album artist.
 - **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
+- **Changelog:** every Noxio release can be read in the app, under About (bundled, so it works offline).
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
 - **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)

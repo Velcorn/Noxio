@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.BuildConfig
@@ -72,6 +73,9 @@ class AboutFragment : ViewBindingFragment<FragmentAboutBinding>() {
             }
         }
         binding.aboutVersion.text = BuildConfig.VERSION_NAME
+        binding.aboutChangelog.setOnClickListener {
+            findNavController().navigate(R.id.changelog_fragment)
+        }
         binding.aboutCode.setOnClickListener { requireContext().openInBrowser(LINK_SOURCE) }
         binding.aboutLicenses.setOnClickListener { requireContext().openInBrowser(LINK_LICENSES) }
         binding.aboutAuxio.setOnClickListener { requireContext().openInBrowser(LINK_AUXIO) }

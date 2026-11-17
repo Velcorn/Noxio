@@ -10,6 +10,7 @@
 #
 # Code that came with Auxio is not listed and only counts in the all-code report.
 detail/DetailBottomBar.kt
+settings/Changelog.kt
 music/PrimaryAlbumArtists.kt
 list/recycler/BottomAlignment.kt
 playback/service/SleepTimerController.kt
