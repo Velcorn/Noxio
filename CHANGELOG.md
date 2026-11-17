@@ -3,6 +3,20 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.18.0
+
+## What's New
+- A backup that is much smaller than your biggest one is no longer written silently: a manual backup asks first, a scheduled one is skipped with a notification, and Settings > Backup asks when you open it
+- Date sort for songs with a date popup while scrolling (from Auxio)
+
+## What's Improved
+- Backups are kept as the five newest; old `_small` files count like any other backup
+
+## What's Fixed
+- The keyboard now really opens when editing a song's tags
+- Restoring a backup applies the theme, black theme, accent and launcher icon right away
+- The wavy seek bar follows playback again when animations are on (Auxio fix)
+
 ## v1.17.1
 
 ## What's Fixed
