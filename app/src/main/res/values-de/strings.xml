@@ -55,7 +55,7 @@
     <string name="lbl_info_content_title">Über sichtbare Künstler</string>
     <string name="lbl_info_content">Das Trennzeichen teilt Künstlernamen in einem Tag auf. Künstler nur auf Titeln haben keine Albumzuordnung. Werden weitere Albuminterpreten ausgeblendet, erscheinen nur die zuerst genannten Künstler; ihnen werden auch das Album und seine Titel zugeordnet. Künstler nur auf Titeln werden dabei ebenfalls ausgeblendet.</string>
     <string name="lbl_info_backup_title">Über Backups</string>
-    <string name="lbl_info_backup">Ein Backup enthält deine Einstellungen, deinen Hörverlauf und deine Wiedergabelisten. Es wird im gewählten Ordner als noxio_YYYY-MM-DD.zip gespeichert, die letzten 5 bleiben.\n\nEin Backup, das viel weniger enthält als das davor, wird als _small gespeichert und ersetzt nie ein gutes.\n\nBeim Wiederherstellen werden die Einstellungen ersetzt, Wiedergaben und Wiedergabelisten werden hinzugefügt. Nichts wird gelöscht.</string>
+    <string name="lbl_info_backup">Ein Backup enthält deine Einstellungen, deinen Hörverlauf und deine Wiedergabelisten. Es wird im gewählten Ordner als Noxio_YYYY-MM-DD.zip gespeichert, die letzten 5 bleiben.\n\nEin Backup, das viel weniger enthält als das davor, wird als _small gespeichert und ersetzt nie ein gutes.\n\nBeim Wiederherstellen werden die Einstellungen ersetzt, Wiedergaben und Wiedergabelisten werden hinzugefügt. Nichts wird gelöscht.</string>
     <string name="set_replay_gain_mode_track">Titel bevorzugen</string>
     <string name="set_replay_gain_mode_album">Album bevorzugen</string>
     <string name="set_keep_shuffle">Zufällig-Einstellung merken</string>

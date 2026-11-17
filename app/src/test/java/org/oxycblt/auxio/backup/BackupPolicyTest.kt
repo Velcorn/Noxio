@@ -30,11 +30,13 @@ class BackupPolicyTest {
 
     @Test
     fun aBackupIsNamedAfterItsDay() {
-        assertEquals("noxio_2026-11-09.zip", name(9))
+        assertEquals("Noxio_2026-11-09.zip", name(9))
     }
 
     @Test
     fun theNameOfABackupIsReadBack() {
+        assertEquals(day(9), BackupPolicy.parse("Noxio_2026-11-09.zip"))
+        // Versions before 1.21 wrote the name in lower case.
         assertEquals(day(9), BackupPolicy.parse("noxio_2026-11-09.zip"))
         // Older versions marked a backup the user insisted on, it is a backup like any other now.
         assertEquals(day(9), BackupPolicy.parse("noxio_2026-11-09_small.zip"))
@@ -46,6 +48,7 @@ class BackupPolicyTest {
         assertNull(BackupPolicy.parse("noxio_2026-11-09.zip.tmp"))
         assertNull(BackupPolicy.parse("noxio_2026-13-45.zip"))
         assertNull(BackupPolicy.parse("holiday.zip"))
+        assertNull(BackupPolicy.parse("NOXIO_2026-11-09.zip"))
     }
 
     // --- the safeguard ---
@@ -157,6 +160,24 @@ class BackupPolicyTest {
         val names = (1..8).map { name(it) } + listOf("noxio-stats.csv", "photo.jpg")
         assertEquals(3, BackupPolicy.toDelete(names).size)
         assertEquals(false, "noxio-stats.csv" in BackupPolicy.toDelete(names))
+    }
+
+    @Test
+    fun aNewBackupGetsTheCapitalizedName() {
+        assertEquals("Noxio_2026-11-09.zip", BackupPolicy.nameFor(day(9), listOf(name(8))))
+        assertEquals("Noxio_2026-11-09.zip", BackupPolicy.nameFor(day(9), listOf(name(9))))
+    }
+
+    @Test
+    fun aSameDayBackupOfAnOlderVersionKeepsItsName() {
+        val old = listOf("noxio_2026-11-08.zip", "noxio_2026-11-09.zip")
+        assertEquals("noxio_2026-11-09.zip", BackupPolicy.nameFor(day(9), old))
+    }
+
+    @Test
+    fun lowerAndUpperCaseBackupsAreKeptByDayAlike() {
+        val names = listOf("noxio_2026-11-03.zip", "noxio_2026-11-04.zip") + (5..8).map { name(it) }
+        assertEquals(listOf("noxio_2026-11-03.zip"), BackupPolicy.toDelete(names))
     }
 
     @Test

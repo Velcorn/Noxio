@@ -9,6 +9,7 @@
     <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=flat" alt="GPL v3">
     <img alt="Minimum SDK Version" src="https://img.shields.io/badge/API-24%2B-1450A8?style=flat">
 </p>
+<p align="center"><b><a href="CHANGELOG.md">Changelog</a></b> · <a href="ROADMAP.md">Roadmap</a> · <a href="https://github.com/Velcorn/Noxio/releases">Releases</a></p>
 
 > [!WARNING]
 > **I'm not an Android developer.** Noxio is a personal project, written almost entirely with an AI assistant for my
@@ -25,13 +26,18 @@ timer. Noxio is **not** affiliated with the Auxio project, so please don't repor
 
 ## What's different from Auxio
 
+Two of the additions are features Auxio
+[has decided not to add](https://github.com/OxygenCobalt/Auxio/wiki/Why-Are-These-Features-Missing%3F): a **sleep
+timer** and **tag editing**. Its "Most Played" playlist is also on that list; Noxio's listening stats go further.
+
 - **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
   cards to share or save. A **year in review** with five cards to swipe through.
-- **Tag editing:** Song properties and Edit tags show title, artists, album, album artists, track and date in the same order. One artist separator setting applies to reading tags and editing them.
-  Playlists follow the song when editing changes its identity. Existing ReplayGain tags are used for playback.
-- **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly
+- **Tag editing:** deliberately basic, for quick fixes on the phone: title, artists, album, album artists, track and
+  date of one song at a time, from Song properties. Playlists follow the song when an edit changes its identity. For
+  bigger jobs (many files, covers, lookups) use a real tag editor such as Picard or kid3.
+- **Backup:** settings, listening history and playlists as `Noxio_YYYY-MM-DD.zip`, daily, weekly
   or monthly, the last five kept. A backup with much less than your biggest one is not written on its own: you get a
   warning and confirm it. Restore shows what's inside first and applies the restored theme right away.
 - **Queue and playlists:** the song that played is ready right after a restart, before the library has loaded. The queue
@@ -61,6 +67,19 @@ timer. Noxio is **not** affiliated with the Auxio project, so please don't repor
 - **Detail pages:** album and artist artwork and lists start at the top; long titles move to reveal the full name.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
 - **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
+
+## Removed from Auxio
+
+Noxio is built for one person's use, so it does one thing one way where Auxio offers a choice:
+
+- **Settings with one sensible answer** are fixed instead of switchable: rounded UI, natural cover proportions,
+  balanced artwork quality, no ReplayGain pre-amp, hidden files excluded, what plays when you tap a song, headset
+  autoplay, pause on repeat, remembering pause, exit on close, intelligent sorting and the playback bar action.
+  Fewer switches means a settings screen you can read at a glance.
+- **Automatic reloading** is off; Refresh and Rescan in Library settings load changes when you want them.
+- **Multi-value separators** for all tags became one artist separator, which tag editing uses too.
+- **Back and three-dot buttons** are gone for one-handed use: gestures go back, a long press opens a row's menu.
+- **Genres** are left out: there is no Genres tab, and Song properties do not show them.
 
 Everything else comes from Auxio: Media3 playback, gapless, ReplayGain from tags, rich tag support, playlists, Android Auto,
 widgets, completely private and offline. Progress and what still needs a check on a phone are in

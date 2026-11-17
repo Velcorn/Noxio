@@ -53,7 +53,7 @@ import timber.log.Timber as L
 /**
  * The full backup: the settings, listening history and playlists in one zip, written on a
  * [BackupSchedule] into a folder the user picked. Every backup has its own file
- * (`noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much less
+ * (`Noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much less
  * than the biggest saved one is not written on its own: the user is warned and has to confirm, see
  * [BackupPolicy.check].
  */
@@ -257,7 +257,7 @@ internal constructor(
             return Outcome.Suspicious(verdict, now, biggest ?: BackupCounts(0, 0))
         }
 
-        val name = BackupPolicy.fileName(today())
+        val name = BackupPolicy.nameFor(today(), tree.listFiles().mapNotNull { it.name })
         // The archive is made first and written safely: a failure halfway must not damage the file
         // of the same day, see SafeDocumentWriter.
         val bytes = ByteArrayOutputStream().also { BackupArchive.write(data, it) }.toByteArray()

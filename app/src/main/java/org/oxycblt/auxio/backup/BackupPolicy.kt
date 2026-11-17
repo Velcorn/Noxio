@@ -31,10 +31,23 @@ object BackupPolicy {
     /** How many backups are kept. */
     const val KEEP = 5
 
-    /** The `_small` ones are from older versions, which marked a backup the user insisted on. */
-    private val NAME = Regex("""noxio_(\d{4}-\d{2}-\d{2})(_small)?\.zip""")
+    /**
+     * Backups are `Noxio_YYYY-MM-DD.zip`. Versions before 1.21 wrote `noxio_` in lower case, and
+     * the `_small` ones marked a backup the user insisted on; both still count as backups.
+     */
+    private val NAME = Regex("""[Nn]oxio_(\d{4}-\d{2}-\d{2})(_small)?\.zip""")
 
-    fun fileName(date: LocalDate) = "noxio_$date.zip"
+    fun fileName(date: LocalDate) = "Noxio_$date.zip"
+
+    /**
+     * The name to write the backup of [date] under, given the files already in the folder. A backup
+     * of the same day made by an older version (`noxio_`) is replaced under its own name: shared
+     * storage ignores case, so a second file that differs only in case cannot be made.
+     */
+    fun nameFor(date: LocalDate, existing: List<String>): String {
+        val name = fileName(date)
+        return existing.firstOrNull { it != name && it.equals(name, ignoreCase = true) } ?: name
+    }
 
     /** @return The day the file is from, or null if it is not a backup file of Noxio. */
     fun parse(fileName: String): LocalDate? {

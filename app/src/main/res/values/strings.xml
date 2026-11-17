@@ -440,7 +440,7 @@
     <string name="lbl_info_content_title">About artist visibility</string>
     <string name="lbl_info_content">The separator splits artist names in a tag. Song-only artists have no album credits. Hiding secondary album artists shows only the first album artist and puts that album and its songs under them; it also hides song-only artists.</string>
     <string name="lbl_info_backup_title">About backups</string>
-    <string name="lbl_info_backup">A backup holds your settings, listening history and playlists. It is saved in the folder you choose as noxio_YYYY-MM-DD.zip, and the last 5 are kept.\n\nA backup that holds much less than the one before is saved as _small and never replaces a good one.\n\nRestoring replaces the settings and adds plays and playlists to what is there. Nothing is deleted.</string>
+    <string name="lbl_info_backup">A backup holds your settings, listening history and playlists. It is saved in the folder you choose as Noxio_YYYY-MM-DD.zip, and the last 5 are kept.\n\nA backup that holds much less than the one before is saved as _small and never replaces a good one.\n\nRestoring replaces the settings and adds plays and playlists to what is there. Nothing is deleted.</string>
 
     <string name="set_library">Library</string>
     <string name="set_locations">Music sources</string>
