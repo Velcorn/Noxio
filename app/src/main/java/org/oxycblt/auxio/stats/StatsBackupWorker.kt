@@ -26,6 +26,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import org.oxycblt.auxio.backup.AppBackup
+import org.oxycblt.auxio.backup.BackupNotification
 import timber.log.Timber as L
 
 /**
@@ -45,7 +46,11 @@ class StatsBackupWorker(context: Context, params: WorkerParameters) :
         val backup =
             EntryPointAccessors.fromApplication(applicationContext, Entry::class.java).appBackup()
         try {
-            backup.run()
+            // A backup that holds much less than the biggest saved one is not written on its own:
+            // the user is told and decides in Settings > Backup.
+            if (backup.run() is AppBackup.Outcome.Suspicious) {
+                BackupNotification.showSkipped(applicationContext)
+            }
         } catch (e: Exception) {
             L.e("Backup failed: $e")
         }

@@ -31,76 +31,77 @@ object BackupPolicy {
     /** How many backups are kept. */
     const val KEEP = 5
 
-    /** Old backups are not removed while that would leave fewer good ones than this. */
-    const val MIN_GOOD = 3
-
+    /** The `_small` ones are from older versions, which marked a backup the user insisted on. */
     private val NAME = Regex("""noxio_(\d{4}-\d{2}-\d{2})(_small)?\.zip""")
 
-    /**
-     * @param small True for a backup that holds much less than the one before, which was written
-     *   because the user asked for it. It never counts as a good backup.
-     */
-    fun fileName(date: LocalDate, small: Boolean = false) =
-        "noxio_$date${if (small) "_small" else ""}.zip"
+    fun fileName(date: LocalDate) = "noxio_$date.zip"
 
-    data class Name(val date: LocalDate, val small: Boolean)
-
-    /** @return What the name of a file says, or null if it is not a backup file of Noxio. */
-    fun parse(fileName: String): Name? {
+    /** @return The day the file is from, or null if it is not a backup file of Noxio. */
+    fun parse(fileName: String): LocalDate? {
         val match = NAME.matchEntire(fileName) ?: return null
-        val date = runCatching { LocalDate.parse(match.groupValues[1]) }.getOrNull() ?: return null
-        return Name(date, match.groupValues[2].isNotEmpty())
+        return runCatching { LocalDate.parse(match.groupValues[1]) }.getOrNull()
     }
 
     enum class Verdict {
         OK,
-        /** There are no plays and no playlists, but the last backup had some. */
+        /** There are no plays and no playlists, but the biggest saved backup has some. */
         EMPTY,
-        /** There are less than half of the plays of the last backup. */
+        /** There are a quarter or more fewer plays than in the biggest saved backup. */
         SHRUNK,
+    }
+
+    /**
+     * What a new backup is compared with: the most plays and the most playlists of the saved
+     * [backups] (each with its day), counting only those from [since] on. The biggest one is used
+     * and not the newest, as a newest one that already lost a little would let the next one lose a
+     * little more, and so on, until the good ones are gone. [since] is the day the user accepted a
+     * smaller backup, which then is the new level.
+     *
+     * @return null if there is nothing to compare with.
+     */
+    fun baseline(backups: List<Pair<LocalDate, BackupCounts>>, since: LocalDate?): BackupCounts? {
+        val counted = backups.filter { since == null || !it.first.isBefore(since) }
+        if (counted.isEmpty()) return null
+        return BackupCounts(
+            counted.maxOf { it.second.plays },
+            counted.maxOf { it.second.playlists },
+        )
     }
 
     /**
      * Whether writing [now] could damage what is saved: a new install, a reset or a failed import
      * must not replace a good backup.
      *
-     * @param last What the newest good backup holds, or null if there is none.
+     * @param baseline What the biggest saved backup holds, see [baseline], or null if there is
+     *   none.
      */
-    fun check(now: BackupCounts, last: BackupCounts?): Verdict {
-        if (last == null) return Verdict.OK
-        if (now.plays == 0 && now.playlists == 0 && (last.plays > 0 || last.playlists > 0)) {
+    fun check(now: BackupCounts, baseline: BackupCounts?): Verdict {
+        if (baseline == null) return Verdict.OK
+        if (
+            now.plays == 0 && now.playlists == 0 && (baseline.plays > 0 || baseline.playlists > 0)
+        ) {
             return Verdict.EMPTY
         }
-        if (last.plays >= MIN_PLAYS_TO_COMPARE && now.plays * 2 < last.plays) {
+        if (baseline.plays >= MIN_PLAYS_TO_COMPARE && now.plays * 4 < baseline.plays * 3) {
             return Verdict.SHRUNK
         }
         return Verdict.OK
     }
 
     /**
-     * Which of the backup files to delete: the oldest ones beyond [KEEP], as long as at least
-     * [MIN_GOOD] good ones are left. Files that are not backups are never listed.
+     * Which of the backup files to delete: the oldest ones beyond [KEEP]. Files that are not
+     * backups are never listed.
      */
-    fun toDelete(fileNames: List<String>): List<String> {
-        val backups =
-            fileNames
-                .mapNotNull { name -> parse(name)?.let { name to it } }
-                // Newest first; a good file comes before a small one of the same day.
-                .sortedWith(
-                    compareByDescending<Pair<String, Name>> { it.second.date }
-                        .thenBy { it.second.small },
-                )
-        var good = backups.count { !it.second.small }
-        val delete = mutableListOf<String>()
-        for ((name, parsed) in backups.drop(KEEP).reversed()) {
-            if (!parsed.small) {
-                if (good <= MIN_GOOD) continue
-                good--
-            }
-            delete += name
-        }
-        return delete
-    }
+    fun toDelete(fileNames: List<String>): List<String> =
+        fileNames
+            .mapNotNull { name -> parse(name)?.let { name to it } }
+            // Newest first; of the same day the plain name is kept before an older `_small` one.
+            .sortedWith(
+                compareByDescending<Pair<String, LocalDate>> { it.second }
+                    .thenBy { it.first.contains("_small") },
+            )
+            .drop(KEEP)
+            .map { it.first }
 
     private const val MIN_PLAYS_TO_COMPARE = 10
 }

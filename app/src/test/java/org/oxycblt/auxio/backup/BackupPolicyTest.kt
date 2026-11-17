@@ -24,25 +24,20 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class BackupPolicyTest {
-    private fun name(day: Int, small: Boolean = false) =
-        BackupPolicy.fileName(LocalDate.of(2026, 11, day), small)
+    private fun day(day: Int) = LocalDate.of(2026, 11, day)
+
+    private fun name(day: Int) = BackupPolicy.fileName(day(day))
 
     @Test
     fun aBackupIsNamedAfterItsDay() {
         assertEquals("noxio_2026-11-09.zip", name(9))
-        assertEquals("noxio_2026-11-09_small.zip", name(9, small = true))
     }
 
     @Test
     fun theNameOfABackupIsReadBack() {
-        assertEquals(
-            BackupPolicy.Name(LocalDate.of(2026, 11, 9), false),
-            BackupPolicy.parse("noxio_2026-11-09.zip"),
-        )
-        assertEquals(
-            BackupPolicy.Name(LocalDate.of(2026, 11, 9), true),
-            BackupPolicy.parse("noxio_2026-11-09_small.zip"),
-        )
+        assertEquals(day(9), BackupPolicy.parse("noxio_2026-11-09.zip"))
+        // Older versions marked a backup the user insisted on, it is a backup like any other now.
+        assertEquals(day(9), BackupPolicy.parse("noxio_2026-11-09_small.zip"))
     }
 
     @Test
@@ -55,7 +50,7 @@ class BackupPolicyTest {
 
     // --- the safeguard ---
 
-    private val last = BackupCounts(plays = 1000, playlists = 4)
+    private val biggest = BackupCounts(plays = 1000, playlists = 4)
 
     @Test
     fun withoutAnEarlierBackupEverythingIsFine() {
@@ -64,7 +59,7 @@ class BackupPolicyTest {
 
     @Test
     fun anEmptyAppDoesNotReplaceABackupWithContent() {
-        assertEquals(BackupPolicy.Verdict.EMPTY, BackupPolicy.check(BackupCounts(0, 0), last))
+        assertEquals(BackupPolicy.Verdict.EMPTY, BackupPolicy.check(BackupCounts(0, 0), biggest))
         assertEquals(
             BackupPolicy.Verdict.EMPTY,
             BackupPolicy.check(BackupCounts(0, 0), BackupCounts(0, 1)),
@@ -80,10 +75,11 @@ class BackupPolicyTest {
     }
 
     @Test
-    fun lessThanHalfThePlaysIsSuspicious() {
-        assertEquals(BackupPolicy.Verdict.SHRUNK, BackupPolicy.check(BackupCounts(499, 4), last))
-        assertEquals(BackupPolicy.Verdict.OK, BackupPolicy.check(BackupCounts(500, 4), last))
-        assertEquals(BackupPolicy.Verdict.OK, BackupPolicy.check(BackupCounts(1200, 0), last))
+    fun aQuarterFewerPlaysOrMoreIsSuspicious() {
+        // Plays only grow, so a loss of a quarter is no normal change.
+        assertEquals(BackupPolicy.Verdict.SHRUNK, BackupPolicy.check(BackupCounts(749, 4), biggest))
+        assertEquals(BackupPolicy.Verdict.OK, BackupPolicy.check(BackupCounts(750, 4), biggest))
+        assertEquals(BackupPolicy.Verdict.OK, BackupPolicy.check(BackupCounts(1200, 0), biggest))
     }
 
     @Test
@@ -92,6 +88,55 @@ class BackupPolicyTest {
             BackupPolicy.Verdict.OK,
             BackupPolicy.check(BackupCounts(2, 0), BackupCounts(9, 0)),
         )
+    }
+
+    // --- what a new backup is compared with ---
+
+    @Test
+    fun nothingSavedMeansNothingToCompareWith() {
+        assertNull(BackupPolicy.baseline(emptyList(), null))
+    }
+
+    @Test
+    fun theBiggestOfTheSavedBackupsIsTheLevelAndNotTheNewest() {
+        val saved =
+            listOf(
+                day(2) to BackupCounts(1000, 4),
+                day(9) to BackupCounts(800, 6),
+                day(16) to BackupCounts(760, 2),
+            )
+        assertEquals(BackupCounts(1000, 6), BackupPolicy.baseline(saved, null))
+    }
+
+    @Test
+    fun aSlowDeclineIsCaughtAgainstTheBiggestAndNotStepByStep() {
+        // 1000 -> 800 -> 640 -> 512: every step on its own loses less than a quarter, but 640 is
+        // already far under the 1000 that is still saved, so it is stopped there.
+        var saved = listOf(day(1) to BackupCounts(1000, 0))
+        var stopped = 0
+        for ((i, plays) in listOf(800, 640, 512).withIndex()) {
+            val now = BackupCounts(plays, 0)
+            if (
+                BackupPolicy.check(now, BackupPolicy.baseline(saved, null)) ==
+                    BackupPolicy.Verdict.OK
+            ) {
+                saved = saved + (day(2 + i) to now)
+            } else {
+                stopped++
+            }
+        }
+        // 800 passes (80%), 640 and 512 are under 75% of 1000.
+        assertEquals(2, stopped)
+        assertEquals(listOf(BackupCounts(1000, 0), BackupCounts(800, 0)), saved.map { it.second })
+    }
+
+    @Test
+    fun anAcceptedSmallerLevelIsTheNewOneFromItsDayOn() {
+        val saved = listOf(day(2) to BackupCounts(1000, 4), day(16) to BackupCounts(100, 1))
+        assertEquals(BackupCounts(100, 1), BackupPolicy.baseline(saved, day(16)))
+        // Backups of the day itself count too, and nothing from before.
+        assertEquals(BackupCounts(1000, 4), BackupPolicy.baseline(saved, day(2)))
+        assertNull(BackupPolicy.baseline(saved, day(20)))
     }
 
     // --- which files are removed ---
@@ -115,23 +160,8 @@ class BackupPolicyTest {
     }
 
     @Test
-    fun smallBackupsAreRemovedFirstAndNeverCountAsGood() {
-        // Newest first: 3 small ones, then 5 good ones. Only the 5 newest overall are kept, but
-        // good backups are held back while fewer than 3 would remain.
-        val names = listOf(name(20, true), name(19, true), name(18, true)) + (1..5).map { name(it) }
-        val deleted = BackupPolicy.toDelete(names)
-        // Of the 8 files the 3 oldest (the good 1, 2 and 3) are beyond the limit. Deleting them
-        // would leave only 2 good backups, so only one of them goes (5 good -> 3).
-        assertEquals(listOf(name(1), name(2)), deleted.sorted())
-        assertEquals(false, name(3) in deleted)
-    }
-
-    @Test
-    fun smallBackupsBeyondTheLimitAreRemovedWithoutTouchingGoodOnes() {
-        val names = (1..5).map { name(it) } + listOf(name(25, true))
-        assertEquals(
-            listOf(name(1)),
-            BackupPolicy.toDelete(names).filter { !it.contains("_small") },
-        )
+    fun olderSmallFilesCountLikeAnyOther() {
+        val names = (3..7).map { name(it) } + listOf("noxio_2026-11-01_small.zip")
+        assertEquals(listOf("noxio_2026-11-01_small.zip"), BackupPolicy.toDelete(names))
     }
 }

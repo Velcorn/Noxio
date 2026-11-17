@@ -38,6 +38,7 @@ import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.backup.AppBackup
 import org.oxycblt.auxio.backup.BackupArchive
+import org.oxycblt.auxio.backup.BackupCounts
 import org.oxycblt.auxio.backup.BackupData
 import org.oxycblt.auxio.backup.BackupSchedule
 import org.oxycblt.auxio.backup.BackupSchedule.Frequency
@@ -139,10 +140,15 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                 true
             }
         updateBackupSummaries()
+        // An automatic backup that was skipped waits for a decision, so the question is asked as
+        // the screen opens (not again when it is only turned or made again).
+        if (savedInstanceState == null) {
+            statsBackup.skipped?.let { confirmSmallBackup(it.now, it.biggest) }
+        }
     }
 
     /** Write a backup right away. */
-    private fun backUpNow(force: Boolean = false) {
+    private fun backUpNow(confirmed: Boolean = false) {
         val context = requireContext()
         if (statsBackup.folder == null) {
             folderLauncher.launch(null)
@@ -151,7 +157,8 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
         viewLifecycleOwner.lifecycleScope.launch {
             val outcome =
                 withContext(Dispatchers.IO) {
-                    runCatching { statsBackup.run(force) }.getOrDefault(AppBackup.Outcome.Failed)
+                    runCatching { statsBackup.run(confirmed) }
+                        .getOrDefault(AppBackup.Outcome.Failed)
                 }
             when (outcome) {
                 is AppBackup.Outcome.Written ->
@@ -161,27 +168,30 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                             android.widget.Toast.LENGTH_SHORT,
                         )
                         .show()
-                is AppBackup.Outcome.Suspicious -> confirmSmallBackup(outcome)
+                is AppBackup.Outcome.Suspicious -> confirmSmallBackup(outcome.now, outcome.last)
                 else -> context.showToast(R.string.err_stats_backup)
             }
             updateBackupSummaries()
         }
     }
 
-    /** A backup that holds much less than the last one is only written when the user insists. */
-    private fun confirmSmallBackup(outcome: AppBackup.Outcome.Suspicious) {
+    /**
+     * A backup that holds much less than the biggest saved one is only written when the user
+     * confirms. Older backups are removed once five newer ones exist, so this is told.
+     */
+    private fun confirmSmallBackup(now: BackupCounts, biggest: BackupCounts) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.lbl_backup_small_title)
             .setMessage(
                 getString(
                     R.string.fmt_backup_small_desc,
-                    outcome.now.plays,
-                    outcome.now.playlists,
-                    outcome.last.plays,
-                    outcome.last.playlists,
+                    now.plays,
+                    now.playlists,
+                    biggest.plays,
+                    biggest.playlists,
                 ),
             )
-            .setPositiveButton(R.string.lbl_backup_small_ok) { _, _ -> backUpNow(force = true) }
+            .setPositiveButton(R.string.lbl_backup_small_ok) { _, _ -> backUpNow(confirmed = true) }
             .setNegativeButton(R.string.lbl_cancel, null)
             .create()
             .apply { blackenWindowOnShow() }
@@ -240,6 +250,11 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
                     }
                     if (restored.libraryMissing) {
                         context.showToast(R.string.lng_backup_no_library)
+                    }
+                    // The theme is applied when the screen is made, so it is made again to show
+                    // the restored one right away.
+                    if (restored.themeChanged) {
+                        activity?.recreate()
                     }
                 }
             }
@@ -313,8 +328,7 @@ class BackupPreferenceFragment : BasePreferenceFragment(R.xml.preferences_backup
         intList(R.string.set_key_backup_frequency)?.summary =
             listOfNotNull(
                     frequencyName,
-                    if (statsBackup.lastVerdict != null)
-                        getString(R.string.lbl_stats_backup_skipped)
+                    if (statsBackup.skipped != null) getString(R.string.lbl_stats_backup_skipped)
                     else next,
                 )
                 .joinToString("\n")

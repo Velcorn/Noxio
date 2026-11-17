@@ -183,9 +183,12 @@
     <string name="set_stats_backup_folder">Backup folder</string>
     <string name="lbl_stats_backup_no_folder">No folder chosen</string>
     <string name="fmt_stats_backup_last">Last backup: %s</string>
-    <string name="lbl_stats_backup_skipped">The last automatic backup was skipped: it held much less than the one before</string>
+    <string name="lbl_stats_backup_skipped">The last automatic backup was skipped: it held much less than your biggest one</string>
     <string name="lbl_backup_small_title">This backup holds much less</string>
-    <string name="fmt_backup_small_desc">Plays: %1$d, playlists: %2$d. The last good backup had plays: %3$d, playlists: %4$d. It is saved as _small and the older backups stay.</string>
+    <string name="fmt_backup_small_desc">Plays: %1$d, playlists: %2$d. Your biggest backup has plays: %3$d, playlists: %4$d. If you save it anyway, backups from before are removed once five newer ones exist.</string>
+    <string name="lbl_backup_skipped_title">Backup skipped</string>
+    <string name="lng_backup_skipped">It holds much less than your biggest backup. Open Settings > Backup to save it or not.</string>
+    <string name="lbl_backup_notification_channel">Backups</string>
     <string name="lbl_backup_small_ok">Save anyway</string>
     <string name="set_backup_restore">Restore from backup</string>
     <string name="set_backup_restore_desc">Restore a backup file</string>

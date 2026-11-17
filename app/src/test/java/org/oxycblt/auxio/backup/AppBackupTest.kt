@@ -38,6 +38,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
+import org.oxycblt.auxio.R
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.stats.PlayEvent
 import org.oxycblt.auxio.stats.StatsCsvImport
@@ -216,44 +217,91 @@ class AppBackupTest {
         assertEquals(BackupPolicy.Verdict.EMPTY, (outcome as AppBackup.Outcome.Suspicious).verdict)
         assertEquals(listOf("noxio_2026-11-09.zip"), files())
         assertEquals(before, File(folder.root, "noxio_2026-11-09.zip").readBytes().size)
-        assertEquals(BackupPolicy.Verdict.EMPTY, backup.lastVerdict)
+        assertEquals(BackupPolicy.Verdict.EMPTY, backup.skipped?.verdict)
 
         // A good run clears the note.
         repository.plays = 3
         backup.run()
-        assertNull(backup.lastVerdict)
+        assertNull(backup.skipped)
     }
 
     @Test
-    fun aSmallBackupIsOnlyWrittenWhenForcedAndGetsItsOwnName() = runBlocking {
+    fun aSkippedBackupKeepsWhatTheUserIsAskedAbout() = runBlocking {
+        val backup = backupInto()
+        repository.plays = 100
+        backup.run()
+        repository.plays = 10
+        day = day.plusDays(7)
+        backup.run()
+        val skipped = backup.skipped!!
+        assertEquals(BackupPolicy.Verdict.SHRUNK, skipped.verdict)
+        assertEquals(10, skipped.now.plays)
+        assertEquals(100, skipped.biggest.plays)
+        // It is the same one the next time the screen is made.
+        assertEquals(skipped, backupInto().skipped)
+    }
+
+    @Test
+    fun aMuchSmallerBackupIsOnlyWrittenWhenConfirmedAndIsThenAPlainBackup() = runBlocking {
         val backup = backupInto()
         repository.plays = 100
         backup.run()
         repository.plays = 10
         day = day.plusDays(7)
         assertTrue(backup.run() is AppBackup.Outcome.Suspicious)
+        assertEquals(listOf("noxio_2026-11-09.zip"), files())
         assertEquals(
-            AppBackup.Outcome.Written("noxio_2026-11-16_small.zip"),
-            backup.run(force = true),
+            AppBackup.Outcome.Written("noxio_2026-11-16.zip"),
+            backup.run(confirmed = true),
         )
-        assertEquals(listOf("noxio_2026-11-09.zip", "noxio_2026-11-16_small.zip"), files())
+        assertEquals(listOf("noxio_2026-11-09.zip", "noxio_2026-11-16.zip"), files())
+        assertNull(backup.skipped)
     }
 
     @Test
-    fun aSmallBackupDoesNotPushOutTheGoodOnes() = runBlocking {
+    fun afterConfirmingASmallerLevelTheNextBackupsAreNotAskedAgain() = runBlocking {
         val backup = backupInto()
         repository.plays = 100
-        repeat(5) {
-            backup.run()
+        backup.run()
+        repository.plays = 10
+        day = day.plusDays(7)
+        backup.run(confirmed = true)
+        // The next one at the same level is fine, the big one from before is no longer the level.
+        day = day.plusDays(7)
+        assertTrue(backup.run() is AppBackup.Outcome.Written)
+        // Losing a lot of that level is asked about again.
+        repository.plays = 0
+        day = day.plusDays(7)
+        assertTrue(backup.run() is AppBackup.Outcome.Suspicious)
+    }
+
+    @Test
+    fun aSlowDeclineCannotPushOutTheGoodBackups() = runBlocking {
+        val backup = backupInto()
+        repository.plays = 1000
+        backup.run()
+        var written = 0
+        // Every step loses a bit, but never a quarter of the last one.
+        for (plays in listOf(900, 810, 729, 656, 590, 531)) {
+            repository.plays = plays
             day = day.plusDays(7)
+            if (backup.run() is AppBackup.Outcome.Written) written++
         }
-        repository.plays = 1
-        repeat(4) {
-            backup.run(force = true)
-            day = day.plusDays(7)
-        }
-        val good = files().count { !it.contains("_small") }
-        assertTrue("only $good good backups left", good >= BackupPolicy.MIN_GOOD)
+        // 900 and 810 are fine (the biggest is 1000), 729 is under three quarters of it.
+        assertEquals(2, written)
+        assertTrue(
+            "the first backup is still there: ${files()}",
+            "noxio_2026-11-09.zip" in files(),
+        )
+    }
+
+    @Test
+    fun olderSmallFilesOfEarlierVersionsAreBackupsLikeAnyOther() = runBlocking {
+        File(folder.root, "noxio_2026-11-01_small.zip").writeText("not a real backup")
+        val backup = backupInto()
+        assertTrue(backup.run() is AppBackup.Outcome.Written)
+        // Not readable, so it is nothing to compare with, and it stays.
+        assertTrue("noxio_2026-11-01_small.zip" in files())
     }
 
     @Test
@@ -358,6 +406,30 @@ class AppBackupTest {
                 .toByteArray(),
             playlists,
         )
+
+    @Test
+    fun restoringADifferentThemeSaysSoThatTheScreenCanBeMadeAgain() = runBlocking {
+        clearPreferences()
+        val black = context.getString(R.string.set_key_black_theme)
+        val backup = backupInto()
+        // After clearing the app data nothing is set, so the black theme of the backup is new.
+        assertTrue(backup.restore(data(mapOf(black to true))).themeChanged)
+        // The same again, and other settings, change no theme.
+        assertFalse(backup.restore(data(mapOf(black to true))).themeChanged)
+        assertFalse(backup.restore(data(mapOf("some_other_setting" to 3))).themeChanged)
+        assertTrue(backup.restore(data(mapOf(black to false))).themeChanged)
+        // The accent and the theme count as well.
+        assertTrue(
+            backup
+                .restore(data(mapOf(context.getString(R.string.set_key_accent) to 4)))
+                .themeChanged,
+        )
+        assertTrue(
+            backup
+                .restore(data(mapOf(context.getString(R.string.set_key_theme) to 2)))
+                .themeChanged,
+        )
+    }
 
     @Test
     fun restoringPutsTheSettingsBackAndAddsThePlays() = runBlocking {

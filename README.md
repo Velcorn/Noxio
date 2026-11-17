@@ -35,7 +35,8 @@ timer. Noxio is **not** affiliated with the Auxio project, so please don't repor
 - **Tag editing:** Song properties and Edit tags show title, artists, album, album artists, track and date in the same order. One artist separator setting applies to reading tags and editing them.
   Playlists follow the song when editing changes its identity. Existing ReplayGain tags are used for playback.
 - **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly
-  or monthly, the last five kept. A much smaller backup never replaces a good one. Restore shows what's inside first.
+  or monthly, the last five kept. A backup with much less than your biggest one is not written on its own: you get a
+  warning and confirm it. Restore shows what's inside first and applies the restored theme right away.
 - **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)
   opens a short explanation.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only

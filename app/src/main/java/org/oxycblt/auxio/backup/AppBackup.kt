@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.oxycblt.auxio.BuildConfig
+import org.oxycblt.auxio.R
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.stats.PlayEvent
@@ -46,13 +47,15 @@ import org.oxycblt.auxio.stats.SafeDocumentWriter
 import org.oxycblt.auxio.stats.StatsBackupWorker
 import org.oxycblt.auxio.stats.StatsCsvImport
 import org.oxycblt.auxio.stats.StatsRepository
+import org.oxycblt.auxio.ui.LauncherIcon
 import timber.log.Timber as L
 
 /**
  * The full backup: the settings, listening history and playlists in one zip, written on a
  * [BackupSchedule] into a folder the user picked. Every backup has its own file
  * (`noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much less
- * than the one before is not written on its own, see [BackupPolicy.check].
+ * than the biggest saved one is not written on its own: the user is warned and has to confirm, see
+ * [BackupPolicy.check].
  */
 @Singleton
 class AppBackup
@@ -87,12 +90,37 @@ internal constructor(
     val lastBackupMs: Long?
         get() = sharedPreferences.getLong(KEY_LAST, 0L).takeIf { it > 0 }
 
-    /** What stopped the last automatic backup, or null if nothing did. */
-    val lastVerdict: BackupPolicy.Verdict?
-        get() =
-            sharedPreferences.getString(KEY_VERDICT, null)?.let {
-                runCatching { BackupPolicy.Verdict.valueOf(it) }.getOrNull()
-            }
+    /** A backup that was not written because it holds much less, see [skipped]. */
+    data class Skipped(
+        val verdict: BackupPolicy.Verdict,
+        /** What the skipped backup would have held. */
+        val now: BackupCounts,
+        /** What the biggest saved backup holds. */
+        val biggest: BackupCounts,
+    )
+
+    /**
+     * The automatic backup that was skipped because it holds much less than the biggest saved one,
+     * and still waits for the user to confirm or not, or null if there is none.
+     */
+    val skipped: Skipped?
+        get() {
+            val verdict =
+                sharedPreferences.getString(KEY_VERDICT, null)?.let {
+                    runCatching { BackupPolicy.Verdict.valueOf(it) }.getOrNull()
+                } ?: return null
+            return Skipped(
+                verdict,
+                BackupCounts(
+                    sharedPreferences.getInt(KEY_SKIPPED_PLAYS, 0),
+                    sharedPreferences.getInt(KEY_SKIPPED_PLAYLISTS, 0),
+                ),
+                BackupCounts(
+                    sharedPreferences.getInt(KEY_BIGGEST_PLAYS, 0),
+                    sharedPreferences.getInt(KEY_BIGGEST_PLAYLISTS, 0),
+                ),
+            )
+        }
 
     /** The display name of the chosen folder, or null if there is none or it is unreachable. */
     val folderName: String?
@@ -167,7 +195,10 @@ internal constructor(
         /** The backup was written to the file called [name]. */
         data class Written(val name: String) : Outcome
 
-        /** Nothing was written, because [now] looks wrong next to what the last backup held. */
+        /**
+         * Nothing was written, because [now] is much less than what the biggest saved backup,
+         * [last], holds. The user has to confirm it.
+         */
         data class Suspicious(
             val verdict: BackupPolicy.Verdict,
             val now: BackupCounts,
@@ -184,37 +215,49 @@ internal constructor(
     /**
      * Write a backup now.
      *
-     * @param force Write it although it holds much less than the last good backup. Such a backup
-     *   gets its own name and is never counted as a good one.
+     * @param confirmed The user was told that it holds much less than the biggest saved backup and
+     *   wants it anyway. It is written like any other, and from then on that is the level new
+     *   backups are compared with, so the user is not asked again for the same reason.
      */
-    suspend fun run(force: Boolean = false): Outcome {
+    suspend fun run(confirmed: Boolean = false): Outcome {
         val tree = folder?.let { openFolder(context, it) }
         if (tree == null || !tree.canWrite()) {
             L.w("Backup folder is missing or not writable")
             return Outcome.NoFolder
         }
-        val existing = tree.listFiles().filter { it.name?.let(BackupPolicy::parse) != null }
-        val newestGood =
-            existing
-                .filter { BackupPolicy.parse(it.name!!)?.small == false }
-                .maxByOrNull { BackupPolicy.parse(it.name!!)!!.date }
-        val lastInfo = newestGood?.let { readInfo(it) }
+        val existing =
+            tree.listFiles().mapNotNull { file ->
+                file.name?.let(BackupPolicy::parse)?.let { day -> file to day }
+            }
+        val saved = existing.mapNotNull { (file, day) ->
+            readInfo(file)?.let { day to BackupCounts(it.plays, it.playlists) }
+        }
+        val accepted =
+            sharedPreferences
+                .getLong(KEY_ACCEPTED_FROM, 0L)
+                .takeIf { it > 0 }
+                ?.let {
+                    LocalDate.ofEpochDay(it)
+                }
+        val biggest = BackupPolicy.baseline(saved, accepted)
+        val newest = existing.maxByOrNull { it.second }?.first
 
-        val data = collect(fallback = newestGood?.let { read(it.uri) })
+        val data = collect(fallback = newest?.let { read(it.uri) })
         val now = BackupCounts(data.info.plays, data.info.playlists)
-        val verdict =
-            BackupPolicy.check(now, lastInfo?.let { BackupCounts(it.plays, it.playlists) })
-        if (verdict != BackupPolicy.Verdict.OK && !force) {
+        val verdict = BackupPolicy.check(now, biggest)
+        if (verdict != BackupPolicy.Verdict.OK && !confirmed) {
             L.w("Backup skipped: $verdict")
-            sharedPreferences.edit { putString(KEY_VERDICT, verdict.name) }
-            return Outcome.Suspicious(
-                verdict,
-                now,
-                BackupCounts(lastInfo?.plays ?: 0, lastInfo?.playlists ?: 0),
-            )
+            sharedPreferences.edit {
+                putString(KEY_VERDICT, verdict.name)
+                putInt(KEY_SKIPPED_PLAYS, now.plays)
+                putInt(KEY_SKIPPED_PLAYLISTS, now.playlists)
+                putInt(KEY_BIGGEST_PLAYS, biggest?.plays ?: 0)
+                putInt(KEY_BIGGEST_PLAYLISTS, biggest?.playlists ?: 0)
+            }
+            return Outcome.Suspicious(verdict, now, biggest ?: BackupCounts(0, 0))
         }
 
-        val name = BackupPolicy.fileName(today(), small = verdict != BackupPolicy.Verdict.OK)
+        val name = BackupPolicy.fileName(today())
         // The archive is made first and written safely: a failure halfway must not damage the file
         // of the same day, see SafeDocumentWriter.
         val bytes = ByteArrayOutputStream().also { BackupArchive.write(data, it) }.toByteArray()
@@ -225,7 +268,13 @@ internal constructor(
         sharedPreferences.edit {
             putLong(KEY_LAST, System.currentTimeMillis())
             remove(KEY_VERDICT)
+            if (verdict != BackupPolicy.Verdict.OK) {
+                // The smaller level is accepted, it is what the next backups are compared with.
+                putLong(KEY_ACCEPTED_FROM, today().toEpochDay())
+            }
         }
+        // Whatever was asked about is settled now.
+        BackupNotification.clear(context)
         // Only now, with the new file safe, are old ones removed.
         val names = tree.listFiles().mapNotNull { it.name }
         for (old in BackupPolicy.toDelete(names)) {
@@ -305,6 +354,11 @@ internal constructor(
         val missingSongs: Int,
         /** Whether the playlists could not be restored because the library is not loaded. */
         val libraryMissing: Boolean,
+        /**
+         * Whether the theme, the black theme or the accent changed. They are applied when the
+         * screen is made, so it has to be made again to show them.
+         */
+        val themeChanged: Boolean = false,
     )
 
     /**
@@ -313,6 +367,12 @@ internal constructor(
      * of that name exists.
      */
     suspend fun restore(data: BackupData): Restored {
+        val themeKeys =
+            listOf(R.string.set_key_theme, R.string.set_key_black_theme, R.string.set_key_accent)
+                .map(context::getString)
+        val iconKey = context.getString(R.string.set_key_launcher_icon)
+        val themeBefore = themeKeys.map { sharedPreferences.all[it] }
+        val iconBefore = sharedPreferences.all[iconKey]
         sharedPreferences.edit {
             for ((key, value) in data.settings) {
                 if (isLocal(key)) continue
@@ -325,6 +385,15 @@ internal constructor(
                     is String -> putString(key, value)
                     is Set<*> -> putStringSet(key, value as Set<String>)
                 }
+            }
+        }
+        val themeChanged = themeKeys.map { sharedPreferences.all[it] } != themeBefore
+        // The launcher icon is a setting of the system too, not only a stored choice.
+        val iconAfter = sharedPreferences.all[iconKey]
+        if (iconAfter != iconBefore && iconAfter is Int) {
+            LauncherIcon.fromIntCode(iconAfter)?.let {
+                runCatching { LauncherIcon.apply(context, it) }
+                    .onFailure { e -> L.w("Could not switch the launcher icon: $e") }
             }
         }
         val plays =
@@ -369,6 +438,7 @@ internal constructor(
             playlists = created,
             missingSongs = missing,
             libraryMissing = library == null && data.playlists.isNotEmpty(),
+            themeChanged = themeChanged,
         )
     }
 
@@ -393,6 +463,11 @@ internal constructor(
         private const val KEY_FOLDER = "noxio_stats_backup_folder_uri"
         private const val KEY_LAST = "noxio_stats_backup_last"
         private const val KEY_VERDICT = "noxio_stats_backup_verdict"
+        private const val KEY_SKIPPED_PLAYS = "noxio_stats_backup_skipped_plays"
+        private const val KEY_SKIPPED_PLAYLISTS = "noxio_stats_backup_skipped_playlists"
+        private const val KEY_BIGGEST_PLAYS = "noxio_stats_backup_biggest_plays"
+        private const val KEY_BIGGEST_PLAYLISTS = "noxio_stats_backup_biggest_playlists"
+        private const val KEY_ACCEPTED_FROM = "noxio_stats_backup_accepted_from"
         private const val OLD_KEY_SWITCH = "noxio_stats_backup"
         const val KEY_FREQUENCY = "noxio_backup_frequency"
         const val KEY_WEEKDAY = "noxio_backup_weekday"

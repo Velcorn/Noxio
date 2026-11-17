@@ -373,9 +373,12 @@
     <string name="set_stats_backup_folder">Backup-Ordner</string>
     <string name="lbl_stats_backup_no_folder">Kein Ordner gewählt</string>
     <string name="fmt_stats_backup_last">Letztes Backup: %s</string>
-    <string name="lbl_stats_backup_skipped">Das letzte automatische Backup wurde übersprungen: Es enthielt viel weniger als das davor</string>
+    <string name="lbl_stats_backup_skipped">Das letzte automatische Backup wurde übersprungen: Es enthielt viel weniger als dein größtes</string>
     <string name="lbl_backup_small_title">Dieses Backup enthält viel weniger</string>
-    <string name="fmt_backup_small_desc">Wiedergaben: %1$d, Wiedergabelisten: %2$d. Das letzte gute Backup hatte Wiedergaben: %3$d, Wiedergabelisten: %4$d. Es wird als _small gespeichert, die älteren Backups bleiben.</string>
+    <string name="fmt_backup_small_desc">Wiedergaben: %1$d, Wiedergabelisten: %2$d. Dein größtes Backup hat Wiedergaben: %3$d, Wiedergabelisten: %4$d. Wenn du es trotzdem speicherst, werden ältere Backups gelöscht, sobald fünf neuere da sind.</string>
+    <string name="lbl_backup_skipped_title">Backup übersprungen</string>
+    <string name="lng_backup_skipped">Es enthält viel weniger als dein größtes Backup. Öffne Einstellungen > Backup, um es zu speichern oder nicht.</string>
+    <string name="lbl_backup_notification_channel">Backups</string>
     <string name="lbl_backup_small_ok">Trotzdem speichern</string>
     <string name="set_backup_restore">Aus Backup wiederherstellen</string>
     <string name="set_backup_restore_desc">Eine Backup-Datei wiederherstellen</string>
