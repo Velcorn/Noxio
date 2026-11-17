@@ -228,9 +228,10 @@ constructor(
                 context.contentResolver,
                 Settings.Global.ANIMATOR_DURATION_SCALE,
                 1f,
-            ) != 0f
+            ) == 0f
         ) {
-            // Anims not enabled globally, ignore
+            // Noxio: animations are turned off in the system, so there is no wave. (Upstream tests
+            // for != 0f here, which turns the wave off for everyone who has animations on.)
             waveEnabled = false
             return
         }

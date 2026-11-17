@@ -54,9 +54,13 @@ class SortTest {
         addedMs: Long = 0,
         album: Album = mockk(relaxed = true),
         artist: String? = null,
+        year: Int? = null,
     ): Song =
         mockk(relaxed = true) {
             every { this@mockk.name } returns name(name)
+            // A song without a date of its own goes by its album (a relaxed mock would give it
+            // some date, so it is set here).
+            every { date } returns year?.let { Date.from(it) }
             every { this@mockk.track } returns track
             every { this@mockk.disc } returns disc?.let { Disc(it, null) }
             every { this@mockk.durationMs } returns durationMs
@@ -66,7 +70,7 @@ class SortTest {
                 listOfNotNull(
                     artist?.let { n ->
                         mockk<Artist>(relaxed = true) { every { this@mockk.name } returns name(n) }
-                    }
+                    },
                 )
         }
 
@@ -88,7 +92,7 @@ class SortTest {
                 listOfNotNull(
                     artist?.let { n ->
                         mockk<Artist>(relaxed = true) { every { this@mockk.name } returns name(n) }
-                    }
+                    },
                 )
         }
 
@@ -273,12 +277,35 @@ class SortTest {
     }
 
     @Test
-    fun songsByDateGoByTheirAlbum() {
+    fun songsByDateWithoutADateOfTheirOwnGoByTheirAlbum() {
         val old = album("Old", year = 1999)
         val new = album("New", year = 2020)
         val list = listOf(song("n", album = new), song("o", album = old))
         assertEquals(listOf("o", "n"), Sort(Sort.Mode.ByDate, ASCENDING).songs(list).names())
         assertEquals(listOf("n", "o"), Sort(Sort.Mode.ByDate, DESCENDING).songs(list).names())
+    }
+
+    @Test
+    fun songsByDateGoByTheirOwnDateBeforeTheirAlbum() {
+        // The song's own date counts first, so a late single on an old album comes last, and an
+        // early one on a new album comes first.
+        val old = album("Old", year = 1999)
+        val new = album("New", year = 2020)
+        val list =
+            listOf(
+                song("late-single", album = old, year = 2024),
+                song("plain-old", album = old),
+                song("early-single", album = new, year = 1990),
+                song("plain-new", album = new),
+            )
+        assertEquals(
+            listOf("early-single", "plain-old", "plain-new", "late-single"),
+            Sort(Sort.Mode.ByDate, ASCENDING).songs(list).names(),
+        )
+        assertEquals(
+            listOf("late-single", "plain-new", "plain-old", "early-single"),
+            Sort(Sort.Mode.ByDate, DESCENDING).songs(list).names(),
+        )
     }
 
     @Test

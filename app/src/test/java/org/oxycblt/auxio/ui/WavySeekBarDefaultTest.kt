@@ -134,4 +134,29 @@ class WavySeekBarDefaultTest {
         seekBar.setWaveEnabled(true)
         assertTrue(waveEnabled.getBoolean(slider))
     }
+
+    @Test
+    fun waveStaysOffWhenTheSystemHasAnimationsTurnedOff() {
+        val themed = ContextThemeWrapper(context, R.style.Theme_Auxio_Black)
+        val seekBar = StyledSeekBar(themed)
+        val slider = seekBar.findViewById<WavySlider>(R.id.seek_bar_slider)
+        val waveEnabled =
+            WavySlider::class.java.getDeclaredField("waveEnabled").apply {
+                isAccessible = true
+            }
+        android.provider.Settings.Global.putFloat(
+            context.contentResolver,
+            android.provider.Settings.Global.ANIMATOR_DURATION_SCALE,
+            0f,
+        )
+        seekBar.setWaveEnabled(true)
+        assertFalse(waveEnabled.getBoolean(slider))
+        android.provider.Settings.Global.putFloat(
+            context.contentResolver,
+            android.provider.Settings.Global.ANIMATOR_DURATION_SCALE,
+            1f,
+        )
+        seekBar.setWaveEnabled(true)
+        assertTrue(waveEnabled.getBoolean(slider))
+    }
 }
