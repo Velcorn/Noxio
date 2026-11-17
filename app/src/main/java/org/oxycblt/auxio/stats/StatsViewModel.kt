@@ -68,7 +68,13 @@ constructor(
     data class Query(val period: StatsPeriod, val offset: Int)
 
     /** A [Query] together with its result, so the two never get out of sync on screen. */
-    data class Ui(val query: Query, val range: LongRange, val stats: ListeningStats)
+    data class Ui(
+        val query: Query,
+        val range: LongRange,
+        val stats: ListeningStats,
+        /** The offset of the earliest period with plays; [previous] stops there. */
+        val firstOffset: Int,
+    )
 
     private val mutableQuery = MutableStateFlow(Query(StatsPeriod.WEEK, 0))
     val query: StateFlow<Query> = mutableQuery.asStateFlow()
@@ -101,7 +107,12 @@ constructor(
         combine(mutableQuery, refresh) { query, _ -> query }
             .mapLatest {
                 val range = statsRange(it.period, it.offset)
-                Ui(it, range, repository.summary(range, context.getString(R.string.def_artist)))
+                Ui(
+                    it,
+                    range,
+                    repository.summary(range, context.getString(R.string.def_artist)),
+                    firstOffset(it.period, repository.firstPlayedAt()),
+                )
             }
             .flowOn(Dispatchers.IO)
             .stateIn(viewModelScope, SharingStarted.Lazily, null)
@@ -114,12 +125,49 @@ constructor(
     }
 
     fun previous() {
-        mutableQuery.value = mutableQuery.value.let { it.copy(offset = it.offset - 1) }
+        val query = mutableQuery.value
+        val limit =
+            ui.value?.takeIf { it.query.period == query.period }?.firstOffset ?: Int.MIN_VALUE
+        if (query.offset > limit) mutableQuery.value = query.copy(offset = query.offset - 1)
     }
 
     fun next() {
         mutableQuery.value =
             mutableQuery.value.let { it.copy(offset = (it.offset + 1).coerceAtMost(0)) }
+    }
+
+    suspend fun heatmap(): List<HeatWeek> =
+        withContext(Dispatchers.IO) {
+            val calendar = Calendar.getInstance()
+            val first = repository.firstPlayedAt()
+            heatmapWeeks(
+                dailyTotals(repository.playTimes(), calendar),
+                first,
+                System.currentTimeMillis(),
+                calendar,
+            )
+        }
+
+    /** The months or years from the first play until now, for the period picker. */
+    suspend fun heatPeriods(period: StatsPeriod): List<HeatPeriod> =
+        withContext(Dispatchers.IO) {
+            val calendar = Calendar.getInstance()
+            heatPeriods(
+                dailyTotals(repository.playTimes(), calendar),
+                period,
+                repository.firstPlayedAt(),
+                System.currentTimeMillis(),
+                calendar,
+            )
+        }
+
+    fun goTo(offset: Int) {
+        val current = mutableQuery.value
+        if (current.period == StatsPeriod.ALL) return
+        val limit =
+            ui.value?.takeIf { it.query.period == current.period }?.firstOffset ?: Int.MIN_VALUE
+        mutableQuery.value = current.copy(offset = offset.coerceIn(limit, 0))
+        mutableExpanded.value = false
     }
 
     fun setCategory(category: StatsCategory) {

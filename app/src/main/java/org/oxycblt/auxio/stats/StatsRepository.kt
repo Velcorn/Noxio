@@ -90,6 +90,38 @@ fun statsRange(
     return start until calendar.timeInMillis
 }
 
+/** Find the offset of the calendar period containing the earliest dated play. */
+fun firstOffset(
+    period: StatsPeriod,
+    firstMs: Long?,
+    nowMs: Long = System.currentTimeMillis(),
+    calendar: Calendar = Calendar.getInstance(),
+    firstDayOfWeek: Int = Calendar.MONDAY,
+): Int {
+    if (period == StatsPeriod.ALL || firstMs == null) return 0
+    val current = statsRange(period, 0, nowMs, calendar, firstDayOfWeek)
+    if (firstMs >= current.first) return 0
+
+    val periodMs =
+        when (period) {
+            StatsPeriod.WEEK -> 7L * 24 * 60 * 60 * 1000
+            StatsPeriod.MONTH -> 30L * 24 * 60 * 60 * 1000
+            StatsPeriod.YEAR -> 365L * 24 * 60 * 60 * 1000
+            StatsPeriod.ALL -> return 0
+        }
+    var offset = -((current.first - firstMs) / periodMs).toInt().coerceAtLeast(1)
+    while (firstMs < statsRange(period, offset, nowMs, calendar, firstDayOfWeek).first) {
+        offset--
+    }
+    while (
+        offset < 0 &&
+            firstMs >= statsRange(period, offset, nowMs, calendar, firstDayOfWeek).last + 1
+    ) {
+        offset++
+    }
+    return offset
+}
+
 /**
  * Collapse raw [PlayEvent]s into ranked lists. Each event counts as one play. Plays without an
  * artist (imported ones are often untagged) are counted for [unknownArtist], so the artists add up
@@ -172,6 +204,11 @@ internal fun artistKeys(event: PlayEvent, unknownArtist: String) =
     artistNames(event).ifEmpty { listOf(unknownArtist) }.distinct()
 
 interface StatsRepository {
+    suspend fun playTimes(): List<PlayTime> = emptyList()
+
+    /** @return The earliest dated play, or null when there are no dated plays. */
+    suspend fun firstPlayedAt(): Long? = null
+
     /**
      * Record a counted play.
      *
@@ -219,6 +256,10 @@ interface StatsRepository {
 }
 
 class StatsRepositoryImpl @Inject constructor(private val dao: PlayEventDao) : StatsRepository {
+    override suspend fun playTimes() = dao.playTimes()
+
+    override suspend fun firstPlayedAt() = dao.firstPlayedAt()
+
     override suspend fun record(event: PlayEvent) = dao.insert(event)
 
     override suspend fun updateListened(id: Long, listenedMs: Long) =

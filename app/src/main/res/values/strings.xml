@@ -123,6 +123,7 @@
     <string name="lbl_equalizer">Equalizer</string>
     <string name="lbl_sleep_timer">Sleep timer</string>
     <string name="lbl_stats">Listening stats</string>
+    <string name="stats_pick_period">Choose period</string>
     <string name="lbl_stats_week">Week</string>
     <string name="lbl_stats_month">Month</string>
     <string name="lbl_stats_year">Year</string>

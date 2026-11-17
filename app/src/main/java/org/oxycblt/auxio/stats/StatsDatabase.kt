@@ -107,6 +107,13 @@ abstract class StatsDatabase : RoomDatabase() {
 
 @Dao
 interface PlayEventDao {
+    @Query("SELECT startedAt, listenedMs FROM PlayEvent WHERE startedAt > 0")
+    suspend fun playTimes(): List<PlayTime>
+
+    /** @return The earliest dated play, or null when there are no dated plays. */
+    @Query("SELECT MIN(startedAt) FROM PlayEvent WHERE startedAt > 0")
+    suspend fun firstPlayedAt(): Long?
+
     /** @return The id of the new row. */
     @Insert suspend fun insert(event: PlayEvent): Long
 

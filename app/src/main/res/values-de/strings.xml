@@ -324,6 +324,7 @@
     <string name="fmt_search_in">%s durchsuchen</string>
     <string name="lbl_sleep_timer">Sleep-Timer</string>
     <string name="lbl_stats">Hörstatistik</string>
+    <string name="stats_pick_period">Zeitraum wählen</string>
     <string name="lbl_stats_week">Woche</string>
     <string name="lbl_stats_month">Monat</string>
     <string name="lbl_stats_year">Jahr</string>

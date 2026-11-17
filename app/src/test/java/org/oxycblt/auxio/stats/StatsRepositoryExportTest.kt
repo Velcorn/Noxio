@@ -28,6 +28,12 @@ class StatsRepositoryExportTest {
     private class Dao : PlayEventDao {
         val events = mutableListOf<PlayEvent>()
 
+        override suspend fun playTimes() =
+            events.filter { it.startedAt > 0 }.map { PlayTime(it.startedAt, it.listenedMs) }
+
+        override suspend fun firstPlayedAt() =
+            events.map { it.startedAt }.filter { it > 0 }.minOrNull()
+
         override suspend fun insert(event: PlayEvent): Long {
             val saved = event.copy(id = events.size + 1L)
             events += saved

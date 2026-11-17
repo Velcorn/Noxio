@@ -199,6 +199,15 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         val expanded = statsModel.expanded.value
 
         binding.statsRange.text = StatsFormat.range(context, ui.query.period, ui.range)
+        binding.statsRange.setOnClickListener {
+            if (
+                ui.query.period != StatsPeriod.ALL &&
+                    childFragmentManager.findFragmentByTag(StatsPickerDialog.TAG) == null
+            ) {
+                StatsPickerDialog().show(childFragmentManager, StatsPickerDialog.TAG)
+            }
+        }
+        binding.statsPrev.isEnabled = ui.query.offset > ui.firstOffset
         binding.statsNext.isEnabled = ui.query.offset < 0
         // All time has nothing before or after it.
         val navVisibility = if (ui.query.period == StatsPeriod.ALL) View.INVISIBLE else View.VISIBLE

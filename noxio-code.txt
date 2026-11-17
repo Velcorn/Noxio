@@ -30,6 +30,7 @@ stats/StatsCsv.kt
 stats/StatsCsvImport.kt
 stats/StatsDatabase.kt
 stats/StatsFormat.kt
+stats/StatsHeatmap.kt
 stats/StatsImage.kt
 stats/StatsRepository.kt
 stats/StatsViewModel.kt

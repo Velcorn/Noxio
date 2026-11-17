@@ -197,6 +197,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/stats_pick_period"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     tools:text="Nov 2 – Nov 8, 2026" />
 

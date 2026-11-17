@@ -204,6 +204,31 @@ class StatsRepositoryTest {
     }
 
     @Test
+    fun firstOffsetFindsTheEarliestContainingPeriod() {
+        val now = at(2026, 1, 10)
+        val calendar = utcCalendar()
+        assertEquals(0, firstOffset(StatsPeriod.WEEK, null, now, calendar))
+        assertEquals(0, firstOffset(StatsPeriod.ALL, at(2020, 1, 1), now, calendar))
+        assertEquals(0, firstOffset(StatsPeriod.WEEK, now, now, calendar))
+        assertEquals(-1, firstOffset(StatsPeriod.WEEK, at(2026, 1, 4), now, calendar))
+        assertEquals(0, firstOffset(StatsPeriod.WEEK, at(2026, 1, 5), now, calendar))
+        assertEquals(-1, firstOffset(StatsPeriod.WEEK, at(2025, 12, 29), now, calendar))
+        assertEquals(-2, firstOffset(StatsPeriod.MONTH, at(2025, 11, 30), now, calendar))
+        assertEquals(-3, firstOffset(StatsPeriod.YEAR, at(2023, 1, 1), now, calendar))
+    }
+
+    @Test
+    fun firstOffsetHandlesWeeksAcrossDst() {
+        val zone = TimeZone.getTimeZone("Europe/Berlin")
+        val calendar = Calendar.getInstance(zone, Locale.GERMANY)
+        val now =
+            ZonedDateTime.of(2026, 3, 30, 12, 0, 0, 0, zone.toZoneId()).toInstant().toEpochMilli()
+        val first =
+            ZonedDateTime.of(2026, 3, 22, 12, 0, 0, 0, zone.toZoneId()).toInstant().toEpochMilli()
+        assertEquals(-2, firstOffset(StatsPeriod.WEEK, first, now, calendar))
+    }
+
+    @Test
     fun allTimeStartsAtTheBaselineAndHasNoEnd() {
         val all = range(StatsPeriod.ALL, 0)
         assertEquals(PlayEvent.BASELINE_TIME, all.first)
@@ -234,6 +259,12 @@ class StatsRepositoryTest {
 
     private class FakeDao : PlayEventDao {
         val events = mutableListOf<PlayEvent>()
+
+        override suspend fun playTimes() =
+            events.filter { it.startedAt > 0 }.map { PlayTime(it.startedAt, it.listenedMs) }
+
+        override suspend fun firstPlayedAt() =
+            events.map { it.startedAt }.filter { it > 0 }.minOrNull()
 
         override suspend fun insert(event: PlayEvent): Long {
             val saved = event.copy(id = events.size + 1L)
@@ -269,6 +300,14 @@ class StatsRepositoryTest {
 
     private val dao = FakeDao()
     private val repository = StatsRepositoryImpl(dao)
+
+    @Test
+    fun firstPlayedAtIgnoresBaselinePlays() = runBlocking {
+        repository.record(play("Baseline", startedAt = PlayEvent.BASELINE_TIME))
+        assertEquals(null, repository.firstPlayedAt())
+        repository.record(play("Dated", startedAt = 5_000))
+        assertEquals(5_000L, repository.firstPlayedAt())
+    }
 
     private fun row(title: String, plays: Int) =
         StatsCsvImport.MostPlayedRow("$title.mp3", title, "Artist", "Album", "", "", 0, 1000, plays)

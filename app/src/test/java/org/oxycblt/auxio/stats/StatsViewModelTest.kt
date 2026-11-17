@@ -42,6 +42,7 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34])
 class StatsViewModelTest {
     private class FakeRepository : StatsRepository {
+        var first: Long? = null
         var imported = 0
         var summaries = mutableListOf<LongRange>()
         var item: ItemStats? = null
@@ -60,6 +61,8 @@ class StatsViewModelTest {
         }
 
         override suspend fun record(event: PlayEvent) = 1L
+
+        override suspend fun firstPlayedAt() = first
 
         override suspend fun updateListened(id: Long, listenedMs: Long) {}
 
@@ -106,6 +109,29 @@ class StatsViewModelTest {
     }
 
     @Test
+    fun previousStopsAtTheFirstPeriodWithPlays() {
+        repository.first = statsRange(StatsPeriod.WEEK, -2).first
+        val collector = CoroutineScope(Dispatchers.Unconfined).launch { model.ui.collect {} }
+        waitFor { model.ui.value != null && model.ui.value!!.firstOffset == -2 }
+        model.previous()
+        model.previous()
+        model.previous()
+        assertEquals(-2, model.query.value.offset)
+        assertEquals(-2, model.ui.value!!.firstOffset)
+        collector.cancel()
+    }
+
+    @Test
+    fun previousStaysAtTheCurrentPeriodWhenThereAreNoDatedPlays() {
+        repository.first = null
+        val collector = CoroutineScope(Dispatchers.Unconfined).launch { model.ui.collect {} }
+        waitFor { model.ui.value != null && model.ui.value!!.firstOffset == 0 }
+        model.previous()
+        assertEquals(0, model.query.value.offset)
+        collector.cancel()
+    }
+
+    @Test
     fun anotherPeriodStartsAtTheCurrentOneAndFoldsTheCard() {
         model.previous()
         model.toggleExpanded()
@@ -149,6 +175,7 @@ class StatsViewModelTest {
                 model.query.value,
                 statsRange(StatsPeriod.WEEK, 0),
                 stats,
+                0,
             )
         assertEquals("artist", model.items(ui).single().name)
         model.setCategory(StatsCategory.ALBUMS)
