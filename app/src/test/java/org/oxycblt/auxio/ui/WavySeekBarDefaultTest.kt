@@ -34,6 +34,7 @@ import org.oxycblt.auxio.R
 import org.oxycblt.auxio.image.CoverMode
 import org.oxycblt.auxio.image.ImageSettingsImpl
 import org.oxycblt.auxio.playback.ui.StyledSeekBar
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -146,6 +147,34 @@ class WavySeekBarDefaultTest {
         preferences.edit(commit = true) { putBoolean("noxio_wavy_seek_bar", true) }
         seekBar.setWaveEnabled(true)
         assertTrue(waveOf(seekBar))
+    }
+
+    @Test
+    fun theWaveFollowsTheSettingWhileThePlayerIsOnScreenAndWhenItComesBack() {
+        val activity = Robolectric.buildActivity(android.app.Activity::class.java).setup().get()
+        activity.setTheme(R.style.Theme_Auxio_Black)
+        val seekBar = StyledSeekBar(activity)
+        activity.setContentView(seekBar)
+        seekBar.setWaveEnabled(true)
+        assertTrue(waveOf(seekBar))
+
+        // Turned off while the seek bar is shown, with playback going on.
+        PreferenceManager.getDefaultSharedPreferences(activity).edit(commit = true) {
+            putBoolean("noxio_wavy_seek_bar", false)
+        }
+        assertFalse(waveOf(seekBar))
+        PreferenceManager.getDefaultSharedPreferences(activity).edit(commit = true) {
+            putBoolean("noxio_wavy_seek_bar", true)
+        }
+        assertTrue(waveOf(seekBar))
+
+        // Turned off while the seek bar is away, then it comes back.
+        (seekBar.parent as android.view.ViewGroup).removeView(seekBar)
+        PreferenceManager.getDefaultSharedPreferences(activity).edit(commit = true) {
+            putBoolean("noxio_wavy_seek_bar", false)
+        }
+        activity.setContentView(seekBar)
+        assertFalse(waveOf(seekBar))
     }
 
     @Test

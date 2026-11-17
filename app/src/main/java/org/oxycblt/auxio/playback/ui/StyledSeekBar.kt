@@ -19,6 +19,7 @@
 package org.oxycblt.auxio.playback.ui
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.AttributeSet
 import androidx.preference.PreferenceManager
 import com.google.android.material.slider.Slider
@@ -56,12 +57,34 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
      * can turn that off in the settings for less motion.
      */
     fun setWaveEnabled(enabled: Boolean) {
+        playing = enabled
         binding.seekBarSlider.setWaveEnabled(enabled && wavyAllowed())
     }
 
+    // The last playback state, so the wave can be redone when the setting changes while the
+    // player is on screen (no playback update comes then).
+    private var playing = false
+    private val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val preferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == context.getString(R.string.set_key_wavy_seek_bar)) {
+            setWaveEnabled(playing)
+        }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        preferences.registerOnSharedPreferenceChangeListener(preferenceListener)
+        // The setting may have changed while this view was away.
+        setWaveEnabled(playing)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        preferences.unregisterOnSharedPreferenceChangeListener(preferenceListener)
+    }
+
     private fun wavyAllowed() =
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean(context.getString(R.string.set_key_wavy_seek_bar), true)
+        preferences.getBoolean(context.getString(R.string.set_key_wavy_seek_bar), true)
 
     /** The current [Listener] attached to this instance. */
     var listener: Listener? = null
