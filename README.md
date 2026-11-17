@@ -25,9 +25,6 @@ timer. Noxio is **not** affiliated with the Auxio project, so please don't repor
 
 ## What's different from Auxio
 
-- **Artist visibility:** Library settings can hide song-only artists or secondary album artists, crediting albums and songs to the first album artist.
-- **Detail pages:** album and artist artwork and lists start at the top; long titles move to reveal the full name.
-
 - **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, a closer look at each, and
@@ -37,28 +34,30 @@ timer. Noxio is **not** affiliated with the Auxio project, so please don't repor
 - **Backup:** settings, listening history and playlists as `noxio_YYYY-MM-DD.zip`, daily, weekly
   or monthly, the last five kept. A backup with much less than your biggest one is not written on its own: you get a
   warning and confirm it. Restore shows what's inside first and applies the restored theme right away.
-- **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)
-  opens a short explanation.
-- **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
-  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
 - **Queue and playlists:** the song that played is ready right after a restart, before the library has loaded. The queue
   has search and sort, opens at the song that plays, opens with a swipe up on the player, and can be cleared or saved
   as a playlist. Playlists can be searched, sorted and have songs taken out,
   with no song added twice and duplicates removed in one go.
-- **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
-  floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),
-  shorter item menus.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
   a keyboard the search row stays, so it can always be switched off.
+- **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
+  floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),
+  shorter item menus.
+- **Faster loading:** the library loads about 2.5 to 3 times faster than in Auxio (the name preparation was the
+  bottleneck), with the same result.
+- **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
+  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
+- **Artist visibility:** Library settings can hide song-only artists or secondary album artists, crediting albums and songs to the first album artist.
 - **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
 - **Look:** pure black theme, rounded UI, a wavy seek bar, and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
+- **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)
+  opens a short explanation.
 - **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed;
   short lists and page titles at the bottom, fixed appearance defaults, hidden files excluded and manual refresh.
-- **Faster loading:** the library loads about 2.5 to 3 times faster than in Auxio (the name preparation was the
-  bottleneck), with the same result.
+- **Detail pages:** album and artist artwork and lists start at the top; long titles move to reveal the full name.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
 - **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
 

@@ -4,11 +4,12 @@ Noxio is a local music player for Android, built for listening through the night
 
 - Sleep timer: hold play/pause, pick 30 min, 60 min or your own time, finish the last song, fade out, shake the phone to restart it. The countdown shows in the play button and in a quiet notification with +10 min and Stop
 - Listening stats: top artists, albums and songs per week, month, year or all time, a closer look at each one, and colorful cards to share or save as an image
-- Import your play counts from Musicolet, weekly and monthly lists included
-- Backup of settings, listening history and playlists on a schedule you pick, with a safeguard against an empty backup replacing a good one, and restore
-- One-handed layout: search, sort and tabs at the bottom, a floating shuffle button, and gestures instead of back buttons
+- Edit song tags (title, artists, album, track, date) from Song properties, with Android asking first
+- Backup of settings, listening history and playlists on a schedule you pick, with a warning before a much smaller backup replaces your biggest one, and restore
 - Queue with search and sort, opened by swiping up on the player, and clear queue; playlists with search and sort
+- One-handed layout: search, sort and tabs at the bottom, a floating shuffle button, and gestures instead of back buttons
 - Loads your library about 2.5 to 3 times faster
+- Import your play counts from Musicolet, weekly and monthly lists included
 - Pure black theme, a wavy seek bar, and a minimal white outline icon
 - Short settings in four screens
 
