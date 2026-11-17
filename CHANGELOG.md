@@ -3,6 +3,14 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.22.0
+
+## What's New
+- Listening stats: tap the shown period to pick a week, month or year from a calendar shaded by listening time
+
+## What's Improved
+- The back arrow in the listening stats stops at your first play
+
 ## v1.21.0
 
 ## What's Changed
