@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.21.0
+
+## What's Changed
+- Backups are named Noxio_YYYY-MM-DD.zip; older noxio_ files still count as backups
+
 ## v1.20.1
 
 ## What's Fixed
