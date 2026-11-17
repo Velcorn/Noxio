@@ -1153,7 +1153,7 @@ class MainFragment :
                                 }
                                 binding.homeShuffleFab.show()
                             }
-                        }
+                        },
                     )
                 } else {
                     L.d("Showing immediately")
@@ -1182,7 +1182,7 @@ class MainFragment :
                                 }
                                 binding.homeNewPlaylistFab.show()
                             }
-                        }
+                        },
                     )
                 } else {
                     L.d("Showing immediately")

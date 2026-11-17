@@ -148,7 +148,7 @@ constructor(
             PagerCommand(
                 update = change.instructions,
                 scroll = index.takeIf { change.type != QueueChange.Type.MAPPING },
-            )
+            ),
         )
         _pagerQueue.value = PagerQueue(queue = queue, index = index)
     }
@@ -256,7 +256,7 @@ constructor(
         playbackManager.play(
             requireNotNull(commandFactory.song(song, shuffle)) {
                 "Invalid playback parameters [$song $shuffle]"
-            }
+            },
         )
     }
 
@@ -283,7 +283,7 @@ constructor(
             return
         }
         L.d(
-            "Cannot use given artist parameter for $song [$artist from ${song.artists}], showing choice dialog"
+            "Cannot use given artist parameter for $song [$artist from ${song.artists}], showing choice dialog",
         )
         startPlaybackDecision(PlaybackDecision.PlayFromArtist(song))
     }
@@ -295,7 +295,7 @@ constructor(
             return
         }
         L.d(
-            "Cannot use given genre parameter for $song [$genre from ${song.genres}], showing choice dialog"
+            "Cannot use given genre parameter for $song [$genre from ${song.genres}], showing choice dialog",
         )
         startPlaybackDecision(PlaybackDecision.PlayFromArtist(song))
     }

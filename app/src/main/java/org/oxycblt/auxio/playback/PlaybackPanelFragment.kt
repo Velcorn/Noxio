@@ -153,7 +153,7 @@ class PlaybackPanelFragment :
                 SpringForce().apply {
                     stiffness = 700f
                     dampingRatio = 0.9f
-                }
+                },
             )
             setOnClickListener { playbackModel.togglePlaying() }
         }

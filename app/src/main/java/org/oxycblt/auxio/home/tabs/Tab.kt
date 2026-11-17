@@ -88,7 +88,7 @@ sealed class Tab(open val type: MusicType) {
             val distinct = tabs.distinctBy { it.type }
             if (tabs.size != distinct.size) {
                 L.w(
-                    "Tab sequences should not have duplicates [old: ${tabs.size} new: ${distinct.size}]"
+                    "Tab sequences should not have duplicates [old: ${tabs.size} new: ${distinct.size}]",
                 )
             }
 
@@ -138,7 +138,7 @@ sealed class Tab(open val type: MusicType) {
             val distinct = tabs.distinctBy { it.type }
             if (tabs.size != distinct.size) {
                 L.w(
-                    "Tab sequences should not have duplicates [old: ${tabs.size} new: ${distinct.size}]"
+                    "Tab sequences should not have duplicates [old: ${tabs.size} new: ${distinct.size}]",
                 )
             }
 

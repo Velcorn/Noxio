@@ -130,7 +130,7 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
         // --- UI SETUP ---
 
         binding.searchAppbar.addOnOffsetChangedListener(
-            FadingToolbarOffsetListener(binding.searchToolbar, binding.searchContent)
+            FadingToolbarOffsetListener(binding.searchToolbar, binding.searchContent),
         )
 
         binding.searchNormalToolbar.apply {
@@ -427,7 +427,7 @@ class SearchFragment : ListFragment<Music, FragmentSearchBinding>() {
                 is PlaylistDecision.Add -> {
                     L.d("Adding ${decision.songs.size} to a playlist")
                     SearchFragmentDirections.addToPlaylist(
-                        decision.songs.map { it.uid }.toTypedArray()
+                        decision.songs.map { it.uid }.toTypedArray(),
                     )
                 }
                 is PlaylistDecision.New -> {

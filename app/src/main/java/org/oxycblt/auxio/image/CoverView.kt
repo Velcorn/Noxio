@@ -504,7 +504,8 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
             ImageRequest.Builder(context)
                 .data(img(size))
                 .error(
-                    StyledDrawable(context, context.getDrawableCompat(errorRes), iconSize).asImage()
+                    StyledDrawable(context, context.getDrawableCompat(errorRes), iconSize)
+                        .asImage(),
                 )
                 .target(image)
 

@@ -72,7 +72,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
     override var songSort: Sort
         get() =
             Sort.fromIntCode(
-                sharedPreferences.getInt(getString(R.string.set_key_songs_sort), Int.MIN_VALUE)
+                sharedPreferences.getInt(getString(R.string.set_key_songs_sort), Int.MIN_VALUE),
             ) ?: Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
@@ -84,7 +84,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
     override var albumSort: Sort
         get() =
             Sort.fromIntCode(
-                sharedPreferences.getInt(getString(R.string.set_key_albums_sort), Int.MIN_VALUE)
+                sharedPreferences.getInt(getString(R.string.set_key_albums_sort), Int.MIN_VALUE),
             ) ?: Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
@@ -96,7 +96,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
     override var artistSort: Sort
         get() =
             Sort.fromIntCode(
-                sharedPreferences.getInt(getString(R.string.set_key_artists_sort), Int.MIN_VALUE)
+                sharedPreferences.getInt(getString(R.string.set_key_artists_sort), Int.MIN_VALUE),
             ) ?: Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
@@ -108,7 +108,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
     override var genreSort: Sort
         get() =
             Sort.fromIntCode(
-                sharedPreferences.getInt(getString(R.string.set_key_genres_sort), Int.MIN_VALUE)
+                sharedPreferences.getInt(getString(R.string.set_key_genres_sort), Int.MIN_VALUE),
             ) ?: Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
@@ -120,7 +120,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
     override var playlistSort: Sort
         get() =
             Sort.fromIntCode(
-                sharedPreferences.getInt(getString(R.string.set_key_playlists_sort), Int.MIN_VALUE)
+                sharedPreferences.getInt(getString(R.string.set_key_playlists_sort), Int.MIN_VALUE),
             ) ?: Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
@@ -135,7 +135,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
                 sharedPreferences.getInt(
                     getString(R.string.set_key_album_songs_sort),
                     Int.MIN_VALUE,
-                )
+                ),
             ) ?: Sort(Sort.Mode.ByDisc, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
@@ -150,7 +150,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
                 sharedPreferences.getInt(
                     getString(R.string.set_key_artist_songs_sort),
                     Int.MIN_VALUE,
-                )
+                ),
             ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
@@ -180,7 +180,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
                 sharedPreferences.getInt(
                     getString(R.string.set_key_genre_songs_sort),
                     Int.MIN_VALUE,
-                )
+                ),
             ) ?: Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {

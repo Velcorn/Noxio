@@ -74,7 +74,7 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         updateDivider()
                     }
-                }
+                },
             )
         }
 
