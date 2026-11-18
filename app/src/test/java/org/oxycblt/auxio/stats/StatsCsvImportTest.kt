@@ -314,11 +314,12 @@ class StatsCsvImportTest {
             (0 until 50).map {
                 StatsCsvImport.MostPlayedRow("$it.mp3", "T$it", "X", "", "", "", 0, 1000, 1)
             }
-        assertTrue(
-            StatsCsvImport.spreadEvents(rows, week).all {
-                it.startedAt in week.startMs until week.endMs
-            },
-        )
+        val events = StatsCsvImport.spreadEvents(rows, week)
+        assertTrue(events.all { it.startedAt in week.startMs until week.endMs })
+        // Songs with a single play spread over the week instead of piling up on its first day.
+        val perDay = events.groupingBy { day(it.startedAt) }.eachCount()
+        assertEquals(7, perDay.size)
+        assertTrue(perDay.values.all { it in 5..10 })
     }
 
     @Test

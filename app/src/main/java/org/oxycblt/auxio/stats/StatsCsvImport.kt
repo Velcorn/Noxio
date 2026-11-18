@@ -189,15 +189,16 @@ object StatsCsvImport {
     fun spreadEvents(rows: List<MostPlayedRow>, period: Period): List<PlayEvent> {
         val length = period.endMs - period.startMs
         return rows.flatMapIndexed { index, row ->
-            // Songs are shifted against each other a little, so they do not all start at once.
-            val shift = (index * SHIFT_MS) % DAY_MS
+            // Each song starts at its own point of the period (golden ratio steps, so they spread
+            // evenly), otherwise songs with one or two plays would all land on its first day.
+            val phase = (index * GOLDEN_RATIO) % 1.0
             (0 until row.plays).map { i ->
                 PlayEvent(
                     songUid = IMPORT_PREFIX + row.filePath.ifEmpty { row.title + row.artist },
                     title = row.title,
                     artists = splitArtists(row.artist),
                     album = row.album,
-                    startedAt = period.startMs + length * i / row.plays + shift,
+                    startedAt = period.startMs + (length * (i + phase) / row.plays).toLong(),
                     listenedMs = row.durationMs,
                     durationMs = row.durationMs,
                     filePath = row.filePath,
@@ -294,8 +295,7 @@ object StatsCsvImport {
     const val IMPORT_PREFIX = "import:"
     private const val HISTORY_PREFIX = "csv:"
     private const val MAX_PLAYS_PER_SONG = 10_000
-    private const val SHIFT_MS = 97_000L
-    private const val DAY_MS = 24L * 3600 * 1000
+    private const val GOLDEN_RATIO = 0.618033988749895
     private val WEEK_NAME = Regex("""Week\s*(\d{1,2})\s*[-–]\s*(\d{4})""", RegexOption.IGNORE_CASE)
     private val MONTH_NUMBER_NAME =
         Regex("""Month\s*(\d{1,2})\s*[-–]\s*(\d{4})""", RegexOption.IGNORE_CASE)

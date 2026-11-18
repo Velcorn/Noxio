@@ -404,9 +404,12 @@ object StatsImage {
         text.typeface = Typeface.DEFAULT
         text.textAlign = Paint.Align.CENTER
         text.alpha = 204
+        // Labels sit above their bars, so the tallest bar leaves room for its label.
+        val labelRoom = if (bars.any { it.label != null }) 40f else 0f
         bars.forEachIndexed { index, bar ->
             val center = MARGIN + slot * (index + 0.5f)
-            val height = (BAR_HEIGHT * bar.fraction.coerceIn(0f, 1f)).coerceAtLeast(6f)
+            val height =
+                ((BAR_HEIGHT - labelRoom) * bar.fraction.coerceIn(0f, 1f)).coerceAtLeast(6f)
             paint.color = if (bar.fraction > 0f) WHITE else 0x55FFFFFF
             canvas.drawRoundRect(
                 RectF(center - width / 2, bottom - height, center + width / 2, bottom),
@@ -420,7 +423,7 @@ object StatsImage {
                     text.textSize -= 1f
                 }
                 val barTop = bottom - height
-                canvas.drawText(bar.label, center, (barTop - 8f).coerceAtLeast(top + 28f), text)
+                canvas.drawText(bar.label, center, barTop - 10f, text)
             }
             bar.bottomLabel?.let {
                 text.textSize = 24f
