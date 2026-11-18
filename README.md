@@ -22,13 +22,13 @@ Noxio is a fork of [Auxio](https://github.com/OxygenCobalt/Auxio) by Alexander C
 music player. The name merges **Auxio** with **Nocturne**: it started because a player to fall asleep to needs a sleep
 timer. Noxio is **not** affiliated with the Auxio project, so please don't report its issues upstream.
 
-**Noxio only changes your files when you ask it to:** when you edit a song's tags. Android asks before every change. What it works out, like listening stats, stays in its own database or in files you export.
+**Noxio only changes your files when you ask it to:** when you edit a song's tags, after Android has asked for permission. What it works out, like listening stats, stays in its own database or in files you export.
 
 ## What's different from Auxio
 
 Two of the additions are features Auxio
 [has decided not to add](https://github.com/OxygenCobalt/Auxio/wiki/Why-Are-These-Features-Missing%3F): a **sleep
-timer** and **tag editing**. Its "Most Played" playlist is also on that list; Noxio's listening stats go further.
+timer** and **tag editing**.
 
 - **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
