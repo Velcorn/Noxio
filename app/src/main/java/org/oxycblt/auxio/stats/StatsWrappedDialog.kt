@@ -90,12 +90,13 @@ class StatsWrappedDialog : ViewBindingBottomSheetDialogFragment<DialogStatsWrapp
             redraw(binding)
         }
         binding.shareSend.setOnClickListener {
-            cards.getOrNull(binding.wrappedPager.currentItem)?.let {
-                shareStatsImage(requireContext(), it)
-            }
+            val page = binding.wrappedPager.currentItem
+            cards.getOrNull(page)?.let { shareStatsImage(requireContext(), it, names[page]) }
         }
         binding.shareSave.setOnClickListener {
-            names.getOrNull(binding.wrappedPager.currentItem)?.let { saveLauncher.launch(it) }
+            names.getOrNull(binding.wrappedPager.currentItem)?.let {
+                saveLauncher.launch(statsImageFileName(it))
+            }
         }
         binding.shareName.setOnClickListener { editName(binding) }
     }
@@ -232,7 +233,7 @@ internal fun wrappedCards(
 
     val cards = mutableListOf<Pair<String, StatsItemImageContent>>()
     cards +=
-        "noxio-$year.png" to
+        "$year" to
             StatsItemImageContent(
                 category = StatsCategory.ARTISTS,
                 name = title,
@@ -275,12 +276,12 @@ internal fun wrappedCards(
             )
     wrapped.topArtist?.let {
         cards +=
-            statsImageFileName(it.name) to
+            NoxioFileName.label(it.name) to
                 itemImageContent(context, 1, StatsPeriod.YEAR, review.range, it)
     }
     if (review.topSongs.isNotEmpty()) {
         cards +=
-            "noxio-$year-songs.png" to
+            "$year-Songs" to
                 StatsItemImageContent(
                     category = StatsCategory.SONGS,
                     name = context.getString(R.string.lbl_stats_top_songs),
@@ -303,11 +304,11 @@ internal fun wrappedCards(
     }
     wrapped.topAlbum?.let {
         cards +=
-            statsImageFileName(it.name) to
+            NoxioFileName.label(it.name) to
                 itemImageContent(context, 1, StatsPeriod.YEAR, review.range, it)
     }
     cards +=
-        "noxio-$year-summary.png" to
+        "$year-Summary" to
             StatsItemImageContent(
                 category = StatsCategory.ALBUMS,
                 name = title,

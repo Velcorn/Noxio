@@ -37,7 +37,7 @@ timer** and **tag editing**.
 - **Tag editing:** deliberately basic, for quick fixes on the phone: title, artists, album, album artists, track and
   date of one song at a time, from Song properties. Playlists follow the song when an edit changes its identity. For
   bigger jobs (many files, covers, lookups) use a real tag editor such as Picard or kid3.
-- **Backup:** settings, listening history and playlists as `Noxio_YYYY-MM-DD.zip`, daily, weekly
+- **Backup:** settings, listening history and playlists as `Noxio_Backup_YYYY-MM-DD_HH-MM-SS.zip`, daily, weekly
   or monthly, the last five kept. A backup with much less than your biggest one is not written on its own: you get a
   warning and confirm it. Restore shows what's inside first and applies the restored theme right away.
 - **Queue and playlists:** the song that played is ready right after a restart, before the library has loaded. The queue

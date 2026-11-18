@@ -78,13 +78,14 @@ object StatsImage {
     const val HEIGHT = 1350
 
     private const val MARGIN = 80f
-    private const val FIRST_ROW_Y = 400f
-    private const val ROW_HEIGHT = 150f
+    private const val FIRST_ROW_Y = 330f
+    private const val ROW_HEIGHT = 164f
 
     private const val CONTENT_WIDTH = WIDTH - 2 * MARGIN
-    private const val FIRST_TILE_Y = 410f
-    private const val HEATMAP_TILE_SHIFT = 30f
-    private const val TILE_HEIGHT = 136f
+    private const val FIRST_TILE_Y = 340f
+    private const val HEATMAP_TILE_SHIFT = 45f
+    private const val TILE_HEIGHT = 160f
+    private const val HEATMAP_TILE_HEIGHT = 136f
     private const val TILE_GAP = 20f
     private const val FOOTER_GAP = 40f
 
@@ -99,7 +100,7 @@ object StatsImage {
         if (width <= available) 1f else (available / width).coerceAtLeast(MIN_FOOTER_SCALE)
 
     private const val TILE_WIDTH = (CONTENT_WIDTH - TILE_GAP) / 2
-    private const val SECTION_Y = 780f
+    private const val SECTION_Y = 770f
     private const val ITEM_ROW_HEIGHT = 112f
     private const val BAR_HEIGHT = 230f
 
@@ -112,12 +113,12 @@ object StatsImage {
 
         text.alpha = 255
         text.textSize = 96f
-        canvas.drawText(content.title, MARGIN, 250f, text)
+        canvas.drawText(content.title, MARGIN, 180f, text)
 
         text.typeface = Typeface.DEFAULT
         text.textSize = 40f
         text.alpha = 230
-        canvas.drawText(content.rangeLabel, MARGIN, 312f, text)
+        canvas.drawText(content.rangeLabel, MARGIN, 242f, text)
 
         content.rows.forEachIndexed { index, row ->
             drawRow(canvas, paint, text, index, FIRST_ROW_Y + index * ROW_HEIGHT, row, ROW_HEIGHT)
@@ -150,13 +151,13 @@ object StatsImage {
         val wrappedTitle = titleLines.size > 1
         titleLines.forEachIndexed { index, line ->
             val value = if (titleLines.size == 1) ellipsize(line, text, CONTENT_WIDTH) else line
-            canvas.drawText(value, MARGIN, (if (wrappedTitle) 226f else 250f) + index * 66f, text)
+            canvas.drawText(value, MARGIN, (if (wrappedTitle) 156f else 180f) + index * 66f, text)
         }
 
         text.typeface = Typeface.DEFAULT
         text.textSize = 40f
         text.alpha = 230
-        val firstLineY = if (wrappedTitle) 360f else 312f
+        val firstLineY = if (wrappedTitle) 290f else 242f
         content.lines.take(if (wrappedTitle) 1 else 2).forEachIndexed { index, line ->
             canvas.drawText(
                 ellipsize(line, text, CONTENT_WIDTH),
@@ -169,12 +170,16 @@ object StatsImage {
 
         content.tiles.take(4).forEachIndexed { index, tile ->
             val left = MARGIN + (index % 2) * (TILE_WIDTH + TILE_GAP)
-            // The year's heatmap above the tiles needs some of the room before the section.
-            val shift = if (content.heatYear != null) HEATMAP_TILE_SHIFT else 0f
-            val top = FIRST_TILE_Y + shift + (index / 2) * (TILE_HEIGHT + TILE_GAP)
+            // The year's heatmap above the tiles takes some of their room.
+            val heatmap = content.heatYear != null
+            val shift = if (heatmap) HEATMAP_TILE_SHIFT else 0f
+            val height = if (heatmap) HEATMAP_TILE_HEIGHT else TILE_HEIGHT
+            // The texts stay in the middle of a lower tile.
+            val inset = (height - TILE_HEIGHT) / 2
+            val top = FIRST_TILE_Y + shift + (index / 2) * (height + TILE_GAP)
             paint.color = 0x33FFFFFF
             canvas.drawRoundRect(
-                RectF(left, top, left + TILE_WIDTH, top + TILE_HEIGHT),
+                RectF(left, top, left + TILE_WIDTH, top + height),
                 36f,
                 36f,
                 paint,
@@ -184,7 +189,7 @@ object StatsImage {
             canvas.drawText(
                 ellipsize(tile.value, text, TILE_WIDTH - 72f),
                 left + 36f,
-                top + 66f,
+                top + inset + 78f,
                 text,
             )
             text.typeface = Typeface.DEFAULT
@@ -193,7 +198,7 @@ object StatsImage {
             canvas.drawText(
                 ellipsize(tile.label, text, TILE_WIDTH - 72f),
                 left + 36f,
-                top + 108f,
+                top + inset + 122f,
                 text,
             )
             text.alpha = 255
@@ -269,7 +274,7 @@ object StatsImage {
         // tiles.
         val columnStep = (CONTENT_WIDTH - cell) / 52
         val left = MARGIN
-        val top = 306f
+        val top = 230f
         var previousMonth = -1
         for (week in 0 until 53) {
             calendar.timeInMillis = monday
@@ -332,11 +337,9 @@ object StatsImage {
         canvas.drawCircle(WIDTH - 120f, 140f, 320f, paint)
         canvas.drawCircle(80f, HEIGHT - 60f, 260f, paint)
 
+        // The text that follows is white and bold unless it says otherwise.
         text.color = WHITE
         text.typeface = Typeface.DEFAULT_BOLD
-        text.textSize = 34f
-        text.alpha = 217
-        canvas.drawText("NOXIO", MARGIN, 120f, text)
     }
 
     /**

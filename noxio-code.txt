@@ -39,6 +39,7 @@ ui/BottomBarInsets.kt
 ui/HorizontalSwipe.kt
 ui/LauncherIcon.kt
 playback/queue/QueueOrder.kt
+stats/NoxioFileName.kt
 stats/StatsItem.kt
 stats/StatsWrapped.kt
 

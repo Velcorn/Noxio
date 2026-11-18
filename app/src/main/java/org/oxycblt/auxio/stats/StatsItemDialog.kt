@@ -90,10 +90,12 @@ class StatsItemDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBin
         binding.sharePreview.contentDescription = describe(content)
 
         binding.shareSend.setOnClickListener {
-            bitmap?.let { shareStatsImage(requireContext(), it) }
+            bitmap?.let {
+                shareStatsImage(requireContext(), it, NoxioFileName.label(details.stats.name))
+            }
         }
         binding.shareSave.setOnClickListener {
-            saveLauncher.launch(statsImageFileName(details.stats.name))
+            saveLauncher.launch(statsImageFileName(NoxioFileName.label(details.stats.name)))
         }
     }
 

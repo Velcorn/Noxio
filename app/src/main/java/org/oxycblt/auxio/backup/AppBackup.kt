@@ -34,6 +34,7 @@ import java.io.IOException
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -53,9 +54,9 @@ import timber.log.Timber as L
 /**
  * The full backup: the settings, listening history and playlists in one zip, written on a
  * [BackupSchedule] into a folder the user picked. Every backup has its own file
- * (`Noxio_YYYY-MM-DD.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that holds much less
- * than the biggest saved one is not written on its own: the user is warned and has to confirm, see
- * [BackupPolicy.check].
+ * (`Noxio_Backup_YYYY-MM-DD_HH-MM-SS.zip`) and the last [BackupPolicy.KEEP] are kept. A backup that
+ * holds much less than the biggest saved one is not written on its own: the user is warned and has
+ * to confirm, see [BackupPolicy.check].
  */
 @Singleton
 class AppBackup
@@ -64,7 +65,7 @@ internal constructor(
     private val repository: StatsRepository,
     private val music: MusicRepository,
     private val openFolder: (Context, Uri) -> DocumentFile?,
-    private val today: () -> LocalDate,
+    private val now: () -> LocalDateTime,
 ) {
     @Inject
     constructor(
@@ -76,7 +77,7 @@ internal constructor(
         repository,
         music,
         { c, uri -> DocumentFile.fromTreeUri(c, uri) },
-        { LocalDate.now() },
+        { LocalDateTime.now() },
     )
 
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -227,18 +228,20 @@ internal constructor(
         }
         val existing =
             tree.listFiles().mapNotNull { file ->
-                file.name?.let(BackupPolicy::parse)?.let { day -> file to day }
+                file.name?.let(BackupPolicy::parse)?.let { time -> file to time }
             }
-        val saved = existing.mapNotNull { (file, day) ->
-            readInfo(file)?.let { day to BackupCounts(it.plays, it.playlists) }
+        val saved = existing.mapNotNull { (file, time) ->
+            readInfo(file)?.let { time to BackupCounts(it.plays, it.playlists) }
         }
+        // Before 1.24 only the day of the accepted backup was kept.
         val accepted =
-            sharedPreferences
-                .getLong(KEY_ACCEPTED_FROM, 0L)
-                .takeIf { it > 0 }
-                ?.let {
-                    LocalDate.ofEpochDay(it)
-                }
+            sharedPreferences.getString(KEY_ACCEPTED_AT, null)?.let {
+                runCatching { LocalDateTime.parse(it) }.getOrNull()
+            }
+                ?: sharedPreferences
+                    .getLong(KEY_ACCEPTED_FROM, 0L)
+                    .takeIf { it > 0 }
+                    ?.let { LocalDate.ofEpochDay(it).atStartOfDay() }
         val biggest = BackupPolicy.baseline(saved, accepted)
         val newest = existing.maxByOrNull { it.second }?.first
 
@@ -257,9 +260,11 @@ internal constructor(
             return Outcome.Suspicious(verdict, now, biggest ?: BackupCounts(0, 0))
         }
 
-        val name = BackupPolicy.nameFor(today(), tree.listFiles().mapNotNull { it.name })
-        // The archive is made first and written safely: a failure halfway must not damage the file
-        // of the same day, see SafeDocumentWriter.
+        // Whole seconds, as in the file name, so the accepted level below matches the file.
+        val time = now().withNano(0)
+        val name = BackupPolicy.fileName(time)
+        // The archive is made first and written safely: a failure halfway must not damage a file
+        // of the same name, see SafeDocumentWriter.
         val bytes = ByteArrayOutputStream().also { BackupArchive.write(data, it) }.toByteArray()
         if (!SafeDocumentWriter.write(context, tree, name, MIME_TYPE) { it.write(bytes) }) {
             L.w("Could not write the backup file")
@@ -270,7 +275,8 @@ internal constructor(
             remove(KEY_VERDICT)
             if (verdict != BackupPolicy.Verdict.OK) {
                 // The smaller level is accepted, it is what the next backups are compared with.
-                putLong(KEY_ACCEPTED_FROM, today().toEpochDay())
+                putString(KEY_ACCEPTED_AT, time.toString())
+                remove(KEY_ACCEPTED_FROM)
             }
         }
         // Whatever was asked about is settled now.
@@ -468,6 +474,7 @@ internal constructor(
         private const val KEY_BIGGEST_PLAYS = "noxio_stats_backup_biggest_plays"
         private const val KEY_BIGGEST_PLAYLISTS = "noxio_stats_backup_biggest_playlists"
         private const val KEY_ACCEPTED_FROM = "noxio_stats_backup_accepted_from"
+        private const val KEY_ACCEPTED_AT = "noxio_stats_backup_accepted_at"
         private const val OLD_KEY_SWITCH = "noxio_stats_backup"
         const val KEY_FREQUENCY = "noxio_backup_frequency"
         const val KEY_WEEKDAY = "noxio_backup_weekday"

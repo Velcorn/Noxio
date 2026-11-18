@@ -376,14 +376,25 @@ class StatsItemTest {
     // --- the file name ---
 
     @Test
-    fun `the image is named after the item`() {
-        assertEquals("noxio-lil-peep.png", statsImageFileName("Lil Peep"))
-        assertEquals("noxio-ac-dc.png", statsImageFileName("AC/DC"))
-        assertEquals("noxio-björk.png", statsImageFileName("Björk"))
-        assertEquals("noxio-stats.png", statsImageFileName("???"))
+    fun `files are named Noxio, what they hold and the time`() {
+        val time = java.time.LocalDateTime.of(2026, 11, 18, 21, 5, 9, 500)
         assertEquals(
-            "noxio-".length + 40 + ".png".length,
-            statsImageFileName("a".repeat(90)).length,
+            "Noxio_Stats_2026-11-18_21-05-09.csv",
+            NoxioFileName.of(NoxioFileName.STATS, "csv", time),
         )
+        assertEquals(
+            "Noxio_Lil-Peep_2026-11-18_21-05-09.png",
+            NoxioFileName.of(NoxioFileName.label("Lil Peep"), "png", time),
+        )
+    }
+
+    @Test
+    fun `an item name becomes a label without separators`() {
+        assertEquals("Lil-Peep", NoxioFileName.label("Lil Peep"))
+        assertEquals("AC-DC", NoxioFileName.label("AC/DC"))
+        assertEquals("Björk", NoxioFileName.label("Björk"))
+        assertEquals("Stats", NoxioFileName.label("???"))
+        assertEquals(40, NoxioFileName.label("a".repeat(90)).length)
+        assertEquals("a".repeat(39), NoxioFileName.label("a".repeat(39) + " b"))
     }
 }

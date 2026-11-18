@@ -40,10 +40,12 @@ import org.oxycblt.auxio.util.systemBarInsetsCompat
 import timber.log.Timber as L
 
 /** Hand an image of the stats to another app. */
-internal fun shareStatsImage(context: Context, image: Bitmap) {
+internal fun shareStatsImage(context: Context, image: Bitmap, what: String) {
     try {
         val directory = File(context.cacheDir, "shared").apply { mkdirs() }
-        val file = File(directory, "noxio-stats.png")
+        // Only the newest shared image is kept; each has its own name.
+        directory.listFiles()?.forEach { it.delete() }
+        val file = File(directory, statsImageFileName(what))
         file.outputStream().use { image.compress(Bitmap.CompressFormat.PNG, 100, it) }
         val uri =
             FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file)
@@ -105,10 +107,10 @@ class StatsShareDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBi
         binding.sharePreview.setImageBitmap(image)
 
         binding.shareSend.setOnClickListener {
-            bitmap?.let { shareStatsImage(requireContext(), it) }
+            bitmap?.let { shareStatsImage(requireContext(), it, topListLabel()) }
         }
         binding.shareSave.setOnClickListener {
-            saveLauncher.launch("noxio-${statsModel.category.value.name.lowercase()}.png")
+            saveLauncher.launch(statsImageFileName(topListLabel()))
         }
     }
 
@@ -116,6 +118,10 @@ class StatsShareDialog : ViewBindingBottomSheetDialogFragment<DialogStatsShareBi
         binding.sharePreview.setImageDrawable(null)
         bitmap = null
     }
+
+    /** "Artists", "Albums" or "Songs", for the file name. */
+    private fun topListLabel() =
+        statsModel.category.value.name.lowercase().replaceFirstChar { it.uppercase() }
 
     private fun content(ui: StatsViewModel.Ui): StatsImageContent {
         val context = requireContext()

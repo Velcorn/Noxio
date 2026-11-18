@@ -42,7 +42,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialFadeThrough
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
-import java.time.LocalDate
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -104,7 +103,7 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                             true
                         }
                         R.id.action_export_stats -> {
-                            exportLauncher.launch("noxio-stats-${LocalDate.now()}.csv")
+                            exportLauncher.launch(NoxioFileName.of(NoxioFileName.STATS, "csv"))
                             true
                         }
                         R.id.action_import_stats -> {

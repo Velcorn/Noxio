@@ -3,6 +3,15 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.24.0
+
+## What's Improved
+- Stats images no longer carry the Noxio label; titles, lists and tiles use the freed space
+
+## What's Changed
+- All saved files are named `Noxio_<What>_YYYY-MM-DD_HH-MM-SS`: `Noxio_Backup_….zip`, `Noxio_Stats_….csv` and `Noxio_<name>_….png` for images
+- A second backup on the same day gets its own file instead of replacing the first; the last five files are kept
+
 ## v1.23.1
 
 ## What's Fixed

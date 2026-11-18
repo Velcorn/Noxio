@@ -19,6 +19,8 @@
 package org.oxycblt.auxio.backup
 
 import java.time.LocalDate
+import java.time.LocalDateTime
+import org.oxycblt.auxio.stats.NoxioFileName
 
 /** How much a backup holds, which is what the safeguard compares. */
 data class BackupCounts(val plays: Int, val playlists: Int)
@@ -32,27 +34,31 @@ object BackupPolicy {
     const val KEEP = 5
 
     /**
-     * Backups are `Noxio_YYYY-MM-DD.zip`. Versions before 1.21 wrote `noxio_` in lower case, and
-     * the `_small` ones marked a backup the user insisted on; both still count as backups.
+     * Backups are `Noxio_Backup_YYYY-MM-DD_HH-MM-SS.zip`, so several of one day each get their own
+     * file. Versions before 1.24 wrote only the day (`Noxio_YYYY-MM-DD.zip`), before 1.21 with
+     * `noxio_` in lower case, and the `_small` ones marked a backup the user insisted on; all still
+     * count as backups, from the start of their day.
      */
-    private val NAME = Regex("""[Nn]oxio_(\d{4}-\d{2}-\d{2})(_small)?\.zip""")
+    private val NAME =
+        Regex(
+            """[Nn]oxio_(?:Backup_)?(\d{4}-\d{2}-\d{2})(?:_(\d{2})-(\d{2})-(\d{2}))?(_small)?\.zip""",
+        )
 
-    fun fileName(date: LocalDate) = "Noxio_$date.zip"
+    fun fileName(time: LocalDateTime) = NoxioFileName.of(NoxioFileName.BACKUP, "zip", time)
 
-    /**
-     * The name to write the backup of [date] under, given the files already in the folder. A backup
-     * of the same day made by an older version (`noxio_`) is replaced under its own name: shared
-     * storage ignores case, so a second file that differs only in case cannot be made.
-     */
-    fun nameFor(date: LocalDate, existing: List<String>): String {
-        val name = fileName(date)
-        return existing.firstOrNull { it != name && it.equals(name, ignoreCase = true) } ?: name
-    }
-
-    /** @return The day the file is from, or null if it is not a backup file of Noxio. */
-    fun parse(fileName: String): LocalDate? {
+    /** @return When the file was made, or null if it is not a backup file of Noxio. */
+    fun parse(fileName: String): LocalDateTime? {
         val match = NAME.matchEntire(fileName) ?: return null
-        return runCatching { LocalDate.parse(match.groupValues[1]) }.getOrNull()
+        return runCatching {
+            val day = LocalDate.parse(match.groupValues[1])
+            if (match.groupValues[2].isEmpty()) {
+                day.atStartOfDay()
+            } else {
+                val (hour, minute, second) = match.groupValues.subList(2, 5).map { it.toInt() }
+                day.atTime(hour, minute, second)
+            }
+        }
+            .getOrNull()
     }
 
     enum class Verdict {
@@ -65,14 +71,17 @@ object BackupPolicy {
 
     /**
      * What a new backup is compared with: the most plays and the most playlists of the saved
-     * [backups] (each with its day), counting only those from [since] on. The biggest one is used
+     * [backups] (each with its time), counting only those from [since] on. The biggest one is used
      * and not the newest, as a newest one that already lost a little would let the next one lose a
-     * little more, and so on, until the good ones are gone. [since] is the day the user accepted a
-     * smaller backup, which then is the new level.
+     * little more, and so on, until the good ones are gone. [since] is the time of the smaller
+     * backup the user accepted, which then is the new level.
      *
      * @return null if there is nothing to compare with.
      */
-    fun baseline(backups: List<Pair<LocalDate, BackupCounts>>, since: LocalDate?): BackupCounts? {
+    fun baseline(
+        backups: List<Pair<LocalDateTime, BackupCounts>>,
+        since: LocalDateTime?,
+    ): BackupCounts? {
         val counted = backups.filter { since == null || !it.first.isBefore(since) }
         if (counted.isEmpty()) return null
         return BackupCounts(
@@ -108,9 +117,9 @@ object BackupPolicy {
     fun toDelete(fileNames: List<String>): List<String> =
         fileNames
             .mapNotNull { name -> parse(name)?.let { name to it } }
-            // Newest first; of the same day the plain name is kept before an older `_small` one.
+            // Newest first; of the same time the plain name is kept before an older `_small` one.
             .sortedWith(
-                compareByDescending<Pair<String, LocalDate>> { it.second }
+                compareByDescending<Pair<String, LocalDateTime>> { it.second }
                     .thenBy { it.first.contains("_small") },
             )
             .drop(KEEP)

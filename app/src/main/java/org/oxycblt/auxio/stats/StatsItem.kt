@@ -274,8 +274,5 @@ internal fun buckets(playTimes: List<Long>, starts: List<Long>): List<ItemStats.
     return starts.mapIndexed { index, start -> ItemStats.Bucket(start, counts[index]) }
 }
 
-/** A file name for the image of the item called [name], for example "noxio-lil-peep.png". */
-internal fun statsImageFileName(name: String): String {
-    val words = name.lowercase().replace(Regex("[^\\p{L}\\p{N}]+"), "-").trim('-').take(40)
-    return if (words.isEmpty()) "noxio-stats.png" else "noxio-$words.png"
-}
+/** A file name for an image of [what], see [NoxioFileName]. */
+internal fun statsImageFileName(what: String): String = NoxioFileName.of(what, "png")

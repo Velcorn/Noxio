@@ -27,7 +27,7 @@ import androidx.test.core.app.ApplicationProvider
 import io.mockk.mockk
 import java.io.File
 import java.io.OutputStream
-import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -92,7 +92,7 @@ class AppBackupTest {
     private val repository = FakeRepository()
     private val music = mockk<MusicRepository>(relaxed = true)
 
-    private var day = LocalDate.of(2026, 11, 9)
+    private var day = LocalDateTime.of(2026, 11, 9, 8, 30)
 
     @get:Rule val folder = TemporaryFolder()
 
@@ -145,11 +145,15 @@ class AppBackupTest {
             putBoolean("flag", true)
         }
         val backup = backupInto()
-        assertEquals(AppBackup.Outcome.Written("Noxio_2026-11-09.zip"), backup.run())
-        assertEquals(listOf("Noxio_2026-11-09.zip"), files())
+        assertEquals(
+            AppBackup.Outcome.Written("Noxio_Backup_2026-11-09_08-30-00.zip"),
+            backup.run(),
+        )
+        assertEquals(listOf("Noxio_Backup_2026-11-09_08-30-00.zip"), files())
         assertNotNull(backup.lastBackupMs)
 
-        val read = backup.read(Uri.fromFile(File(folder.root, "Noxio_2026-11-09.zip")))!!
+        val read =
+            backup.read(Uri.fromFile(File(folder.root, "Noxio_Backup_2026-11-09_08-30-00.zip")))!!
         assertEquals(3, read.info.plays)
         assertEquals("value", read.settings["some_setting"])
         assertEquals(true, read.settings["flag"])
@@ -169,14 +173,15 @@ class AppBackupTest {
     }
 
     @Test
-    fun theBackupOfTheSameDayIsReplacedAndAnotherDayGetsItsOwnFile() = runBlocking {
+    fun everyBackupGetsItsOwnFileAlsoOnTheSameDay() = runBlocking {
         val backup = backupInto()
         backup.run()
+        day = day.plusHours(2).plusSeconds(15)
         backup.run()
-        assertEquals(listOf("Noxio_2026-11-09.zip"), files())
-        day = day.plusDays(7)
-        backup.run()
-        assertEquals(listOf("Noxio_2026-11-09.zip", "Noxio_2026-11-16.zip"), files())
+        assertEquals(
+            listOf("Noxio_Backup_2026-11-09_08-30-00.zip", "Noxio_Backup_2026-11-09_10-30-15.zip"),
+            files(),
+        )
     }
 
     @Test
@@ -187,8 +192,8 @@ class AppBackupTest {
             day = day.plusDays(7)
         }
         assertEquals(5, files().size)
-        assertEquals("Noxio_2026-12-28.zip", files().last())
-        assertFalse("Noxio_2026-11-09.zip" in files())
+        assertEquals("Noxio_Backup_2026-12-28_08-30-00.zip", files().last())
+        assertFalse("Noxio_Backup_2026-11-09_08-30-00.zip" in files())
     }
 
     @Test
@@ -208,15 +213,18 @@ class AppBackupTest {
     fun anEmptyAppDoesNotReplaceAGoodBackup() = runBlocking {
         val backup = backupInto()
         assertTrue(backup.run() is AppBackup.Outcome.Written)
-        val before = File(folder.root, "Noxio_2026-11-09.zip").readBytes().size
+        val before = File(folder.root, "Noxio_Backup_2026-11-09_08-30-00.zip").readBytes().size
 
         repository.plays = 0
         day = day.plusDays(7)
         val outcome = backup.run()
         assertTrue(outcome is AppBackup.Outcome.Suspicious)
         assertEquals(BackupPolicy.Verdict.EMPTY, (outcome as AppBackup.Outcome.Suspicious).verdict)
-        assertEquals(listOf("Noxio_2026-11-09.zip"), files())
-        assertEquals(before, File(folder.root, "Noxio_2026-11-09.zip").readBytes().size)
+        assertEquals(listOf("Noxio_Backup_2026-11-09_08-30-00.zip"), files())
+        assertEquals(
+            before,
+            File(folder.root, "Noxio_Backup_2026-11-09_08-30-00.zip").readBytes().size,
+        )
         assertEquals(BackupPolicy.Verdict.EMPTY, backup.skipped?.verdict)
 
         // A good run clears the note.
@@ -249,12 +257,15 @@ class AppBackupTest {
         repository.plays = 10
         day = day.plusDays(7)
         assertTrue(backup.run() is AppBackup.Outcome.Suspicious)
-        assertEquals(listOf("Noxio_2026-11-09.zip"), files())
+        assertEquals(listOf("Noxio_Backup_2026-11-09_08-30-00.zip"), files())
         assertEquals(
-            AppBackup.Outcome.Written("Noxio_2026-11-16.zip"),
+            AppBackup.Outcome.Written("Noxio_Backup_2026-11-16_08-30-00.zip"),
             backup.run(confirmed = true),
         )
-        assertEquals(listOf("Noxio_2026-11-09.zip", "Noxio_2026-11-16.zip"), files())
+        assertEquals(
+            listOf("Noxio_Backup_2026-11-09_08-30-00.zip", "Noxio_Backup_2026-11-16_08-30-00.zip"),
+            files(),
+        )
         assertNull(backup.skipped)
     }
 
@@ -291,17 +302,47 @@ class AppBackupTest {
         assertEquals(2, written)
         assertTrue(
             "the first backup is still there: ${files()}",
-            "Noxio_2026-11-09.zip" in files(),
+            "Noxio_Backup_2026-11-09_08-30-00.zip" in files(),
         )
     }
 
     @Test
-    fun aBackupOfTheSameDayByAnOlderVersionIsReplacedUnderItsOwnName() = runBlocking {
+    fun aBackupOfTheSameDayByAnOlderVersionStaysNextToTheNewOne() = runBlocking {
         File(folder.root, "noxio_2026-11-09.zip").writeText("an older backup of today")
         val backup = backupInto()
-        assertEquals(AppBackup.Outcome.Written("noxio_2026-11-09.zip"), backup.run())
-        assertEquals(listOf("noxio_2026-11-09.zip"), files())
-        assertNotNull(backup.read(Uri.fromFile(File(folder.root, "noxio_2026-11-09.zip"))))
+        assertEquals(
+            AppBackup.Outcome.Written("Noxio_Backup_2026-11-09_08-30-00.zip"),
+            backup.run(),
+        )
+        assertEquals(
+            listOf("Noxio_Backup_2026-11-09_08-30-00.zip", "noxio_2026-11-09.zip"),
+            files(),
+        )
+    }
+
+    @Test
+    fun anAcceptedSmallerLevelHoldsForTheNextBackupOfTheSameDay() = runBlocking {
+        val backup = backupInto()
+        repository.plays = 100
+        backup.run()
+        repository.plays = 10
+        day = day.plusHours(1)
+        backup.run(confirmed = true)
+        day = day.plusHours(1)
+        assertTrue(backup.run() is AppBackup.Outcome.Written)
+    }
+
+    @Test
+    fun anAcceptedDayOfAnOlderVersionStillCounts() = runBlocking {
+        val backup = backupInto()
+        repository.plays = 100
+        backup.run()
+        PreferenceManager.getDefaultSharedPreferences(context).edit {
+            putLong("noxio_stats_backup_accepted_from", day.toLocalDate().plusDays(1).toEpochDay())
+        }
+        repository.plays = 10
+        day = day.plusDays(1)
+        assertTrue(backup.run() is AppBackup.Outcome.Written)
     }
 
     @Test
@@ -550,7 +591,8 @@ class AppBackupTest {
                 )
                 .also { it.folder = treeUri }
         backup.run()
-        val read = backup.read(Uri.fromFile(File(folder.root, "Noxio_2026-11-09.zip")))!!
+        val read =
+            backup.read(Uri.fromFile(File(folder.root, "Noxio_Backup_2026-11-09_08-30-00.zip")))!!
         assertEquals(1, read.info.playlists)
         assertEquals(
             listOf(
@@ -591,7 +633,8 @@ class AppBackupTest {
                 { day },
             )
         second.run()
-        val read = second.read(Uri.fromFile(File(folder.root, "Noxio_2026-11-16.zip")))!!
+        val read =
+            second.read(Uri.fromFile(File(folder.root, "Noxio_Backup_2026-11-16_08-30-00.zip")))!!
         assertEquals(listOf("Gym"), read.playlists.map { it.name })
     }
 

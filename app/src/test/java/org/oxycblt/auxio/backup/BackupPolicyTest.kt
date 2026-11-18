@@ -19,22 +19,35 @@
 package org.oxycblt.auxio.backup
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
 class BackupPolicyTest {
-    private fun day(day: Int) = LocalDate.of(2026, 11, day)
+    private fun day(day: Int) = LocalDate.of(2026, 11, day).atStartOfDay()
 
-    private fun name(day: Int) = BackupPolicy.fileName(day(day))
+    private fun name(day: Int) = BackupPolicy.fileName(day(day).withHour(8))
 
     @Test
-    fun aBackupIsNamedAfterItsDay() {
-        assertEquals("Noxio_2026-11-09.zip", name(9))
+    fun aBackupIsNamedAfterItsDayAndTime() {
+        assertEquals(
+            "Noxio_Backup_2026-11-09_08-05-03.zip",
+            BackupPolicy.fileName(LocalDateTime.of(2026, 11, 9, 8, 5, 3, 999)),
+        )
+        assertEquals(
+            "Noxio_Backup_2026-11-09_21-00-00.zip",
+            BackupPolicy.fileName(day(9).withHour(21)),
+        )
     }
 
     @Test
     fun theNameOfABackupIsReadBack() {
+        assertEquals(
+            LocalDateTime.of(2026, 11, 9, 8, 5, 3),
+            BackupPolicy.parse("Noxio_Backup_2026-11-09_08-05-03.zip"),
+        )
+        // Versions before 1.24 wrote only the day; it counts from its start.
         assertEquals(day(9), BackupPolicy.parse("Noxio_2026-11-09.zip"))
         // Versions before 1.21 wrote the name in lower case.
         assertEquals(day(9), BackupPolicy.parse("noxio_2026-11-09.zip"))
@@ -49,6 +62,8 @@ class BackupPolicyTest {
         assertNull(BackupPolicy.parse("noxio_2026-13-45.zip"))
         assertNull(BackupPolicy.parse("holiday.zip"))
         assertNull(BackupPolicy.parse("NOXIO_2026-11-09.zip"))
+        assertNull(BackupPolicy.parse("Noxio_Backup_2026-11-09_25-00-00.zip"))
+        assertNull(BackupPolicy.parse("Noxio_2026-11-09_08-05.zip"))
     }
 
     // --- the safeguard ---
@@ -163,15 +178,24 @@ class BackupPolicyTest {
     }
 
     @Test
-    fun aNewBackupGetsTheCapitalizedName() {
-        assertEquals("Noxio_2026-11-09.zip", BackupPolicy.nameFor(day(9), listOf(name(8))))
-        assertEquals("Noxio_2026-11-09.zip", BackupPolicy.nameFor(day(9), listOf(name(9))))
+    fun severalBackupsOfOneDayAreKeptNewestFirstWithTheOldDayOnlyOnes() {
+        val names =
+            listOf("noxio_2026-11-08.zip", "Noxio_2026-11-09.zip") +
+                (8..12).map { BackupPolicy.fileName(day(9).withHour(it)) }
+        assertEquals(
+            listOf("Noxio_2026-11-09.zip", "noxio_2026-11-08.zip"),
+            BackupPolicy.toDelete(names),
+        )
     }
 
     @Test
-    fun aSameDayBackupOfAnOlderVersionKeepsItsName() {
-        val old = listOf("noxio_2026-11-08.zip", "noxio_2026-11-09.zip")
-        assertEquals("noxio_2026-11-09.zip", BackupPolicy.nameFor(day(9), old))
+    fun anAcceptedLevelCountsFromItsSecondOnAlsoWithinADay() {
+        val saved =
+            listOf(
+                day(9).withHour(8) to BackupCounts(1000, 4),
+                day(9).withHour(9) to BackupCounts(100, 1),
+            )
+        assertEquals(BackupCounts(100, 1), BackupPolicy.baseline(saved, day(9).withHour(9)))
     }
 
     @Test
