@@ -53,7 +53,8 @@ import org.oxycblt.auxio.util.systemBarInsetsCompat
  * A bottom sheet for starting, checking and stopping the [SleepTimer]. Opened by holding the
  * play/pause button of the playback panel.
  *
- * All three durations can be edited on tap. Confirmed edits are saved and sorted left to right.
+ * A tap selects a duration; a tap on the selected one edits it. Confirmed edits are saved and
+ * sorted left to right.
  */
 @AndroidEntryPoint
 class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBinding>() {
@@ -104,7 +105,7 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
         binding.sleepShake.isChecked = sleepTimer.shakeToReset
 
         tiles().forEachIndexed { index, tile ->
-            tile.durationButton.setOnClickListener { startEditing(index) }
+            tile.durationButton.setOnClickListener { select(index) }
             tile.durationInput.hint = getString(R.string.fmt_sleep_range, SleepTimer.MAX_MINUTES)
             tile.durationInput.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -170,6 +171,23 @@ class SleepTimerDialog : ViewBindingBottomSheetDialogFragment<DialogSleepTimerBi
             tile.durationEditRow.visibility = if (editingIndex == index) View.VISIBLE else View.GONE
         }
         requireBinding().sleepStart.isEnabled = editingIndex == null
+    }
+
+    /** Select the duration at [index], or edit it if it already is the selected one. */
+    private fun select(index: Int) {
+        if (editingIndex == null && selectedIndex == index) {
+            startEditing(index)
+            return
+        }
+        if (editingIndex == index) return
+        selectedIndex =
+            if (editingIndex != null) {
+                // The edit may move the durations, so the tapped one is found again by its value.
+                val target = minutes[index]
+                finishEditing()
+                minutes.indexOf(target).coerceAtLeast(0)
+            } else index
+        updateTiles()
     }
 
     private fun startEditing(index: Int, draft: String? = null) {

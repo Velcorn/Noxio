@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.24.1
+
+## What's Improved
+- Sleep timer: tapping a duration only selects it; tap the selected one again to edit it
+
 ## v1.24.0
 
 ## What's Improved
