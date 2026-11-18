@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.23.1
+
+## What's Fixed
+- Imported Musicolet weeks and months are spread evenly over their days instead of piling up on the first day; import the files again to fix earlier imports
+- Year in review: the hours above the bars are no longer hidden by the tallest bars
+
 ## v1.23.0
 
 ## What's New
