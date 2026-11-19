@@ -34,6 +34,8 @@
 
     <LinearLayout
         android:id="@+id/playback_info_container"
+        android:background="?attr/selectableItemBackground"
+        android:longClickable="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_medium"
@@ -74,19 +76,6 @@
 
     </LinearLayout>
 
-    <org.oxycblt.auxio.ui.RippleFixMaterialButton
-        android:id="@+id/playback_more"
-        android:minWidth="@dimen/size_touchable_small"
-        android:minHeight="@dimen/size_touchable_small"
-        style="@style/Widget.Auxio.Button.Playback.More"
-        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/ic_more_24"
-        android:layout_marginEnd="@dimen/spacing_mid_medium"
-        app:layout_constraintBottom_toBottomOf="@+id/playback_info_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/playback_info_container" />
 
     <org.oxycblt.auxio.playback.ui.StyledSeekBar
         android:id="@+id/playback_seek_bar"

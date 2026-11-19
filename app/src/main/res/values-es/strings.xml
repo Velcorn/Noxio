@@ -212,7 +212,6 @@
     <string name="lbl_confirm_delete_playlist">¿Quiere eliminar la lista de reproducción?</string>
     <string name="fmt_editing">Editando %s</string>
     <string name="lbl_appears_on">Aparece en</string>
-    <string name="lbl_share">Compartir</string>
     <string name="def_disc">Sin disco</string>
     <string name="lbl_song">Canción</string>
     <string name="lbl_sort_mode">Ordenar por</string>

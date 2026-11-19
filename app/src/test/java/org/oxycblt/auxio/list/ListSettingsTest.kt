@@ -39,6 +39,7 @@ class ListSettingsTest {
 
     private val byName = Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
     private val byDateOldestFirst = Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
+    private val byDateNewestFirst = Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
     private val custom = Sort(Sort.Mode.ByDuration, Sort.Direction.DESCENDING)
 
     /** Every sort, with the setting key it is stored under and its default. */
@@ -48,7 +49,11 @@ class ListSettingsTest {
         val default: Sort,
         val get: (ListSettings) -> Sort,
         val set: (ListSettings, Sort) -> Unit,
-    )
+    ) {
+        /** The lists of the home screen have no sort to choose, they are always by name. */
+        val fixed: Boolean
+            get() = name in listOf("songs", "albums", "artists", "genres", "playlists")
+    }
 
     private val entries =
         listOf(
@@ -104,7 +109,7 @@ class ListSettingsTest {
             Entry(
                 "artist albums",
                 R.string.set_key_artist_albums_sort,
-                byDateOldestFirst,
+                byDateNewestFirst,
                 { it.artistAlbumSort },
                 { s, v -> s.artistAlbumSort = v },
             ),
@@ -125,10 +130,18 @@ class ListSettingsTest {
     }
 
     @Test
-    fun everyListRemembersItsOrder() {
-        for (e in entries) {
+    fun everyPageListRemembersItsOrder() {
+        for (e in entries.filterNot { it.fixed }) {
             e.set(settings, custom)
             assertEquals(e.name, custom, e.get(ListSettingsImpl(context)))
+        }
+    }
+
+    @Test
+    fun theHomeListsStayByNameAlsoWithAStoredOrder() {
+        for (e in entries.filter { it.fixed }) {
+            e.set(settings, custom)
+            assertEquals(e.name, byName, e.get(ListSettingsImpl(context)))
         }
     }
 

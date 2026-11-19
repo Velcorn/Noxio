@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The menu of a song in the queue, opened by a long press. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_queue_remove"
+        android:icon="@drawable/ic_close_24"
+        android:title="@string/lbl_queue_remove" />
+    <item
+        android:id="@+id/action_playlist_add"
+        android:icon="@drawable/ic_playlist_add_24"
+        android:title="@string/lbl_playlist_add" />
+    <item
+        android:id="@+id/action_artist_details"
+        android:icon="@drawable/ic_artist_24"
+        android:title="@string/lbl_artist_details" />
+    <item
+        android:id="@+id/action_album_details"
+        android:icon="@drawable/ic_album_24"
+        android:title="@string/lbl_album_details" />
+    <item
+        android:id="@+id/action_detail"
+        android:icon="@drawable/ic_details_24"
+        android:title="@string/lbl_song_detail" />
+</menu>

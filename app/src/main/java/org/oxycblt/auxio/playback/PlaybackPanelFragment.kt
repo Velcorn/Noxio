@@ -164,11 +164,18 @@ class PlaybackPanelFragment :
             SleepTimerDialog().show(childFragmentManager, SleepTimerDialog.TAG)
             true
         }
-        binding.playbackMore?.setOnClickListener {
+        // A long press on the song, artist and album opens the menu of the song. A tap on one of
+        // them still goes to it.
+        val openMenu = View.OnLongClickListener {
             playbackModel.song.value?.let {
                 listModel.openMenu(R.menu.playback_song, it, PlaySong.ByItself)
             }
+            true
         }
+        binding.playbackInfoContainer.setOnLongClickListener(openMenu)
+        binding.playbackSong.setOnLongClickListener(openMenu)
+        binding.playbackArtist.setOnLongClickListener(openMenu)
+        binding.playbackAlbum?.setOnLongClickListener(openMenu)
 
         // --- VIEWMODEL SETUP --
         collectImmediately(playbackModel.song, ::updateSong)

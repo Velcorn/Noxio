@@ -216,7 +216,6 @@
     <string name="lbl_appears_on">Появляется на</string>
     <string name="fmt_editing">Редактирование %s</string>
     <string name="def_disc">Нет диска</string>
-    <string name="lbl_share">Поделиться</string>
     <string name="lbl_song">Трек</string>
     <string name="lbl_sort_mode">Сортировать по</string>
     <string name="lbl_sort_direction">Направление</string>

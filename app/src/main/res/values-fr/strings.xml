@@ -201,7 +201,6 @@
     <string name="lbl_appears_on">Apparaît sur</string>
     <string name="lbl_rename_playlist">Renommer la playlist</string>
     <string name="lbl_confirm_delete_playlist">Supprimer la playlist ?</string>
-    <string name="lbl_share">Partager</string>
     <string name="desc_remove_song">Supprimer ce titre</string>
     <string name="desc_song_handle">Déplacer ce titre</string>
     <string name="desc_queue_bar">Ouvrir la file d\'attente</string>

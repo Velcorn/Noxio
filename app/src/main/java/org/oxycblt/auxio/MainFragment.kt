@@ -26,11 +26,14 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -415,18 +418,12 @@ class MainFragment :
                             ArtistDetailFragmentDirections.sortAlbums()
                         }
                     NavMode.PLAYLIST -> PlaylistDetailFragmentDirections.sort()
-                    else ->
-                        when (homeModel.currentTabType.value) {
-                            MusicType.SONGS -> HomeFragmentDirections.sortSongs()
-                            MusicType.ALBUMS -> HomeFragmentDirections.sortAlbums()
-                            MusicType.ARTISTS -> HomeFragmentDirections.sortArtists()
-                            MusicType.GENRES -> HomeFragmentDirections.sortGenres()
-                            MusicType.PLAYLISTS -> HomeFragmentDirections.sortPlaylists()
-                        }
+                    // The home lists are always sorted by name.
+                    else -> return@setOnClickListener
                 },
             )
         }
-        binding.mainMore.setOnClickListener(::showMore)
+        binding.mainSettings.setOnClickListener { homeModel.showSettings() }
         binding.mainSearchInput.setOnKeyListener { view, keyCode, event ->
             // Backspace on an empty filter puts it away again in the keyboard phone mode.
             if (
@@ -515,11 +512,9 @@ class MainFragment :
         val filter = mode == NavMode.ARTIST || mode == NavMode.PLAYLIST
         binding.mainSearch.isVisible = !filter
         binding.mainSearchInput.isVisible = filter
-        // Sort and more are in the header of the list on the pages of an album and a genre, which
-        // have nothing to filter, so the row is not needed there at all.
-        val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
-        binding.mainSort.isVisible = !ownHeader && (!keyboardMode || touchOnly)
-        binding.mainMore.isVisible = !ownHeader && (!keyboardMode || touchOnly)
+        // The home lists are always sorted by name, so only the pages of an artist and a playlist
+        // have a sort here. The pages of an album and a genre have it in the header of their list.
+        binding.mainSort.isVisible = filter && (!keyboardMode || touchOnly)
         if (filter) {
             binding.mainSearchInput.setText(
                 if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery,
@@ -550,7 +545,7 @@ class MainFragment :
         if (binding.queueCover.layoutParams.height != cover) {
             binding.queueCover.updateLayoutParams { height = cover }
         }
-        val noTabs = !binding.mainTabs.isVisible
+        val noTabs = !binding.mainTabRow.isVisible
         val extra = if (noTabs) requireContext().getDimenPixels(R.dimen.spacing_medium) else 0
         binding.mainBottomNav.updatePadding(bottom = navInsetBottom + extra)
     }
@@ -648,7 +643,7 @@ class MainFragment :
             KeyAction.Sort ->
                 when {
                     queueOpen -> binding.queueSort.performClick()
-                    playerOpen || navMode == NavMode.NONE -> false
+                    playerOpen || navMode == NavMode.NONE || navMode == NavMode.HOME -> false
                     else -> {
                         binding.mainSort.performClick()
                         true
@@ -769,13 +764,21 @@ class MainFragment :
             }
             shownTabTypes = types
         }
-        if (resources.getBoolean(R.bool.noxio_short_screen)) {
-            // Icons only on short screens; the label stays for screen readers.
-            for (i in 0 until binding.mainTabs.tabCount) {
-                val tab = binding.mainTabs.getTabAt(i) ?: continue
-                tab.contentDescription = tab.text
-                tab.text = null
+        // Icons only, a bit bigger than with a label; the label stays for screen readers but is
+        // not shown as a tooltip on a long press.
+        val iconSize = resources.getDimensionPixelSize(R.dimen.noxio_tab_icon)
+        for (i in 0 until binding.mainTabs.tabCount) {
+            val tab = binding.mainTabs.getTabAt(i) ?: continue
+            tab.contentDescription = tab.text
+            tab.text = null
+            tab.view.children.filterIsInstance<ImageView>().forEach { icon ->
+                icon.scaleType = ImageView.ScaleType.FIT_CENTER
+                icon.updateLayoutParams {
+                    width = iconSize
+                    height = iconSize
+                }
             }
+            TooltipCompat.setTooltipText(tab.view, null)
         }
         settingTabs = false
         selectCurrentTab(binding)
@@ -826,6 +829,11 @@ class MainFragment :
                     NavMode.PLAYLIST -> false
                     else -> true
                 }
+        // The stats and the settings sit at the end of the tabs of the home screen, also when it
+        // has a single tab. The keyboard phone mode opens them from its menu key.
+        val homeButtons = mode == NavMode.HOME && (!keyboardMode || touchOnly)
+        binding.mainSettings.isVisible = homeButtons
+        binding.mainTabRow.isVisible = binding.mainTabs.isVisible || homeButtons
         applyNavPadding(binding)
         nav.alpha = if (shown) fadeRatio else 0f
         nav.isInvisible = nav.alpha == 0f

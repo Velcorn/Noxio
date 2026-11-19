@@ -33,7 +33,7 @@ timer** and **tag editing**.
 - **Sleep timer:** hold play/pause. Three editable durations, shortest first; finish the last song, fade out, shake to restart.
   The countdown shows in the play button and in a quiet notification with +10 min, Restart and Stop; it pauses with playback.
 - **Listening stats:** top artists, albums and songs per week, month, year or all time, picked by week number, month or year,
-  a closer look at each, and cards to share or save. A named **year in review** with a listening heatmap and monthly listening time.
+  a closer look at each, and cards to share or save, opened from Settings. A named **year in review** with a listening heatmap and monthly listening time.
 - **Tag editing:** deliberately basic, for quick fixes on the phone: title, artists, album, album artists, track and
   date of one song at a time, from Song properties. Playlists follow the song when an edit changes its identity. For
   bigger jobs (many files, covers, lookups) use a real tag editor such as Picard or kid3.
@@ -47,22 +47,23 @@ timer** and **tag editing**.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
   a keyboard the search row stays, so it can always be switched off.
-- **One-handed layout:** search, sort and tabs at the bottom, the playing strip right under the search row, a
-  floating shuffle button, no back buttons (gestures only), no three-dot buttons on rows (long press for the menu),
-  shorter item menus.
+- **One-handed layout:** search and icon-only tabs at the bottom with settings next to them, the playing strip
+  right under the search row, a floating shuffle button, no back buttons (gestures only), no three-dot buttons (long
+  press a row, the queue, the playing strip or the song in the player for its menu), shorter item menus
+  without Share.
 - **Faster loading:** the library loads about 2.5 to 3 times faster than in Auxio (the name preparation was the
   bottleneck), with the same result.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
   estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
 - **Artist visibility:** Library settings can hide song-only artists or secondary album artists, crediting albums and songs to the first album artist.
-- **Short and square screens:** a compact player, icon-only tabs, totals in the stats title row and a lower album
+- **Short and square screens:** a compact player, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
 - **Changelog:** every Noxio release can be read in the app, under About (bundled, so it works offline).
 - **Look:** pure black theme, rounded UI, a wavy seek bar (can be turned off), and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
 - **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)
   opens a short explanation.
-- **Shorter settings:** four screens (Appearance, Playback, Library, Backup), with little-used options removed;
+- **Shorter settings:** four screens (Appearance, Library, Playback, Backup), with little-used options removed;
   short lists and page titles at the bottom, fixed appearance defaults, hidden files excluded and manual refresh.
 - **Detail pages:** album and artist artwork and lists start at the top; long titles move to reveal the full name.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
@@ -74,7 +75,8 @@ Noxio is built for one person's use, so it does one thing one way where Auxio of
 
 - **Settings with one sensible answer** are fixed instead of switchable: rounded UI, natural cover proportions,
   balanced artwork quality, no ReplayGain pre-amp, hidden files excluded, what plays when you tap a song, headset
-  autoplay, pause on repeat, remembering pause, exit on close, intelligent sorting and the playback bar action.
+  autoplay, pause on repeat, remembering pause, exit on close, intelligent sorting, the playback bar action and the
+  sort of the home lists (always by name; album, artist and playlist pages keep theirs).
   Fewer switches means a settings screen you can read at a glance.
 - **Automatic reloading** is off; Refresh and Rescan in Library settings load changes when you want them.
 - **Multi-value separators** for all tags became one artist separator, which tag editing uses too.

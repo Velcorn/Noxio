@@ -157,6 +157,27 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
         playbackManager.goto(index)
     }
 
+    /** Where in the queue the song is whose menu is open, see [removeMenuSong]. */
+    private var menuIndex = -1
+
+    /** Remember which place of the queue the menu that opens now belongs to. */
+    fun openMenu(adapterIndex: Int) {
+        menuIndex = queueIndex(adapterIndex)
+    }
+
+    /**
+     * Remove [song] from the place in the queue its menu was opened for. A song can be in the queue
+     * more than once; if the queue changed while the menu was open, its first place is removed.
+     */
+    fun removeMenuSong(song: Song) {
+        val queue = queue.value
+        val index = menuIndex.takeIf { queue.getOrNull(it) == song } ?: queue.indexOf(song)
+        menuIndex = -1
+        if (index !in queue.indices) return
+        L.d("Removing item $index in queue from its menu")
+        playbackManager.removeQueueItem(index)
+    }
+
     /**
      * Remove a queue item at the given index.
      *

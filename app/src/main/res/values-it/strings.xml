@@ -211,7 +211,6 @@
     <string name="fmt_deletion_info">Eliminare %s? L\'operazione non può essere annullata.</string>
     <string name="lng_playlist_deleted">Playlist eliminata</string>
     <string name="lng_playlist_renamed">Playlist rinominata</string>
-    <string name="lbl_share">Condividi</string>
     <string name="def_disc">Nessun disco</string>
     <string name="lbl_appears_on">Appare in</string>
     <string name="fmt_editing">Modificando %s</string>

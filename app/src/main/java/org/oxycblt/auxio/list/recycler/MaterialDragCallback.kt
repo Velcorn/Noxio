@@ -72,6 +72,9 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
     private val itemTranslateZString = Spatial.DEFAULT
     private val itemAnims = mutableMapOf<View, AnimBundle>()
 
+    /** Whether a swipe to the start removes an item. */
+    protected open val swipeToRemove = true
+
     final override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -80,7 +83,10 @@ abstract class MaterialDragCallback : ItemTouchHelper.Callback() {
             makeFlag(
                 ItemTouchHelper.ACTION_STATE_DRAG,
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ) or makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.START)
+            ) or
+                if (swipeToRemove)
+                    makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.START)
+                else 0
         } else {
             0
         }

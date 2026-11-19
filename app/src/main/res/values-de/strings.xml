@@ -232,7 +232,6 @@
     <string name="lbl_rename_playlist">Wiedergabeliste umbenennen</string>
     <string name="lng_playlist_renamed">Wiedergabeliste umbenannt</string>
     <string name="lng_playlist_deleted">Wiedergabeliste gelöscht</string>
-    <string name="lbl_share">Teilen</string>
     <string name="def_disc">Keine Disc</string>
     <string name="lbl_appears_on">Erscheint in</string>
     <string name="fmt_editing">%s bearbeiten</string>
@@ -352,6 +351,9 @@
     <string name="err_stats_export">Die Datei konnte nicht geschrieben werden</string>
     <string name="set_backup">Backup</string>
     <string name="set_backup_summary">Einstellungen, Hörverlauf und Wiedergabelisten</string>
+    <string name="set_about_summary">Version, Änderungen und Lizenzen</string>
+    <string name="set_stats_summary">Bestenlisten, Jahresrückblick und Karten zum Teilen</string>
+    <string name="lbl_queue_remove">Aus der Warteschlange entfernen</string>
     <string name="set_backup_frequency">Zeitplan</string>
     <string name="set_backup_off">Aus</string>
     <string name="set_backup_daily">Jeden Tag</string>

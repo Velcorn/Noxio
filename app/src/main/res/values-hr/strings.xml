@@ -212,7 +212,6 @@
     <string name="fmt_deletion_info">Izbrisati %s? To je nepovratna radnja.</string>
     <string name="fmt_editing">Uređivanje popisa pjesama %s</string>
     <string name="lbl_appears_on">Sudjeluje u</string>
-    <string name="lbl_share">Dijeli</string>
     <string name="def_disc">Nema diska</string>
     <string name="lbl_song">Pjesma</string>
     <string name="lbl_sort_mode">Razvrstaj po</string>

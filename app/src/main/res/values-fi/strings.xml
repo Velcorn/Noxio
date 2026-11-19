@@ -197,7 +197,6 @@
     <string name="lng_playlist_renamed">Soittolista nimetty uudelleen</string>
     <string name="lng_playlist_deleted">Soittolista poistettu</string>
     <string name="lng_playlist_added">Lisätty soittolistaan</string>
-    <string name="lbl_share">Jaa</string>
     <string name="lbl_appears_on">Esiintyy</string>
     <string name="lng_widget">Näytä ja hallinnoi musiikin toistoa</string>
     <string name="desc_song_handle">Siirrä tämä kappale</string>

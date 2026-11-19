@@ -25,7 +25,7 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentPlaybackBarBinding
-import org.oxycblt.auxio.detail.DetailViewModel
+import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.displayArtists
 import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.music.resolve
@@ -43,7 +43,7 @@ import org.oxycblt.musikr.Song
 @AndroidEntryPoint
 class PlaybackBarFragment : ViewBindingFragment<FragmentPlaybackBarBinding>() {
     private val playbackModel: PlaybackViewModel by activityViewModels()
-    private val detailModel: DetailViewModel by activityViewModels()
+    private val listModel: ListViewModel by activityViewModels()
 
     override fun onCreateBinding(inflater: LayoutInflater) =
         FragmentPlaybackBarBinding.inflate(inflater)
@@ -57,8 +57,11 @@ class PlaybackBarFragment : ViewBindingFragment<FragmentPlaybackBarBinding>() {
         // --- UI SETUP ---
         binding.root.apply {
             setOnClickListener { playbackModel.openPlayback() }
+            // The same menu as a long press on the song in the playback panel.
             setOnLongClickListener {
-                playbackModel.song.value?.let(detailModel::showAlbum)
+                playbackModel.song.value?.let {
+                    listModel.openMenu(R.menu.playback_song, it, PlaySong.ByItself)
+                }
                 true
             }
         }

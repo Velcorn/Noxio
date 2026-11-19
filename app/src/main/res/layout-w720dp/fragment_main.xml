@@ -148,17 +148,39 @@
         android:orientation="vertical"
         android:translationZ="8dp">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/main_tabs"
+        <!-- The tabs, then the stats and the settings at the end of the row. -->
+        <LinearLayout
+            android:id="@+id/main_tab_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:tabGravity="fill"
-            app:tabIndicatorHeight="0dp"
-            app:tabInlineLabel="false"
-            app:tabMode="fixed"
-            app:tabRippleColor="@android:color/transparent"
-            app:tabTextAppearance="?attr/textAppearanceLabelSmall" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/spacing_small">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/main_tabs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                app:tabGravity="fill"
+                app:tabIndicatorHeight="0dp"
+                app:tabInlineLabel="false"
+                app:tabMode="fixed"
+                app:tabRippleColor="@android:color/transparent"
+                app:tabTextAppearance="?attr/textAppearanceLabelSmall" />
+
+            <ImageButton
+                android:id="@+id/main_settings"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/set_root_title"
+                android:src="@drawable/ic_settings_24"
+                app:tint="?android:attr/textColorSecondary" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -216,15 +238,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/lbl_sort"
             android:src="@drawable/ic_sort_20"
-            app:tint="?android:attr/textColorSecondary" />
-
-        <ImageButton
-            android:id="@+id/main_more"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/lbl_more"
-            android:src="@drawable/ic_more_vert_20"
             app:tint="?android:attr/textColorSecondary" />
 
     </LinearLayout>

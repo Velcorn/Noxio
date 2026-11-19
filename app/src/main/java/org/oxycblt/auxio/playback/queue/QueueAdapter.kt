@@ -48,8 +48,11 @@ import timber.log.Timber as L
  * @param listener A [EditClickListListener] to bind interactions to.
  * @author Alexander Capehart (OxygenCobalt)
  */
-class QueueAdapter(private val listener: EditClickListListener<Song>) :
-    FlexibleListAdapter<Song, QueueSongViewHolder>(QueueSongViewHolder.DIFF_CALLBACK) {
+class QueueAdapter(
+    private val listener: EditClickListListener<Song>,
+    /** A long press on a song, which opens its menu. */
+    private val onMenu: (Song, RecyclerView.ViewHolder) -> Unit,
+) : FlexibleListAdapter<Song, QueueSongViewHolder>(QueueSongViewHolder.DIFF_CALLBACK) {
     // Since PlayingIndicator adapter relies on an item value, we cannot use it for this
     // adapter, as one item can appear at several points in the UI. Use a similar implementation
     // with an index value instead.
@@ -68,7 +71,7 @@ class QueueAdapter(private val listener: EditClickListListener<Song>) :
         payload: List<Any>,
     ) {
         if (payload.isEmpty()) {
-            viewHolder.bind(getItem(position), listener)
+            viewHolder.bind(getItem(position), listener, onMenu)
         }
 
         viewHolder.isFuture = position > currentIndex
@@ -172,8 +175,16 @@ class QueueSongViewHolder private constructor(private val binding: ItemEditableS
      * @param listener A [EditClickListListener] to bind interactions to.
      */
     @SuppressLint("ClickableViewAccessibility")
-    fun bind(song: Song, listener: EditClickListListener<Song>) {
+    fun bind(
+        song: Song,
+        listener: EditClickListListener<Song>,
+        onMenu: (Song, RecyclerView.ViewHolder) -> Unit,
+    ) {
         listener.bind(song, this, body, binding.songDragHandle)
+        body.setOnLongClickListener {
+            onMenu(song, this)
+            true
+        }
         binding.songAlbumCover.bind(song)
         binding.songName.text = song.name.resolve(binding.context)
         binding.songInfo.text =

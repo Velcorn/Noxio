@@ -67,6 +67,13 @@ class RootPreferenceFragment : BasePreferenceFragment(R.xml.preferences_root) {
                 findNavController()
                     .navigateSafe(RootPreferenceFragmentDirections.backupPreferences())
             }
+            // Stats and About were in the menu of the home screen, which is gone.
+            getString(R.string.set_key_stats) -> {
+                findNavController().navigateSafe(RootPreferenceFragmentDirections.stats())
+            }
+            getString(R.string.set_key_about) -> {
+                findNavController().navigateSafe(RootPreferenceFragmentDirections.about())
+            }
             else -> return super.onPreferenceTreeClick(preference)
         }
 

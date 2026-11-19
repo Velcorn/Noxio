@@ -3,6 +3,19 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.25.0
+
+## What's Improved
+- Long press instead of three dots: a song in the queue, the song in the player and the playing strip open the song's menu; the queue menu can remove the song
+- Now playing: song, artist and album are centered
+- Home: the bottom row is only the search field; the tabs show bigger icons without labels, with Settings at their end
+- An artist's albums start newest first (unless you picked an order)
+
+## What's Changed
+- Listening stats and About moved into Settings, which now lists Appearance, Library, Playback, Listening stats, Backup and About
+- The home lists are always sorted by name; album, artist and playlist pages keep their sort
+- Share is gone from all menus, and swiping no longer removes a song from the queue
+
 ## v1.24.1
 
 ## What's Improved

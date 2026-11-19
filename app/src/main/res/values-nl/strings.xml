@@ -212,7 +212,6 @@
     </plurals>
     <string name="lbl_appears_on">Verschijnt op</string>
     <string name="lbl_playlists">Afspeellijsten</string>
-    <string name="lbl_share">Deel</string>
     <string name="lng_playlist_deleted">Afspeellijst verwijderd</string>
     <string name="set_exclude_non_music">Sluit niet-muziek uit</string>
     <string name="set_exclude_non_music_desc">Negeer audiobestanden die geen muziek zijn, zoals podcasts</string>

@@ -52,4 +52,6 @@
     <dimen name="widget_def_width">180dp</dimen>
     <dimen name="widget_def_height">100dp</dimen>
 
+    <!-- Noxio: the home and artist tabs show only an icon, a bit bigger. -->
+    <dimen name="noxio_tab_icon">28dp</dimen>
 </resources>

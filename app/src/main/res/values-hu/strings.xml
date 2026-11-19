@@ -212,7 +212,6 @@
     <string name="desc_no_cover">Album borító</string>
     <string name="cdc_aac">Advanced Audio Coding (AAC)</string>
     <string name="lbl_appears_on">Megjelenik itt,</string>
-    <string name="lbl_share">Megoszt</string>
     <string name="lbl_confirm_delete_playlist">Lejátszólista törlése?</string>
     <string name="desc_remove_song">Távolítsa el ezt a dalt</string>
     <string name="desc_auxio_icon">Auxio ikon</string>

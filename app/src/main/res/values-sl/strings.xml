@@ -103,7 +103,6 @@
     <string name="lbl_album">Album</string>
     <string name="lbl_playlist_add">Dodaj na seznam predvajanja</string>
     <string name="lbl_date_added">Datum vnosa</string>
-    <string name="lbl_share">Deli</string>
     <string name="lbl_album_live">Album v živo</string>
     <string name="desc_no_cover">Naslovnica albuma</string>
     <string name="lbl_rename">Preimenuj</string>

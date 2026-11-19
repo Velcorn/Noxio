@@ -9,21 +9,33 @@
         app:title="@string/set_ui" />
 
     <Preference
-        app:icon="@drawable/ic_play_24"
-        app:key="@string/set_key_audio"
-        app:summary="@string/set_audio_desc"
-        app:title="@string/set_audio" />
-
-    <Preference
         app:icon="@drawable/ic_song_24"
         app:key="@string/set_key_music"
         app:summary="@string/set_content_desc"
         app:title="@string/set_library" />
 
     <Preference
+        app:icon="@drawable/ic_play_24"
+        app:key="@string/set_key_audio"
+        app:summary="@string/set_audio_desc"
+        app:title="@string/set_audio" />
+
+    <Preference
+        app:icon="@drawable/ic_stats_24"
+        app:key="@string/set_key_stats"
+        app:summary="@string/set_stats_summary"
+        app:title="@string/lbl_stats" />
+
+    <Preference
         app:icon="@drawable/ic_save_24"
         app:key="@string/set_key_backup_settings"
         app:summary="@string/set_backup_summary"
         app:title="@string/set_backup" />
+
+    <Preference
+        app:icon="@drawable/ic_about_24"
+        app:key="@string/set_key_about"
+        app:summary="@string/set_about_summary"
+        app:title="@string/lbl_about" />
 
 </PreferenceScreen>

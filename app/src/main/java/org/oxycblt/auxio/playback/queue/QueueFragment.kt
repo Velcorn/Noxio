@@ -27,9 +27,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.min
+import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.FragmentQueueBinding
 import org.oxycblt.auxio.list.EditClickListListener
+import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
+import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.util.collect
@@ -47,7 +50,12 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
     // Shared with the search row of the main screen (see MainFragment).
     private val queueModel: QueueViewModel by activityViewModels()
     private val playbackModel: PlaybackViewModel by activityViewModels()
-    private val queueAdapter = QueueAdapter(this)
+    private val listModel: ListViewModel by activityViewModels()
+    private val queueAdapter =
+        QueueAdapter(this) { song, viewHolder ->
+            queueModel.openMenu(viewHolder.bindingAdapterPosition)
+            listModel.openMenu(R.menu.queue_song, song, PlaySong.ByItself)
+        }
     private var touchHelper: ItemTouchHelper? = null
     private var shownFiltered = false
 

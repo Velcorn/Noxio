@@ -213,7 +213,6 @@
     <string name="lbl_confirm_delete_playlist">Выдаліць плэйліст?</string>
     <string name="lng_playlist_renamed">Плэйліст перайменаван</string>
     <string name="lng_playlist_deleted">Плэйліст выдален</string>
-    <string name="lbl_share">Падзяліцца</string>
     <string name="def_disc">Няма дыска</string>
     <string name="lbl_appears_on">З\'яўляецца на</string>
     <string name="fmt_editing">Рэдагаванне %s</string>

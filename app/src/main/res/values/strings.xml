@@ -159,6 +159,9 @@
     <string name="err_stats_export">Could not write the file</string>
     <string name="set_backup">Backup</string>
     <string name="set_backup_summary">Settings, listening history and playlists</string>
+    <string name="set_about_summary">Version, changelog and licenses</string>
+    <string name="set_stats_summary">Top lists, year in review and share cards</string>
+    <string name="lbl_queue_remove">Remove from queue</string>
     <string name="set_backup_frequency">Schedule</string>
     <string name="set_backup_off">Off</string>
     <string name="set_backup_daily">Every day</string>
@@ -256,7 +259,6 @@
     <string name="lbl_artist_details">Go to artist</string>
     <string name="lbl_album_details">Go to album</string>
     <string name="lbl_song_detail">View properties</string>
-    <string name="lbl_share">Share</string>
 
     <string name="lbl_props">Song properties</string>
     <string name="lbl_path">Path</string>

@@ -56,7 +56,6 @@
     <string name="lbl_album_details">ალბომის ნახვა</string>
     <string name="lbl_queue">რიგი</string>
     <string name="lbl_shuffle">შემთხვევითი მუსიკა</string>
-    <string name="lbl_share">გაზიარება</string>
     <string name="lbl_format">ფორმატი</string>
     <string name="lbl_props">სიმღერის პარამეტრები</string>
     <string name="lbl_song_detail">პარამეტრების ნახვა</string>

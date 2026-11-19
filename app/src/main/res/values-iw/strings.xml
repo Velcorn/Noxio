@@ -185,7 +185,6 @@
     <string name="desc_track_number">רצועה %d</string>
     <string name="desc_exit">עצירת הנגינה</string>
     <string name="desc_remove_song">הסרת שיר זה</string>
-    <string name="lbl_share">שיתוף</string>
     <string name="desc_song_handle">העברת שיר זה</string>
     <string name="desc_tab_handle">העברת לשונית זו</string>
     <string name="desc_clear_search">ניקוי תור החיפוש</string>

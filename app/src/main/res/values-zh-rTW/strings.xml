@@ -104,7 +104,6 @@
     <string name="lbl_date_added">建立日期</string>
     <string name="lbl_sort_mode">排序依據</string>
     <string name="lbl_equalizer">等化器</string>
-    <string name="lbl_share">分享</string>
     <string name="lbl_shuffle_shortcut_long">全部隨機播放</string>
     <string name="lbl_cancel">取消</string>
     <string name="lng_playlist_created">已建立播放清單</string>

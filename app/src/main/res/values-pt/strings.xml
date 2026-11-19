@@ -88,7 +88,6 @@
     <string name="set_theme_night">Escuro</string>
     <string name="set_accent">Esquema de cores</string>
     <string name="lbl_export_playlist">Exportar lista de reprodução</string>
-    <string name="lbl_share">Partilhar</string>
     <string name="lbl_size">Tamanho</string>
     <string name="lbl_shuffle_shortcut_short">Aleatório</string>
     <string name="lbl_shuffle_shortcut_long">Misturar tudo</string>

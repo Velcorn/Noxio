@@ -36,6 +36,12 @@
         <action
             android:id="@+id/backup_preferences"
             app:destination="@id/backup_preferences_fragment" />
+        <action
+            android:id="@+id/about"
+            app:destination="@id/about_fragment" />
+        <action
+            android:id="@+id/stats"
+            app:destination="@id/stats_fragment" />
     </fragment>
 
     <fragment

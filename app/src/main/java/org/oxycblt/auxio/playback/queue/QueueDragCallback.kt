@@ -39,6 +39,9 @@ class QueueDragCallback(private val queueModel: QueueViewModel) : MaterialDragCa
             target.bindingAdapterPosition,
         )
 
+    // Songs leave the queue from the menu of a long press, not by a swipe.
+    override val swipeToRemove = false
+
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         queueModel.removeQueueDataItem(viewHolder.bindingAdapterPosition)
     }
