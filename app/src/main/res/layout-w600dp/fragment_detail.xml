@@ -94,6 +94,10 @@
             app:layout_constraintStart_toEndOf="@+id/detail_cover"
             app:layout_constraintTop_toTopOf="@+id/detail_cover"
             app:layout_constraintVertical_chainStyle="packed"
+            android:gravity="center_horizontal"
+
+            android:textAlignment="center"
+
             tools:text="Type" />
 
         <TextView
@@ -108,6 +112,10 @@
             app:layout_constraintEnd_toEndOf="@+id/detail_type"
             app:layout_constraintStart_toStartOf="@+id/detail_type"
             app:layout_constraintTop_toBottomOf="@+id/detail_type"
+            android:gravity="center_horizontal"
+
+            android:textAlignment="center"
+
             tools:text="Name" />
 
         <TextView
@@ -120,6 +128,10 @@
             app:layout_constraintEnd_toEndOf="@+id/detail_type"
             app:layout_constraintStart_toStartOf="@+id/detail_name"
             app:layout_constraintTop_toBottomOf="@+id/detail_name"
+            android:gravity="center_horizontal"
+
+            android:textAlignment="center"
+
             tools:text="Info A" />
 
         <TextView
@@ -132,6 +144,10 @@
             app:layout_constraintEnd_toEndOf="@+id/detail_type"
             app:layout_constraintStart_toStartOf="@+id/detail_name"
             app:layout_constraintTop_toBottomOf="@+id/detail_subhead"
+            android:gravity="center_horizontal"
+
+            android:textAlignment="center"
+
             tools:text="Info B" />
 
         <com.google.android.material.button.MaterialButtonGroup

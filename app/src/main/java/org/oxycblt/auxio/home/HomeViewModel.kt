@@ -247,9 +247,18 @@ constructor(
      * @param pagerPos The new position of the ViewPager2 instance.
      */
     fun synchronizeTabPosition(pagerPos: Int) {
-        L.d("Updating current tab to ${currentTabTypes[pagerPos]}")
-        _currentTabType.value = currentTabTypes[pagerPos]
+        // Noxio: the page after the music tabs is Settings. The music tab stays the last one
+        // shown, so the lists and the shuffle button keep working behind it.
+        _settingsShown.value = pagerPos >= currentTabTypes.size
+        val tab = currentTabTypes.getOrNull(pagerPos) ?: return
+        L.d("Updating current tab to $tab")
+        _currentTabType.value = tab
     }
+
+    private val _settingsShown = MutableStateFlow(false)
+
+    /** Whether the Settings page at the end of the home tabs is shown. */
+    val settingsShown: StateFlow<Boolean> = _settingsShown
 
     /**
      * Update whether the user is fast scrolling or not in the home view.
@@ -276,6 +285,11 @@ constructor(
     fun showStats() {
         showOuter.put(Outer.Stats)
     }
+
+    /** Open the screen of Settings behind the row with this [key]. */
+    fun showSettingsScreen(key: String) {
+        showOuter.put(Outer.SettingsScreen(key))
+    }
 }
 
 sealed interface Outer {
@@ -284,4 +298,7 @@ sealed interface Outer {
     data object About : Outer
 
     data object Stats : Outer
+
+    /** One of the screens of Settings, opened from the Settings page of the home tabs. */
+    data class SettingsScreen(val key: String) : Outer
 }

@@ -20,7 +20,6 @@ package org.oxycblt.auxio.ui.accent
 
 import android.R as SR
 import android.view.ViewGroup
-import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R as MR
 import org.oxycblt.auxio.databinding.ItemAccentBinding
@@ -104,7 +103,6 @@ class AccentViewHolder private constructor(private val binding: ItemAccentBindin
             // Add a Tooltip based on the content description so that the purpose of this
             // button can be clear.
             contentDescription = context.getString(accent.name)
-            TooltipCompat.setTooltipText(this, contentDescription)
             backgroundTintList = context.getColorCompat(accent.primary)
         }
     }

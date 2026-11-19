@@ -3,6 +3,22 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.26.0
+
+## What's New
+- Settings is the last home tab: swipe past Playlists or tap the gear
+- Choose picture: an artist can show one of their album covers instead of the collage
+
+## What's Improved
+- The floating button searches: the library on home and album pages, the field above the playing strip on artist and playlist pages and in the queue; a long press offers Shuffle and the page's menu
+- A long press on the header of an album, artist or playlist page opens its menu, now with Shuffle and Sort; page headers are centered
+- Albums with several discs keep their discs in order, also when sorted by name
+- Buttons no longer show a hint on a long press
+
+## What's Changed
+- The search rows, the queue's sort and ⋮, and the sort and ⋮ buttons in page headers are gone
+- Fewer sort choices: an artist's albums by name or date, their songs by name, an album by track or name, a playlist by name; the queue can only be shuffled
+
 ## v1.25.0
 
 ## What's Improved

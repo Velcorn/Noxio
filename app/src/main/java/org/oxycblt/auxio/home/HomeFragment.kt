@@ -56,6 +56,7 @@ import org.oxycblt.auxio.music.PlaylistDecision
 import org.oxycblt.auxio.music.PlaylistMessage
 import org.oxycblt.auxio.playback.PlaybackDecision
 import org.oxycblt.auxio.playback.PlaybackViewModel
+import org.oxycblt.auxio.settings.HomeSettingsFragment
 import org.oxycblt.auxio.ui.FadingToolbarOffsetListener
 import org.oxycblt.auxio.util.collect
 import org.oxycblt.auxio.util.collectImmediately
@@ -174,6 +175,14 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
         collect(homeModel.recreateTabs.flow, ::handleRecreate)
         collect(homeModel.chooseMusicLocations.flow, ::handleChooseFolders)
         collectImmediately(homeModel.currentTabType, ::updateCurrentTab)
+        collectImmediately(homeModel.settingsShown) { shown ->
+            val pager = requireBinding().homePager
+            if (shown) {
+                pager.setCurrentItem(homeModel.currentTabTypes.size, false)
+            } else if (pager.currentItem >= homeModel.currentTabTypes.size) {
+                updateCurrentTab(homeModel.currentTabType.value)
+            }
+        }
         collect(detailModel.toShow.flow, ::handleShow)
         collect(listModel.menu.flow, ::handleMenu)
         collectImmediately(listModel.selected, ::updateSelection)
@@ -215,7 +224,11 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
 
         // The tabs are in the main navigation, so follow them when one is tapped there.
         val position = homeModel.currentTabTypes.indexOf(tabType)
-        if (position >= 0 && binding.homePager.currentItem != position) {
+        if (
+            position >= 0 &&
+                binding.homePager.currentItem != position &&
+                !homeModel.settingsShown.value
+        ) {
             binding.homePager.setCurrentItem(position, false)
         }
 
@@ -445,10 +458,11 @@ class HomeFragment : SelectionFragment<FragmentHomeBinding>() {
         fragmentManager: FragmentManager,
         lifecycleOwner: LifecycleOwner,
     ) : FragmentStateAdapter(fragmentManager, lifecycleOwner.lifecycle) {
-        override fun getItemCount() = tabs.size
+        // Noxio: Settings is the last page, after the music tabs.
+        override fun getItemCount() = tabs.size + 1
 
         override fun createFragment(position: Int): Fragment =
-            when (tabs[position]) {
+            when (tabs.getOrNull(position) ?: return HomeSettingsFragment()) {
                 MusicType.SONGS -> SongListFragment()
                 MusicType.ALBUMS -> AlbumListFragment()
                 MusicType.ARTISTS -> ArtistListFragment()

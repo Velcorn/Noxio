@@ -19,6 +19,18 @@
         <action
             android:id="@+id/stats"
             app:destination="@id/stats_fragment" />
+        <action
+            android:id="@+id/ui_preferences"
+            app:destination="@id/ui_preferences_fragment" />
+        <action
+            android:id="@+id/music_preferences"
+            app:destination="@id/music_preferences_fragment" />
+        <action
+            android:id="@+id/audio_preferences"
+            app:destination="@id/audio_preferences_fragment" />
+        <action
+            android:id="@+id/backup_preferences"
+            app:destination="@id/backup_preferences_fragment" />
     </fragment>
     <fragment
         android:id="@+id/root_preferences_fragment"

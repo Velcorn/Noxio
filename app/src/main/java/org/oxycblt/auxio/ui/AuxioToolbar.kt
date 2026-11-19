@@ -36,7 +36,6 @@ import androidx.appcompat.view.SupportMenuInflater
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuItemImpl
 import androidx.appcompat.widget.Toolbar
-import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.children
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
@@ -142,7 +141,6 @@ constructor(
             contentDescription =
                 toolbarAttrs.getText(AR.styleable.Toolbar_navigationContentDescription)
             isVisible = icon != null
-            TooltipCompat.setTooltipText(this, contentDescription)
             if (isRtl) {
                 rotation = 180f
             }
@@ -275,7 +273,6 @@ constructor(
                 icon = item.icon
                 contentDescription = item.title
                 isEnabled = item.isEnabled
-                TooltipCompat.setTooltipText(this, item.title)
                 setOnClickListener { view ->
                     if (item.hasSubMenu()) {
                         val subMenu = unlikelyToBeNull(item.subMenu)
@@ -292,7 +289,6 @@ constructor(
             configureIconButton(this)
             setIconResource(R.drawable.ic_more_vert_24)
             contentDescription = context.getString(R.string.lbl_more)
-            TooltipCompat.setTooltipText(this, contentDescription)
             setOnClickListener { view ->
                 val customListener = overflowClickListener
                 if (customListener != null) {

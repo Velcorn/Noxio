@@ -20,6 +20,7 @@ package org.oxycblt.auxio.image
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Matrix
@@ -42,6 +43,7 @@ import androidx.core.view.isEmpty
 import androidx.core.view.updateMarginsRelative
 import androidx.core.widget.ImageViewCompat
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.preference.PreferenceManager
 import coil3.ImageLoader
 import coil3.asImage
 import coil3.request.ImageRequest
@@ -61,6 +63,8 @@ import org.oxycblt.auxio.image.coil.RoundedRectTransformation
 import org.oxycblt.auxio.image.coil.SmatteringCoverComposition
 import org.oxycblt.auxio.image.coil.SquareCropTransformation
 import org.oxycblt.auxio.image.coil.StackCoverComposition
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
+import org.oxycblt.auxio.music.primaryAlbumArtistsOnly
 import org.oxycblt.auxio.ui.Effect
 import org.oxycblt.auxio.ui.Spatial
 import org.oxycblt.auxio.ui.UISettings
@@ -104,6 +108,13 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
     private val playbackIndicator: PlaybackIndicator?
     private val selectionBadge: ImageView?
     private val iconSize: Int?
+    private var boundArtist: Artist? = null
+    private val artistPictureListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, changedKey ->
+            if (changedKey == context.getString(R.string.set_key_artist_pictures)) {
+                boundArtist?.let(::bind)
+            }
+        }
 
     private val checkScaleSpring = Spatial.FAST
     private val checkAlphaSpring = Effect.FAST
@@ -261,6 +272,9 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+        // Noxio: a chosen artist picture shows everywhere the artist does, right away.
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .registerOnSharedPreferenceChangeListener(artistPictureListener)
         invalidateRootAlpha()
         invalidatePlaybackIndicatorAlpha(playbackIndicator ?: return)
         invalidateSelectionIndicatorAlpha(selectionBadge ?: return)
@@ -338,12 +352,14 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      * @param song The [Song] to bind to the view.
      */
     fun bind(song: Song) =
-        bindImpl(
-            { song.cover },
-            context.getString(R.string.desc_album_cover, song.album.name),
-            R.drawable.ic_album_24,
-            squareishShapeAppearance,
-        )
+        clearArtistBinding().run {
+            bindImpl(
+                { song.cover },
+                context.getString(R.string.desc_album_cover, song.album.name),
+                R.drawable.ic_album_24,
+                squareishShapeAppearance,
+            )
+        }
 
     /**
      * Bind an [Album]'s image to this view.
@@ -351,6 +367,7 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      * @param album The [Album] to bind to the view.
      */
     fun bind(album: Album) {
+        boundArtist = null
         bindImpl(
             {
                 // Generally it's not desirable for many albums to show all of their covers since
@@ -375,6 +392,32 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      * @param artist The [Artist] to bind to the view.
      */
     fun bind(artist: Artist) {
+        boundArtist = artist
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val key = context.getString(R.string.set_key_artist_pictures)
+        val choices = ArtistPictures.decode(prefs.getString(key, null))
+        val albums =
+            if (context.primaryAlbumArtistsOnly())
+                PrimaryAlbumArtists.albums(artist, artist.explicitAlbums)
+            else artist.explicitAlbums
+        val chosenUid =
+            ArtistPictures.resolve(choices, artist.uid.toString(), albums.map { it.uid.toString() })
+        if (chosenUid != null) {
+            val album = albums.first { it.uid.toString() == chosenUid }
+            bindImpl(
+                {
+                    album.covers.covers
+                        .groupBy { it.id }
+                        .maxByOrNull { it.value.size }
+                        ?.value
+                        ?.firstOrNull()
+                },
+                context.getString(R.string.desc_artist_image, artist.name),
+                R.drawable.ic_artist_24,
+                squareishShapeAppearance,
+            )
+            return
+        }
         // For artists we arrange the images
         // in a "smattering" of random rotation/tilt to give the feeling of a messy
         // stack of vinyl.
@@ -393,27 +436,35 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
         )
     }
 
+    override fun onDetachedFromWindow() {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .unregisterOnSharedPreferenceChangeListener(artistPictureListener)
+        super.onDetachedFromWindow()
+    }
+
     /**
      * Bind a [Genre]'s image to this view.
      *
      * @param genre The [Genre] to bind to the view.
      */
     fun bind(genre: Genre) =
-        // Genres are organized like a "gallery" of various covers that overlap eachother,
-        // as if they were framed on a wall.
-        bindImpl(
-            { size ->
-                GalleryCoverCollection(
-                    genre.covers,
-                    genre.uid.toString().hashCode(),
-                    responsiveCornerRatio(size),
-                    backgroundColor(),
-                )
-            },
-            context.getString(R.string.desc_genre_image, genre.name),
-            R.drawable.ic_genre_24,
-            squareishShapeAppearance,
-        )
+        clearArtistBinding().run {
+            // Genres are organized like a "gallery" of various covers that overlap eachother,
+            // as if they were framed on a wall.
+            bindImpl(
+                { size ->
+                    GalleryCoverCollection(
+                        genre.covers,
+                        genre.uid.toString().hashCode(),
+                        responsiveCornerRatio(size),
+                        backgroundColor(),
+                    )
+                },
+                context.getString(R.string.desc_genre_image, genre.name),
+                R.drawable.ic_genre_24,
+                squareishShapeAppearance,
+            )
+        }
 
     /**
      * Bind a [Playlist]'s image to this view.
@@ -421,21 +472,27 @@ constructor(context: Context, attrs: AttributeSet? = null, @AttrRes defStyleAttr
      * @param playlist the [Playlist] to bind.
      */
     fun bind(playlist: Playlist) =
-        // Playlists are organized in a straight diagonal stack to give the appearance of an
-        // "orderly" pile of covers.
-        bindImpl(
-            { size ->
-                StackCoverComposition(
-                    playlist.covers,
-                    responsiveCornerRatio(size),
-                    playlist.uid.toString().hashCode(),
-                    backgroundColor(),
-                )
-            },
-            context.getString(R.string.desc_playlist_image, playlist.name),
-            R.drawable.ic_playlist_24,
-            squareishShapeAppearance,
-        )
+        clearArtistBinding().run {
+            // Playlists are organized in a straight diagonal stack to give the appearance of an
+            // "orderly" pile of covers.
+            bindImpl(
+                { size ->
+                    StackCoverComposition(
+                        playlist.covers,
+                        responsiveCornerRatio(size),
+                        playlist.uid.toString().hashCode(),
+                        backgroundColor(),
+                    )
+                },
+                context.getString(R.string.desc_playlist_image, playlist.name),
+                R.drawable.ic_playlist_24,
+                squareishShapeAppearance,
+            )
+        }
+
+    private fun clearArtistBinding() {
+        boundArtist = null
+    }
 
     /**
      * Bind the covers of a generic list of [Song]s.

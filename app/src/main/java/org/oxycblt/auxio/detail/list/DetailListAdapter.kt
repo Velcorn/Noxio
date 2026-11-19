@@ -20,8 +20,6 @@ package org.oxycblt.auxio.detail.list
 
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.TooltipCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import org.oxycblt.auxio.IntegerTable
@@ -138,17 +136,6 @@ private class SortHeaderViewHolder(private val binding: ItemSortHeaderBinding) :
      */
     fun bind(sortHeader: SortHeader, listener: DetailListAdapter.Listener<*>) {
         binding.headerTitle.text = binding.context.getString(sortHeader.titleRes)
-        binding.headerSort.apply {
-            isVisible = sortHeader.sortable
-            // Add a Tooltip based on the content description so that the purpose of this
-            // button can be clear.
-            TooltipCompat.setTooltipText(this, contentDescription)
-            setOnClickListener { listener.onOpenSortMenu() }
-        }
-        binding.headerMore.apply {
-            TooltipCompat.setTooltipText(this, contentDescription)
-            setOnClickListener { listener.onOpenParentMenu() }
-        }
     }
 
     companion object {

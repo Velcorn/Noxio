@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/menu_queue_actions">
         <item
+            android:id="@+id/action_shuffle"
+            android:icon="@drawable/ic_shuffle_off_24"
+            android:title="@string/lbl_shuffle" />
+        <item
             android:id="@+id/action_play_next"
             android:icon="@drawable/ic_play_next_24"
             android:title="@string/lbl_play_next" />
@@ -11,6 +15,10 @@
             android:title="@string/lbl_queue_add" />
     </group>
     <group android:id="@+id/menu_playlist_actions">
+        <item
+            android:id="@+id/action_sort"
+            android:icon="@drawable/ic_sort_24"
+            android:title="@string/lbl_sort" />
         <item
             android:id="@+id/action_rename"
             android:icon="@drawable/ic_edit_24"

@@ -52,7 +52,7 @@ class AlbumSongSortDialog : SortDialog() {
         detailModel.applyAlbumSongSort(sort)
     }
 
-    override fun getModeChoices() = listOf(Sort.Mode.ByDisc, Sort.Mode.ByTrack)
+    override fun getModeChoices() = listOf(Sort.Mode.ByDisc, Sort.Mode.ByName)
 
     private fun updateAlbum(album: Album?) {
         if (album == null) {

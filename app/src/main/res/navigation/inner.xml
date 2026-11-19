@@ -126,11 +126,6 @@
         android:label="genre_sort_dialog"
         tools:layout="@layout/dialog_sort" />
 
-    <dialog
-        android:id="@+id/queue_sort_dialog"
-        android:name="org.oxycblt.auxio.playback.queue.QueueSortDialog"
-        android:label="queue_sort_dialog"
-        tools:layout="@layout/dialog_sort" />
 
     <dialog
         android:id="@+id/playlist_sort_dialog"
@@ -272,9 +267,6 @@
             android:name="artistUid"
             app:argType="org.oxycblt.musikr.Music$UID" />
         <action
-            android:id="@+id/sort"
-            app:destination="@+id/artist_song_sort_dialog" />
-        <action
             android:id="@+id/sort_albums"
             app:destination="@+id/artist_album_sort_dialog" />
         <action
@@ -308,12 +300,6 @@
             android:id="@+id/play_from_genre"
             app:destination="@id/play_from_genre_dialog" />
     </fragment>
-
-    <dialog
-        android:id="@+id/artist_song_sort_dialog"
-        android:name="org.oxycblt.auxio.detail.sort.ArtistSongSortDialog"
-        android:label="artist_song_sort_dialog"
-        tools:layout="@layout/dialog_sort" />
 
     <dialog
         android:id="@+id/artist_album_sort_dialog"

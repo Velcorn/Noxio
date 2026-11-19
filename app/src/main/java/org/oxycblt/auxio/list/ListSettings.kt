@@ -122,11 +122,13 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
     override var albumSongSort: Sort
         get() =
             Sort.fromIntCode(
-                sharedPreferences.getInt(
-                    getString(R.string.set_key_album_songs_sort),
-                    Int.MIN_VALUE,
-                ),
-            ) ?: Sort(Sort.Mode.ByDisc, Sort.Direction.ASCENDING)
+                    sharedPreferences.getInt(
+                        getString(R.string.set_key_album_songs_sort),
+                        Int.MIN_VALUE,
+                    ),
+                )
+                ?.takeIf { it.mode in ALBUM_SONG_MODES }
+                ?: Sort(Sort.Mode.ByDisc, Sort.Direction.ASCENDING)
         set(value) {
             sharedPreferences.edit {
                 putInt(getString(R.string.set_key_album_songs_sort), value.intCode)
@@ -135,13 +137,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
         }
 
     override var artistSongSort: Sort
-        get() =
-            Sort.fromIntCode(
-                sharedPreferences.getInt(
-                    getString(R.string.set_key_artist_songs_sort),
-                    Int.MIN_VALUE,
-                ),
-            ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
+        get() = HOME_SORT
         set(value) {
             sharedPreferences.edit {
                 putInt(getString(R.string.set_key_artist_songs_sort), value.intCode)
@@ -152,11 +148,13 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
     override var artistAlbumSort: Sort
         get() =
             Sort.fromIntCode(
-                sharedPreferences.getInt(
-                    getString(R.string.set_key_artist_albums_sort),
-                    Int.MIN_VALUE,
-                ),
-            ) ?: Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
+                    sharedPreferences.getInt(
+                        getString(R.string.set_key_artist_albums_sort),
+                        Int.MIN_VALUE,
+                    ),
+                )
+                ?.takeIf { it.mode in ARTIST_ALBUM_MODES }
+                ?: Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
         set(value) {
             sharedPreferences.edit {
                 putInt(getString(R.string.set_key_artist_albums_sort), value.intCode)
@@ -195,5 +193,7 @@ class ListSettingsImpl @Inject constructor(@ApplicationContext val context: Cont
 
     private companion object {
         val HOME_SORT = Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
+        val ALBUM_SONG_MODES = setOf(Sort.Mode.ByDisc, Sort.Mode.ByName)
+        val ARTIST_ALBUM_MODES = setOf(Sort.Mode.ByName, Sort.Mode.ByDate)
     }
 }

@@ -139,8 +139,10 @@ private class DetailGeneratorImpl(
 
     override fun album(uid: Music.UID): Detail<Album>? {
         val album = musicRepository.library?.findAlbum(uid) ?: return null
-        val songs = listSettings.albumSongSort.songs(album.songs)
-        val discs = songs.groupBy { it.disc }
+        val sort = listSettings.albumSongSort
+        val songs = sort.songs(album.songs)
+        // Noxio: the discs stay in order, also when the songs are sorted by name.
+        val discs = DiscGroups.group(songs, sort.direction == Sort.Direction.DESCENDING) { it.disc }
         val section =
             if (discs.size > 1) {
                 DetailSection.Discs(discs)

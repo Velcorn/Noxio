@@ -55,9 +55,6 @@ class ArtistAlbumSortDialog : SortDialog() {
         listOf(
             Sort.Mode.ByName,
             Sort.Mode.ByDate,
-            Sort.Mode.ByDuration,
-            Sort.Mode.ByCount,
-            Sort.Mode.ByDateAdded,
         )
 
     private fun updateArtist(artist: Artist?) {

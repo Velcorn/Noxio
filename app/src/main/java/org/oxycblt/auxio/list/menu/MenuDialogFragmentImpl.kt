@@ -19,13 +19,18 @@
 package org.oxycblt.auxio.list.menu
 
 import android.view.MenuItem
+import androidx.core.content.edit
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.databinding.DialogMenuBinding
 import org.oxycblt.auxio.detail.DetailViewModel
+import org.oxycblt.auxio.image.ArtistPictures
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.music.PlaylistSongs
@@ -134,6 +139,7 @@ class AlbumMenuDialogFragment : MenuDialogFragment<Menu.ForAlbum>() {
 
     override fun onClick(item: MenuItem, menu: Menu.ForAlbum) {
         when (item.itemId) {
+            R.id.action_sort -> findNavController().navigate(R.id.album_song_sort_dialog)
             R.id.action_play -> playbackModel.play(menu.album)
             R.id.action_shuffle -> playbackModel.shuffle(menu.album)
             R.id.action_detail -> detailModel.showAlbum(menu.album)
@@ -184,6 +190,11 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
             setOf()
         }
 
+    override fun getHiddenItemIds(menu: Menu.ForArtist) = buildSet {
+        if (detailModel.artistTab.value == org.oxycblt.auxio.detail.ArtistTab.SONGS)
+            add(R.id.action_sort)
+    }
+
     override fun updateMenu(binding: DialogMenuBinding, menu: Menu.ForArtist) {
         val context = requireContext()
         val primaryOnly = context.primaryAlbumArtistsOnly()
@@ -218,6 +229,8 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
                 PrimaryAlbumArtists.songs(menu.artist, menu.artist.explicitAlbums)
             else null
         when (item.itemId) {
+            R.id.action_sort -> findNavController().navigate(R.id.artist_album_sort_dialog)
+            R.id.action_choose_artist_picture -> chooseArtistPicture(menu.artist)
             R.id.action_play ->
                 if (primarySongs != null) playbackModel.play(primarySongs)
                 else playbackModel.play(menu.artist)
@@ -241,6 +254,41 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
             else -> error("Unexpected menu item $item")
         }
     }
+
+    private fun chooseArtistPicture(artist: Artist) {
+        val context = requireContext()
+        // Only albums with a cover can stand for the artist.
+        val albums =
+            (if (context.primaryAlbumArtistsOnly())
+                    PrimaryAlbumArtists.albums(artist, artist.explicitAlbums)
+                else artist.explicitAlbums)
+                .filter { it.covers.covers.isNotEmpty() }
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val key = context.getString(R.string.set_key_artist_pictures)
+        val choices = ArtistPictures.decode(prefs.getString(key, null))
+        val selected =
+            ArtistPictures.resolve(choices, artist.uid.toString(), albums.map { it.uid.toString() })
+        val options =
+            listOf(getString(R.string.lbl_collage)) + albums.map { it.name.resolve(context) }
+        val selectedIndex =
+            if (selected == null) 0 else albums.indexOfFirst { it.uid.toString() == selected } + 1
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.action_choose_artist_picture)
+            .setSingleChoiceItems(options.toTypedArray(), selectedIndex) { dialog, which ->
+                val albumUid = albums.getOrNull(which - 1)?.uid?.toString()
+                prefs.edit {
+                    putString(
+                        key,
+                        ArtistPictures.encode(
+                            ArtistPictures.choose(choices, artist.uid.toString(), albumUid),
+                        ),
+                    )
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.lbl_cancel, null)
+            .show()
+    }
 }
 
 /**
@@ -261,6 +309,9 @@ class GenreMenuDialogFragment : MenuDialogFragment<Menu.ForGenre>() {
         get() = args.parcel
 
     override fun getDisabledItemIds(menu: Menu.ForGenre) = setOf<Int>()
+
+    override fun getHiddenItemIds(menu: Menu.ForGenre) =
+        setOf(R.id.action_sort, R.id.action_choose_artist_picture)
 
     override fun updateMenu(binding: DialogMenuBinding, menu: Menu.ForGenre) {
         val context = requireContext()
@@ -345,6 +396,7 @@ class PlaylistMenuDialogFragment : MenuDialogFragment<Menu.ForPlaylist>() {
 
     override fun onClick(item: MenuItem, menu: Menu.ForPlaylist) {
         when (item.itemId) {
+            R.id.action_sort -> findNavController().navigate(R.id.playlist_song_sort_dialog)
             R.id.action_play -> playbackModel.play(menu.playlist)
             R.id.action_shuffle -> playbackModel.shuffle(menu.playlist)
             R.id.action_detail -> detailModel.showPlaylist(menu.playlist)

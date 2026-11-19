@@ -40,7 +40,9 @@ class ListSettingsTest {
     private val byName = Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING)
     private val byDateOldestFirst = Sort(Sort.Mode.ByDate, Sort.Direction.ASCENDING)
     private val byDateNewestFirst = Sort(Sort.Mode.ByDate, Sort.Direction.DESCENDING)
-    private val custom = Sort(Sort.Mode.ByDuration, Sort.Direction.DESCENDING)
+    // Offered on every page that has a choice.
+    private val custom = Sort(Sort.Mode.ByName, Sort.Direction.DESCENDING)
+    private val removed = Sort(Sort.Mode.ByDuration, Sort.Direction.DESCENDING)
 
     /** Every sort, with the setting key it is stored under and its default. */
     private class Entry(
@@ -52,7 +54,8 @@ class ListSettingsTest {
     ) {
         /** The lists of the home screen have no sort to choose, they are always by name. */
         val fixed: Boolean
-            get() = name in listOf("songs", "albums", "artists", "genres", "playlists")
+            get() =
+                name in listOf("songs", "albums", "artists", "genres", "playlists", "artist songs")
     }
 
     private val entries =
@@ -102,7 +105,7 @@ class ListSettingsTest {
             Entry(
                 "artist songs",
                 R.string.set_key_artist_songs_sort,
-                byDateOldestFirst,
+                byName,
                 { it.artistSongSort },
                 { s, v -> s.artistSongSort = v },
             ),
@@ -160,6 +163,30 @@ class ListSettingsTest {
             preferences.edit { putInt(context.getString(e.key), 0x7FFF_FFF0) }
             assertEquals(e.name, e.default, e.get(settings))
         }
+    }
+
+    @Test
+    fun removedModesFallBackAndAllowedModesAreKept() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        preferences.edit {
+            putInt(context.getString(R.string.set_key_artist_albums_sort), removed.intCode)
+            putInt(
+                context.getString(R.string.set_key_album_songs_sort),
+                Sort(Sort.Mode.ByTrack, Sort.Direction.ASCENDING).intCode,
+            )
+        }
+        assertEquals(byDateNewestFirst, settings.artistAlbumSort)
+        assertEquals(Sort(Sort.Mode.ByDisc, Sort.Direction.ASCENDING), settings.albumSongSort)
+
+        preferences.edit {
+            putInt(
+                context.getString(R.string.set_key_artist_albums_sort),
+                byDateOldestFirst.intCode,
+            )
+            putInt(context.getString(R.string.set_key_album_songs_sort), byName.intCode)
+        }
+        assertEquals(byDateOldestFirst, settings.artistAlbumSort)
+        assertEquals(byName, settings.albumSongSort)
     }
 
     @Test

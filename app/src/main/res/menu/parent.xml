@@ -13,4 +13,8 @@
         android:id="@+id/action_playlist_add"
         android:icon="@drawable/ic_playlist_add_24"
         android:title="@string/lbl_playlist_add" />
+    <item
+        android:id="@+id/action_choose_artist_picture"
+        android:icon="@drawable/ic_artist_24"
+        android:title="@string/action_choose_artist_picture" />
 </menu>

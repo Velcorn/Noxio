@@ -20,7 +20,9 @@ package org.oxycblt.auxio.playback.queue
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.core.view.isInvisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,11 +34,13 @@ import org.oxycblt.auxio.databinding.FragmentQueueBinding
 import org.oxycblt.auxio.list.EditClickListListener
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.list.adapter.UpdateInstructions
+import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.util.collect
 import org.oxycblt.auxio.util.collectImmediately
+import org.oxycblt.auxio.util.systemBarInsetsCompat
 import org.oxycblt.musikr.Song
 import timber.log.Timber as L
 
@@ -51,6 +55,7 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
     private val queueModel: QueueViewModel by activityViewModels()
     private val playbackModel: PlaybackViewModel by activityViewModels()
     private val listModel: ListViewModel by activityViewModels()
+    private val musicModel: MusicViewModel by activityViewModels()
     private val queueAdapter =
         QueueAdapter(this) { song, viewHolder ->
             queueModel.openMenu(viewHolder.bindingAdapterPosition)
@@ -65,6 +70,19 @@ class QueueFragment : ViewBindingFragment<FragmentQueueBinding>(), EditClickList
         super.onBindingCreated(binding, savedInstanceState)
 
         // --- UI SETUP ---
+        binding.queueShuffleFab.setOnClickListener { queueModel.startSearch() }
+        // Above the search row and the playing strip, which the list leaves room for too.
+        val fabMargin = resources.getDimensionPixelSize(R.dimen.spacing_medium)
+        binding.queueShuffleFab.setOnApplyWindowInsetsListener { view, insets ->
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = fabMargin + insets.systemBarInsetsCompat.bottom
+            }
+            insets
+        }
+        binding.queueShuffleFab.setOnLongClickListener {
+            showQueueMenu(it, queueModel, musicModel, playbackModel)
+            true
+        }
         binding.queueRecycler.apply {
             adapter = queueAdapter
             touchHelper =

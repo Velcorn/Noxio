@@ -126,6 +126,10 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
         binding.detailRecycler.apply { adapter = getDetailListAdapter() }
 
         binding.detailName.isSelected = true
+        binding.detailHeader?.setOnLongClickListener {
+            onOpenParentMenu()
+            true
+        }
 
         spacingSmall = requireContext().getDimenPixels(R.dimen.spacing_small)
     }
@@ -136,6 +140,7 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
         super.onDestroyBinding(binding)
         binding.detailAppbar?.removeOnOffsetChangedListener(this)
         binding.detailNormalToolbar.setOnMenuItemClickListener(null)
+        binding.detailHeader?.setOnLongClickListener(null)
         binding.detailRecycler.adapter = null
     }
 
@@ -190,6 +195,10 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
             }
             R.id.action_shuffle -> {
                 onShuffleParent(parent)
+                true
+            }
+            R.id.action_sort -> {
+                onOpenSortMenu()
                 true
             }
             else -> false

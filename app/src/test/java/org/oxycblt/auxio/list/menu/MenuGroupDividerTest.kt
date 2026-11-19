@@ -26,8 +26,8 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.oxycblt.auxio.R
@@ -58,18 +58,23 @@ class MenuGroupDividerTest {
 
     @Test
     fun playlistDividersSeparateQueueManagementAndDeleteEvenWhenActionsAreDisabled() {
-        for (resource in listOf(R.menu.playlist, R.menu.detail_playlist)) {
+        // The playlist page's menu also has Shuffle at the start of the queue actions and Sort at
+        // the start of the playlist actions.
+        for ((resource, dividers) in
+            listOf(R.menu.playlist to listOf(1, 5), R.menu.detail_playlist to listOf(2, 7))) {
+            val last = dividers.last() + 1
             val adapter = adapter(resource)
             // Empty playlists disable queue actions, export and duplicates without changing the
             // groups.
             adapter.currentList.forEach { it.isEnabled = false }
-            assertFalse(divider.shouldDrawDivider(0, adapter))
-            assertTrue(divider.shouldDrawDivider(1, adapter))
-            assertFalse(divider.shouldDrawDivider(2, adapter))
-            assertFalse(divider.shouldDrawDivider(3, adapter))
-            assertFalse(divider.shouldDrawDivider(4, adapter))
-            assertTrue(divider.shouldDrawDivider(5, adapter))
-            assertFalse(divider.shouldDrawDivider(6, adapter))
+            for (position in 0..last) {
+                val expected = position in dividers
+                assertEquals(
+                    "$resource at $position",
+                    expected,
+                    divider.shouldDrawDivider(position, adapter),
+                )
+            }
         }
     }
 

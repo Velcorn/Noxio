@@ -138,14 +138,20 @@ class QueueViewModel @Inject constructor(private val playbackManager: PlaybackSt
     private fun queueIndex(adapterIndex: Int) =
         if (query.value.isBlank()) adapterIndex else shownIndices().getOrElse(adapterIndex) { -1 }
 
-    /**
-     * Put the whole queue in the order of [sort], which may be random. The current song keeps
-     * playing.
-     */
-    fun sortQueue(sort: Sort) {
+    /** Asks the queue's search field to show and take the keyboard, see MainFragment. */
+    val searchRequests: Event<Unit>
+        field = MutableEvent<Unit>()
+
+    fun startSearch() {
+        searchRequests.put(Unit)
+    }
+
+    /** Put the whole queue in a random order. The current song keeps playing. */
+    fun shuffleQueue() {
         val queue = queue.value
-        L.d("Sorting the queue by $sort")
-        playbackManager.reorderQueue(QueueOrder.matching(queue, sort.songs(queue)))
+        L.d("Shuffling the queue")
+        val shuffled = Sort(Sort.Mode.ByRandom, Sort.Direction.ASCENDING).songs(queue)
+        playbackManager.reorderQueue(QueueOrder.matching(queue, shuffled))
     }
 
     fun goto(adapterIndex: Int) {

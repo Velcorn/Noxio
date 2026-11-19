@@ -151,7 +151,9 @@ class ArtistDetailFragment : DetailFragment<Artist, Music>() {
     }
 
     override fun onOpenSortMenu() {
-        findNavController().navigateSafe(ArtistDetailFragmentDirections.sort())
+        if (detailModel.artistTab.value == ArtistTab.ALBUMS) {
+            findNavController().navigateSafe(ArtistDetailFragmentDirections.sortAlbums())
+        }
     }
 
     /** A swipe to the left or right on the list switches between the albums and the songs. */

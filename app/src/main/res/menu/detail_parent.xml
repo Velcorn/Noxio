@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/action_shuffle"
+        android:icon="@drawable/ic_shuffle_off_24"
+        android:title="@string/lbl_shuffle" />
+    <item
         android:id="@+id/action_play_next"
         android:icon="@drawable/ic_play_next_24"
         android:title="@string/lbl_play_next" />
@@ -12,4 +16,12 @@
         android:id="@+id/action_playlist_add"
         android:icon="@drawable/ic_playlist_add_24"
         android:title="@string/lbl_playlist_add" />
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_sort_24"
+        android:title="@string/lbl_sort" />
+    <item
+        android:id="@+id/action_choose_artist_picture"
+        android:icon="@drawable/ic_artist_24"
+        android:title="@string/action_choose_artist_picture" />
 </menu>

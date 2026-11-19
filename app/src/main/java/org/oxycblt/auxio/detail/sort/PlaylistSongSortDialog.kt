@@ -53,14 +53,7 @@ class PlaylistSongSortDialog : SortDialog() {
         detailModel.sortPlaylist(sort)
     }
 
-    override fun getModeChoices() =
-        listOf(
-            Sort.Mode.ByName,
-            Sort.Mode.ByArtist,
-            Sort.Mode.ByAlbum,
-            Sort.Mode.ByDate,
-            Sort.Mode.ByDuration,
-        )
+    override fun getModeChoices() = listOf(Sort.Mode.ByName)
 
     private fun updatePlaylist(genre: Playlist?) {
         if (genre == null) {

@@ -41,16 +41,16 @@ timer** and **tag editing**.
   or monthly, the last five kept. A backup with much less than your biggest one is not written on its own: you get a
   warning and confirm it. Restore shows what's inside first and applies the restored theme right away.
 - **Queue and playlists:** the song that played is ready right after a restart, before the library has loaded. The queue
-  has search and sort, opens at the song that plays, opens with a swipe up on the player, and can be cleared or saved
+  has its own search button (a long press shuffles, saves or clears it), opens at the song that plays, opens with a swipe up on the player, and can be cleared or saved
   as a playlist. Playlists can be searched, sorted and have songs taken out,
   with no song added twice and duplicates removed in one go.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
   a keyboard the search row stays, so it can always be switched off.
-- **One-handed layout:** search and icon-only tabs at the bottom with settings next to them, the playing strip
-  right under the search row, a floating shuffle button, no back buttons (gestures only), no three-dot buttons (long
-  press a row, the queue, the playing strip or the song in the player for its menu), shorter item menus
-  without Share.
+- **One-handed layout:** icon-only tabs at the bottom with Settings as the last tab, the playing strip above them,
+  a floating search button (a long press shuffles or opens the page's menu) instead of a search row, no back buttons (gestures only), no three-dot buttons (long
+  press a row, a page header or its search button, the queue, the playing strip or the song in the player for its menu; sorting
+  is in the page menus), shorter item menus without Share.
 - **Faster loading:** the library loads about 2.5 to 3 times faster than in Auxio (the name preparation was the
   bottleneck), with the same result.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
@@ -65,7 +65,8 @@ timer** and **tag editing**.
   opens a short explanation.
 - **Shorter settings:** four screens (Appearance, Library, Playback, Backup), with little-used options removed;
   short lists and page titles at the bottom, fixed appearance defaults, hidden files excluded and manual refresh.
-- **Detail pages:** album and artist artwork and lists start at the top; long titles move to reveal the full name.
+- **Detail pages:** album and artist artwork and lists start at the top, the header is centered; long titles move
+  to reveal the full name. An artist's picture can be one of their album covers instead of the collage.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
 - **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
 
@@ -76,7 +77,8 @@ Noxio is built for one person's use, so it does one thing one way where Auxio of
 - **Settings with one sensible answer** are fixed instead of switchable: rounded UI, natural cover proportions,
   balanced artwork quality, no ReplayGain pre-amp, hidden files excluded, what plays when you tap a song, headset
   autoplay, pause on repeat, remembering pause, exit on close, intelligent sorting, the playback bar action and the
-  sort of the home lists (always by name; album, artist and playlist pages keep theirs).
+  sort of the home lists and an artist's songs (always by name; an artist's albums by name or date, an album by
+  track or name, a playlist by name).
   Fewer switches means a settings screen you can read at a glance.
 - **Automatic reloading** is off; Refresh and Rescan in Library settings load changes when you want them.
 - **Multi-value separators** for all tags became one artist separator, which tag editing uses too.

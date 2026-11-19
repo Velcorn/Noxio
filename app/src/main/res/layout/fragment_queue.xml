@@ -17,4 +17,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!-- Noxio: the same floating search button as on the other screens. It searches the queue,
+         a long press shuffles, saves or clears it. -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/queue_shuffle_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/spacing_medium"
+        android:contentDescription="@string/lbl_search"
+        android:src="@drawable/ic_search_24" />
+
 </FrameLayout>

@@ -59,10 +59,8 @@ import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 import org.oxycblt.auxio.databinding.FragmentMainBinding
-import org.oxycblt.auxio.detail.ArtistDetailFragmentDirections
 import org.oxycblt.auxio.detail.ArtistTab
 import org.oxycblt.auxio.detail.DetailViewModel
-import org.oxycblt.auxio.detail.PlaylistDetailFragmentDirections
 import org.oxycblt.auxio.detail.Show
 import org.oxycblt.auxio.home.HomeFragmentDirections
 import org.oxycblt.auxio.home.HomeViewModel
@@ -78,6 +76,7 @@ import org.oxycblt.auxio.playback.PlaybackBottomSheetBehavior
 import org.oxycblt.auxio.playback.PlaybackViewModel
 import org.oxycblt.auxio.playback.queue.QueueBottomSheetBehavior
 import org.oxycblt.auxio.playback.queue.QueueViewModel
+import org.oxycblt.auxio.playback.queue.showQueueMenu
 import org.oxycblt.auxio.playback.timer.SleepTimerDialog
 import org.oxycblt.auxio.ui.DialogAwareNavigationListener
 import org.oxycblt.auxio.ui.KeyAction
@@ -251,14 +250,37 @@ class MainFragment :
 
         binding.mainScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
         binding.sheetScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
-        binding.homeShuffleFab.setOnClickListener {
+        // Noxio: the floating button searches what is shown, a long press opens what can be done
+        // with it, starting with Shuffle. There is no search row any more.
+        binding.homeShuffleFab.setOnClickListener { startSearch(binding) }
+        binding.homeShuffleFab.setOnLongClickListener { view ->
             when (currentNavMode(binding)) {
-                NavMode.ARTIST -> detailModel.currentArtist.value?.let(playbackModel::shuffle)
-                NavMode.ALBUM -> detailModel.currentAlbum.value?.let(playbackModel::shuffle)
-                NavMode.GENRE -> detailModel.currentGenre.value?.let(playbackModel::shuffle)
-                NavMode.PLAYLIST -> detailModel.currentPlaylist.value?.let(playbackModel::shuffle)
-                else -> playbackModel.shuffleAll()
+                NavMode.ARTIST ->
+                    detailModel.currentArtist.value?.let {
+                        listModel.openMenu(R.menu.detail_parent, it)
+                    }
+                NavMode.ALBUM ->
+                    detailModel.currentAlbum.value?.let {
+                        listModel.openMenu(R.menu.detail_album, it)
+                    }
+                NavMode.GENRE ->
+                    detailModel.currentGenre.value?.let {
+                        listModel.openMenu(R.menu.detail_parent, it)
+                    }
+                NavMode.PLAYLIST ->
+                    detailModel.currentPlaylist.value?.let {
+                        listModel.openMenu(R.menu.detail_playlist, it)
+                    }
+                else ->
+                    popupMenu(requireContext(), view).apply {
+                        menu.add(R.string.lbl_shuffle_all).setOnMenuItemClickListener {
+                            playbackModel.shuffleAll()
+                            true
+                        }
+                        show()
+                    }
             }
+            true
         }
         binding.homeNewPlaylistFab.apply {
             inflate(R.menu.new_playlist_actions)
@@ -296,11 +318,21 @@ class MainFragment :
         collect(detailModel.toShow.flow, ::handleShow)
         collectImmediately(detailModel.editedPlaylist, detailBackCallback::invalidateEnabled)
         collectImmediately(homeModel.showOuter.flow, ::handleShowOuter)
+        collect(queueModel.searchRequests.flow) {
+            if (it != null) {
+                showKeyboardFor(binding.queueSearchInput)
+                queueModel.searchRequests.consume()
+            }
+        }
         collectImmediately(homeModel.currentTabType, ::updateCurrentTab)
         collectImmediately(detailModel.currentArtist) { updateSearchHint(binding) }
         collectImmediately(detailModel.currentPlaylist) { updateSearchHint(binding) }
         collectImmediately(detailModel.artistTab) { selectCurrentTab(binding) }
         collectImmediately(homeModel.songList, homeModel.isFastScrolling, ::updateFab)
+        collectImmediately(homeModel.settingsShown) {
+            selectCurrentTab(binding)
+            updateFab(homeModel.songList.value, homeModel.isFastScrolling.value)
+        }
         // Noxio: the album that is shown decides whether there is anything to shuffle.
         collectImmediately(detailModel.currentAlbum) {
             updateFab(homeModel.songList.value, homeModel.isFastScrolling.value)
@@ -407,23 +439,6 @@ class MainFragment :
                 ?.hideSoftInputFromWindow(view.windowToken, 0)
             true
         }
-        binding.mainSort.setOnClickListener {
-            exploreNavigate(
-                when (navMode) {
-                    NavMode.ARTIST ->
-                        // Each of the two lists of an artist has its own sort.
-                        if (detailModel.artistTab.value == ArtistTab.SONGS) {
-                            ArtistDetailFragmentDirections.sort()
-                        } else {
-                            ArtistDetailFragmentDirections.sortAlbums()
-                        }
-                    NavMode.PLAYLIST -> PlaylistDetailFragmentDirections.sort()
-                    // The home lists are always sorted by name.
-                    else -> return@setOnClickListener
-                },
-            )
-        }
-        binding.mainSettings.setOnClickListener { homeModel.showSettings() }
         binding.mainSearchInput.setOnKeyListener { view, keyCode, event ->
             // Backspace on an empty filter puts it away again in the keyboard phone mode.
             if (
@@ -462,11 +477,6 @@ class MainFragment :
                 false
             }
         }
-        binding.queueSort.setOnClickListener {
-            // The same dialog as the other lists have, it can be opened from any screen.
-            requireBinding().exploreNavHost.findNavController().navigate(R.id.queue_sort_dialog)
-        }
-        binding.queueMore.setOnClickListener(::showQueueMore)
         binding.mainBottomNav.setOnApplyWindowInsetsListener { view, insets ->
             // Keep the tabs clear of the system navigation.
             navInsetBottom = insets.systemBarInsetsCompat.bottom
@@ -514,7 +524,6 @@ class MainFragment :
         binding.mainSearchInput.isVisible = filter
         // The home lists are always sorted by name, so only the pages of an artist and a playlist
         // have a sort here. The pages of an album and a genre have it in the header of their list.
-        binding.mainSort.isVisible = filter && (!keyboardMode || touchOnly)
         if (filter) {
             binding.mainSearchInput.setText(
                 if (mode == NavMode.ARTIST) detailModel.artistQuery else detailModel.playlistQuery,
@@ -580,24 +589,6 @@ class MainFragment :
     }
 
     /** The menu of the queue: what is done with the whole of it. */
-    private fun showQueueMore(anchor: View) {
-        popupMenu(requireContext(), anchor).apply {
-            inflate(R.menu.queue_overflow)
-            val hasSongs = queueModel.queue.value.isNotEmpty()
-            menu.findItem(R.id.action_queue_save).isEnabled = hasSongs
-            menu.findItem(R.id.action_queue_clear).isEnabled = hasSongs
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    // The dialog of the playlists, with a new one at its end.
-                    R.id.action_queue_save -> musicModel.addToPlaylist(queueModel.queue.value)
-                    R.id.action_queue_clear -> playbackModel.clearQueue()
-                }
-                true
-            }
-            show()
-        }
-    }
-
     /**
      * What a key does in the keyboard phone mode, see [KeyboardMode.actionFor].
      *
@@ -636,23 +627,27 @@ class MainFragment :
                     navMode == NavMode.NONE -> false
                     else -> {
                         // What the floating shuffle button does, which this mode hides.
-                        binding.homeShuffleFab.performClick()
+                        shuffleShown(binding)
                         true
                     }
                 }
             KeyAction.Sort ->
                 when {
-                    queueOpen -> binding.queueSort.performClick()
-                    playerOpen || navMode == NavMode.NONE || navMode == NavMode.HOME -> false
-                    else -> {
-                        binding.mainSort.performClick()
+                    queueOpen -> {
+                        queueModel.shuffleQueue()
                         true
                     }
+                    else -> false
                 }
             KeyAction.Menu ->
                 when {
                     queueOpen -> {
-                        showQueueMore(binding.queueMore)
+                        showQueueMenu(
+                            binding.queueSearchInput,
+                            queueModel,
+                            musicModel,
+                            playbackModel,
+                        )
                         true
                     }
                     playerOpen -> false
@@ -718,6 +713,36 @@ class MainFragment :
         return true
     }
 
+    /** Shuffle what is shown: the page of an artist, an album, a genre or a playlist, or all. */
+    private fun shuffleShown(binding: FragmentMainBinding) {
+        when (currentNavMode(binding)) {
+            NavMode.ARTIST -> detailModel.currentArtist.value?.let(playbackModel::shuffle)
+            NavMode.ALBUM -> detailModel.currentAlbum.value?.let(playbackModel::shuffle)
+            NavMode.GENRE -> detailModel.currentGenre.value?.let(playbackModel::shuffle)
+            NavMode.PLAYLIST -> detailModel.currentPlaylist.value?.let(playbackModel::shuffle)
+            else -> playbackModel.shuffleAll()
+        }
+    }
+
+    /**
+     * What the floating search button does: filter an artist or a playlist in the field that then
+     * shows above the playing strip, otherwise open the search of the whole library.
+     */
+    private fun startSearch(binding: FragmentMainBinding) {
+        when (currentNavMode(binding)) {
+            NavMode.ARTIST,
+            NavMode.PLAYLIST -> showKeyboardFor(binding.mainSearchInput)
+            else -> binding.exploreNavHost.findNavController().navigate(R.id.search_fragment)
+        }
+    }
+
+    private fun showKeyboardFor(input: View) {
+        input.requestFocus()
+        input.context
+            .getSystemService(InputMethodManager::class.java)
+            ?.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
+    }
+
     private fun showMoreMenu(anchor: View) {
         popupMenu(requireContext(), anchor).apply {
             inflate(R.menu.home_overflow)
@@ -763,6 +788,14 @@ class MainFragment :
                 binding.mainTabs.addTab(tab, false)
             }
             shownTabTypes = types
+            // Noxio: Settings is the last tab, also reachable by swiping past the music tabs.
+            binding.mainTabs.addTab(
+                binding.mainTabs
+                    .newTab()
+                    .setText(R.string.set_root_title)
+                    .setIcon(R.drawable.ic_settings_24),
+                false,
+            )
         }
         // Icons only, a bit bigger than with a label; the label stays for screen readers but is
         // not shown as a tooltip on a long press.
@@ -789,7 +822,8 @@ class MainFragment :
             if (navMode == NavMode.ARTIST) {
                 ARTIST_TABS.indexOf(detailModel.artistTab.value)
             } else {
-                shownTabTypes.indexOf(homeModel.currentTabType.value)
+                if (homeModel.settingsShown.value) shownTabTypes.size
+                else shownTabTypes.indexOf(homeModel.currentTabType.value)
             }
         if (position >= 0 && binding.mainTabs.selectedTabPosition != position) {
             settingTabs = true
@@ -817,34 +851,35 @@ class MainFragment :
         if (mode == NavMode.HOME && homeModel.currentTabTypes != shownTabTypes) {
             rebuildTabs(binding)
         }
-        // On the home screen a single tab makes the tabs redundant.
         // The pages of an album, a genre and a playlist have no tabs.
         // The keyboard phone mode has no tabs: swipe, or Alt with a number.
         binding.mainTabs.isVisible =
             !keyboardMode &&
                 when (mode) {
-                    NavMode.HOME -> homeModel.currentTabTypes.size > 1
+                    // Settings is a tab too, so home always has more than one.
+                    NavMode.HOME -> true
                     NavMode.ALBUM,
                     NavMode.GENRE,
                     NavMode.PLAYLIST -> false
                     else -> true
                 }
-        // The stats and the settings sit at the end of the tabs of the home screen, also when it
-        // has a single tab. The keyboard phone mode opens them from its menu key.
-        val homeButtons = mode == NavMode.HOME && (!keyboardMode || touchOnly)
-        binding.mainSettings.isVisible = homeButtons
-        binding.mainTabRow.isVisible = binding.mainTabs.isVisible || homeButtons
+        binding.mainTabRow.isVisible = binding.mainTabs.isVisible
         applyNavPadding(binding)
         nav.alpha = if (shown) fadeRatio else 0f
         nav.isInvisible = nav.alpha == 0f
         // Albums and genres have sort and more in the header of their list, so no row at all.
         val row = binding.mainRow
-        val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
+        // The Settings page of the home tabs has nothing to search either.
+        val ownHeader =
+            mode == NavMode.ALBUM ||
+                mode == NavMode.GENRE ||
+                (mode == NavMode.HOME && homeModel.settingsShown.value)
         // In the keyboard phone mode there is no search row: typing opens the search, and on an
         // artist or a playlist page the filter shows while it is used.
         val filtering =
             binding.mainSearchInput.hasFocus() || binding.mainSearchInput.text.isNotEmpty()
-        val rowShown = shown && !ownHeader && (!keyboardMode || touchOnly || filtering)
+        // Noxio: the search row only shows while it is used, the floating button opens it.
+        val rowShown = shown && !ownHeader && filtering
         row.alpha = nav.alpha
         row.visibility =
             when {
@@ -947,10 +982,10 @@ class MainFragment :
             placePlayingStrip(binding, queueBarRatio > 0f)
             // The search row under the strip fades in with it.
             binding.queueRow.alpha = queueBarRatio
-            // In the keyboard phone mode the queue search only shows while it is used.
+            // The queue search only shows while it is used, its floating button opens it.
             val queueFiltering =
                 binding.queueSearchInput.hasFocus() || binding.queueSearchInput.text.isNotEmpty()
-            binding.queueRow.isInvisible = queueBarRatio == 0f || (keyboardMode && !queueFiltering)
+            binding.queueRow.isInvisible = queueBarRatio == 0f || !queueFiltering
             binding.queueCover.alpha = queueBarRatio
             binding.queueCover.isInvisible = queueBarRatio == 0f
             // The search row is above the strip, the strip above the space at the bottom.
@@ -1214,9 +1249,7 @@ class MainFragment :
         isFastScrolling: Boolean,
     ) =
         currentNavMode(binding) == NavMode.NONE ||
-            // Noxio: an album with one song has nothing to shuffle.
-            (currentNavMode(binding) == NavMode.ALBUM &&
-                detailModel.currentAlbum.value?.songs?.size == 1) ||
+            (currentNavMode(binding) == NavMode.HOME && homeModel.settingsShown.value) ||
             sheetRising == true ||
             songs.isEmpty() ||
             isFastScrolling
@@ -1262,9 +1295,22 @@ class MainFragment :
                 is Outer.Settings -> MainFragmentDirections.preferences()
                 is Outer.About -> MainFragmentDirections.about()
                 is Outer.Stats -> MainFragmentDirections.stats()
+                is Outer.SettingsScreen ->
+                    when (outer.key) {
+                        getString(R.string.set_key_ui) -> MainFragmentDirections.uiPreferences()
+                        getString(R.string.set_key_music) ->
+                            MainFragmentDirections.musicPreferences()
+                        getString(R.string.set_key_audio) ->
+                            MainFragmentDirections.audioPreferences()
+                        getString(R.string.set_key_backup_settings) ->
+                            MainFragmentDirections.backupPreferences()
+                        getString(R.string.set_key_stats) -> MainFragmentDirections.stats()
+                        getString(R.string.set_key_about) -> MainFragmentDirections.about()
+                        else -> null
+                    }
                 null -> return
             }
-        findNavController().navigateSafe(directions)
+        directions?.let { findNavController().navigateSafe(it) }
         homeModel.showOuter.consume()
     }
 

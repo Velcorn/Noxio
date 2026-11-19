@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="action_choose_artist_picture">Choose picture</string>
+    <string name="lbl_collage">Collage</string>
     <!-- Info namespace | App labels -->
     <eat-comment />
 
@@ -161,6 +163,8 @@
     <string name="set_backup_summary">Settings, listening history and playlists</string>
     <string name="set_about_summary">Version, changelog and licenses</string>
     <string name="set_stats_summary">Top lists, year in review and share cards</string>
+    <string name="lbl_shuffle_all">Shuffle all</string>
+    <string name="lbl_queue_shuffle">Shuffle queue</string>
     <string name="lbl_queue_remove">Remove from queue</string>
     <string name="set_backup_frequency">Schedule</string>
     <string name="set_backup_off">Off</string>
