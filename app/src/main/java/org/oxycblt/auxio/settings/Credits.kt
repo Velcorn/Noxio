@@ -27,10 +27,21 @@ data class CreditLicense(val name: String, val text: String, val url: String?)
 /** One entry of the credits: a project Noxio is built on or a library it ships. */
 data class Credit(
     val name: String,
-    val by: String,
+    val authors: List<String>,
     val licenses: List<CreditLicense>,
     val website: String?,
-)
+) {
+    /** All authors, for example "Jake Wharton" or "A, B, C". */
+    val by: String
+        get() = authors.joinToString(", ")
+
+    /**
+     * The authors for a row: at most [max] names, and [andOthers] (which gets those names) when
+     * there are more, so a long list does not fill the screen.
+     */
+    fun shortBy(max: Int = 2, andOthers: (String) -> String): String =
+        if (authors.size <= max) by else andOthers(authors.take(max).joinToString(", "))
+}
 
 /** The credits, split into what Noxio is built on and the libraries it ships. */
 data class Credits(val foundations: List<Credit>, val libraries: List<Credit>)
@@ -53,43 +64,50 @@ object CreditsList {
 
     fun parse(json: String): Credits = from(Libs.Builder().withJson(json).build().libraries)
 
-    /** AndroidX ships as dozens of parts; they are listed as one entry. */
-    const val ANDROIDX_GROUP = "androidx."
-    const val ANDROIDX_WEBSITE = "https://developer.android.com/jetpack/androidx"
+    /** A project that ships as many parts, listed as one entry. */
+    data class Group(val name: String, val prefixes: List<String>, val website: String) {
+        fun matches(uniqueId: String) = prefixes.any { uniqueId.startsWith(it) }
+    }
+
+    val GROUPS =
+        listOf(
+            Group(
+                "AndroidX",
+                listOf("androidx."),
+                "https://developer.android.com/jetpack/androidx",
+            ),
+            Group(
+                "Kotlin",
+                listOf("org.jetbrains.kotlin:", "org.jetbrains.kotlinx:", "org.jetbrains:"),
+                "https://kotlinlang.org",
+            ),
+            Group("Dagger & Hilt", listOf("com.google.dagger:"), "https://dagger.dev"),
+            Group("Guava", listOf("com.google.guava:"), "https://github.com/google/guava"),
+        )
 
     fun from(libraries: List<Library>): Credits {
         val credits = libraries.associate { it.uniqueId to credit(it) }
         val foundations = FOUNDATIONS.mapNotNull { credits[it] }
         val taken = foundations.map { it.name.lowercase() }.toMutableSet()
-        val (androidx, others) =
-            libraries
-                .filter { it.uniqueId !in FOUNDATIONS }
-                .partition { it.uniqueId.startsWith(ANDROIDX_GROUP) }
-        val folded =
-            androidx
+        val listed = libraries.filter { it.uniqueId !in FOUNDATIONS }
+        val folded = GROUPS.mapNotNull { group ->
+            val parts =
+                listed.filter { group.matches(it.uniqueId) }.map { credits.getValue(it.uniqueId) }
+            if (parts.isEmpty()) return@mapNotNull null
+            Credit(
+                name = group.name,
+                authors = parts.flatMap { it.authors }.distinct(),
+                licenses =
+                    parts.flatMap { it.licenses }.distinctBy { it.name }.sortedBy { it.name },
+                website = group.website,
+            )
+        }
+        val others =
+            listed
+                .filter { lib -> GROUPS.none { it.matches(lib.uniqueId) } }
                 .map { credits.getValue(it.uniqueId) }
-                .takeIf { it.isNotEmpty() }
-                ?.let { parts ->
-                    Credit(
-                        name = "AndroidX",
-                        by =
-                            parts
-                                .map { it.by }
-                                .filter(String::isNotBlank)
-                                .distinct()
-                                .joinToString(", "),
-                        licenses =
-                            parts
-                                .flatMap { it.licenses }
-                                .distinctBy { it.name }
-                                .sortedBy {
-                                    it.name
-                                },
-                        website = ANDROIDX_WEBSITE,
-                    )
-                }
         val rest =
-            (others.map { credits.getValue(it.uniqueId) } + listOfNotNull(folded))
+            (others + folded)
                 .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                 // Some projects publish several artifacts under one name; list it once.
                 .filter { taken.add(it.name.lowercase()) }
@@ -105,15 +123,14 @@ object CreditsList {
         // for example when config/aboutlibraries names the right license of a library.
         val withText = all.filter { it.text.isNotEmpty() }
         val licenses = (withText.ifEmpty { all }).distinctBy { it.name }.sortedBy { it.name }
-        val by =
+        val authors =
             library.developers
                 .mapNotNull { it.name?.takeIf(String::isNotBlank) }
                 .distinct()
                 .ifEmpty { listOfNotNull(library.organization?.name) }
-                .joinToString(", ")
         return Credit(
             name = library.name.ifBlank { library.uniqueId },
-            by = by,
+            authors = authors,
             licenses = licenses,
             website = library.website?.takeIf(String::isNotBlank) ?: library.scm?.url,
         )

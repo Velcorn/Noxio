@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.29.2
+
+## What's Improved
+- Credits: Kotlin, Dagger & Hilt and Guava are one entry each, like AndroidX, and long author lists show two names and "and others"
+
 ## v1.29.1
 
 ## What's Fixed

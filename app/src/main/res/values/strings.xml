@@ -311,6 +311,7 @@
     <string name="lbl_wiki" tools:ignore="UnusedResources">Wiki</string>
     <string name="lbl_credits_foundations">Noxio is built on</string>
     <string name="lbl_credits_libraries">Libraries</string>
+    <string name="fmt_credits_and_others">%s and others</string>
     <string name="lbl_website">Website</string>
     <string name="lbl_licenses">Licenses</string>
     <string name="lbl_library_counts">Library statistics</string>

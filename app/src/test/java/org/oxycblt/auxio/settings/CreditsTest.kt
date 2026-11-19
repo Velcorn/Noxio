@@ -110,7 +110,36 @@ class CreditsTest {
             )
         assertEquals(listOf("AndroidX", "Beta"), credits.libraries.map { it.name })
         assertEquals("AOSP", credits.libraries[0].by)
-        assertEquals(CreditsList.ANDROIDX_WEBSITE, credits.libraries[0].website)
+        assertEquals(CreditsList.GROUPS[0].website, credits.libraries[0].website)
         assertEquals(1, credits.libraries[0].licenses.size)
+    }
+
+    @Test
+    fun kotlinPartsAreFoldedTooAndOtherGroupsStayApart() {
+        val credits =
+            CreditsList.parse(
+                json(
+                    lib(
+                        "org.jetbrains.kotlin:kotlin-stdlib",
+                        "Kotlin Stdlib",
+                        listOf("Apache-2.0"),
+                    ),
+                    lib("org.jetbrains.kotlinx:coroutines", "Coroutines", listOf("Apache-2.0")),
+                    lib("org.jetbrains:annotations", "Annotations", listOf("Apache-2.0")),
+                    lib("com.google.dagger:dagger", "Dagger", listOf("Apache-2.0")),
+                    lib("com.google.dagger:hilt-android", "Hilt Android", listOf("Apache-2.0")),
+                ),
+            )
+        assertEquals(listOf("Dagger & Hilt", "Kotlin"), credits.libraries.map { it.name })
+        assertEquals("https://kotlinlang.org", credits.libraries[1].website)
+    }
+
+    @Test
+    fun longAuthorListsAreShortenedForTheRow() {
+        val many = Credit("Lib", listOf("A", "B", "C"), emptyList(), null)
+        assertEquals("A, B, C", many.by)
+        assertEquals("A, B and others", many.shortBy { "$it and others" })
+        val two = Credit("Lib", listOf("A", "B"), emptyList(), null)
+        assertEquals("A, B", two.shortBy { "$it and others" })
     }
 }

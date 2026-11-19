@@ -117,7 +117,11 @@ class CreditsFragment : ViewBindingFragment<FragmentCreditsBinding>() {
         row.addView(
             text(credit.name, com.google.android.material.R.attr.textAppearanceBodyLarge, false),
         )
-        val details = listOf(credit.by, credit.licenses.joinToString(", ") { it.name })
+        val details =
+            listOf(
+                credit.shortBy { getString(R.string.fmt_credits_and_others, it) },
+                credit.licenses.joinToString(", ") { it.name },
+            )
         row.addView(
             text(
                 details.filter { it.isNotBlank() }.joinToString(" · "),

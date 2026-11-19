@@ -29,6 +29,7 @@
     <string name="lbl_changelog">Changelog</string>
     <string name="lbl_credits_foundations">Noxio baut auf</string>
     <string name="lbl_credits_libraries">Bibliotheken</string>
+    <string name="fmt_credits_and_others">%s und weitere</string>
     <string name="lbl_website">Website</string>
     <string name="lbl_licenses">Lizenzen</string>
     <string name="lbl_author_name">Entwickelt von Alexander Capehart</string>
