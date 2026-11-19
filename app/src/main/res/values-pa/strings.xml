@@ -175,7 +175,6 @@
     <string name="cdc_flac">ਫਰੀ ਲੂਜ਼ਲੈੱਸ ਆਡੀਓ Codec (FLAC)</string>
     <string name="clr_red">ਲਾਲ</string>
     <string name="clr_orange">ਸੰਤਰੀ</string>
-    <string name="fmt_lib_genre_count">%d: ਸ਼ੈਲੀਆਂ ਲੋਡ ਕੀਤੀਆਂ</string>
     <string name="fmt_lib_album_count">%d: ਐਲਬਮ ਲੋਡ ਕੀਤੇ</string>
     <string name="fmt_lib_artist_count">%d: ਕਲਾਕਾਰ ਲੋਡ ਕੀਤੇ</string>
     <string name="desc_album_cover">%s ਲਈ ਐਲਬਮ ਕਵਰ</string>

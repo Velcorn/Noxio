@@ -245,7 +245,6 @@
     <string name="fmt_lib_song_count">Këngët e ngarkuara: %d</string>
     <string name="fmt_lib_album_count">Albumet e ngarkuara: %d</string>
     <string name="fmt_lib_artist_count">Artistët e ngarkuar: %d</string>
-    <string name="fmt_lib_genre_count">Zhanret e ngarkuara: %d</string>
     <string name="fmt_lib_total_duration">Kohëzgjatja totale: %s</string>
     <string name="fmt_deletion_info">A dëshironi të fshini %s? Kjo nuk mund të anulohet.</string>
     <string name="clr_indigo">Lejla</string>

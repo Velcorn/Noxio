@@ -175,7 +175,6 @@
     <string name="clr_yellow">黃色</string>
     <string name="fmt_list">%1$s，%2$s</string>
     <string name="fmt_lib_artist_count">載入演出者：%d</string>
-    <string name="fmt_lib_genre_count">載入類型：%d</string>
     <string name="fmt_lib_total_duration">長度總計：%s</string>
     <string name="set_replay_gain">音量標準化</string>
     <string name="fmt_editing">正在編輯 %s</string>

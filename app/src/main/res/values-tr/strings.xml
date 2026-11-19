@@ -95,7 +95,6 @@
     <string name="clr_yellow">Sarı</string>
     <string name="clr_orange">Turuncu</string>
     <string name="fmt_lib_artist_count">Yüklenen sanatçılar: %d</string>
-    <string name="fmt_lib_genre_count">Yüklenen türler: %d</string>
     <string name="fmt_sample_rate">%d Hz</string>
     <string name="def_playback">Müzik çalmıyor</string>
     <string name="desc_genre_image">%s türünün resmi</string>

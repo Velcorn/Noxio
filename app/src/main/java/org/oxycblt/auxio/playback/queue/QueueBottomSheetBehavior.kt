@@ -28,7 +28,6 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.ui.BaseBottomSheetBehavior
-import org.oxycblt.auxio.ui.KeyboardMode
 import org.oxycblt.auxio.ui.UISettings
 import org.oxycblt.auxio.util.getAttrColorCompat
 import org.oxycblt.auxio.util.getDimenPixels
@@ -45,14 +44,9 @@ class QueueBottomSheetBehavior<V : View>(context: Context, attributeSet: Attribu
     BaseBottomSheetBehavior<V>(context, attributeSet) {
     private var barHeight = 0
     private var barSpacing = context.getDimenPixels(R.dimen.spacing_small)
-    // The search row under the playing strip, the queue ends above it.
-    // In the keyboard phone mode it only shows while it is used, over the end of the queue.
-    private val rowHeight =
-        if (KeyboardMode.isActive(context)) {
-            context.getDimenPixels(R.dimen.spacing_medium)
-        } else {
-            context.getDimenPixels(R.dimen.size_queue_row)
-        }
+    // Noxio: the search row under the playing strip only shows while it is used, over the end of
+    // the queue, so only a small gap is kept for it.
+    private val rowHeight = context.getDimenPixels(R.dimen.spacing_medium)
 
     init {
         // Not hide-able (and not programmatically hide-able)

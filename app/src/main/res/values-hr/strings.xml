@@ -124,7 +124,6 @@
     <string name="fmt_lib_song_count">Broj učitanih pjesama: %d</string>
     <string name="fmt_lib_album_count">Broj učitanih albuma: %d</string>
     <string name="fmt_lib_artist_count">Broj učitanih izvođača: %d</string>
-    <string name="fmt_lib_genre_count">Broj učitanih žanrova: %d</string>
     <string name="fmt_lib_total_duration">Ukupno trajanje: %s</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d pjesma</item>

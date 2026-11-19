@@ -186,7 +186,6 @@
     <string name="fmt_disc_no">Discul %d</string>
     <string name="fmt_disc_no_subtitle">Discul %1$d – %2$s</string>
     <string name="fmt_def_playlist">Playlist %d</string>
-    <string name="fmt_lib_genre_count">Genuri încărcate: %d</string>
     <string name="set_audio_desc">Configurează sunetul și comportamentul redării</string>
     <string name="def_track">Fără track</string>
     <string name="set_locations_desc">Configurează de unde se încarcă muzica</string>

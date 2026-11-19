@@ -275,17 +275,6 @@
                         tools:text="Artists Loaded: 1616" />
 
                     <TextView
-                        android:id="@+id/about_genre_count"
-                        style="@style/Widget.Auxio.TextView.Icon"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:drawableStartCompat="@drawable/ic_genre_24"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/about_licenses"
-                        tools:text="Genres Loaded: 1616" />
-
-                    <TextView
                         android:id="@+id/about_total_duration"
                         style="@style/Widget.Auxio.TextView.Icon"
                         android:layout_width="match_parent"

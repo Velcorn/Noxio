@@ -135,7 +135,6 @@
     <string name="cdc_ogg">Ogg audio</string>
     <string name="fmt_lib_album_count">Albums geladen: %d</string>
     <string name="fmt_lib_artist_count">Artiesten geladen: %d</string>
-    <string name="fmt_lib_genre_count">Genres geladen: %d</string>
     <string name="lbl_indexer">Muziek laden</string>
     <string name="lbl_album">Album</string>
     <string name="lbl_duration">Duur</string>

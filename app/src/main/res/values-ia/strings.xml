@@ -102,7 +102,6 @@
     <string name="set_lib_tabs">Schedas del bibliotheca</string>
     <string name="set_keep_shuffle_desc">Mantener le reproduction aleatori al reproducer un nove canto</string>
     <string name="def_genre">Genere incognite</string>
-    <string name="fmt_lib_genre_count">Generes cargate: %d</string>
     <string name="desc_genre_image">Imagine de genere ab %s</string>
     <string name="lbl_library_counts">Statisticas del bibliotheca</string>
     <string name="set_library">Bibliotheca</string>

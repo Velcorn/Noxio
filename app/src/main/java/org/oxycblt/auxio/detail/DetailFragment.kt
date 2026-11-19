@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
@@ -38,6 +39,7 @@ import org.oxycblt.auxio.list.ListFragment
 import org.oxycblt.auxio.list.ListViewModel
 import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.playback.PlaybackViewModel
+import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.getDimenPixels
 import org.oxycblt.auxio.util.systemBarInsetsCompat
 import org.oxycblt.musikr.Music
@@ -126,6 +128,11 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
         binding.detailRecycler.apply { adapter = getDetailListAdapter() }
 
         binding.detailName.isSelected = true
+        // Noxio: while the page is filtered, the header makes room for the matches.
+        collectImmediately(detailModel.filtering) { filtering ->
+            binding.detailHeader?.isGone = filtering
+            binding.detailAppbar?.setExpanded(!filtering, false)
+        }
         binding.detailHeader?.setOnLongClickListener {
             onOpenParentMenu()
             true

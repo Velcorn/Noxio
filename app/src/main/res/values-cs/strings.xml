@@ -114,7 +114,6 @@
     <string name="fmt_lib_song_count">Načtených skladeb: %d</string>
     <string name="fmt_lib_album_count">Načtených alb: %d</string>
     <string name="fmt_lib_artist_count">Načtených umělců: %d</string>
-    <string name="fmt_lib_genre_count">Načtených žánrů: %d</string>
     <string name="fmt_lib_total_duration">Celková doba trvání: %s</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d skladba</item>

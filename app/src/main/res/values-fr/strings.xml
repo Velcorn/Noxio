@@ -206,7 +206,6 @@
     <string name="desc_queue_bar">Ouvrir la file d\'attente</string>
     <string name="def_song_count">Aucun titre</string>
     <string name="fmt_editing">Modification de %s</string>
-    <string name="fmt_lib_genre_count">Genres chargés : %d</string>
     <string name="desc_genre_image">Image de genre pour %s</string>
     <string name="cdc_flac">Codec audio gratuit sans perte (FLAC)</string>
     <string name="fmt_selected">%d sélectionnés</string>

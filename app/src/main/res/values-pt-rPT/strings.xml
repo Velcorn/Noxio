@@ -136,7 +136,6 @@
     <string name="fmt_disc_no_subtitle">Disco %1$d – %2$s</string>
     <string name="desc_album_cover">Capa do álbum para %s</string>
     <string name="set_content">Conteúdo</string>
-    <string name="fmt_lib_genre_count">Gêneros carregados: %d</string>
     <string name="lbl_indexer">A carregar música</string>
     <string name="lbl_indexing">A carregar música</string>
     <string name="lbl_observing">A monitorizar a biblioteca de música</string>

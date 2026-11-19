@@ -124,7 +124,6 @@
     <string name="def_genre">Ukjent sjanger</string>
     <string name="desc_genre_image">Sjangerbilde for %s</string>
     <string name="def_artist">Ukjent artist</string>
-    <string name="fmt_lib_genre_count">Sjangere innlastet: %d</string>
     <string name="desc_exit">Stopp avspilling</string>
     <string name="clr_green">Grønn</string>
     <string name="clr_deep_green">Mørkegrønn</string>

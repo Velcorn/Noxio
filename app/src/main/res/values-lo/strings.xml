@@ -273,7 +273,6 @@
     <string name="fmt_lib_song_count">ໂຫຼດເພງແລ້ວ: %d</string>
     <string name="fmt_lib_album_count">ໂຫຼດອາລະບໍາແລ້ວ: %d</string>
     <string name="fmt_lib_artist_count">ໂຫຼດສິນລະປິນແລ້ວ: %d</string>
-    <string name="fmt_lib_genre_count">ໂຫຼດແນວເພງແລ້ວ: %d</string>
     <string name="fmt_lib_total_duration">ໄລຍະເວລາທັງໝົດ: %s</string>
     <string name="fmt_lib_total_size">ຂະໜາດທັງໝົດ: %s</string>
     <plurals name="fmt_song_count">

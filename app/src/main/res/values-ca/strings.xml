@@ -273,7 +273,6 @@
     <string name="fmt_lib_song_count">Cançons carregades: %d</string>
     <string name="fmt_lib_album_count">Àlbums carregats: %d</string>
     <string name="fmt_lib_artist_count">Artistes carregats: %d</string>
-    <string name="fmt_lib_genre_count">Gèneres carregats: %d</string>
     <string name="fmt_lib_total_duration">Durada total: %s</string>
     <string name="fmt_lib_total_size">Mida total: %s</string>
     <plurals name="fmt_song_count">

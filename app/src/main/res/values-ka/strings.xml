@@ -102,7 +102,6 @@
     <string name="lbl_supporters">გულშემატკივრები</string>
     <string name="lng_empty_genres">თქვენი ჟანრები აქ გამოჩნდება.</string>
     <string name="fmt_lib_total_duration">სრული ხანგრძლივობა: %s</string>
-    <string name="fmt_lib_genre_count">ჟანრების რაოდენობა: %d</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d სიმღერა</item>
         <item quantity="other">%d სიმღერა</item>

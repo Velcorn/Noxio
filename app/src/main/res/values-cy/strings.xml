@@ -159,7 +159,6 @@
     <string name="fmt_lib_song_count">Caneuon wedi\'u llwytho: %d</string>
     <string name="fmt_lib_album_count">Albymau wedi\'u llwytho: %d</string>
     <string name="fmt_lib_artist_count">Artistiaid wedi\'u llwytho: %d</string>
-    <string name="fmt_lib_genre_count">Genres wedi\'u llwytho: %d</string>
     <string name="fmt_lib_total_duration">Cyfanswm hyd: %s</string>
     <string name="set_replay_gain_mode_dynamic">Ffafrio albwm os oes un yn chwarae</string>
     <string name="set_replay_gain">Normaleiddio uchder sain</string>

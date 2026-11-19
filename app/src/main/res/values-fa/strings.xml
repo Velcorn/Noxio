@@ -268,7 +268,6 @@
     <string name="fmt_lib_song_count">آهنگ‌های بارگیری شده: %d</string>
     <string name="fmt_lib_album_count">آلبوم‌های بارگیری شده: %d</string>
     <string name="fmt_lib_artist_count">هنرمندان بارگیری شده: %d</string>
-    <string name="fmt_lib_genre_count">انواع بارگیری شده: %d</string>
     <string name="fmt_lib_total_duration">مجموع زمان: %s</string>
     <string name="lbl_author_name">Alexander Capehart</string>
     <string name="cdc_mp3">MPEG-1 audio</string>

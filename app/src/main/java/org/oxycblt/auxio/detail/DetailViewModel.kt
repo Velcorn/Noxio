@@ -199,6 +199,17 @@ constructor(
     var playlistQuery = ""
         private set
 
+    /**
+     * Noxio: whether the albums or songs of an artist or a playlist are filtered, so that the page
+     * can make room for the matches.
+     */
+    val filtering: StateFlow<Boolean>
+        field = MutableStateFlow(false)
+
+    private fun updateFiltering() {
+        filtering.value = artistQuery.isNotEmpty() || playlistQuery.isNotEmpty()
+    }
+
     /** The [PlaySong] instructions to use when playing a [Song] from [Genre] details. */
     val playInPlaylistWith
         get() =
@@ -388,6 +399,7 @@ constructor(
         }
         // A new artist starts with its albums, or its songs if it has no albums, and no filter.
         artistQuery = ""
+        updateFiltering()
         artistTab.value =
             if (detailGenerator.artist(uid)?.sections?.any { it is DetailSection.Albums } == true) {
                 ArtistTab.ALBUMS
@@ -414,6 +426,7 @@ constructor(
             return
         }
         artistQuery = query
+        updateFiltering()
         refreshArtist(artist.uid, null)
     }
 
@@ -515,6 +528,7 @@ constructor(
         val playlist = currentPlaylist.value ?: return
         L.d("Starting playlist edit")
         playlistQuery = ""
+        updateFiltering()
         editedPlaylist.value = playlist.songs
         refreshPlaylist(playlist.uid)
     }
@@ -529,6 +543,7 @@ constructor(
             return
         }
         playlistQuery = query
+        updateFiltering()
         refreshPlaylist(playlist.uid)
     }
 

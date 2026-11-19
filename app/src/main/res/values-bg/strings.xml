@@ -217,7 +217,6 @@
     <string name="fmt_bitrate">%d kbps</string>
     <string name="fmt_lib_album_count">Заредени албуми: %d</string>
     <string name="fmt_lib_artist_count">Заредени изпълнители: %d</string>
-    <string name="fmt_lib_genre_count">Заредени жанрове: %d</string>
     <string name="fmt_lib_total_duration">Обща продължителност: %s</string>
     <string name="clr_deep_purple">Наситено лилаво</string>
     <string name="clr_blue">Синьо</string>

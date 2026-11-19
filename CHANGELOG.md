@@ -3,6 +3,18 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.27.2
+
+## What's Improved
+- Filtering an artist or a playlist hides the cover and header, so the matches show right away
+- The queue's search button sits right above the playing strip, like on the other screens
+
+## What's Fixed
+- The Shuffle all button stayed when switching tabs
+
+## What's Changed
+- About no longer counts genres
+
 ## v1.27.1
 
 ## What's Changed

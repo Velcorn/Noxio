@@ -275,7 +275,6 @@
     <string name="fmt_lib_song_count">Yüklənmir mahnılar: %d</string>
     <string name="fmt_lib_album_count">Yüklənmiş albomlar: %d</string>
     <string name="fmt_lib_artist_count">Yüklənmiş ifaçılar: %d</string>
-    <string name="fmt_lib_genre_count">Yüklənmiş janrlar: %d</string>
     <string name="fmt_lib_total_duration">Ümumi müddət: %s</string>
     <plurals name="fmt_seconds">
         <item quantity="one">%d saniyə</item>

@@ -241,7 +241,6 @@
     <string name="fmt_deletion_info">%s ஐ நீக்கவா? இதை செயல்தவிர்க்க முடியாது.</string>
     <string name="fmt_lib_album_count">ஆல்பங்கள் ஏற்றப்பட்டன: %d</string>
     <string name="fmt_lib_artist_count">கலைஞர்கள் ஏற்றப்பட்டனர்: %d</string>
-    <string name="fmt_lib_genre_count">வகைகள் ஏற்றப்பட்டவை: %d</string>
     <string name="fmt_lib_total_duration">மொத்த காலம்: %s</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d பாடல்</item>

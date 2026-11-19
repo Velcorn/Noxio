@@ -144,7 +144,6 @@
     <string name="clr_grey">Шэры</string>
     <string name="clr_dynamic">Дынамічны</string>
     <string name="fmt_lib_artist_count">Выканаўцы загружаны: %d</string>
-    <string name="fmt_lib_genre_count">Загружана жанраў: %d</string>
     <string name="clr_cyan">Блакітны</string>
     <string name="clr_teal">Чыркаваты</string>
     <string name="clr_yellow">Жоўты</string>

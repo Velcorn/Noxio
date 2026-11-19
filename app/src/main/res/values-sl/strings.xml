@@ -76,7 +76,6 @@
     <string name="desc_playlist_image">Slika seznama predvajanja za %s</string>
     <string name="lbl_delete">Odstrani</string>
     <string name="set_rewind_prev">Previj nazaj preden se preskoči nazaj</string>
-    <string name="fmt_lib_genre_count">Naloženih žanrov: %d</string>
     <string name="lbl_playback">Se predvaja</string>
     <string name="desc_remove_song">Odstrani to pesem</string>
     <string name="def_disc">Ni diska</string>

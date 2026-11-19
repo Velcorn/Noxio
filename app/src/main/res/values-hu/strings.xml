@@ -162,7 +162,6 @@
     <string name="set_lib_tabs">Könyvtár fülek</string>
     <string name="cdc_flac">Free Lossless Audio Codec (FLAC)</string>
     <string name="fmt_bitrate">%d kbps</string>
-    <string name="fmt_lib_genre_count">Betöltött műfaj: %d</string>
     <string name="lbl_indexer">Zene betöltés</string>
     <string name="lbl_indexing">Zene betöltése</string>
     <string name="lbl_observing">Zene könyvtár figyelése</string>

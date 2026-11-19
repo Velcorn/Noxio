@@ -121,7 +121,6 @@
     <string name="fmt_sample_rate">%d Hz</string>
     <string name="fmt_indexing">正在加载您的音乐库… (%1$d/%2$d)</string>
     <string name="fmt_lib_artist_count">已加载艺术家数量：%d</string>
-    <string name="fmt_lib_genre_count">已加载流派数量：%d</string>
     <string name="fmt_lib_total_duration">总计时长：%s</string>
     <string name="cdc_aac">高级音乐编码 (AAC)</string>
     <string name="fmt_lib_album_count">已加载专辑数量：%d</string>

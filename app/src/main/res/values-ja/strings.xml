@@ -116,7 +116,6 @@
     <string name="lbl_size">ファイルサイズ</string>
     <string name="lbl_licenses">使用許諾</string>
     <string name="set_reindex_desc">可能な場合、キャッシュされたタグを用いて音楽ライブラリを再読み込み</string>
-    <string name="fmt_lib_genre_count">読み込みが完了したジャンル数: %d</string>
     <string name="fmt_db_neg">-%.1f デシベル</string>
     <string name="fmt_lib_album_count">読み込みが完了したアルバム数: %d</string>
     <string name="lbl_about">Auxioについて</string>

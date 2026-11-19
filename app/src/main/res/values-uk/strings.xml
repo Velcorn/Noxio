@@ -78,7 +78,6 @@
     <string name="lbl_duration">Тривалість</string>
     <string name="lbl_mixes">DJ мікси</string>
     <string name="lbl_mix">DJ мікс</string>
-    <string name="fmt_lib_genre_count">Завантажено жанрів: %d</string>
     <string name="lbl_props">Властивості пісні</string>
     <string name="lbl_date_added">Дата додавання</string>
     <string name="lbl_sample_rate">Частота дискретизації</string>

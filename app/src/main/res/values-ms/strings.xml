@@ -273,7 +273,6 @@
     <string name="fmt_lib_song_count">Lagu dimuatkan: %d</string>
     <string name="fmt_lib_album_count">Album dimuatkan: %d</string>
     <string name="fmt_lib_artist_count">Artis dimuatkan: %d</string>
-    <string name="fmt_lib_genre_count">Genre dimuatkan: %d</string>
     <string name="fmt_lib_total_duration">Jumlah masa: %s</string>
     <string name="fmt_lib_total_size">Jumlah saiz: %s</string>
     <plurals name="fmt_song_count">

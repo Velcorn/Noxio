@@ -156,7 +156,6 @@
     <string name="lbl_single_remix">Ремикс сингл</string>
     <string name="lbl_compilations">Сборники</string>
     <string name="fmt_db_neg">−%.1f дБ</string>
-    <string name="fmt_lib_genre_count">Жанров загружено: %d</string>
     <string name="def_track">Нет трека</string>
     <string name="fmt_sample_rate">%d Гц</string>
     <string name="fmt_lib_artist_count">Исполнителей загружено: %d</string>

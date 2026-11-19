@@ -122,7 +122,6 @@
     <string name="cdc_aac">Codificación de sonido avanzado (AAC)</string>
     <string name="fmt_indexing">Cargando tu biblioteca de música… (%1$d/%2$d)</string>
     <string name="fmt_lib_artist_count">Artistas cargados: %d</string>
-    <string name="fmt_lib_genre_count">Géneros cargados: %d</string>
     <string name="lbl_indexer">Música cargando</string>
     <string name="lbl_song_count">Número de canciones</string>
     <string name="lng_indexing">Cargando la fonoteca…</string>

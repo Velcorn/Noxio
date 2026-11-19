@@ -235,7 +235,6 @@
     </plurals>
     <string name="fmt_lib_album_count">Laaditud albumeid: %d</string>
     <string name="fmt_lib_artist_count">Laaditud esitajaid: %d</string>
-    <string name="fmt_lib_genre_count">Laaditud žanre: %d</string>
     <string name="fmt_lib_total_duration">Kestus kokku: %s</string>
     <plurals name="fmt_album_count">
         <item quantity="one">%d album</item>

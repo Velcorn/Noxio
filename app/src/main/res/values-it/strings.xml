@@ -101,7 +101,6 @@
     <string name="fmt_lib_song_count">Brani trovati: %d</string>
     <string name="fmt_lib_album_count">Album trovati: %d</string>
     <string name="fmt_lib_artist_count">Artisti trovati: %d</string>
-    <string name="fmt_lib_genre_count">Generi trovati: %d</string>
     <string name="fmt_lib_total_duration">Durata totale: %s</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d brano</item>

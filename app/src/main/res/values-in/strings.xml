@@ -141,7 +141,6 @@
     <string name="clr_teal">Hijau laut</string>
     <string name="clr_green">Hijau</string>
     <string name="clr_orange">Jingga</string>
-    <string name="fmt_lib_genre_count">Genre yang dimuat: %d</string>
     <string name="lbl_song_count">Jumlah lagu</string>
     <string name="lbl_track">Trek</string>
     <string name="clr_pink">Merah muda</string>

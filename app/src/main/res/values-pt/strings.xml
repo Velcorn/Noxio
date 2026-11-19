@@ -129,7 +129,6 @@
     <string name="fmt_db_pos">+%.1f dB</string>
     <string name="fmt_db_neg">-%.1f dB</string>
     <string name="fmt_bitrate">%d kbps</string>
-    <string name="fmt_lib_genre_count">Gêneros carregados: %d</string>
     <string name="lbl_sort_direction">Direção</string>
     <string name="lbl_sort_asc">Ascendente</string>
     <string name="lbl_sort_dsc">Descendente</string>

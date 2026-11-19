@@ -173,7 +173,6 @@
     <string name="fmt_indexing">Lader inn musikksamlinga di… (%1$d/%2$d)</string>
     <string name="fmt_deletion_info">Taka %s bort for godt? Dette kan ikkje angrast.</string>
     <string name="fmt_lib_song_count">Innladde songar: %d</string>
-    <string name="fmt_lib_genre_count">Innladde sjangrar: %d</string>
     <plurals name="fmt_song_count">
         <item quantity="one">%d song</item>
         <item quantity="other">%d songar</item>

@@ -128,7 +128,6 @@
     <string name="fmt_lib_artist_count">אומנים טעונים: %d</string>
     <string name="fmt_lib_song_count">שירים טעונים: %d</string>
     <string name="fmt_lib_album_count">אלבומים טעונים: %d</string>
-    <string name="fmt_lib_genre_count">ז\'אנרים טעונים: %d</string>
     <string name="set_library">ספריה</string>
     <string name="err_no_app">לא נמצא יישום שיכול לטפל במשימה זו</string>
     <string name="err_bad_location">תיקייה זו אינה נתמכת</string>

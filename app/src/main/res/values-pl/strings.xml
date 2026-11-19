@@ -167,7 +167,6 @@
     <string name="def_playback">Utwory nie są odtwarzane</string>
     <string name="fmt_indexing">Importuję bibliotekę muzyczną… (%1$d/%2$d)</string>
     <string name="fmt_lib_album_count">Zaimportowane albumy: %d</string>
-    <string name="fmt_lib_genre_count">Zaimportowane gatunki: %d</string>
     <string name="fmt_lib_total_duration">Łączny czas trwania: %s</string>
     <string name="desc_change_repeat">Zmień tryb powtarzania</string>
     <string name="lng_observing">Monitoruję zmiany w bibliotece muzycznej…</string>

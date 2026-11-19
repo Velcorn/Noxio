@@ -65,7 +65,6 @@
     <string name="lbl_size">Μέγεθος</string>
     <string name="fmt_db_pos">+%.1f dB</string>
     <string name="fmt_indexing">Φόρτωση της συλλογής μουσικής σας… (%1$d/%2$d)</string>
-    <string name="fmt_lib_genre_count">Είδη που φορτώθηκαν: %d</string>
     <string name="lbl_song_count">Αριθμός τραγουδιών</string>
     <string name="err_bad_location">Αυτός ο φάκελος δεν υποστηρίζεται</string>
     <string name="fmt_disc_no">Δίσκος %d</string>

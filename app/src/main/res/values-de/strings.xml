@@ -142,7 +142,6 @@
     <string name="fmt_db_neg">-%.1f dB</string>
     <string name="fmt_lib_album_count">Geladene Alben: %d</string>
     <string name="fmt_lib_artist_count">Geladene Künstler: %d</string>
-    <string name="fmt_lib_genre_count">Geladene Genres: %d</string>
     <string name="fmt_lib_total_duration">Gesamtdauer: %s</string>
     <string name="lbl_cancel">Abbrechen</string>
     <string name="set_locations">Musikquellen</string>

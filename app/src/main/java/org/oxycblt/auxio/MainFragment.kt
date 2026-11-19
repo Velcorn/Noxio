@@ -336,6 +336,7 @@ class MainFragment :
         collectImmediately(detailModel.artistTab) { selectCurrentTab(binding) }
         collectImmediately(homeModel.songList, homeModel.isFastScrolling, ::updateFab)
         collectImmediately(homeModel.settingsShown) { shown ->
+            hideShuffleAll(binding)
             if (!shown && homeModel.settingsQuery.value.isNotEmpty()) {
                 binding.mainSearchInput.setText("")
                 homeModel.setSettingsQuery("")
@@ -540,6 +541,7 @@ class MainFragment :
     /** Set the search field and the tabs up for the screen that is shown. */
     private fun applyNavMode(binding: FragmentMainBinding, mode: NavMode) {
         navMode = mode
+        hideShuffleAll(binding)
         // Artists and playlists have a field to filter them. Albums and genres have nothing to
         // filter, so there is no search at all there.
         updateSearchField(binding)
@@ -1189,6 +1191,8 @@ class MainFragment :
 
     private fun updateCurrentTab(@Suppress("UNUSED_PARAMETER") tabType: MusicType) {
         val binding = requireBinding()
+        // Noxio: the Shuffle all button belongs to the tab it was opened on.
+        hideShuffleAll(binding)
         selectCurrentTab(binding)
         updateFabVisibility(
             binding,
