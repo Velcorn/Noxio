@@ -37,6 +37,7 @@ import org.oxycblt.auxio.list.PlainDivider
 import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.MusicRepository
 import org.oxycblt.auxio.music.MusicType
+import org.oxycblt.auxio.music.PrimaryAlbumArtists
 import org.oxycblt.auxio.playback.PlaySong
 import org.oxycblt.auxio.playback.PlaybackSettings
 import org.oxycblt.musikr.Library
@@ -202,21 +203,40 @@ constructor(
     }
 
     // The library sorted by name, kept for as long as the library is the same.
-    private var sortedLibrary: Library? = null
+    // The library and the artist settings the sorted items were made for.
+    private var sortedKey: Triple<Library, Boolean, Boolean>? = null
     private var sortedItems = SearchEngine.Items()
 
     private fun sortedByName(library: Library): SearchEngine.Items =
         synchronized(this) {
-            if (sortedLibrary !== library) {
+            val key =
+                Triple(
+                    library,
+                    homeSettings.primaryAlbumArtistsOnly,
+                    homeSettings.shouldHideCollaborators,
+                )
+            val current = sortedKey
+            if (
+                current == null ||
+                    current.first !== library ||
+                    current.second != key.second ||
+                    current.third != key.third
+            ) {
                 sortedItems =
                     SearchEngine.Items(
                         songs = SORT.songs(library.songs),
                         albums = SORT.albums(library.albums),
-                        artists = SORT.artists(library.artists),
+                        artists =
+                            PrimaryAlbumArtists.shown(
+                                SORT.artists(library.artists),
+                                library.albums,
+                                homeSettings.primaryAlbumArtistsOnly,
+                                homeSettings.shouldHideCollaborators,
+                            ),
                         genres = SORT.genres(library.genres),
                         playlists = SORT.playlists(library.playlists),
                     )
-                sortedLibrary = library
+                sortedKey = key
             }
             sortedItems
         }

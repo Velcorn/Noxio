@@ -58,6 +58,28 @@ object TextWrap {
         return lines
     }
 
+    /** Lines of a name and whether they are in the smaller size. */
+    data class Fit(val lines: List<String>, val small: Boolean)
+
+    /**
+     * Fits a name into [maxWidth]: on one line in the normal size if it fits, else on one line in
+     * the smaller size, else wrapped to [maxLines] lines in the smaller size.
+     *
+     * @param measureNormal The width of a text in the normal size.
+     * @param measureSmall The width of a text in the smaller size.
+     */
+    fun shrinkThenWrap(
+        value: String,
+        maxLines: Int,
+        maxWidth: Float,
+        measureNormal: (String) -> Float,
+        measureSmall: (String) -> Float,
+    ): Fit {
+        val normal = wrap(value, 1, maxWidth, measureNormal)
+        if (normal.isEmpty() || measureNormal(value.trim()) <= maxWidth) return Fit(normal, false)
+        return Fit(wrap(value, maxLines, maxWidth, measureSmall), true)
+    }
+
     /** Where the first line of [text] ends: after the last space that fits, else mid-word. */
     private fun breakAt(text: String, maxWidth: Float, measure: (String) -> Float): Int {
         var fit = 0

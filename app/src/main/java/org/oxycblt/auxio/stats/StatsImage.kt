@@ -461,13 +461,26 @@ object StatsImage {
         text.color = WHITE
         text.textAlign = Paint.Align.LEFT
         text.textSize = 44f
-        // A long name wraps to a second line, in a smaller size, and moves the artist down.
-        val name = TextWrap.wrap(row.name, 2, 560f, text::measureText)
-        val wrapped = name.size > 1
-        if (wrapped) {
-            text.textSize = if (roomy) 38f else 36f
-        }
-        val lines = if (wrapped) TextWrap.wrap(row.name, 2, 560f, text::measureText) else name
+        // A long name is written smaller first; only when it still does not fit does it wrap to a
+        // second line and move the artist down (like the name on the item card).
+        val smallSize = if (roomy) 38f else 36f
+        val fit =
+            TextWrap.shrinkThenWrap(
+                row.name,
+                2,
+                560f,
+                { value ->
+                    text.textSize = 44f
+                    text.measureText(value)
+                },
+                { value ->
+                    text.textSize = smallSize
+                    text.measureText(value)
+                },
+            )
+        text.textSize = if (fit.small) smallSize else 44f
+        val lines = fit.lines
+        val wrapped = lines.size > 1
         val hasSubtitle = !row.subtitle.isNullOrEmpty()
         if (wrapped) {
             // Two lines of name, then the artist under them.

@@ -72,4 +72,18 @@ class PrimaryAlbumArtistsTest {
         )
         assertEquals(listOf(solo), PrimaryAlbumArtists.albums(tray, listOf(together, solo)))
     }
+
+    @Test
+    fun shownFollowsTheSettingsLikeTheArtistsTab() {
+        val peep = artist()
+        val guest = artist()
+        val together = album(listOf(peep, guest), emptyList())
+        every { peep.explicitAlbums } returns listOf(together)
+        every { guest.explicitAlbums } returns emptyList()
+        val all = listOf(peep, guest)
+
+        assertEquals(listOf(peep), PrimaryAlbumArtists.shown(all, listOf(together), true, false))
+        assertEquals(listOf(peep), PrimaryAlbumArtists.shown(all, listOf(together), false, true))
+        assertEquals(all, PrimaryAlbumArtists.shown(all, listOf(together), false, false))
+    }
 }

@@ -42,6 +42,23 @@ object PrimaryAlbumArtists {
         val firstIds = albums.mapNotNullTo(mutableSetOf()) { first(it)?.uid }
         return artists.filter { it.uid in firstIds }
     }
+
+    /**
+     * The artists the Artists tab shows, in the given order: with [primaryOnly] only those first on
+     * an album, otherwise without song-only artists when [hideCollaborators] is on. Search uses it
+     * too, so it does not offer artists that have nothing to show.
+     */
+    fun shown(
+        artists: List<Artist>,
+        albums: Collection<Album>,
+        primaryOnly: Boolean,
+        hideCollaborators: Boolean,
+    ): List<Artist> =
+        when {
+            primaryOnly -> visible(artists, albums)
+            hideCollaborators -> artists.filter { it.explicitAlbums.isNotEmpty() }
+            else -> artists
+        }
 }
 
 fun Context.primaryAlbumArtistsOnly(): Boolean =

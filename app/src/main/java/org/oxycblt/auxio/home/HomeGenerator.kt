@@ -205,10 +205,13 @@ private class HomeGeneratorImpl(
                 if (key == null) visible
                 else if (sort.direction == Sort.Direction.ASCENDING) visible.sortedBy(key)
                 else visible.sortedByDescending(key)
-            } else if (homeSettings.shouldHideCollaborators) {
-                sorted.filter { it.explicitAlbums.isNotEmpty() }
             } else {
-                sorted
+                PrimaryAlbumArtists.shown(
+                    sorted,
+                    deviceLibrary.albums,
+                    false,
+                    homeSettings.shouldHideCollaborators,
+                )
             }
         } ?: emptyList()
 

@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.29.1
+
+## What's Fixed
+- Search listed artists that the Artists tab hides (song-only or secondary album artists), shown with no albums and no songs
+- On the Top songs share card, a name that fits in the smaller size stays on one line instead of leaving a gap above the artist
+
 ## v1.29.0
 
 ## What's New

@@ -75,4 +75,24 @@ class TextWrapTest {
             TextWrap.wrap("Songs for the Night Shift (Live at the Old Mill, 2019)", 2, 24f, width)
         assertTrue(lines.all { it.length <= 24 })
     }
+
+    @Test
+    fun shrinkThenWrapPrefersOneSmallerLineOverTwo() {
+        // One unit per character in the normal size, 0.8 in the smaller one.
+        val normal = { value: String -> value.length.toFloat() }
+        val small = { value: String -> value.length * 0.8f }
+
+        assertEquals(
+            TextWrap.Fit(listOf("Short name"), false),
+            TextWrap.shrinkThenWrap("Short name", 2, 12f, normal, small),
+        )
+        // 14 characters: too wide normally (14 > 12), fits small (11.2).
+        assertEquals(
+            TextWrap.Fit(listOf("Diamond Piano!"), true),
+            TextWrap.shrinkThenWrap("Diamond Piano!", 2, 12f, normal, small),
+        )
+        val long = TextWrap.shrinkThenWrap("Diamond Piano Freestyle", 2, 12f, normal, small)
+        assertEquals(true, long.small)
+        assertEquals(2, long.lines.size)
+    }
 }
