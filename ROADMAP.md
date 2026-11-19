@@ -66,7 +66,7 @@ Built and unit tested where there is logic, and looked at on an emulator, but no
 - Settings in four screens (Appearance with the library tabs, Playback, Library, Backup); week start, what plays from the library or a detail page, headset autoplay, pause on repeat, remember pause, always exit on close, intelligent sorting and the custom playback bar action removed
 - Bottom navigation: home screen with the search row, tabs and floating shuffle button at the bottom; album, genre, playlist and artist pages with the same bottom row; search with filter chips at the bottom; no back buttons, gestures only
 - Queue: search row under the playing strip, sort of the whole queue (name, artist, album, date, duration, random); now playing title centered
-- Playback bar with previous, play and next; wavy seek bar while playing
+- Playback bar with play and next; wavy seek bar while playing
 - Default tab order Artists, Albums, Songs, Playlists, no Genres tab; no three-dot buttons on list rows (long press opens the item menu); black theme for menus, dialogs, sheets and bars
 - Icon: Crescent and Sparkle, and a minimal white outline icon switchable in Settings > Appearance
 - About page with Noxio links, the Auxio credit and fork notice; store listing (fastlane) with a Noxio description in English and German, new screenshots and feature graphic, Auxio's changelogs and other languages removed

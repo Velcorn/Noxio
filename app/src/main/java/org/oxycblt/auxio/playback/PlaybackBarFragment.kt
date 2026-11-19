@@ -73,15 +73,13 @@ class PlaybackBarFragment : ViewBindingFragment<FragmentPlaybackBarBinding>() {
         // The keyboard phone mode plays, pauses and skips with keys (Space, Ctrl+N, Ctrl+B), so the
         // strip only shows what is playing.
         if (KeyboardMode.isActive(requireContext())) {
-            binding.playbackSkipPrev.isVisible = false
             binding.playbackPlayPause.isVisible = false
             binding.playbackSecondaryAction.isVisible = false
         }
 
         // Set up actions
         binding.playbackPlayPause.setOnClickListener { playbackModel.togglePlaying() }
-        binding.playbackSkipPrev.setOnClickListener { playbackModel.prev() }
-        // Noxio: the bar always has the previous and the next song, there is no custom action.
+        // Noxio: the bar always has play and the next song, there is no custom action.
         binding.playbackSecondaryAction.apply {
             setIconResource(R.drawable.ic_skip_next_24)
             contentDescription = getString(R.string.desc_skip_next)
