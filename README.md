@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/badge/license-GPL%20v3-2B6DBE.svg?style=flat" alt="GPL v3">
     <img alt="Minimum SDK Version" src="https://img.shields.io/badge/API-24%2B-1450A8?style=flat">
 </p>
-<p align="center"><b><a href="CHANGELOG.md">Changelog</a></b> · <a href="ROADMAP.md">Roadmap</a> · <a href="https://github.com/Velcorn/Noxio/releases">Releases</a></p>
+<p align="center"><b><a href="CHANGELOG.md">Changelog</a></b> · <a href="docs/GESTURES.md">Gestures</a> · <a href="ROADMAP.md">Roadmap</a> · <a href="https://github.com/Velcorn/Noxio/releases">Releases</a></p>
 
 > [!WARNING]
 > **I'm not an Android developer.** Noxio is a personal project, written almost entirely with an AI assistant for my
@@ -47,10 +47,9 @@ timer** and **tag editing**.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
   a keyboard the search row stays, so it can always be switched off.
-- **One-handed layout:** icon-only tabs at the bottom with Settings as the last tab, the playing strip above them,
-  a floating search button (a long press shuffles or opens the page's menu) instead of a search row, no back buttons (gestures only), no three-dot buttons (long
-  press a row, a page header or its search button, the queue, the playing strip or the song in the player for its menu; sorting
-  is in the page menus), shorter item menus without Share.
+- **One-handed layout:** icon-only tabs at the bottom with Settings as the last tab, the playing strip above
+  them and a floating search button; no back or three-dot buttons, long presses and gestures instead (all in
+  [docs/GESTURES.md](docs/GESTURES.md)).
 - **Faster loading:** the library loads about 2.5 to 3 times faster than in Auxio (the name preparation was the
   bottleneck), with the same result.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
@@ -66,7 +65,7 @@ timer** and **tag editing**.
 - **Shorter settings:** four screens (Appearance, Library, Playback, Backup), with little-used options removed;
   short lists and page titles at the bottom, fixed appearance defaults, hidden files excluded and manual refresh.
 - **Detail pages:** album and artist artwork and lists start at the top, the header is centered; long titles move
-  to reveal the full name. An artist's picture can be one of their album covers instead of the collage.
+  to reveal the full name. An artist's picture can be one of their album covers (A to Z) instead of the collage.
 - **Languages:** English and German cover everything; Auxio's other translations stay, with Noxio's texts in English.
 - **Package** `de.devfin.noxio`, so it installs next to Auxio. Releases come as a universal and a smaller ARM64 APK.
 

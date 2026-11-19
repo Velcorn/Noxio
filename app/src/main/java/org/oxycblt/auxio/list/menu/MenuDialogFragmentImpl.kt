@@ -32,6 +32,7 @@ import org.oxycblt.auxio.databinding.DialogMenuBinding
 import org.oxycblt.auxio.detail.DetailViewModel
 import org.oxycblt.auxio.image.ArtistPictures
 import org.oxycblt.auxio.list.ListViewModel
+import org.oxycblt.auxio.list.sort.Sort
 import org.oxycblt.auxio.music.MusicViewModel
 import org.oxycblt.auxio.music.PlaylistSongs
 import org.oxycblt.auxio.music.PrimaryAlbumArtists
@@ -263,6 +264,7 @@ class ArtistMenuDialogFragment : MenuDialogFragment<Menu.ForArtist>() {
                     PrimaryAlbumArtists.albums(artist, artist.explicitAlbums)
                 else artist.explicitAlbums)
                 .filter { it.covers.covers.isNotEmpty() }
+                .let { Sort(Sort.Mode.ByName, Sort.Direction.ASCENDING).albums(it) }
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val key = context.getString(R.string.set_key_artist_pictures)
         val choices = ArtistPictures.decode(prefs.getString(key, null))

@@ -20,8 +20,4 @@
         android:id="@+id/action_sort"
         android:icon="@drawable/ic_sort_24"
         android:title="@string/lbl_sort" />
-    <item
-        android:id="@+id/action_choose_artist_picture"
-        android:icon="@drawable/ic_artist_24"
-        android:title="@string/action_choose_artist_picture" />
 </menu>

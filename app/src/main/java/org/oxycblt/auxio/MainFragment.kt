@@ -248,11 +248,20 @@ class MainFragment :
 
         binding.playbackSheet.elevation = 0f
 
-        binding.mainScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
-        binding.sheetScrim.setOnClickListener { binding.homeNewPlaylistFab.close() }
+        binding.mainScrim.setOnClickListener {
+            binding.homeNewPlaylistFab.close()
+            hideShuffleAll(binding)
+        }
+        binding.sheetScrim.setOnClickListener {
+            binding.homeNewPlaylistFab.close()
+            hideShuffleAll(binding)
+        }
         // Noxio: the floating button searches what is shown, a long press opens what can be done
         // with it, starting with Shuffle. There is no search row any more.
-        binding.homeShuffleFab.setOnClickListener { startSearch(binding) }
+        binding.homeShuffleFab.setOnClickListener {
+            hideShuffleAll(binding)
+            startSearch(binding)
+        }
         binding.homeShuffleFab.setOnLongClickListener { view ->
             when (currentNavMode(binding)) {
                 NavMode.ARTIST ->
@@ -271,16 +280,13 @@ class MainFragment :
                     detailModel.currentPlaylist.value?.let {
                         listModel.openMenu(R.menu.detail_playlist, it)
                     }
-                else ->
-                    popupMenu(requireContext(), view).apply {
-                        menu.add(R.string.lbl_shuffle_all).setOnMenuItemClickListener {
-                            playbackModel.shuffleAll()
-                            true
-                        }
-                        show()
-                    }
+                else -> showShuffleAll(binding)
             }
             true
+        }
+        binding.homeShuffleAllFab.setOnClickListener {
+            hideShuffleAll(binding)
+            playbackModel.shuffleAll()
         }
         binding.homeNewPlaylistFab.apply {
             inflate(R.menu.new_playlist_actions)
@@ -329,7 +335,12 @@ class MainFragment :
         collectImmediately(detailModel.currentPlaylist) { updateSearchHint(binding) }
         collectImmediately(detailModel.artistTab) { selectCurrentTab(binding) }
         collectImmediately(homeModel.songList, homeModel.isFastScrolling, ::updateFab)
-        collectImmediately(homeModel.settingsShown) {
+        collectImmediately(homeModel.settingsShown) { shown ->
+            if (!shown && homeModel.settingsQuery.value.isNotEmpty()) {
+                binding.mainSearchInput.setText("")
+                homeModel.setSettingsQuery("")
+            }
+            updateSearchField(binding)
             selectCurrentTab(binding)
             updateFab(homeModel.songList.value, homeModel.isFastScrolling.value)
         }
@@ -429,6 +440,10 @@ class MainFragment :
             when (navMode) {
                 NavMode.ARTIST -> detailModel.setArtistQuery(it?.toString().orEmpty())
                 NavMode.PLAYLIST -> detailModel.setPlaylistQuery(it?.toString().orEmpty())
+                NavMode.HOME ->
+                    if (homeModel.settingsShown.value) {
+                        homeModel.setSettingsQuery(it?.toString().orEmpty())
+                    }
                 else -> {}
             }
         }
@@ -487,7 +502,15 @@ class MainFragment :
                 WindowInsetsCompat.toWindowInsetsCompat(insets, view)
                     .getInsets(WindowInsetsCompat.Type.ime())
                     .bottom
-            keyboardLift = max(keyboard - navInsetBottom, 0)
+            val lift = max(keyboard - navInsetBottom, 0)
+            // Noxio: an empty search field goes away with the on-screen keyboard; the floating
+            // search button brings it back. A hardware keyboard has no such inset.
+            if (keyboardLift > 0 && lift == 0 && !keyboardMode) {
+                for (input in listOf(binding.mainSearchInput, binding.queueSearchInput)) {
+                    if (input.hasFocus() && input.text.isEmpty()) input.clearFocus()
+                }
+            }
+            keyboardLift = lift
             applyKeyboardLift(binding)
             insets
         }
@@ -519,9 +542,8 @@ class MainFragment :
         navMode = mode
         // Artists and playlists have a field to filter them. Albums and genres have nothing to
         // filter, so there is no search at all there.
+        updateSearchField(binding)
         val filter = mode == NavMode.ARTIST || mode == NavMode.PLAYLIST
-        binding.mainSearch.isVisible = !filter
-        binding.mainSearchInput.isVisible = filter
         // The home lists are always sorted by name, so only the pages of an artist and a playlist
         // have a sort here. The pages of an album and a genre have it in the header of their list.
         if (filter) {
@@ -557,6 +579,22 @@ class MainFragment :
         val noTabs = !binding.mainTabRow.isVisible
         val extra = if (noTabs) requireContext().getDimenPixels(R.dimen.spacing_medium) else 0
         binding.mainBottomNav.updatePadding(bottom = navInsetBottom + extra)
+    }
+
+    /**
+     * The filter field is for the songs of an artist or a playlist and, on the Settings page of the
+     * home tabs, for the settings; elsewhere the search opens on its own screen.
+     */
+    private fun updateSearchField(binding: FragmentMainBinding) {
+        val settings = navMode == NavMode.HOME && homeModel.settingsShown.value
+        val filter = navMode == NavMode.ARTIST || navMode == NavMode.PLAYLIST || settings
+        binding.mainSearch.isVisible = !filter
+        binding.mainSearchInput.isVisible = filter
+        if (settings) {
+            binding.mainSearchInput.hint = getString(R.string.lbl_search_settings)
+        } else if (!filter && binding.mainSearchInput.text.isNotEmpty()) {
+            binding.mainSearchInput.setText("")
+        }
     }
 
     private fun updateSearchHint(binding: FragmentMainBinding) {
@@ -713,6 +751,25 @@ class MainFragment :
         return true
     }
 
+    /** Noxio: the Shuffle all button above the search button, over a scrim that closes it. */
+    private fun showShuffleAll(binding: FragmentMainBinding) {
+        val search = binding.homeShuffleFab
+        val gap = resources.getDimensionPixelSize(R.dimen.spacing_small)
+        binding.homeShuffleAllFab.translationY = search.translationY - search.height - gap
+        binding.homeShuffleAllFab.show()
+        binding.mainScrim.isInvisible = false
+        binding.sheetScrim.isInvisible = false
+    }
+
+    private fun hideShuffleAll(binding: FragmentMainBinding) {
+        if (!binding.homeShuffleAllFab.isOrWillBeShown) return
+        binding.homeShuffleAllFab.hide()
+        if (!binding.homeNewPlaylistFab.isOpen) {
+            binding.mainScrim.isInvisible = true
+            binding.sheetScrim.isInvisible = true
+        }
+    }
+
     /** Shuffle what is shown: the page of an artist, an album, a genre or a playlist, or all. */
     private fun shuffleShown(binding: FragmentMainBinding) {
         when (currentNavMode(binding)) {
@@ -732,6 +789,10 @@ class MainFragment :
         when (currentNavMode(binding)) {
             NavMode.ARTIST,
             NavMode.PLAYLIST -> showKeyboardFor(binding.mainSearchInput)
+            NavMode.HOME if homeModel.settingsShown.value -> {
+                updateSearchField(binding)
+                showKeyboardFor(binding.mainSearchInput)
+            }
             else -> binding.exploreNavHost.findNavController().navigate(R.id.search_fragment)
         }
     }
@@ -869,11 +930,7 @@ class MainFragment :
         nav.isInvisible = nav.alpha == 0f
         // Albums and genres have sort and more in the header of their list, so no row at all.
         val row = binding.mainRow
-        // The Settings page of the home tabs has nothing to search either.
-        val ownHeader =
-            mode == NavMode.ALBUM ||
-                mode == NavMode.GENRE ||
-                (mode == NavMode.HOME && homeModel.settingsShown.value)
+        val ownHeader = mode == NavMode.ALBUM || mode == NavMode.GENRE
         // In the keyboard phone mode there is no search row: typing opens the search, and on an
         // artist or a playlist page the filter shows while it is used.
         val filtering =
@@ -1130,14 +1187,14 @@ class MainFragment :
         )
     }
 
-    private fun updateCurrentTab(tabType: MusicType) {
+    private fun updateCurrentTab(@Suppress("UNUSED_PARAMETER") tabType: MusicType) {
         val binding = requireBinding()
         selectCurrentTab(binding)
         updateFabVisibility(
             binding,
             homeModel.songList.value,
             homeModel.isFastScrolling.value,
-            tabType,
+            fabTabType(binding),
         )
     }
 
@@ -1237,7 +1294,11 @@ class MainFragment :
 
     /** The kind of list the floating button is for: an artist page has songs, like the song tab. */
     private fun fabTabType(binding: FragmentMainBinding) =
-        if (currentNavMode(binding).let { it != NavMode.HOME && it != NavMode.NONE }) {
+        if (
+            currentNavMode(binding).let { it != NavMode.HOME && it != NavMode.NONE } ||
+                // The Settings page has the search button too, also after the playlists.
+                homeModel.settingsShown.value
+        ) {
             MusicType.SONGS
         } else {
             homeModel.currentTabType.value
@@ -1249,7 +1310,6 @@ class MainFragment :
         isFastScrolling: Boolean,
     ) =
         currentNavMode(binding) == NavMode.NONE ||
-            (currentNavMode(binding) == NavMode.HOME && homeModel.settingsShown.value) ||
             sheetRising == true ||
             songs.isEmpty() ||
             isFastScrolling
@@ -1262,6 +1322,7 @@ class MainFragment :
         if (binding.homeNewPlaylistFab.isOpen) {
             binding.homeNewPlaylistFab.close()
         }
+        hideShuffleAll(binding)
         if (binding.homeNewPlaylistFab.mainFab.isOrWillBeShown) {
             FAB_HIDE_FROM_USER_FIELD.invoke(binding.homeNewPlaylistFab.mainFab, null, false)
         }

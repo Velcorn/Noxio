@@ -3,6 +3,21 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.27.0
+
+## What's New
+- Settings tab: the search button searches every setting; tap a match to open its screen
+- A guide to all taps, long presses and swipes (docs/GESTURES.md)
+
+## What's Improved
+- Home: a long press on the search button shows a Shuffle all button above it
+- An empty search field goes away with the keyboard; the search button brings it back
+- Choose picture lists the albums from A to Z and is only in the Artists tab's menu
+- About and the rest of the Settings tab sit right above the playing strip
+
+## What's Fixed
+- The wide layout's floating button showed the shuffle icon instead of search
+
 ## v1.26.0
 
 ## What's New

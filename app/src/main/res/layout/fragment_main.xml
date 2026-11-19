@@ -60,6 +60,17 @@
                 android:contentDescription="@string/lbl_search"
                 android:src="@drawable/ic_search_24" />
 
+            <!-- Noxio: pops up above the search button on a long press on the home screen. -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/home_shuffle_all_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_medium"
+                android:layout_gravity="bottom|end"
+                android:contentDescription="@string/lbl_shuffle_all"
+                android:src="@drawable/ic_shuffle_off_24"
+                android:visibility="gone" />
+
         </org.oxycblt.auxio.ui.EdgeFrameLayout>
 
     </org.oxycblt.auxio.ui.EatInsetsFrameLayout>

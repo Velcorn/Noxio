@@ -260,6 +260,15 @@ constructor(
     /** Whether the Settings page at the end of the home tabs is shown. */
     val settingsShown: StateFlow<Boolean> = _settingsShown
 
+    private val _settingsQuery = MutableStateFlow("")
+
+    /** What the settings are searched for on the Settings page, empty for the plain list. */
+    val settingsQuery: StateFlow<String> = _settingsQuery
+
+    fun setSettingsQuery(query: String) {
+        _settingsQuery.value = query
+    }
+
     /**
      * Update whether the user is fast scrolling or not in the home view.
      *

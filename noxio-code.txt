@@ -12,6 +12,7 @@
 detail/DetailBottomBar.kt
 detail/DiscGroups.kt
 settings/Changelog.kt
+settings/SettingsSearch.kt
 music/PrimaryAlbumArtists.kt
 list/recycler/BottomAlignment.kt
 playback/service/SleepTimerController.kt

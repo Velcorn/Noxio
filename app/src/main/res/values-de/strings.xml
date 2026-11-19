@@ -355,6 +355,8 @@
     <string name="set_backup_summary">Einstellungen, Hörverlauf und Wiedergabelisten</string>
     <string name="set_about_summary">Version, Änderungen und Lizenzen</string>
     <string name="set_stats_summary">Bestenlisten, Jahresrückblick und Karten zum Teilen</string>
+    <string name="lbl_no_settings_found">Keine Einstellungen gefunden</string>
+    <string name="lbl_search_settings">Einstellungen durchsuchen</string>
     <string name="lbl_shuffle_all">Alles zufällig</string>
     <string name="lbl_queue_shuffle">Warteschlange mischen</string>
     <string name="lbl_queue_remove">Aus der Warteschlange entfernen</string>

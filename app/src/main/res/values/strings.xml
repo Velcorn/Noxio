@@ -163,6 +163,8 @@
     <string name="set_backup_summary">Settings, listening history and playlists</string>
     <string name="set_about_summary">Version, changelog and licenses</string>
     <string name="set_stats_summary">Top lists, year in review and share cards</string>
+    <string name="lbl_no_settings_found">No settings found</string>
+    <string name="lbl_search_settings">Search settings</string>
     <string name="lbl_shuffle_all">Shuffle all</string>
     <string name="lbl_queue_shuffle">Shuffle queue</string>
     <string name="lbl_queue_remove">Remove from queue</string>
