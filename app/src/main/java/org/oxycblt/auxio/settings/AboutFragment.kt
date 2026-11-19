@@ -73,7 +73,7 @@ class AboutFragment : ViewBindingFragment<FragmentAboutBinding>() {
             }
         }
         binding.aboutVersion.text = BuildConfig.VERSION_NAME
-        binding.aboutChangelog.setOnClickListener {
+        binding.aboutVersionRow.setOnClickListener {
             findNavController().navigate(R.id.changelog_fragment)
         }
         binding.aboutCode.setOnClickListener { requireContext().openInBrowser(LINK_SOURCE) }
@@ -111,6 +111,6 @@ class AboutFragment : ViewBindingFragment<FragmentAboutBinding>() {
         const val LINK_SOURCE = "https://github.com/Velcorn/Noxio"
         const val LINK_NEW_ISSUE = "$LINK_SOURCE/issues/new"
         const val LINK_AUXIO = "https://github.com/OxygenCobalt/Auxio"
-        const val LINK_LICENSES = "$LINK_AUXIO/wiki/Licenses"
+        const val LINK_LICENSES = "$LINK_SOURCE/blob/main/LICENSE"
     }
 }

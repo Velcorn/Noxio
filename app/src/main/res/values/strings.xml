@@ -411,6 +411,8 @@
     <string name="set_launcher_icon">App icon</string>
     <string name="set_launcher_icon_default">Default</string>
     <string name="set_launcher_icon_minimal">Minimal, white without a background</string>
+    <string name="set_pause_other_audio">Pause for other sounds</string>
+    <string name="set_pause_other_audio_desc">Also for apps that do not ask Android first, like voice messages in some messengers, and play on afterwards</string>
     <string name="set_keep_shuffle">Remember shuffle</string>
     <string name="set_keep_shuffle_desc">Keep shuffle on when playing a new song</string>
 

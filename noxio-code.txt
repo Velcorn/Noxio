@@ -15,6 +15,7 @@ settings/Changelog.kt
 settings/SettingsSearch.kt
 music/PrimaryAlbumArtists.kt
 list/recycler/BottomAlignment.kt
+playback/service/OtherAudio.kt
 playback/service/SleepTimerController.kt
 playback/timer/SleepTimer.kt
 playback/timer/SleepTimerMath.kt

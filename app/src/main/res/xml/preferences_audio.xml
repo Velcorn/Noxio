@@ -15,6 +15,12 @@
         app:summary="@string/set_rewind_prev_desc"
         app:title="@string/set_rewind_prev" />
 
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="@string/set_key_pause_other_audio"
+        app:summary="@string/set_pause_other_audio_desc"
+        app:title="@string/set_pause_other_audio" />
+
     <Preference
         app:key="@string/set_key_equalizer"
         app:summary="@string/set_equalizer_desc"

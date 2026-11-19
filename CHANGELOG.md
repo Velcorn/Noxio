@@ -3,6 +3,15 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.28.0
+
+## What's New
+- Pause for other sounds (Playback settings): Noxio also pauses for apps that play sound without asking Android first, like voice messages in Element, and plays on afterwards
+
+## What's Improved
+- About: the name is centered with the icon beside it; a tap on Version opens the changelog
+- Licenses opens Noxio's license
+
 ## v1.27.2
 
 ## What's Improved

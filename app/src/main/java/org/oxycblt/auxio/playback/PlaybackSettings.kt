@@ -52,6 +52,8 @@ interface PlaybackSettings : Settings<PlaybackSettings.Listener> {
     val keepShuffle: Boolean
     /** Whether to rewind when the skip previous button is pressed before skipping back. */
     val rewindWithPrev: Boolean
+    /** Noxio: whether to pause for sounds of other apps that do not ask for audio focus. */
+    val pauseForOtherAudio: Boolean
     /** Whether a song should pause after every repeat. */
     val pauseOnRepeat: Boolean
     /** Whether to maintain the play/pause state when skipping or editing the queue */
@@ -95,6 +97,9 @@ class PlaybackSettingsImpl @Inject constructor(@ApplicationContext context: Cont
 
     override val rewindWithPrev: Boolean
         get() = sharedPreferences.getBoolean(getString(R.string.set_key_rewind_prev), true)
+
+    override val pauseForOtherAudio: Boolean
+        get() = sharedPreferences.getBoolean(getString(R.string.set_key_pause_other_audio), true)
 
     override val pauseOnRepeat: Boolean
         get() = false

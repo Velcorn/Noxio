@@ -60,6 +60,8 @@
     <string name="lbl_info_backup">Ein Backup enthält deine Einstellungen, deinen Hörverlauf und deine Wiedergabelisten. Es wird im gewählten Ordner als Noxio_Backup_YYYY-MM-DD_HH-MM-SS.zip gespeichert, die letzten 5 bleiben.\n\nEin Backup, das viel weniger enthält als dein größtes, wird erst gespeichert, wenn du es bestätigst.\n\nBeim Wiederherstellen werden die Einstellungen ersetzt, Wiedergaben und Wiedergabelisten werden hinzugefügt. Nichts wird gelöscht.</string>
     <string name="set_replay_gain_mode_track">Titel bevorzugen</string>
     <string name="set_replay_gain_mode_album">Album bevorzugen</string>
+    <string name="set_pause_other_audio">Für andere Töne pausieren</string>
+    <string name="set_pause_other_audio_desc">Auch für Apps, die Android nicht vorher fragen, etwa Sprachnachrichten mancher Messenger, und danach weiterspielen</string>
     <string name="set_keep_shuffle">Zufällig-Einstellung merken</string>
     <string name="set_keep_shuffle_desc">Zufällig anlassen, wenn ein neues Lied abgespielt wird</string>
     <string name="set_rewind_prev" ns0:ignore="Typos">Zurückspulen, bevor das Lied zurück geändert wird</string>

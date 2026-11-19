@@ -37,21 +37,19 @@
                         android:layout_marginTop="@dimen/spacing_medium"
                         android:contentDescription="@string/desc_auxio_icon"
                         android:src="@mipmap/ic_launcher"
+                        android:layout_marginEnd="@dimen/spacing_medium"
                         app:layout_constraintEnd_toStartOf="@+id/about_app_name"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/about_app_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_medium"
                         android:text="@string/info_app_name"
                         android:textAppearance="?attr/textAppearanceTitleLargeEmphasized"
                         app:layout_constraintBottom_toBottomOf="@+id/about_auxio_icon"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/about_auxio_icon"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/about_auxio_icon" />
 
                     <TextView
@@ -102,30 +100,31 @@
                         app:layout_constraintTop_toBottomOf="@+id/about_version_title"
                         tools:text="16.16.16" />
 
-                    <TextView
-                        android:id="@+id/about_changelog"
-                        style="@style/Widget.Auxio.TextView.Icon.Clickable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_mid_medium"
-                        android:text="@string/lbl_changelog"
-                        app:drawableStartCompat="@drawable/ic_changelog_24"
-                        app:layout_constraintBottom_toTopOf="@+id/about_code"
+                    <!-- Noxio: the version row opens the changelog. -->
+                    <View
+                        android:id="@+id/about_version_row"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:contentDescription="@string/lbl_changelog"
+                        android:focusable="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/about_version"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/about_version" />
+                        app:layout_constraintTop_toTopOf="@+id/about_version_title" />
 
                     <TextView
                         android:id="@+id/about_code"
                         style="@style/Widget.Auxio.TextView.Icon.Clickable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
                         android:text="@string/lbl_code"
                         app:drawableStartCompat="@drawable/ic_code_24"
                         app:layout_constraintBottom_toTopOf="@+id/about_licenses"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/about_changelog" />
+                        app:layout_constraintTop_toBottomOf="@+id/about_version" />
 
                     <TextView
                         android:id="@+id/about_licenses"

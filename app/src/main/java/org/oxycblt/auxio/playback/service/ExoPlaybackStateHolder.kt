@@ -20,9 +20,15 @@ package org.oxycblt.auxio.playback.service
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
+import android.media.AudioPlaybackConfiguration
 import android.media.audiofx.AudioEffect
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.OpenableColumns
 import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -109,6 +115,66 @@ class ExoPlaybackStateHolder(
     var sessionOngoing = false
         private set
 
+    // Noxio: pausing for other apps' sounds that do not ask for audio focus, see OtherAudio.
+    private val otherAudio = OtherAudio()
+    private val audioManager = context.getSystemService(AudioManager::class.java)
+    /** Set while Noxio pauses or plays on because of another app, not because of the user. */
+    private var otherAudioChange = false
+    private val playbackCallback =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            object : AudioManager.AudioPlaybackCallback() {
+                override fun onPlaybackConfigChanged(
+                    configs: MutableList<AudioPlaybackConfiguration>,
+                ) {
+                    // Noxio's own player can briefly be there twice when the song changes, so
+                    // only a change that lasts counts.
+                    otherAudioHandler.removeCallbacks(checkOtherPlayers)
+                    otherAudioHandler.postDelayed(checkOtherPlayers, OTHER_AUDIO_DELAY_MS)
+                }
+            }
+        } else {
+            null
+        }
+
+    private val otherAudioHandler = Handler(Looper.getMainLooper())
+    private val checkOtherPlayers = Runnable { onOtherPlayers(currentOthers()) }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun othersPlaying(configs: List<AudioPlaybackConfiguration>) =
+        OtherAudio.othersAmong(
+            // Android does not tell other apps whether a player plays, but its description does;
+            // players that only exist, like the idle ones of the phone app, are left out.
+            configs
+                .filter { OtherAudio.isStarted(it.toString()) }
+                .map { it.audioAttributes.usage to it.audioAttributes.contentType },
+            android.media.AudioAttributes.USAGE_MEDIA,
+            android.media.AudioAttributes.CONTENT_TYPE_MUSIC,
+        )
+
+    private fun currentOthers() =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && audioManager != null) {
+            othersPlaying(audioManager.activePlaybackConfigurations)
+        } else {
+            0
+        }
+
+    private fun onOtherPlayers(others: Int) {
+        if (!playbackSettings.pauseForOtherAudio) return
+        when (otherAudio.onPlayersChanged(others, player.isPlaying)) {
+            OtherAudio.Action.PAUSE -> {
+                L.d("Another app plays a sound, pausing")
+                otherAudioChange = true
+                player.playWhenReady = false
+            }
+            OtherAudio.Action.RESUME -> {
+                L.d("The other app's sound ended, playing on")
+                otherAudioChange = true
+                player.playWhenReady = true
+            }
+            OtherAudio.Action.NONE -> {}
+        }
+    }
+
     fun attach() {
         playbackManager.registerStateHolder(this)
         musicRepository.addUpdateListener(this)
@@ -117,11 +183,18 @@ class ExoPlaybackStateHolder(
         playbackSettings.registerListener(this)
         imageSettings.registerListener(this)
         sleepTimerController.attach()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && playbackCallback != null) {
+            audioManager?.registerAudioPlaybackCallback(playbackCallback, null)
+        }
     }
 
     fun release() {
         saveJob.cancel()
         sleepTimerController.release()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && playbackCallback != null) {
+            audioManager?.unregisterAudioPlaybackCallback(playbackCallback)
+        }
+        otherAudioHandler.removeCallbacks(checkOtherPlayers)
         playbackManager.unregisterStateHolder(this)
         musicRepository.removeUpdateListener(this)
         player.removeListener(this)
@@ -648,6 +721,12 @@ class ExoPlaybackStateHolder(
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         super.onIsPlayingChanged(isPlaying)
         autoSaver.setPlaying(isPlaying)
+        // Only a change by the user (or anything else) starts over what counts as another sound.
+        if (otherAudioChange) {
+            otherAudioChange = false
+        } else {
+            otherAudio.onOwnPlaying(isPlaying, currentOthers())
+        }
         // Where it stopped or started is worth keeping, however it was started or stopped.
         deferSave()
     }
@@ -855,6 +934,9 @@ class ExoPlaybackStateHolder(
     }
 
     private companion object {
+        /** How long another app's player has to be there before it counts. */
+        private const val OTHER_AUDIO_DELAY_MS = 700L
+
         const val SAVE_BUFFER = 5000L
         const val AUTO_SAVE_INTERVAL = 15_000L
     }
