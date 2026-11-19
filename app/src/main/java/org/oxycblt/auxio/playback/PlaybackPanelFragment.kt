@@ -127,18 +127,16 @@ class PlaybackPanelFragment :
             offscreenPageLimit = 1
         }
 
-        // Set up fast seek overlay
+        // Noxio: a tap on the song, artist or album does nothing, a long press opens the song's
+        // menu with Go to artist and Go to album.
         binding.playbackSong.apply {
             isSelected = true
-            setOnClickListener { navigateToCurrentSong() }
         }
         binding.playbackArtist.apply {
             isSelected = true
-            setOnClickListener { navigateToCurrentArtist() }
         }
         binding.playbackAlbum?.apply {
             isSelected = true
-            setOnClickListener { navigateToCurrentAlbum() }
         }
 
         binding.playbackSeekBar?.listener = this
@@ -386,18 +384,6 @@ class PlaybackPanelFragment :
                 binding.playbackPager.setCurrentItem(command.scroll, false)
             }
         }
-    }
-
-    private fun navigateToCurrentSong() {
-        playbackModel.song.value?.let(detailModel::showAlbum)
-    }
-
-    private fun navigateToCurrentArtist() {
-        playbackModel.song.value?.let(detailModel::showArtist)
-    }
-
-    private fun navigateToCurrentAlbum() {
-        playbackModel.song.value?.let { detailModel.showAlbum(it.album) }
     }
 
     override fun seek(direction: Direction) {

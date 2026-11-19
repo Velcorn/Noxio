@@ -45,8 +45,7 @@ collage.
 |---|---|---|
 | Tap | the playing strip | opens the player |
 | Long press | the playing strip | the song's menu |
-| Tap | the song, artist or album in the player | goes to the song's album, the artist or the album |
-| Long press | the song, artist or album in the player | the song's menu |
+| Long press | the song, artist or album in the player | the song's menu, with Go to artist and Go to album |
 | Swipe left or right | the cover | the next or previous song |
 | Swipe up | the player | opens the queue |
 | Hold | play/pause | the sleep timer |

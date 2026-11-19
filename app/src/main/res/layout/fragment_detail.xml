@@ -96,8 +96,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_medium"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:textColor="?android:attr/textColorSecondary"
                         app:layout_constraintBottom_toTopOf="@+id/detail_info"
                         app:layout_constraintEnd_toEndOf="parent"

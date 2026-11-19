@@ -143,9 +143,7 @@ class AlbumDetailFragment : DetailFragment<Album, Song>() {
         binding.detailSubhead.apply {
             text = album.displayArtists(context.primaryAlbumArtistsOnly()).resolveNames(context)
 
-            // Add a QoL behavior where navigation to the artist will occur if the artist
-            // name is pressed.
-            setOnClickListener { detailModel.showArtist(album) }
+            // Noxio: no tap to the artist, the long press menu of the header has Go to artist.
         }
 
         // Date, song count, and duration map to the info text

@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.27.1
+
+## What's Changed
+- A tap on the song, artist or album in the player, or on the artist of an album page, no longer opens the album or artist; their long press menus have Go to artist and Go to album
+
 ## v1.27.0
 
 ## What's New
