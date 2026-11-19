@@ -115,6 +115,11 @@
         android:label="changelog_fragment"
         tools:layout="@layout/fragment_changelog" />
     <fragment
+        android:id="@+id/credits_fragment"
+        android:name="org.oxycblt.auxio.settings.CreditsFragment"
+        android:label="credits_fragment"
+        tools:layout="@layout/fragment_credits" />
+    <fragment
         android:id="@+id/stats_fragment"
         android:name="org.oxycblt.auxio.stats.StatsFragment"
         android:label="stats_fragment"

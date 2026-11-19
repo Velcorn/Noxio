@@ -1,0 +1,15 @@
+{
+  "uniqueId": "org.oxycblt:auxio",
+  "name": "Auxio",
+  "description": "The music player Noxio is a fork of.",
+  "website": "https://github.com/OxygenCobalt/Auxio",
+  "developers": [
+    {
+      "name": "Alexander Capehart (OxygenCobalt)"
+    }
+  ],
+  "licenses": [
+    "GPL-3.0-or-later"
+  ],
+  "artifactVersion": ""
+}

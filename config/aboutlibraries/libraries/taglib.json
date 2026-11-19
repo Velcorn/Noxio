@@ -1,0 +1,16 @@
+{
+  "uniqueId": "org.taglib:taglib",
+  "name": "TagLib",
+  "description": "Reads and writes the tags of music files.",
+  "website": "https://taglib.org",
+  "developers": [
+    {
+      "name": "The TagLib developers"
+    }
+  ],
+  "licenses": [
+    "LGPL-2.1-only",
+    "MPL-1.1"
+  ],
+  "artifactVersion": ""
+}

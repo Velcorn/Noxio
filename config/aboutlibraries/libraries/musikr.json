@@ -1,0 +1,15 @@
+{
+  "uniqueId": "org.oxycblt:musikr",
+  "name": "Musikr",
+  "description": "Auxio's music library loader.",
+  "website": "https://github.com/OxygenCobalt/Auxio",
+  "developers": [
+    {
+      "name": "Alexander Capehart (OxygenCobalt)"
+    }
+  ],
+  "licenses": [
+    "GPL-3.0-or-later"
+  ],
+  "artifactVersion": ""
+}

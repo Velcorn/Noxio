@@ -1,0 +1,15 @@
+{
+  "uniqueId": "androidx.media3:media3",
+  "name": "Media3 (ExoPlayer)",
+  "description": "Audio playback, built from source.",
+  "website": "https://github.com/androidx/media",
+  "developers": [
+    {
+      "name": "The Android Open Source Project"
+    }
+  ],
+  "licenses": [
+    "Apache-2.0"
+  ],
+  "artifactVersion": ""
+}

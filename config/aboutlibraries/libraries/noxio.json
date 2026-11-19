@@ -1,0 +1,15 @@
+{
+  "uniqueId": "de.devfin:noxio",
+  "artifactVersion": "",
+  "name": "Noxio",
+  "description": "This app.",
+  "website": "https://github.com/Velcorn/Noxio",
+  "developers": [
+    {
+      "name": "Velcorn"
+    }
+  ],
+  "licenses": [
+    "GPL-3.0-or-later"
+  ]
+}

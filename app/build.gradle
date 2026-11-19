@@ -7,6 +7,7 @@ plugins {
     id "dagger.hilt.android.plugin"
     id "com.google.devtools.ksp"
     id "jacoco"
+    id "com.mikepenz.aboutlibraries.plugin.android"
 }
 
 android {
@@ -270,6 +271,9 @@ dependencies {
 
     // Fuzzy search
     implementation 'org.apache.commons:commons-text:1.15.0'
+
+    // Credits: reads the library list the AboutLibraries plugin writes at build time
+    implementation "com.mikepenz:aboutlibraries-core:15.3.0"
 }
 
 // Copy the changelog of the repository into the assets before every build.
@@ -279,3 +283,8 @@ def copyChangelog = tasks.register("copyChangelog", Copy) {
     rename { "changelog.md" }
 }
 tasks.named("preBuild") { dependsOn copyChangelog }
+
+// Noxio: the credits in About. Libraries Gradle cannot see (Auxio, Media3 from source, TagLib,
+// FFmpeg) and fixed licenses are in config/aboutlibraries.
+// ("collect" is also a Groovy method, so the block form does not work.)
+aboutLibraries.collect.configPath.set(rootProject.layout.projectDirectory.dir("config/aboutlibraries"))

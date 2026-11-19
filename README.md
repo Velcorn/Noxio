@@ -58,6 +58,7 @@ timer** and **tag editing**.
 - **Short and square screens:** a compact player, totals in the stats title row and a lower album
   header, so more fits on screens like the Clicks Communicator.
 - **Changelog:** every Noxio release can be read in the app, under About (bundled, so it works offline).
+- **Credits:** About > Licenses lists Noxio, what it is built on and every library it ships, with the full license texts (bundled).
 - **Look:** pure black theme, rounded UI, a wavy seek bar (can be turned off), and a minimal white outline icon next to the default
   one. Neither icon has a background layer, so shape-cutting launchers like Kvaesitso leave them whole.
 - **Explained settings:** an "i" in the header of the less obvious groups (ReplayGain, keyboard, library, backup)

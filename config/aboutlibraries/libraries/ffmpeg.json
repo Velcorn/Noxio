@@ -1,0 +1,15 @@
+{
+  "uniqueId": "org.ffmpeg:ffmpeg",
+  "name": "FFmpeg",
+  "description": "Decodes formats Android cannot play by itself, through media3-decoder-ffmpeg.",
+  "website": "https://ffmpeg.org",
+  "developers": [
+    {
+      "name": "The FFmpeg developers"
+    }
+  ],
+  "licenses": [
+    "LGPL-2.1-or-later"
+  ],
+  "artifactVersion": ""
+}
