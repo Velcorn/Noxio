@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.31.2
+
+## What's Improved
+- Popup menus have more rounded corners, in every theme
+- The review menu item says which review it opens: "2026 review" or "All-time review" (German "Rückblick 2026", "Gesamtrückblick")
+
 ## v1.31.1
 
 ## What's Improved
