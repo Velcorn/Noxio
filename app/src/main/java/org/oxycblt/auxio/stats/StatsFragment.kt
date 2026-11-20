@@ -98,7 +98,8 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
                 setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.action_wrapped -> {
-                            StatsWrappedDialog.of(statsModel.wrappedYear())
+                            (if (statsModel.reviewIsAllTime()) StatsWrappedDialog.allTime()
+                                else StatsWrappedDialog.of(statsModel.wrappedYear()))
                                 .show(childFragmentManager, StatsWrappedDialog.TAG)
                             true
                         }

@@ -215,12 +215,18 @@ constructor(
     /** Read an imported stats file. [fileName] tells which week a Musicolet export is for. */
     fun parseCsv(text: String, fileName: String?) = StatsCsvImport.parse(text, fileName)
 
-    /** A year in review with a closer look at its top artist and album, for the Wrapped cards. */
+    /** A year review with a closer look at its top artist, for the review cards. */
     data class Wrapped(
         val review: YearInReview,
         val topArtist: ItemStats?,
-        val topAlbum: ItemStats?,
     )
+
+    data class AllTimeWrapped(
+        val review: AllTimeReview,
+        val topArtist: ItemStats?,
+    )
+
+    fun reviewIsAllTime(): Boolean = query.value.period == StatsPeriod.ALL
 
     /**
      * The year the Wrapped cards are about: the one that is shown in the year view, otherwise the
@@ -246,8 +252,24 @@ constructor(
             Wrapped(
                 review,
                 look(StatsCategory.ARTISTS, review.topArtist),
-                look(StatsCategory.ALBUMS, review.topAlbum),
             )
+        }
+
+    suspend fun loadAllTimeWrapped(): AllTimeWrapped =
+        withContext(Dispatchers.IO) {
+            val unknown = context.getString(R.string.def_artist)
+            val review = repository.allTimeReview(unknown)
+            val topArtist =
+                review.topArtist?.let {
+                    repository.itemStats(
+                        StatsCategory.ARTISTS,
+                        it.key,
+                        StatsPeriod.ALL,
+                        review.range,
+                        unknown,
+                    )
+                }
+            AllTimeWrapped(review, topArtist)
         }
 
     /** Write the full play history as CSV. Must be called off the main thread. */

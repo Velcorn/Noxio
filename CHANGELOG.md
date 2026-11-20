@@ -3,6 +3,16 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.31.0
+
+## What's New
+- Review for all time: when the stats show All time, the review has six cards: overview with a bar per year, Through the years (top artist and song of each year), top artist, top songs, listening clock and a summary with a years × months grid
+- Listening clock: a round 24-hour chart of when you listen, with the time of day you listen most, in both reviews
+
+## What's Changed
+- "Year in review" is now called "Review" and follows the shown period: a year, or all time
+- The yearly review drops the top album card; the top album stays on the summary
+
 ## v1.30.0
 
 ## What's Changed

@@ -176,4 +176,83 @@ class StatsWrappedTest {
         assertEquals(30L, result.monthListenedMs[Calendar.FEBRUARY])
         assertEquals(4, result.dailyLevels.values.single())
     }
+
+    @Test
+    fun reviewHourCountsSkipEstimatedAndBaselineEvents() {
+        val real =
+            play("Real", startedAt = at(2026, 6, 1))
+                .copy(
+                    startedAt =
+                        calendar()
+                            .apply {
+                                timeInMillis = at(2026, 6, 1)
+                                set(Calendar.HOUR_OF_DAY, 23)
+                            }
+                            .timeInMillis,
+                )
+        val result =
+            review(
+                listOf(
+                    real,
+                    real.copy(estimated = true),
+                    real.copy(startedAt = PlayEvent.BASELINE_TIME),
+                ),
+            )
+        assertEquals(1, result.hourPlays[23])
+        assertEquals(24, result.hourPlays.size)
+    }
+
+    @Test
+    fun allTimeCountsBaselineButDatesAndClockDoNot() {
+        val dated = play("Dated", artist = "A", startedAt = at(2024, 2, 1))
+        val guessed =
+            play("Imported", artist = "A", startedAt = at(2024, 7, 1)).copy(estimated = true)
+        val baseline = play("Old", artist = "Old artist", startedAt = PlayEvent.BASELINE_TIME)
+        val result = allTimeReview(listOf(dated, guessed, baseline), calendar = calendar())
+        assertEquals(3, result.plays)
+        assertEquals(180_000L, result.listenedMs)
+        assertEquals(at(2024, 2, 1), result.firstPlayAt)
+        assertTrue(result.topSongs.any { it.name == "Old" })
+        assertEquals("A", result.topArtist?.name)
+        assertEquals(listOf(2024), result.years.map { it.year })
+        assertEquals(2, result.years.single().plays)
+        assertEquals(1, result.hourPlays.sum())
+        assertEquals(8, result.yearMonthLevels.single().second.sum())
+        assertEquals(1, result.weekdayPlays.sum())
+    }
+
+    @Test
+    fun allTimeYearsIncludeGapsAndPerYearTops() {
+        val events =
+            listOf(
+                play("First", artist = "Alpha", startedAt = at(2020, 1, 1)),
+                play("Last", artist = "Beta", startedAt = at(2022, 1, 1), listenedMs = 500_000),
+            )
+        val result = allTimeReview(events, calendar = calendar())
+        assertEquals(listOf(2020, 2021, 2022), result.years.map { it.year })
+        assertEquals(0, result.years[1].plays)
+        assertEquals("Alpha", result.years.first().topArtist?.name)
+        assertEquals("Last", result.years.last().topSong?.name)
+        assertEquals(2022, result.busiestYear)
+    }
+
+    @Test
+    fun allTimeGridLevelsAreRelativeToTheLargestMonth() {
+        assertEquals(listOf(0, 1, 2, 4), monthLevels(listOf(0, 10, 50, 100)))
+        assertEquals(listOf(0, 0), monthLevels(listOf(0, 0)))
+        val result = allTimeReview(emptyList(), calendar = calendar())
+        assertTrue(result.yearMonthLevels.isEmpty())
+        assertNull(result.firstPlayAt)
+        assertNull(result.busiestYear)
+    }
+
+    @Test
+    fun timeOfDayUsesTheFourBucketsIncludingLateNight() {
+        fun hours(vararg values: Int) = List(24) { if (it in values) 1 else 0 }
+        assertEquals(TimeOfDay.MORNING, timeOfDay(hours(5, 6)))
+        assertEquals(TimeOfDay.AFTERNOON, timeOfDay(hours(12, 13)))
+        assertEquals(TimeOfDay.EVENING, timeOfDay(hours(17, 18)))
+        assertEquals(TimeOfDay.NIGHT, timeOfDay(hours(23, 4)))
+        assertNull(timeOfDay(List(24) { 0 }))
+    }
 }

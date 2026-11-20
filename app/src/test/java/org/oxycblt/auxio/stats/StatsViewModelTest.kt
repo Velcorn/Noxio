@@ -97,6 +97,15 @@ class StatsViewModelTest {
     }
 
     @Test
+    fun reviewUsesAllTimeOnlyWhenThatPeriodIsShown() {
+        assertFalse(model.reviewIsAllTime())
+        model.setPeriod(StatsPeriod.ALL)
+        assertTrue(model.reviewIsAllTime())
+        model.setPeriod(StatsPeriod.YEAR)
+        assertFalse(model.reviewIsAllTime())
+    }
+
+    @Test
     fun previousGoesBackAndNextForwardButNotPastToday() {
         model.previous()
         model.previous()
@@ -271,7 +280,7 @@ class StatsViewModelTest {
     }
 
     @Test
-    fun theWrappedCardsLookCloserAtTheTopArtistAndAlbumOfTheYear() = runBlocking {
+    fun theWrappedCardsLookCloserAtTheTopArtistOfTheYear() = runBlocking {
         val events =
             listOf(
                 PlayEvent(
@@ -294,10 +303,7 @@ class StatsViewModelTest {
         val wrapped = model.loadWrapped(2026)
         assertEquals(2026, wrapped.review.year)
         assertEquals(
-            listOf(
-                StatsCategory.ARTISTS to StatsPeriod.YEAR,
-                StatsCategory.ALBUMS to StatsPeriod.YEAR,
-            ),
+            listOf(StatsCategory.ARTISTS to StatsPeriod.YEAR),
             repository.looked,
         )
     }

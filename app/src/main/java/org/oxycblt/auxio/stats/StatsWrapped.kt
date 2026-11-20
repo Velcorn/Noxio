@@ -20,6 +20,7 @@ package org.oxycblt.auxio.stats
 
 import java.util.Calendar
 import java.util.Locale
+import kotlin.math.roundToInt
 
 /**
  * The numbers of a year in review ("Wrapped").
@@ -54,6 +55,7 @@ data class YearInReview(
     val busiestMonth: Int?,
     val weekdayPlays: List<Int>,
     val busiestWeekday: Int?,
+    val hourPlays: List<Int>,
 ) {
     val isEmpty: Boolean
         get() = plays == 0
@@ -92,6 +94,7 @@ fun yearInReview(
     val monthPlays = IntArray(12)
     val monthListened = LongArray(12)
     val weekdayPlays = IntArray(7)
+    val hourPlays = IntArray(24)
     for (event in inYear) {
         calendar.timeInMillis = event.startedAt
         val month = calendar.get(Calendar.MONTH)
@@ -100,6 +103,7 @@ fun yearInReview(
         // The day of an imported play is only a guess.
         if (!event.hasGuessedTime) {
             weekdayPlays[(calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7]++
+            hourPlays[calendar.get(Calendar.HOUR_OF_DAY)]++
         }
     }
     val busiestWeekdayIndex = weekdayPlays.indices.maxByOrNull { weekdayPlays[it] }
@@ -125,7 +129,141 @@ fun yearInReview(
         weekdayPlays = weekdayPlays.toList(),
         busiestWeekday =
             busiestWeekdayIndex?.takeIf { weekdayPlays[it] > 0 }?.let { (it + 1) % 7 + 1 },
+        hourPlays = hourPlays.toList(),
     )
+}
+
+data class YearSummary(
+    val year: Int,
+    val plays: Int,
+    val listenedMs: Long,
+    val topArtist: RankedItem?,
+    val topSong: RankedItem?,
+)
+
+data class AllTimeReview(
+    val range: LongRange,
+    val plays: Int,
+    val listenedMs: Long,
+    val songs: Int,
+    val artists: Int,
+    val firstPlayAt: Long?,
+    val topArtist: RankedItem?,
+    val topAlbum: RankedItem?,
+    val topSongs: List<RankedItem>,
+    val years: List<YearSummary>,
+    val yearMonthLevels: List<Pair<Int, List<Int>>>,
+    val busiestYear: Int?,
+    val hourPlays: List<Int>,
+    val weekdayPlays: List<Int>,
+    val busiestWeekday: Int?,
+) {
+    val isEmpty: Boolean
+        get() = plays == 0
+}
+
+fun allTimeReview(
+    events: List<PlayEvent>,
+    unknownArtist: String = "Unknown artist",
+    calendar: Calendar = Calendar.getInstance(),
+    topSongs: Int = 5,
+): AllTimeReview {
+    val summary = summarize(events, limit = Int.MAX_VALUE, unknownArtist = unknownArtist)
+    val dated = events.filter { it.startedAt != PlayEvent.BASELINE_TIME }
+    val byYear = dated.groupBy { event ->
+        calendar.timeInMillis = event.startedAt
+        calendar.get(Calendar.YEAR)
+    }
+    val years =
+        if (byYear.isEmpty()) {
+            emptyList()
+        } else {
+            val first = byYear.keys.minOrNull()!!
+            val last = byYear.keys.maxOrNull()!!
+            (first..last).map { year ->
+                val yearEvents = byYear[year].orEmpty()
+                val yearSummary =
+                    summarize(yearEvents, limit = Int.MAX_VALUE, unknownArtist = unknownArtist)
+                YearSummary(
+                    year,
+                    yearSummary.plays,
+                    yearSummary.listenedMs,
+                    yearSummary.artists.firstOrNull(),
+                    yearSummary.songs.firstOrNull(),
+                )
+            }
+        }
+    val monthTotals = years.associate { yearSummary ->
+        val year = yearSummary.year
+        val yearEvents = byYear[year].orEmpty()
+        val totals = LongArray(12)
+        yearEvents.forEach { event ->
+            calendar.timeInMillis = event.startedAt
+            totals[calendar.get(Calendar.MONTH)] += event.listenedMs
+        }
+        year to totals.toList()
+    }
+    val orderedMonths = monthTotals.toSortedMap()
+    val allMonthLevels = monthLevels(orderedMonths.values.flatten())
+    val yearMonthLevels = orderedMonths.keys.zip(allMonthLevels.chunked(12))
+    val hourPlays = IntArray(24)
+    val weekdayPlays = IntArray(7)
+    dated
+        .filterNot { it.hasGuessedTime }
+        .forEach { event ->
+            calendar.timeInMillis = event.startedAt
+            hourPlays[calendar.get(Calendar.HOUR_OF_DAY)]++
+            weekdayPlays[(calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7]++
+        }
+    val busiest = weekdayPlays.indices.maxByOrNull { weekdayPlays[it] }
+    return AllTimeReview(
+        range = PlayEvent.BASELINE_TIME until Long.MAX_VALUE,
+        plays = summary.plays,
+        listenedMs = summary.listenedMs,
+        songs = summary.songs.size,
+        artists = summary.artists.size,
+        firstPlayAt = dated.minOfOrNull { it.startedAt },
+        topArtist = summary.artists.firstOrNull(),
+        topAlbum = summary.albums.firstOrNull(),
+        topSongs = summary.songs.take(topSongs),
+        years = years,
+        yearMonthLevels = yearMonthLevels,
+        busiestYear =
+            years
+                .maxWithOrNull(compareBy<YearSummary> { it.listenedMs }.thenBy { it.plays })
+                ?.takeIf { it.plays > 0 }
+                ?.year,
+        hourPlays = hourPlays.toList(),
+        weekdayPlays = weekdayPlays.toList(),
+        busiestWeekday = busiest?.takeIf { weekdayPlays[it] > 0 }?.let { (it + 1) % 7 + 1 },
+    )
+}
+
+fun monthLevels(listenedMs: List<Long>): List<Int> {
+    val max = listenedMs.maxOrNull() ?: 0L
+    if (max <= 0L) return List(listenedMs.size) { 0 }
+    return listenedMs.map {
+        if (it <= 0) 0 else ((it.toDouble() / max * 4).roundToInt()).coerceIn(1, 4)
+    }
+}
+
+enum class TimeOfDay {
+    MORNING,
+    AFTERNOON,
+    EVENING,
+    NIGHT,
+}
+
+fun timeOfDay(hourPlays: List<Int>): TimeOfDay? {
+    if (hourPlays.none { it > 0 }) return null
+    val totals =
+        listOf(
+            (5..11).sumOf { hourPlays.getOrElse(it) { 0 } },
+            (12..16).sumOf { hourPlays.getOrElse(it) { 0 } },
+            (17..21).sumOf { hourPlays.getOrElse(it) { 0 } },
+            listOf(22, 23, 0, 1, 2, 3, 4).sumOf { hourPlays.getOrElse(it) { 0 } },
+        )
+    return TimeOfDay.entries[totals.indices.maxBy { totals[it] }]
 }
 
 /** Make a card title using a localized possessive form of [name]. */

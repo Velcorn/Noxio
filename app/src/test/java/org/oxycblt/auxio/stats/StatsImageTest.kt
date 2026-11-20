@@ -97,6 +97,18 @@ class StatsImageTest {
     }
 
     @Test
+    fun clockAndYearGridCardsRenderAtTheShareSize() {
+        val base = itemContent(rows = 0, bars = 0)
+        val clock = base.copy(clockHours = List(24) { it % 4 })
+        val grid = base.copy(yearGrid = (2021..2026).map { it to List(12) { month -> month % 5 } })
+        for (item in listOf(clock, grid)) {
+            val bitmap = StatsImage.renderItem(context, item)
+            assertEquals(1080, bitmap.width)
+            assertEquals(1350, bitmap.height)
+        }
+    }
+
+    @Test
     fun everyCategoryHasItsOwnColors() {
         val colors = StatsCategory.entries.map { StatsImage.gradientOf(context, it) }
         assertEquals(StatsCategory.entries.size, colors.toSet().size)

@@ -60,6 +60,10 @@ data class StatsItemImageContent(
     val footerEnd: String,
     val heatLevels: Map<Long, Int> = emptyMap(),
     val heatYear: Int? = null,
+    val clockHours: List<Int> = emptyList(),
+    /** False for rows that are not a ranking: they are drawn without a number. */
+    val rankedRows: Boolean = true,
+    val yearGrid: List<Pair<Int, List<Int>>> = emptyList(),
 ) {
     data class Tile(val value: String, val label: String)
 
@@ -103,6 +107,11 @@ object StatsImage {
     private const val SECTION_Y = 770f
     private const val ITEM_ROW_HEIGHT = 112f
     private const val BAR_HEIGHT = 230f
+    private const val CLOCK_CENTER_Y = 745f
+    private const val CLOCK_INNER = 120f
+    private const val CLOCK_OUTER = 330f
+    private const val CLOCK_LABEL_RADIUS = 385f
+    private const val CLOCK_BAR_WIDTH = 22f
 
     fun render(context: Context, content: StatsImageContent): Bitmap {
         val bitmap = createBitmap(WIDTH, HEIGHT)
@@ -171,7 +180,7 @@ object StatsImage {
         content.tiles.take(4).forEachIndexed { index, tile ->
             val left = MARGIN + (index % 2) * (TILE_WIDTH + TILE_GAP)
             // The year's heatmap above the tiles takes some of their room.
-            val heatmap = content.heatYear != null
+            val heatmap = content.heatYear != null || content.yearGrid.isNotEmpty()
             val shift = if (heatmap) HEATMAP_TILE_SHIFT else 0f
             val height = if (heatmap) HEATMAP_TILE_HEIGHT else TILE_HEIGHT
             // The texts stay in the middle of a lower tile.
@@ -205,7 +214,11 @@ object StatsImage {
         }
 
         if (
-            content.tiles.isNotEmpty() && (content.rows.isNotEmpty() || content.bars.isNotEmpty())
+            content.tiles.isNotEmpty() &&
+                (content.rows.isNotEmpty() ||
+                    content.bars.isNotEmpty() ||
+                    content.clockHours.isNotEmpty() ||
+                    content.yearGrid.isNotEmpty())
         ) {
             text.typeface = Typeface.DEFAULT_BOLD
             text.textSize = 34f
@@ -224,10 +237,12 @@ object StatsImage {
                     FIRST_ROW_Y + index * ROW_HEIGHT,
                     row,
                     ROW_HEIGHT,
+                    content.rankedRows,
                 )
             }
         } else {
             if (content.heatYear != null) drawYearHeatmap(canvas, paint, text, content)
+            if (content.yearGrid.isNotEmpty()) drawYearGrid(canvas, paint, text, content.yearGrid)
             content.rows.take(3).forEachIndexed { index, row ->
                 drawRow(
                     canvas,
@@ -240,7 +255,8 @@ object StatsImage {
                 )
             }
         }
-        if (content.rows.isEmpty()) {
+        if (content.clockHours.isNotEmpty()) drawListeningClock(canvas, paint, text, content)
+        if (content.rows.isEmpty() && content.clockHours.isEmpty() && content.yearGrid.isEmpty()) {
             drawBars(canvas, paint, text, content.bars)
         }
 
@@ -248,6 +264,99 @@ object StatsImage {
             drawFooter(canvas, paint, text, content.footerStart, content.footerEnd, small = true)
         }
         return bitmap
+    }
+
+    private fun drawListeningClock(
+        canvas: Canvas,
+        paint: Paint,
+        text: TextPaint,
+        content: StatsItemImageContent,
+    ) {
+        // The clock fills the room between the title and the footer. Each hour is a faint
+        // full-length
+        // track with its share of the plays drawn over it in white, midnight at the top.
+        val cx = WIDTH / 2f
+        val cy = CLOCK_CENTER_Y
+        val max = content.clockHours.maxOrNull()?.coerceAtLeast(1) ?: 1
+        paint.strokeWidth = CLOCK_BAR_WIDTH
+        paint.strokeCap = Paint.Cap.ROUND
+        for (hour in 0 until 24) {
+            val angle = Math.toRadians(hour * 15.0 - 90.0)
+            val cos = kotlin.math.cos(angle).toFloat()
+            val sin = kotlin.math.sin(angle).toFloat()
+            val fraction = content.clockHours.getOrElse(hour) { 0 }.toFloat() / max
+            val end = CLOCK_INNER + (CLOCK_OUTER - CLOCK_INNER) * fraction.coerceAtLeast(0.03f)
+            paint.color = WHITE
+            paint.alpha = 51
+            canvas.drawLine(
+                cx + cos * CLOCK_INNER,
+                cy + sin * CLOCK_INNER,
+                cx + cos * CLOCK_OUTER,
+                cy + sin * CLOCK_OUTER,
+                paint,
+            )
+            paint.alpha = 255
+            canvas.drawLine(
+                cx + cos * CLOCK_INNER,
+                cy + sin * CLOCK_INNER,
+                cx + cos * end,
+                cy + sin * end,
+                paint,
+            )
+        }
+        text.typeface = Typeface.DEFAULT_BOLD
+        text.textSize = 38f
+        text.textAlign = Paint.Align.CENTER
+        text.alpha = 217
+        listOf(0, 6, 12, 18).forEach { hour ->
+            val angle = Math.toRadians(hour * 15.0 - 90.0)
+            canvas.drawText(
+                hour.toString(),
+                cx + kotlin.math.cos(angle).toFloat() * CLOCK_LABEL_RADIUS,
+                cy + kotlin.math.sin(angle).toFloat() * CLOCK_LABEL_RADIUS + 13f,
+                text,
+            )
+        }
+        text.alpha = 255
+        text.textAlign = Paint.Align.LEFT
+    }
+
+    private fun drawYearGrid(
+        canvas: Canvas,
+        paint: Paint,
+        text: TextPaint,
+        years: List<Pair<Int, List<Int>>>,
+    ) {
+        // Sits where the heatmap of a year does and takes the same height: one row of 12 wide month
+        // cells per year, the year at the left, month initials above like the heatmap.
+        val rows = years.takeLast(6)
+        val labelWidth = 70f
+        val left = MARGIN + labelWidth
+        val top = 230f
+        val gap = 4f
+        val stripHeight = 7 * 13.5f + 6 * 3f
+        val cellHeight = minOf(22f, (stripHeight - (rows.size - 1) * gap) / rows.size)
+        val cellWidth = (CONTENT_WIDTH - labelWidth - 11 * gap) / 12
+        text.typeface = Typeface.DEFAULT_BOLD
+        text.textSize = 15f
+        text.alpha = 204
+        java.text.DateFormatSymbols.getInstance().months.take(12).forEachIndexed { index, month ->
+            canvas.drawText(month.take(1), left + index * (cellWidth + gap), top - 6f, text)
+        }
+        text.textSize = 20f
+        rows.forEachIndexed { row, (year, levels) ->
+            val y = top + row * (cellHeight + gap)
+            canvas.drawText(year.toString(), MARGIN, y + cellHeight / 2 + 7f, text)
+            levels.take(12).forEachIndexed { column, level ->
+                paint.color = WHITE
+                paint.alpha = intArrayOf(31, 64, 115, 179, 255)[level.coerceIn(0, 4)]
+                val x = left + column * (cellWidth + gap)
+                canvas.drawRoundRect(RectF(x, y, x + cellWidth, y + cellHeight), 3f, 3f, paint)
+            }
+        }
+        paint.alpha = 255
+        text.alpha = 255
+        text.textAlign = Paint.Align.LEFT
     }
 
     private fun drawYearHeatmap(
@@ -445,18 +554,24 @@ object StatsImage {
         top: Float,
         row: StatsImageContent.Row,
         rowHeight: Float,
+        ranked: Boolean = true,
     ) {
         val roomy = rowHeight >= ROW_HEIGHT
         val first = index == 0
 
-        paint.color = if (first) WHITE else 0x38FFFFFF
-        canvas.drawCircle(MARGIN + 44f, top + 40f, 40f, paint)
-
+        // Rows that are not a ranking (such as years in order) leave out the number and start at
+        // the
+        // margin.
+        val nameX = if (ranked) MARGIN + 120f else MARGIN
         text.typeface = Typeface.DEFAULT_BOLD
-        text.textSize = 40f
-        text.textAlign = Paint.Align.CENTER
-        text.color = if (first) DARK else WHITE
-        canvas.drawText((index + 1).toString(), MARGIN + 44f, top + 54f, text)
+        if (ranked) {
+            paint.color = if (first) WHITE else 0x38FFFFFF
+            canvas.drawCircle(MARGIN + 44f, top + 40f, 40f, paint)
+            text.textSize = 40f
+            text.textAlign = Paint.Align.CENTER
+            text.color = if (first) DARK else WHITE
+            canvas.drawText((index + 1).toString(), MARGIN + 44f, top + 54f, text)
+        }
 
         text.color = WHITE
         text.textAlign = Paint.Align.LEFT
@@ -488,7 +603,7 @@ object StatsImage {
             lines.forEachIndexed { line, value ->
                 canvas.drawText(
                     value,
-                    MARGIN + 120f,
+                    nameX,
                     firstY + line * (if (roomy) 44f else 38f),
                     text,
                 )
@@ -496,7 +611,7 @@ object StatsImage {
         } else {
             // A name without a second line sits in the middle of its row, next to the number.
             val nameY = if (hasSubtitle) top + 36f else top + 55f
-            canvas.drawText(lines.firstOrNull().orEmpty(), MARGIN + 120f, nameY, text)
+            canvas.drawText(lines.firstOrNull().orEmpty(), nameX, nameY, text)
         }
         if (hasSubtitle) {
             text.typeface = Typeface.DEFAULT
@@ -505,7 +620,7 @@ object StatsImage {
             val subtitleY = if (!wrapped) top + 80f else if (roomy) top + 122f else top + 102f
             canvas.drawText(
                 ellipsize(row.subtitle.orEmpty(), text, 560f),
-                MARGIN + 120f,
+                nameX,
                 subtitleY,
                 text,
             )
