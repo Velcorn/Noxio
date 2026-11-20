@@ -497,6 +497,8 @@
     <string name="fmt_sleep_range">1–%d Min.</string>
     <string name="desc_sleep_timer_hold">Wiedergabe starten oder pausieren; für den Sleep-Timer gedrückt halten</string>
     <string name="lbl_stats_wrapped">Rückblick</string>
+    <string name="lbl_stats_review_all_time">Gesamtrückblick</string>
+    <string name="fmt_stats_review_year">Rückblick %s</string>
     <string name="lbl_stats_wrapped_subtitle">Jahr in Musik</string>
     <string name="lbl_stats_wrapped_name_action">Name</string>
     <string name="lbl_stats_wrapped_name">Name für den Rückblick</string>

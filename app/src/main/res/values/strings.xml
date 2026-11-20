@@ -644,6 +644,8 @@
     <string name="fmt_sleep_range">1–%d min</string>
     <string name="desc_sleep_timer_hold">Play or pause; hold for sleep timer</string>
     <string name="lbl_stats_wrapped">Review</string>
+    <string name="lbl_stats_review_all_time">All-time review</string>
+    <string name="fmt_stats_review_year">%s review</string>
     <string name="lbl_stats_wrapped_subtitle">Year in music</string>
     <string name="lbl_stats_wrapped_name_action">Name</string>
     <string name="lbl_stats_wrapped_name">Name for review</string>

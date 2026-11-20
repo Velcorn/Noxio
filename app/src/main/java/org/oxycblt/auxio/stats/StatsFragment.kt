@@ -29,7 +29,6 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.toColorInt
@@ -53,6 +52,7 @@ import org.oxycblt.auxio.ui.HorizontalSwipeDetector
 import org.oxycblt.auxio.ui.ViewBindingFragment
 import org.oxycblt.auxio.ui.blackenWindowOnShow
 import org.oxycblt.auxio.ui.liftByBottomInset
+import org.oxycblt.auxio.ui.popupMenu
 import org.oxycblt.auxio.util.collectImmediately
 import org.oxycblt.auxio.util.showToast
 import org.oxycblt.auxio.util.systemBarInsetsCompat
@@ -93,8 +93,16 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
         super.onBindingCreated(binding, savedInstanceState)
 
         binding.statsMenu.setOnClickListener { view ->
-            PopupMenu(requireContext(), view).apply {
+            popupMenu(requireContext(), view).apply {
                 menuInflater.inflate(R.menu.toolbar_stats, menu)
+                // The review is named after what it covers: the shown year, or all time.
+                menu.findItem(R.id.action_wrapped)?.title =
+                    if (statsModel.reviewIsAllTime()) getString(R.string.lbl_stats_review_all_time)
+                    else
+                        getString(
+                            R.string.fmt_stats_review_year,
+                            statsModel.wrappedYear().toString(),
+                        )
                 setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.action_wrapped -> {

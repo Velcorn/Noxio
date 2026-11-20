@@ -62,6 +62,10 @@
         <item name="cornerSize">20dp</item>
     </style>
 
+    <style name="Widget.Auxio.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_menu</item>
+    </style>
+
     <!-- Menus with the black theme, see BlackSurface.kt -->
     <style name="ThemeOverlay.Auxio.BlackPopup" parent="">
         <item name="popupMenuStyle">@style/Widget.Auxio.PopupMenu.Black</item>
