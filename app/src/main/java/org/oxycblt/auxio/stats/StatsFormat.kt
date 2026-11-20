@@ -32,18 +32,19 @@ object StatsFormat {
     fun plays(context: Context, plays: Int): String =
         context.resources.getQuantityString(R.plurals.fmt_stats_plays, plays, plays)
 
-    /** A listening time such as "2 h 5 min", or "<1 min". */
+    /** A listening time such as "1d 2h 30m", "2h 5m" or "<1m". Leading zero units are left out. */
     fun listened(context: Context, ms: Long): String {
         val totalMinutes = ms / 60_000
         if (totalMinutes == 0L) {
             return context.getString(R.string.lbl_stats_under_minute)
         }
-        val hours = totalMinutes / 60
+        val days = totalMinutes / (24 * 60)
+        val hours = totalMinutes / 60 % 24
         val minutes = totalMinutes % 60
-        return if (hours > 0) {
-            context.getString(R.string.fmt_stats_time_hm, hours, minutes)
-        } else {
-            context.getString(R.string.fmt_stats_time_m, minutes)
+        return when {
+            days > 0 -> context.getString(R.string.fmt_stats_time_dhm, days, hours, minutes)
+            hours > 0 -> context.getString(R.string.fmt_stats_time_hm, hours, minutes)
+            else -> context.getString(R.string.fmt_stats_time_m, minutes)
         }
     }
 

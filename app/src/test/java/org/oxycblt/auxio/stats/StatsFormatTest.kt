@@ -118,21 +118,28 @@ class StatsFormatTest {
 
     @Test
     fun lessThanAMinuteIsSaidSo() {
-        assertEquals("<1 min", StatsFormat.listened(context, 59_999))
-        assertEquals("<1 min", StatsFormat.listened(context, 0))
+        assertEquals("<1m", StatsFormat.listened(context, 59_999))
+        assertEquals("<1m", StatsFormat.listened(context, 0))
     }
 
     @Test
     fun minutesWithoutHours() {
-        assertEquals("1 min", StatsFormat.listened(context, minutes(1)))
-        assertEquals("59 min", StatsFormat.listened(context, minutes(59)))
+        assertEquals("1m", StatsFormat.listened(context, minutes(1)))
+        assertEquals("59m", StatsFormat.listened(context, minutes(59)))
     }
 
     @Test
     fun hoursAndMinutes() {
-        assertEquals("1 h 0 min", StatsFormat.listened(context, minutes(60)))
-        assertEquals("2 h 5 min", StatsFormat.listened(context, minutes(125)))
-        assertEquals("447 h 28 min", StatsFormat.listened(context, minutes(447 * 60 + 28)))
+        assertEquals("1h 0m", StatsFormat.listened(context, minutes(60)))
+        assertEquals("2h 5m", StatsFormat.listened(context, minutes(125)))
+        assertEquals("23h 59m", StatsFormat.listened(context, minutes(24 * 60 - 1)))
+    }
+
+    @Test
+    fun daysHoursAndMinutes() {
+        assertEquals("1d 0h 0m", StatsFormat.listened(context, minutes(24 * 60)))
+        assertEquals("1d 2h 30m", StatsFormat.listened(context, minutes(26 * 60 + 30)))
+        assertEquals("18d 15h 28m", StatsFormat.listened(context, minutes(447 * 60 + 28)))
     }
 
     @Test

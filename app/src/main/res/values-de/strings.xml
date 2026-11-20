@@ -408,10 +408,11 @@
     <string name="err_backup_unreadable">Das ist kein Backup von Noxio</string>
     <string name="err_backup_newer">Dieses Backup stammt von einer neueren Version von Noxio. Aktualisiere zuerst die App</string>
     <string name="lbl_stats_empty">In diesem Zeitraum wurde noch nichts gehört. Ein Lied zählt nach 30 Sekunden.</string>
-    <string name="lbl_stats_under_minute">&lt;1 Min.</string>
+    <string name="lbl_stats_under_minute">&lt;1M</string>
     <string name="fmt_stats_row">%1$s\n%2$s</string>
-    <string name="fmt_stats_time_hm">%1$d Std. %2$d Min.</string>
-    <string name="fmt_stats_time_m">%1$d Min.</string>
+    <string name="fmt_stats_time_dhm">%1$dT %2$dS %3$dM</string>
+    <string name="fmt_stats_time_hm">%1$dS %2$dM</string>
+    <string name="fmt_stats_time_m">%1$dM</string>
     <string name="lbl_stats_item_plays">Wiedergaben</string>
     <string name="lbl_stats_item_time">Hörzeit</string>
     <string name="lbl_stats_item_share">Am gesamten Hören</string>

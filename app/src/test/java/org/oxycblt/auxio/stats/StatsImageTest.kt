@@ -41,7 +41,7 @@ class StatsImageTest {
                 List(rows) {
                     StatsImageContent.Row("Artist $it", "Album $it", "${it + 1} plays", "$it min")
                 },
-            totalTime = "4 h 25 min",
+            totalTime = "4h 25m",
             totalPlays = "80 plays",
         )
 

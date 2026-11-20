@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.30.0
+
+## What's Changed
+- Listening times in the stats are shortened to days, hours and minutes, such as "1d 2h 30m" (German "1T 2S 30M")
+- The playback bar at the bottom no longer has a previous-song button; play and next remain
+
 ## v1.29.2
 
 ## What's Improved
