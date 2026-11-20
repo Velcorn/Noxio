@@ -484,17 +484,13 @@
     <string name="lbl_scan_working">Läuft…</string>
     <string name="fmt_scan_progress">Lieder werden gelesen: %1$d / %2$d</string>
     <string name="lbl_scan_done">Deine Musik ist auf dem neuesten Stand</string>
-    <plurals name="fmt_stats_item_estimated">
-        <item quantity="one">Davon %d importiert, Zeit geschätzt</item>
-        <item quantity="other">Davon %d importiert, Zeiten geschätzt</item>
-    </plurals>
     <plurals name="fmt_stats_imported">
-        <item quantity="one">%d Wiedergabe importiert</item>
-        <item quantity="other">%d Wiedergaben importiert</item>
+        <item quantity="one">%s Wiedergabe importiert</item>
+        <item quantity="other">%s Wiedergaben importiert</item>
     </plurals>
     <plurals name="fmt_stats_plays">
-        <item quantity="one">%d Wiedergabe</item>
-        <item quantity="other">%d Wiedergaben</item>
+        <item quantity="one">%s Wiedergabe</item>
+        <item quantity="other">%s Wiedergaben</item>
     </plurals>
     <string name="lbl_sleep_paused">Timer pausiert — läuft mit der Wiedergabe weiter</string>
     <string name="fmt_sleep_notification_paused">Pausiert · noch %s</string>

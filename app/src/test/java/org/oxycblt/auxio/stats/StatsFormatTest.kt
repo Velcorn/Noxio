@@ -117,6 +117,15 @@ class StatsFormatTest {
     }
 
     @Test
+    fun countsHaveThousandsSeparators() {
+        assertEquals("999", StatsFormat.number(999, Locale.US))
+        assertEquals("1,438", StatsFormat.number(1438, Locale.US))
+        assertEquals("1.438", StatsFormat.number(1438, Locale.GERMANY))
+        assertEquals("12,345 plays", StatsFormat.plays(context, 12345, Locale.US))
+        assertEquals("1 play", StatsFormat.plays(context, 1, Locale.US))
+    }
+
+    @Test
     fun lessThanAMinuteIsSaidSo() {
         assertEquals("<1m", StatsFormat.listened(context, 59_999))
         assertEquals("<1m", StatsFormat.listened(context, 0))

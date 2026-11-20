@@ -257,15 +257,15 @@ internal fun wrappedCards(
                             context.getString(R.string.lbl_stats_item_time),
                         ),
                         StatsItemImageContent.Tile(
-                            review.plays.toString(),
+                            StatsFormat.number(review.plays, locale),
                             context.getString(R.string.lbl_stats_item_plays),
                         ),
                         StatsItemImageContent.Tile(
-                            review.songs.toString(),
+                            StatsFormat.number(review.songs, locale),
                             context.getString(R.string.lbl_stats_wrapped_songs),
                         ),
                         StatsItemImageContent.Tile(
-                            review.artists.toString(),
+                            StatsFormat.number(review.artists, locale),
                             context.getString(R.string.lbl_stats_wrapped_artists),
                         ),
                     ),
@@ -332,7 +332,7 @@ internal fun wrappedCards(
                             context.getString(R.string.lbl_stats_item_time),
                         ),
                         StatsItemImageContent.Tile(
-                            review.plays.toString(),
+                            StatsFormat.number(review.plays, locale),
                             context.getString(R.string.lbl_stats_item_plays),
                         ),
                         review.topArtist?.let {
@@ -403,15 +403,15 @@ internal fun allTimeCards(
                             context.getString(R.string.lbl_stats_item_time),
                         ),
                         StatsItemImageContent.Tile(
-                            review.plays.toString(),
+                            StatsFormat.number(review.plays, locale),
                             context.getString(R.string.lbl_stats_item_plays),
                         ),
                         StatsItemImageContent.Tile(
-                            review.songs.toString(),
+                            StatsFormat.number(review.songs, locale),
                             context.getString(R.string.lbl_stats_wrapped_songs),
                         ),
                         StatsItemImageContent.Tile(
-                            review.artists.toString(),
+                            StatsFormat.number(review.artists, locale),
                             context.getString(R.string.lbl_stats_wrapped_artists),
                         ),
                     ),
@@ -507,7 +507,7 @@ internal fun allTimeCards(
                             context.getString(R.string.lbl_stats_item_time),
                         ),
                         StatsItemImageContent.Tile(
-                            review.plays.toString(),
+                            StatsFormat.number(review.plays, locale),
                             context.getString(R.string.lbl_stats_item_plays),
                         ),
                         review.topArtist?.let {

@@ -148,13 +148,9 @@
     <string name="lbl_stats_all">All time</string>
     <string name="lbl_stats_import_baseline">Import as your history before Noxio?</string>
     <string name="lbl_stats_import_baseline_desc">Play counts without a week or month in the file name are added to All time only, not to any week, month or year. They replace the ones of an earlier import. Several files are added together.</string>
-    <plurals name="fmt_stats_item_estimated">
-        <item quantity="one">Includes %d imported play with an estimated time</item>
-        <item quantity="other">Includes %d imported plays with estimated times</item>
-    </plurals>
     <plurals name="fmt_stats_imported">
-        <item quantity="one">Imported %d play</item>
-        <item quantity="other">Imported %d plays</item>
+        <item quantity="one">Imported %s play</item>
+        <item quantity="other">Imported %s plays</item>
     </plurals>
     <string name="err_stats_import">This is not a stats file Noxio can read</string>
     <string name="lbl_stats_exported">Exported</string>
@@ -217,8 +213,8 @@
     <string name="fmt_stats_time_hm">%1$dh %2$dm</string>
     <string name="fmt_stats_time_m">%1$dm</string>
     <plurals name="fmt_stats_plays">
-        <item quantity="one">%d play</item>
-        <item quantity="other">%d plays</item>
+        <item quantity="one">%s play</item>
+        <item quantity="other">%s plays</item>
     </plurals>
     <string name="lbl_stats_item_plays">Plays</string>
     <string name="lbl_stats_item_time">Listening time</string>

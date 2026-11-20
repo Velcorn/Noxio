@@ -375,7 +375,11 @@ class StatsFragment : ViewBindingFragment<FragmentStatsBinding>() {
             val added = withContext(Dispatchers.IO) { statsModel.importCsv(files) }
             Toast.makeText(
                     context,
-                    context.resources.getQuantityString(R.plurals.fmt_stats_imported, added, added),
+                    context.resources.getQuantityString(
+                        R.plurals.fmt_stats_imported,
+                        added,
+                        StatsFormat.number(added),
+                    ),
                     Toast.LENGTH_SHORT,
                 )
                 .show()

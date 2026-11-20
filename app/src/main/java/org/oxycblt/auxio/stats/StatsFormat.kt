@@ -29,8 +29,12 @@ import org.oxycblt.auxio.R
 
 /** Text formatting shared by the stats screen and the image that can be shared from it. */
 object StatsFormat {
-    fun plays(context: Context, plays: Int): String =
-        context.resources.getQuantityString(R.plurals.fmt_stats_plays, plays, plays)
+    fun plays(context: Context, plays: Int, locale: Locale = Locale.getDefault()): String =
+        context.resources.getQuantityString(R.plurals.fmt_stats_plays, plays, number(plays, locale))
+
+    /** A count with the thousands separator of [locale], such as "1,438" (German "1.438"). */
+    fun number(value: Int, locale: Locale = Locale.getDefault()): String =
+        java.text.NumberFormat.getIntegerInstance(locale).format(value)
 
     /** A listening time such as "1d 2h 30m", "2h 5m" or "<1m". Leading zero units are left out. */
     fun listened(context: Context, ms: Long): String {

@@ -3,6 +3,12 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.31.1
+
+## What's Improved
+- Counts in the stats, share cards and reviews have thousands separators, such as "1,438 plays" (German "1.438")
+- Artist, album and song cards no longer have a line about imported plays with estimated times
+
 ## v1.31.0
 
 ## What's New

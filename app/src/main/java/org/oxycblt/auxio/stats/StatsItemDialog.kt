@@ -148,20 +148,11 @@ internal fun itemImageContent(
             listOfNotNull(
                 stats.subtitle?.ifEmpty { null },
                 rankLine,
-                if (stats.estimatedPlays > 0) {
-                    context.resources.getQuantityString(
-                        R.plurals.fmt_stats_item_estimated,
-                        stats.estimatedPlays,
-                        stats.estimatedPlays,
-                    )
-                } else {
-                    null
-                },
             ),
         tiles =
             listOf(
                 StatsItemImageContent.Tile(
-                    stats.plays.toString(),
+                    StatsFormat.number(stats.plays),
                     context.getString(R.string.lbl_stats_item_plays),
                 ),
                 StatsItemImageContent.Tile(
@@ -174,14 +165,14 @@ internal fun itemImageContent(
                 ),
                 if (stats.countsWeeks) {
                     StatsItemImageContent.Tile(
-                        stats.weeksPlayed.toString(),
+                        StatsFormat.number(stats.weeksPlayed),
                         context.getString(R.string.lbl_stats_item_weeks),
                     )
                 } else {
                     StatsItemImageContent.Tile(
                         // Imported plays have no real day.
                         if (stats.daysPlayed == 0 && stats.estimatedPlays > 0) "–"
-                        else stats.daysPlayed.toString(),
+                        else StatsFormat.number(stats.daysPlayed),
                         context.getString(R.string.lbl_stats_item_days),
                     )
                 },
