@@ -153,6 +153,7 @@ class ExoPlaybackStateHolder(
                 .map { it.audioAttributes.usage to it.audioAttributes.contentType },
             android.media.AudioAttributes.USAGE_MEDIA,
             android.media.AudioAttributes.CONTENT_TYPE_MUSIC,
+            ownPlaying = player.isPlaying,
         )
 
     private fun currentOthers() =

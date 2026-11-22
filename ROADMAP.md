@@ -9,6 +9,7 @@ The user checked these on the Clicks Communicator and they did not work; details
 - Keyboard phone mode on the Communicator: whether Automatic detects its keyboard, and whether Ctrl, Alt+number and Ctrl with comma or period arrive as expected
 
 ## Done
+- Pause for other sounds: pausing for a voice message no longer flips between pause and play when the messenger plays it as music; regression tests added, not run here.
 - Pause for other sounds: messenger pause and resume work without pauses between songs, confirmed on a phone.
 - Tag editing: edits work on a phone and other players read the changed tags, confirmed on a phone.
 - Queue before the library: the playing song restores before loading finishes and the rest of the queue follows without a gap, confirmed on a phone.

@@ -73,14 +73,86 @@ class OtherAudioTest {
     @Test
     fun ownPlayerAndShortSoundsAreNotCounted() {
         val own = media to music
-        assertEquals(0, OtherAudio.othersAmong(listOf(own), media, music))
-        assertEquals(0, OtherAudio.othersAmong(listOf(own, notification to 4), media, music))
-        assertEquals(1, OtherAudio.othersAmong(listOf(own, media to speech), media, music))
-        assertEquals(1, OtherAudio.othersAmong(listOf(own, voice to speech), media, music))
-        // Without its own player every relevant one is another app's.
-        assertEquals(1, OtherAudio.othersAmong(listOf(media to speech), media, music))
+        assertEquals(0, OtherAudio.othersAmong(listOf(own), media, music, ownPlaying = true))
+        assertEquals(
+            0,
+            OtherAudio.othersAmong(listOf(own, notification to 4), media, music, ownPlaying = true),
+        )
+        assertEquals(
+            1,
+            OtherAudio.othersAmong(listOf(own, media to speech), media, music, ownPlaying = true),
+        )
+        assertEquals(
+            1,
+            OtherAudio.othersAmong(listOf(own, voice to speech), media, music, ownPlaying = true),
+        )
+        // With no matching player, nothing is subtracted even while Noxio plays.
+        assertEquals(
+            1,
+            OtherAudio.othersAmong(listOf(media to speech), media, music, ownPlaying = true),
+        )
         // A second music player is another app's.
-        assertEquals(1, OtherAudio.othersAmong(listOf(own, own), media, music))
+        assertEquals(1, OtherAudio.othersAmong(listOf(own, own), media, music, ownPlaying = true))
+    }
+
+    @Test
+    fun aVoiceMessagePlayedAsMusicDoesNotResumeNoxioUntilItStops() {
+        assertVoiceMessagePausesUntilStopped(music)
+    }
+
+    @Test
+    fun aVoiceMessagePlayedAsSpeechDoesNotResumeNoxioUntilItStops() {
+        assertVoiceMessagePausesUntilStopped(speech)
+    }
+
+    private fun assertVoiceMessagePausesUntilStopped(content: Int) {
+        val audio = OtherAudio()
+        val own = media to music
+        val other = media to content
+        audio.onOwnPlaying(
+            true,
+            OtherAudio.othersAmong(listOf(own), media, music, ownPlaying = true),
+        )
+        assertEquals(
+            Action.PAUSE,
+            audio.onPlayersChanged(
+                OtherAudio.othersAmong(listOf(own, other), media, music, ownPlaying = true),
+                playing = true,
+            ),
+        )
+        assertTrue(audio.pausedForOther)
+        // Noxio's player is no longer started, but the voice message is still playing.
+        assertEquals(
+            Action.NONE,
+            audio.onPlayersChanged(
+                OtherAudio.othersAmong(listOf(other), media, music, ownPlaying = false),
+                playing = false,
+            ),
+        )
+        assertTrue(audio.pausedForOther)
+        assertEquals(
+            Action.RESUME,
+            audio.onPlayersChanged(
+                OtherAudio.othersAmong(emptyList(), media, music, ownPlaying = false),
+                playing = false,
+            ),
+        )
+        assertFalse(audio.pausedForOther)
+    }
+
+    @Test
+    fun whileNoxioIsPausedEveryRelevantStartedPlayerCounts() {
+        val matching = media to music
+        assertEquals(1, OtherAudio.othersAmong(listOf(matching), media, music, ownPlaying = false))
+        assertEquals(
+            4,
+            OtherAudio.othersAmong(
+                listOf(matching, media to speech, voice to speech, 0 to music, notification to 4),
+                media,
+                music,
+                ownPlaying = false,
+            ),
+        )
     }
 
     @Test

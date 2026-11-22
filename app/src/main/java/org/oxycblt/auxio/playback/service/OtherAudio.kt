@@ -63,13 +63,20 @@ class OtherAudio {
 
     companion object {
         /**
-         * How many of the [players] (each its usage and content type) are not Noxio's own one.
-         * Noxio plays as media with music, so one such player is taken for its own. Short sounds
-         * (notifications, clicks, alarms, navigation) are left out: they ask for focus anyway.
+         * How many of the started [players] (each its usage and content type) are not Noxio's own
+         * one. Only while [ownPlaying], one player matching [ownUsage] and [ownContent] is taken
+         * for its own; while paused, every relevant started player belongs to another app. Short
+         * sounds (notifications, clicks, alarms, navigation) are left out: they ask for focus
+         * anyway.
          */
-        fun othersAmong(players: List<Pair<Int, Int>>, ownUsage: Int, ownContent: Int): Int {
+        fun othersAmong(
+            players: List<Pair<Int, Int>>,
+            ownUsage: Int,
+            ownContent: Int,
+            ownPlaying: Boolean,
+        ): Int {
             val relevant = players.filter { (usage, _) -> usage in RELEVANT_USAGES }
-            val own = if (relevant.any { it == ownUsage to ownContent }) 1 else 0
+            val own = if (ownPlaying && relevant.any { it == ownUsage to ownContent }) 1 else 0
             return relevant.size - own
         }
 
