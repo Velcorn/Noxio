@@ -3,6 +3,11 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.32.1
+
+## What's Fixed
+- Pause for other sounds no longer switches between pause and play every second while a messenger plays a voice message
+
 ## v1.32.0
 
 ## What's Changed
