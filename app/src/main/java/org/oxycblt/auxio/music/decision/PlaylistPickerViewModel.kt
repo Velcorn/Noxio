@@ -115,12 +115,24 @@ class PlaylistPickerViewModel @Inject constructor(private val musicRepository: M
             }
             L.d("Updated chosen name to $chosenName")
             refreshChoicesWith = refreshChoicesWith ?: currentSongsToAdd.value
+        }
 
-            // TODO: Add music syncing for other playlist states here
-
+        if (changes.deviceLibrary || changes.userLibrary) {
+            currentPendingRenamePlaylist.value =
+                currentPendingRenamePlaylist.value?.let { pending ->
+                    library?.findPlaylist(pending.playlist.uid)?.let { playlist ->
+                        pending.copy(
+                            playlist = playlist,
+                            applySongs =
+                                pending.applySongs.mapNotNull { library?.findSong(it.uid) },
+                        )
+                    }
+                }
+            currentPlaylistToDelete.value =
+                currentPlaylistToDelete.value?.let { library?.findPlaylist(it.uid) }
             currentPlaylistToExport.value =
                 currentPlaylistToExport.value?.let { playlist ->
-                    musicRepository.library?.findPlaylist(playlist.uid)
+                    library?.findPlaylist(playlist.uid)
                 }
             L.d("Updated playlist to export to ${currentPlaylistToExport.value}")
         }
@@ -146,6 +158,14 @@ class PlaylistPickerViewModel @Inject constructor(private val musicRepository: M
         reason: PlaylistDecision.New.Reason,
     ) {
         L.d("Opening ${songUids.size} songs to create a playlist from")
+        currentPendingNewPlaylist.value?.let { pending ->
+            if (
+                pending.songs.map { it.uid } == songUids.toList() &&
+                    pending.template == template &&
+                    pending.reason == reason
+            )
+                return
+        }
         val library = musicRepository.library ?: return
         val songs =
             musicRepository.library
@@ -187,6 +207,15 @@ class PlaylistPickerViewModel @Inject constructor(private val musicRepository: M
         reason: PlaylistDecision.Rename.Reason,
     ) {
         L.d("Opening playlist $playlistUid to rename")
+        currentPendingRenamePlaylist.value?.let { pending ->
+            if (
+                pending.playlist.uid == playlistUid &&
+                    pending.applySongs.map { it.uid } == applySongUids.toList() &&
+                    pending.template == template &&
+                    pending.reason == reason
+            )
+                return
+        }
         val playlist = musicRepository.library?.findPlaylist(playlistUid)
         val applySongs = musicRepository.library?.let { applySongUids.mapNotNull(it::findSong) }
 
@@ -206,7 +235,6 @@ class PlaylistPickerViewModel @Inject constructor(private val musicRepository: M
      */
     fun setPlaylistToExport(playlistUid: Music.UID) {
         L.d("Opening playlist $playlistUid to export")
-        // TODO: Add this guard to the rest of the methods here
         if (currentPlaylistToExport.value?.uid == playlistUid) return
         currentPlaylistToExport.value = musicRepository.library?.findPlaylist(playlistUid)
         if (currentPlaylistToExport.value == null) {
@@ -233,6 +261,7 @@ class PlaylistPickerViewModel @Inject constructor(private val musicRepository: M
      */
     fun setPlaylistToDelete(playlistUid: Music.UID) {
         L.d("Opening playlist $playlistUid to delete")
+        if (currentPlaylistToDelete.value?.uid == playlistUid) return
         currentPlaylistToDelete.value = musicRepository.library?.findPlaylist(playlistUid)
         if (currentPlaylistToDelete.value == null) {
             L.w("Given playlist UID to delete was invalid")
@@ -277,6 +306,7 @@ class PlaylistPickerViewModel @Inject constructor(private val musicRepository: M
      */
     fun setSongsToAdd(songUids: Array<Music.UID>) {
         L.d("Opening ${songUids.size} songs to add to a playlist")
+        if (currentSongsToAdd.value?.map { it.uid } == songUids.toList()) return
         currentSongsToAdd.value =
             musicRepository.library
                 ?.let { songUids.mapNotNull(it::findSong).ifEmpty { null } }

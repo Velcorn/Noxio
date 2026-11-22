@@ -43,10 +43,11 @@ timer** and **tag editing**.
 - **Queue and playlists:** the song that played is ready right after a restart, before the library has loaded. The queue
   has its own search button (a long press shuffles, saves or clears it), opens at the song that plays, opens with a swipe up on the player, and can be cleared or saved
   as a playlist. Playlists can be searched, sorted and have songs taken out,
-  with no song added twice and duplicates removed in one go.
+  with no song added twice and duplicates removed in one go. Play next keeps its place when shuffle is turned off.
+- **Playback errors:** a toast names a song that cannot play; it is skipped, and playback stops if a whole queue pass fails.
 - **Keyboard phones:** with a hardware keyboard (automatic, or on/off in Appearance) the screen loses its buttons,
   rows and tabs: type to search, Space plays, Ctrl plus a letter does the rest (Ctrl+H lists them). Without
-  a keyboard the search row stays, so it can always be switched off.
+  a keyboard the search row stays, so it can always be switched off. The Communicator device check failed and needs investigation.
 - **One-handed layout:** icon-only tabs at the bottom with Settings as the last tab, the playing strip above
   them and a floating search button; no back or three-dot buttons, long presses and gestures instead (all in
   [docs/GESTURES.md](docs/GESTURES.md)).
@@ -56,7 +57,7 @@ timer** and **tag editing**.
   estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
 - **Artist visibility:** Library settings can hide song-only artists or secondary album artists, crediting albums and songs to the first album artist.
 - **Short and square screens:** a compact player, totals in the stats title row and a lower album
-  header, so more fits on screens like the Clicks Communicator.
+  header, so more fits on short screens. The Communicator device check failed and needs investigation.
 - **Changelog:** every Noxio release can be read in the app, under About (bundled, so it works offline).
 - **Credits:** About > Licenses lists Noxio, what it is built on and every library it ships, with the full license texts (bundled).
 - **Look:** pure black theme, rounded UI, a wavy seek bar (can be turned off), and a minimal white outline icon next to the default
@@ -86,7 +87,7 @@ Noxio is built for one person's use, so it does one thing one way where Auxio of
 - **Genres** are left out: there is no Genres tab, and Song properties do not show them.
 
 Everything else comes from Auxio: Media3 playback, gapless, ReplayGain from tags, rich tag support, playlists, Android Auto,
-widgets, completely private and offline. Progress and what still needs a check on a phone are in
+widgets, completely private and offline. Progress and device issues that need investigation are in
 [ROADMAP.md](/ROADMAP.md).
 
 ## Screenshots

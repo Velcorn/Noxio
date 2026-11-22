@@ -3,6 +3,20 @@
 Noxio versions follow major.minor.patch: a minor version has new features or changes how the app looks or
 behaves, a patch version only fixes things. Auxio's own history is in its repository.
 
+## v1.32.0
+
+## What's Changed
+- When a song cannot be played, a message names it ("Could not play …") before the next song starts; if no song in the queue can be played, playback stops after one round instead of skipping on forever
+
+## What's Improved
+- Screen readers announce the state of the repeat, shuffle and play buttons ("Repeat: all", "Shuffle: on")
+- Music sources keeps your choices and newly added folders when the screen rotates
+
+## What's Fixed
+- Songs added with Play next stay right after the current song when shuffle is turned off
+- Tapping quickly while a playlist is being saved can no longer lose or mix up the edit
+- Opening the same playlist to export twice no longer reloads it
+
 ## v1.31.2
 
 ## What's Improved

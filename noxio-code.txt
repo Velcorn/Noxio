@@ -61,3 +61,4 @@ playback/state/QueueSwap.kt
 tags/TagEdit.kt
 tags/TagEditMigration.kt
 image/ArtistPictures.kt
+playback/service/PlaybackFailures.kt

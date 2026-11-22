@@ -74,14 +74,49 @@ class BetterShuffleOrderTest {
     }
 
     @Test
-    fun songsInsertedInTheMiddlePlayRightAfterTheOneBeforeThem() {
-        // Two songs are added after the song at index 1.
+    fun insertionUsesTheSamePhysicalIndicesAsThePlayer() {
         val grown = order.cloneAndInsert(1, 2) as BetterShuffleOrder
-        assertEquals(6, grown.length)
+        assertEquals(listOf(4, 0, 5, 1, 2, 3), grown.walk())
         assertEquals((0 until 6).toList(), grown.walk().sorted())
-        val walked = grown.walk()
-        assertEquals(walked.indexOf(1) + 1, walked.indexOf(2))
-        assertEquals(walked.indexOf(1) + 2, walked.indexOf(3))
+    }
+
+    @Test
+    fun playNextStaysAfterCurrentInBothShuffledAndUnshuffledQueues() {
+        val queue = mutableListOf("A", "B", "C", "D")
+        val currentIndex = 2
+        val grown = order.insertAfter(currentIndex, 2)
+        queue.addAll(currentIndex + 1, listOf("next1", "next2"))
+        assertEquals(listOf("C", "next1", "next2", "A", "D", "B"), grown.walk().map(queue::get))
+        assertEquals(listOf("C", "next1", "next2", "D"), queue.drop(currentIndex))
+        assertEquals((0 until queue.size).toList(), grown.walk().sorted())
+    }
+
+    @Test
+    fun playNextAfterPhysicalLastSongStillComesNextWhenShuffled() {
+        val grown = order.insertAfter(3, 2)
+        assertEquals(listOf(2, 0, 3, 4, 5, 1), grown.walk())
+    }
+
+    @Test
+    fun repeatedPlayNextKeepsTheNewestInsertionFirstInBothOrders() {
+        val queue = mutableListOf("A", "B", "C", "D")
+        val first = order.insertAfter(0, 1)
+        queue.add(1, "first")
+        val second = first.insertAfter(0, 2)
+        queue.addAll(1, listOf("second", "third"))
+        assertEquals(listOf("second", "third", "first"), queue.drop(1).take(3))
+        val shuffledSongs = second.walk().map(queue::get)
+        assertEquals(
+            listOf("second", "third", "first"),
+            shuffledSongs.drop(shuffledSongs.indexOf("A") + 1).take(3),
+        )
+    }
+
+    @Test
+    fun insertingAtTheBeginningShiftsEveryExistingIndex() {
+        val grown = order.cloneAndInsert(0, 2) as BetterShuffleOrder
+        assertEquals((0 until 6).toList(), grown.walk().sorted())
+        assertEquals(listOf(4, 0, 1, 2, 5, 3), grown.walk())
     }
 
     @Test

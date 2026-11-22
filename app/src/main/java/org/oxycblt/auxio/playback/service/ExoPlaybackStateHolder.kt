@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.OpenableColumns
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.media3.common.AudioAttributes
@@ -54,8 +55,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
+import org.oxycblt.auxio.R
 import org.oxycblt.auxio.image.ImageSettings
 import org.oxycblt.auxio.music.MusicRepository
+import org.oxycblt.auxio.music.resolve
 import org.oxycblt.auxio.playback.PlaybackSettings
 import org.oxycblt.auxio.playback.persist.PersistenceRepository
 import org.oxycblt.auxio.playback.replaygain.ReplayGainAudioProcessor
@@ -96,6 +99,7 @@ class ExoPlaybackStateHolder(
     private val saveScope = CoroutineScope(Dispatchers.IO + saveJob)
     private val restoreScope = CoroutineScope(Dispatchers.IO + saveJob)
     private var currentSaveJob: Job? = null
+    private val playbackFailures = PlaybackFailures()
     // While something plays the position is saved every little while, not only after changes.
     private val autoSaver =
         AutoSaver(CoroutineScope(Dispatchers.Main + saveJob), AUTO_SAVE_INTERVAL) {
@@ -404,6 +408,7 @@ class ExoPlaybackStateHolder(
     override fun newPlayback(command: PlaybackCommand) {
         // Noxio: something new plays, the queue restored early is replaced and may be saved over.
         earlyRestored = false
+        playbackFailures.reset()
         parent = command.parent
         player.shuffleModeEnabled = command.shuffled
         player.setMediaItems(command.queue.map { it.buildMediaItem() })
@@ -513,22 +518,19 @@ class ExoPlaybackStateHolder(
     }
 
     override fun playNext(songs: List<Song>, ack: StateAck.PlayNext) {
-        val currTimeline = player.currentTimeline
-        val nextIndex =
-            if (currTimeline.isEmpty) {
-                C.INDEX_UNSET
-            } else {
-                currTimeline.getNextWindowIndex(
-                    player.currentMediaItemIndex,
-                    Player.REPEAT_MODE_OFF,
-                    player.shuffleModeEnabled,
-                )
-            }
-
-        if (nextIndex == C.INDEX_UNSET) {
+        if (player.mediaItemCount == 0) {
             player.addMediaItems(songs.map { it.buildMediaItem() })
         } else {
-            player.addMediaItems(nextIndex, songs.map { it.buildMediaItem() })
+            val currentIndex = player.currentMediaItemIndex
+            val order =
+                if (player.shuffleModeEnabled) {
+                    BetterShuffleOrder(player.unscrambleQueueIndices().toIntArray())
+                        .insertAfter(currentIndex, songs.size)
+                } else {
+                    null
+                }
+            player.addMediaItems(currentIndex + 1, songs.map { it.buildMediaItem() })
+            if (order != null) player.setShuffleOrder(order)
         }
         playbackManager.ack(this, ack)
         deferSave()
@@ -703,6 +705,7 @@ class ExoPlaybackStateHolder(
     override fun onPlaybackStateChanged(playbackState: Int) {
         super.onPlaybackStateChanged(playbackState)
 
+        if (playbackState == Player.STATE_ENDED) playbackFailures.reset()
         if (playbackState == Player.STATE_ENDED && player.repeatMode == Player.REPEAT_MODE_OFF) {
             goto(0)
             player.pause()
@@ -712,6 +715,13 @@ class ExoPlaybackStateHolder(
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
         super.onMediaItemTransition(mediaItem, reason)
 
+        // Only a completed track breaks a chain of failures; starting to play is insufficient.
+        if (
+            reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO ||
+                reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT
+        ) {
+            playbackFailures.reset()
+        }
         if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
             playbackManager.ack(this, StateAck.IndexMoved)
             deferSave()
@@ -749,12 +759,39 @@ class ExoPlaybackStateHolder(
     }
 
     override fun onPlayerError(error: PlaybackException) {
-        // TODO: Replace with no skipping and a notification instead
-        // If there's any issue, just go to the next song.
         L.e("Player error occurred")
         L.e(error.stackTraceToString())
+        val title =
+            player.currentMediaItem?.song?.name?.resolve(context)
+                ?: player.currentMediaItem?.mediaMetadata?.title
+                ?: context.getString(R.string.lbl_song)
+        Toast.makeText(
+                context,
+                context.getString(R.string.err_song_playback, title),
+                Toast.LENGTH_SHORT,
+            )
+            .show()
+        if (playbackFailures.shouldStop(player.mediaItemCount)) {
+            player.stop()
+            player.playWhenReady = false
+            return
+        }
+        // A failed track must not be retried by repeat-one. Wrap once to try the entire queue.
+        val nextIndex =
+            player.currentTimeline.getNextWindowIndex(
+                player.currentMediaItemIndex,
+                Player.REPEAT_MODE_ALL,
+                player.shuffleModeEnabled,
+            )
+        if (nextIndex == C.INDEX_UNSET) {
+            player.stop()
+            player.playWhenReady = false
+            return
+        }
+        player.seekTo(nextIndex, C.TIME_UNSET)
         player.prepare()
-        playbackManager.next()
+        playbackManager.ack(this, StateAck.IndexMoved)
+        deferSave()
     }
 
     private fun broadcastAudioEffectAction(event: String) {

@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.activityViewModels
@@ -142,8 +143,8 @@ class PlaybackPanelFragment :
         binding.playbackSeekBar?.listener = this
 
         // Set up actions
-        // TODO: Add better playback button accessibility
         binding.playbackRepeat.setOnClickListener { playbackModel.toggleRepeatMode() }
+        binding.playbackSkipPrev.contentDescription = getString(R.string.desc_skip_prev)
         binding.playbackSkipPrev.setOnClickListener { playbackModel.prev() }
         binding.playbackPlayPause.apply {
             @SuppressLint("RestrictedApi")
@@ -156,6 +157,7 @@ class PlaybackPanelFragment :
             setOnClickListener { playbackModel.togglePlaying() }
         }
         binding.playbackSkipNext.setOnClickListener { playbackModel.next() }
+        binding.playbackSkipNext.contentDescription = getString(R.string.desc_skip_next)
         binding.playbackShuffle.setOnClickListener { playbackModel.toggleShuffled() }
         binding.playbackPlayPause.setOnLongClickListener {
             L.d("Opening sleep timer")
@@ -185,41 +187,6 @@ class PlaybackPanelFragment :
         collectImmediately(playbackModel.pagerQueue, ::updatePager)
         collectImmediately(sleepTimer.state, ::updateSleepTimer)
     }
-
-    // FIXME: Old code!! Maybe not necessary anymore?
-    //    override fun onStart() {
-    //        super.onStart()
-    //        playbackModel.song.value?.let { requireBinding().playbackCover.bind(it) }
-    //        requireBinding().root.viewTreeObserver.addOnGlobalLayoutListener(this)
-    //    }
-
-    //    override fun onStop() {
-    //        super.onStop()
-    //        requireBinding().root.viewTreeObserver.removeOnGlobalLayoutListener(this)
-    //    }
-
-    //    override fun onGlobalLayout() {
-    //        if (binding == null || lastCoverWidth < 0) {
-    //            return
-    //        }
-    // Hacky workaround for cover radius not being preserved in between sizing changes
-    // (i.e split screen or landscape mode)
-    // For some reason ConstraintLayout does several passes on 1:1 elements that causes their
-    // size to radically change, so we wait until it stabilizes and then force an image
-    // reload if needed. Optimistically this is a no-op from coil caching, but when the cover
-    // did accidentally load the wrong image (with weird corner radius intended for bigger
-    // covers) we can force it to reload.
-    // If this breaks, it's fine since we also started a load as we normally did w/state
-    // updates, so the cover will not break.
-    //        val binding = requireBinding()
-    //        val coverWidth = binding.playbackCover.width
-    //        if (lastCoverWidth != coverWidth) {
-    //            lastCoverWidth = coverWidth
-    //        } else {
-    //            playbackModel.song.value?.let { binding.playbackCover.bind(it) }
-    //            lastCoverWidth = -1
-    //        }
-    //    }
 
     override fun onDestroyBinding(binding: FragmentPlaybackPanelBinding) {
         countdownJob?.cancel()
@@ -294,15 +261,33 @@ class PlaybackPanelFragment :
         val repeatButton = requireBinding().playbackRepeat
         repeatButton.isChecked = repeatMode != RepeatMode.NONE
         repeatButton.setIconResource(repeatMode.icon)
+        ViewCompat.setStateDescription(
+            repeatButton,
+            getString(
+                when (repeatMode) {
+                    RepeatMode.NONE -> R.string.desc_repeat_off
+                    RepeatMode.ALL -> R.string.desc_repeat_all
+                    RepeatMode.TRACK -> R.string.desc_repeat_one
+                },
+            ),
+        )
     }
 
     private fun updatePlaying(isPlaying: Boolean) {
         requireBinding().playbackPlayPause.isChecked = isPlaying
+        requireBinding().playbackPlayPause.contentDescription =
+            getString(
+                if (isPlaying) R.string.desc_pause_sleep_timer else R.string.desc_play_sleep_timer,
+            )
         requireBinding().playbackSeekBar?.setWaveEnabled(isPlaying)
     }
 
     private fun updateShuffled(isShuffled: Boolean) {
         requireBinding().playbackShuffle.isChecked = isShuffled
+        ViewCompat.setStateDescription(
+            requireBinding().playbackShuffle,
+            getString(if (isShuffled) R.string.desc_shuffle_on else R.string.desc_shuffle_off),
+        )
     }
 
     private fun updatePager(queue: PagerQueue) {

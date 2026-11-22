@@ -87,7 +87,7 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
     private var isIncludeMode = true
     private var hasStoragePermission = false
     private var isExtrasExpanded = false
-    private var pendingLocationCallback: ((Location.Unopened) -> Unit)? = null
+    private var pendingLocationTarget: String? = null
     private var permissionGrantedInSession = false
 
     override fun onCreateBinding(inflater: LayoutInflater) =
@@ -141,8 +141,11 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
             itemAnimator = null
         }
 
-        // Load initial state from MusicSettings
-        loadInitialState(binding)
+        if (savedInstanceState == null) {
+            loadInitialState(binding)
+        } else {
+            restorePendingState(binding, savedInstanceState)
+        }
 
         // Set up string resources
         binding.locationsModeHeader.setText(R.string.set_load_from)
@@ -178,26 +181,15 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
 
         // Set up add folder buttons
         binding.locationsIncludeAdd.setOnClickListener {
-            pendingLocationCallback = { location ->
-                location.open(requireContext())?.let { opened ->
-                    includeLocationAdapter.add(opened)
-                    updateSaveButtonState()
-                }
-            }
+            pendingLocationTarget = TARGET_INCLUDE
             onNewLocation(openDocumentTreeLauncher)
         }
         binding.locationsExcludeAdd.setOnClickListener {
-            pendingLocationCallback = { location ->
-                excludeLocationAdapter.add(location)
-                updateSaveButtonState()
-            }
+            pendingLocationTarget = TARGET_EXCLUDE
             onNewLocation(openDocumentTreeLauncher)
         }
         binding.locationsFilterAdd.setOnClickListener {
-            pendingLocationCallback = { location ->
-                filterLocationAdapter.add(location)
-                updateSaveButtonState()
-            }
+            pendingLocationTarget = TARGET_FILTER
             onNewLocation(localOnlyOpenDocumentTreeLauncher)
         }
 
@@ -270,12 +262,66 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // TODO
+        val binding = requireBinding()
+        outState.putBoolean(KEY_FILE_PICKER, isFilePickerMode)
+        outState.putBoolean(KEY_INCLUDE_MODE, isIncludeMode)
+        outState.putBoolean(KEY_EXTRAS, isExtrasExpanded)
+        outState.putBoolean(KEY_PERMISSION_GRANTED, permissionGrantedInSession)
+        outState.putBoolean(KEY_MULTITHREAD, binding.locationsMultithreadSwitch.isChecked)
+        outState.putBoolean(KEY_EXCLUDE_NON_MUSIC, binding.locationsExcludeNonMusicSwitch.isChecked)
+        outState.putString(KEY_PENDING_TARGET, pendingLocationTarget)
+        outState.putStringArrayList(
+            KEY_INCLUDED,
+            ArrayList(includeLocationAdapter.locations.map { it.uri.toString() }),
+        )
+        outState.putStringArrayList(
+            KEY_EXCLUDED,
+            ArrayList(excludeLocationAdapter.locations.map { it.uri.toString() }),
+        )
+        outState.putStringArrayList(
+            KEY_FILTERED,
+            ArrayList(filterLocationAdapter.locations.map { it.uri.toString() }),
+        )
+    }
+
+    private fun restorePendingState(binding: DialogMusicLocationsBinding, state: Bundle) {
+        isFilePickerMode = state.getBoolean(KEY_FILE_PICKER)
+        isIncludeMode = state.getBoolean(KEY_INCLUDE_MODE)
+        isExtrasExpanded = state.getBoolean(KEY_EXTRAS)
+        permissionGrantedInSession = state.getBoolean(KEY_PERMISSION_GRANTED)
+        pendingLocationTarget = state.getString(KEY_PENDING_TARGET)
+        hasStoragePermission = checkStoragePermission()
+        binding.locationsModeExclude.isChecked = isFilePickerMode
+        binding.locationsModeInclude.isChecked = !isFilePickerMode
+        binding.locationsExcludeModeExclude.isChecked = isIncludeMode
+        binding.locationsExcludeModeInclude.isChecked = !isIncludeMode
+        binding.locationsMultithreadSwitch.isChecked = state.getBoolean(KEY_MULTITHREAD)
+        binding.locationsExcludeNonMusicSwitch.isChecked = state.getBoolean(KEY_EXCLUDE_NON_MUSIC)
+        val context = requireContext()
+        includeLocationAdapter.clear()
+        excludeLocationAdapter.clear()
+        filterLocationAdapter.clear()
+        includeLocationAdapter.addAll(
+            state.getStringArrayList(KEY_INCLUDED).orEmpty().mapNotNull {
+                Location.Unopened.from(context, Uri.parse(it)).open(context)
+            },
+        )
+        excludeLocationAdapter.addAll(
+            state.getStringArrayList(KEY_EXCLUDED).orEmpty().map {
+                Location.Unopened.from(context, Uri.parse(it))
+            },
+        )
+        filterLocationAdapter.addAll(
+            state.getStringArrayList(KEY_FILTERED).orEmpty().map {
+                Location.Unopened.from(context, Uri.parse(it))
+            },
+        )
     }
 
     override fun onDestroyBinding(binding: DialogMusicLocationsBinding) {
         super.onDestroyBinding(binding)
         openDocumentTreeLauncher = null
+        localOnlyOpenDocumentTreeLauncher = null
         storagePermissionLauncher = null
         binding.locationsIncludeRecycler.adapter = null
         binding.locationsExcludeRecycler.adapter = null
@@ -289,6 +335,7 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
         try {
             launcher.launch(null)
         } catch (e: ActivityNotFoundException) {
+            pendingLocationTarget = null
             requireContext().showToast(R.string.err_no_app)
         }
     }
@@ -296,7 +343,7 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
     private fun addDocumentTreeUriToDirs(uri: Uri?, disableThirdParty: Boolean) {
         if (uri == null) {
             L.d("No URI given (user closed the dialog)")
-            pendingLocationCallback = null
+            pendingLocationTarget = null
             return
         }
         val context = requireContext()
@@ -304,11 +351,16 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
 
         if (location.path.volume is Volume.ThirdParty && disableThirdParty) {
             requireContext().showToast(R.string.err_bad_location)
-            pendingLocationCallback = null
+            pendingLocationTarget = null
             return
         }
-        pendingLocationCallback?.invoke(location)
-        pendingLocationCallback = null
+        when (pendingLocationTarget) {
+            TARGET_INCLUDE -> location.open(context)?.let { includeLocationAdapter.add(it) }
+            TARGET_EXCLUDE -> excludeLocationAdapter.add(location)
+            TARGET_FILTER -> filterLocationAdapter.add(location)
+        }
+        updateSaveButtonState()
+        pendingLocationTarget = null
     }
 
     private fun updateModeUI(binding: DialogMusicLocationsBinding) {
@@ -624,5 +676,21 @@ class LocationsDialog : ViewBindingMaterialDialogFragment<DialogMusicLocationsBi
             }
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = isEnabled
+    }
+
+    private companion object {
+        const val KEY_FILE_PICKER = "locations.file_picker"
+        const val KEY_INCLUDE_MODE = "locations.include_mode"
+        const val KEY_EXTRAS = "locations.extras"
+        const val KEY_PERMISSION_GRANTED = "locations.permission_granted"
+        const val KEY_MULTITHREAD = "locations.multithread"
+        const val KEY_EXCLUDE_NON_MUSIC = "locations.exclude_non_music"
+        const val KEY_PENDING_TARGET = "locations.pending_target"
+        const val KEY_INCLUDED = "locations.included"
+        const val KEY_EXCLUDED = "locations.excluded"
+        const val KEY_FILTERED = "locations.filtered"
+        const val TARGET_INCLUDE = "include"
+        const val TARGET_EXCLUDE = "exclude"
+        const val TARGET_FILTER = "filter"
     }
 }

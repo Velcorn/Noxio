@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.oxycblt.auxio.R
 import org.oxycblt.auxio.detail.list.DiscDivider
 import org.oxycblt.auxio.detail.list.DiscHeader
@@ -191,6 +192,8 @@ constructor(
      */
     val editedPlaylist: StateFlow<List<Song>?>
         field = MutableStateFlow<List<Song>?>(null)
+
+    private var savingPlaylist = false
 
     /**
      * What the songs of the playlist are filtered by, empty to show all. Only applies outside of an
@@ -516,6 +519,7 @@ constructor(
      * @param uid The [Music.UID] of the [Playlist] to update [currentPlaylist] to. Must be valid.
      */
     fun setPlaylist(uid: Music.UID) {
+        if (savingPlaylist) return
         L.d("Opening playlist $uid")
         if (uid === currentPlaylist.value?.uid) {
             return
@@ -525,6 +529,7 @@ constructor(
 
     /** Start a playlist editing session. Does nothing if a playlist is not being shown. */
     fun startPlaylistEdit() {
+        if (savingPlaylist) return
         val playlist = currentPlaylist.value ?: return
         L.d("Starting playlist edit")
         playlistQuery = ""
@@ -552,15 +557,21 @@ constructor(
      * prior editing session.
      */
     fun savePlaylistEdit() {
+        if (savingPlaylist) return
         val playlist = currentPlaylist.value ?: return
         val editedPlaylist = editedPlaylist.value ?: return
         L.d("Committing playlist edits")
-        viewModelScope.launch(Dispatchers.IO) {
-            musicRepository.rewritePlaylist(playlist, editedPlaylist)
-            // TODO: The user could probably press some kind of button if they were fast enough.
-            //  Think of a better way to handle this state.
-            this@DetailViewModel.editedPlaylist.value = null
-            refreshPlaylist(playlist.uid)
+        savingPlaylist = true
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    musicRepository.rewritePlaylist(playlist, editedPlaylist)
+                }
+                this@DetailViewModel.editedPlaylist.value = null
+                refreshPlaylist(playlist.uid)
+            } finally {
+                savingPlaylist = false
+            }
         }
     }
 
@@ -572,6 +583,7 @@ constructor(
      * @param sort The [Sort] to apply.
      */
     fun sortPlaylist(sort: Sort) {
+        if (savingPlaylist) return
         val playlist = currentPlaylist.value ?: return
         L.d("Sorting playlist by $sort")
         val sorted = sort.songs(playlist.songs)
@@ -588,6 +600,7 @@ constructor(
      * @return true if the session was ended, false otherwise.
      */
     fun dropPlaylistEdit(): Boolean {
+        if (savingPlaylist) return false
         val playlist = currentPlaylist.value ?: return false
         if (editedPlaylist.value == null) {
             // Nothing to do.
@@ -604,6 +617,7 @@ constructor(
      * @param sort The [Sort] to apply.
      */
     fun applyPlaylistSongSort(sort: Sort) {
+        if (savingPlaylist) return
         val playlist = currentPlaylist.value ?: return
         editedPlaylist.value = sort.songs(editedPlaylist.value ?: return)
         refreshPlaylist(playlist.uid, UpdateInstructions.Replace(1))
@@ -617,6 +631,7 @@ constructor(
      * @return true if the song was moved, false otherwise.
      */
     fun movePlaylistSongs(from: Int, to: Int): Boolean {
+        if (savingPlaylist) return false
         val playlist = currentPlaylist.value ?: return false
         val editedPlaylist = (editedPlaylist.value ?: return false).toMutableList()
         val realFrom = from - 1
@@ -637,6 +652,7 @@ constructor(
      * @param at The position of the item to remove, in the list adapter data.
      */
     fun removePlaylistSong(at: Int) {
+        if (savingPlaylist) return
         val playlist = currentPlaylist.value ?: return
         val editedPlaylist = (editedPlaylist.value ?: return).toMutableList()
         val realAt = at - 1

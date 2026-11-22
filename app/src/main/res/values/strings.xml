@@ -678,4 +678,12 @@
     <string name="lng_playlist_already">Already in the playlist</string>
     <string name="lng_playlist_removed">Removed from the playlist</string>
     <string name="lng_playlist_deduped">Duplicates removed</string>
+    <string name="err_song_playback">Could not play %1$s</string>
+    <string name="desc_repeat_off">Repeat: off</string>
+    <string name="desc_repeat_all">Repeat: all</string>
+    <string name="desc_repeat_one">Repeat: one song</string>
+    <string name="desc_shuffle_on">Shuffle: on</string>
+    <string name="desc_shuffle_off">Shuffle: off</string>
+    <string name="desc_play_sleep_timer">Play; hold for sleep timer</string>
+    <string name="desc_pause_sleep_timer">Pause; hold for sleep timer</string>
 </resources>

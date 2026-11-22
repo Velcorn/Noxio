@@ -25,6 +25,7 @@ import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.transition.MaterialSharedAxis
@@ -105,8 +106,13 @@ abstract class DetailFragment<P : MusicParent, C : Music> :
             // not needed for buttons since they are not in the dual-pane layout
             binding.detailNormalToolbar.titleContainer.alpha = 0f
             pane.setOnApplyWindowInsetsListener { view, insets ->
-                // todo: rtl awareness
-                view.updatePadding(bottom = insets.systemBarInsetsCompat.bottom)
+                val bars = insets.systemBarInsetsCompat
+                val isRtl = view.layoutDirection == View.LAYOUT_DIRECTION_RTL
+                view.updatePaddingRelative(
+                    start = if (isRtl) bars.right else bars.left,
+                    end = if (isRtl) bars.left else bars.right,
+                    bottom = bars.bottom,
+                )
                 insets
             }
         }
