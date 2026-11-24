@@ -73,7 +73,7 @@ The user checked these on the Clicks Communicator and they did not work; details
 - Default tab order Artists, Albums, Songs, Playlists, no Genres tab; no three-dot buttons on list rows (long press opens the item menu); black theme for menus, dialogs, sheets and bars; popup menus have 16dp rounded corners in every theme
 - Icon: Crescent and Sparkle, and a minimal white outline icon switchable in Settings > Appearance
 - About page with Noxio links, the Auxio credit and fork notice; store listing (fastlane) with a Noxio description in English and German, new screenshots and feature graphic, Auxio's changelogs and other languages removed
-- README screenshots of what differs from Auxio, retaken for the backup, the stats with imported plays and the sleep timer in the play controls
+- README screenshots of what differs from Auxio, retaken for the backup, the stats with imported plays and the sleep timer in the play controls; retaken from the updated example library, with the yearly and all-time review added
 - German translation of everything Noxio added
 - Unit tests for the Noxio logic, coverage badge, CI (format, Android lint, tests), build caching, signed releases with an ARM64 APK
 

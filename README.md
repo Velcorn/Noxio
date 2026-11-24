@@ -54,7 +54,7 @@ timer** and **tag editing**.
 - **Faster loading:** the library loads about 2.5 to 3 times faster than in Auxio (the name preparation was the
   bottleneck), with the same result.
 - **Musicolet import:** weekly and monthly "Most played songs" files land in their week or month. Their days are only
-  estimated, so they count for totals and weeks, not for days listened (marked with ≈ where it matters).
+  estimated, so they count for totals and weeks, not for days listened (their first and last play are marked with ≈).
 - **Artist visibility:** Library settings can hide song-only artists or secondary album artists, crediting albums and songs to the first album artist.
 - **Short and square screens:** a compact player, totals in the stats title row and a lower album
   header, so more fits on short screens. The Communicator device check failed and needs investigation.
@@ -96,7 +96,8 @@ Black theme on a Pixel 9 sized emulator, with a made up library and listening hi
 
 <table>
 <tr><td align="center" width="20%"><img src="docs/screenshots/08-sleep-timer.png" alt="Sleep timer"><br><sub>Sleep timer</sub></td><td align="center" width="20%"><img src="docs/screenshots/02-player.png" alt="Now playing"><br><sub>Now playing</sub></td><td align="center" width="20%"><img src="docs/screenshots/01-home.png" alt="Home"><br><sub>Home</sub></td><td align="center" width="20%"><img src="docs/screenshots/03-queue.png" alt="Queue"><br><sub>Queue</sub></td><td align="center" width="20%"><img src="docs/screenshots/04-album.png" alt="Album"><br><sub>Album</sub></td></tr>
-<tr><td align="center" width="20%"><img src="docs/screenshots/05-stats.png" alt="Stats"><br><sub>Stats</sub></td><td align="center" width="20%"><img src="docs/screenshots/06-stats-item.png" alt="Artist stats"><br><sub>Artist stats</sub></td><td align="center" width="20%"><img src="docs/screenshots/07-share-card.png" alt="Share card"><br><sub>Share card</sub></td><td align="center" width="20%"><img src="docs/screenshots/09-backup.png" alt="Backup"><br><sub>Backup</sub></td><td align="center" width="20%"><img src="docs/screenshots/10-search.png" alt="Search"><br><sub>Search</sub></td></tr>
+<tr><td align="center" width="20%"><img src="docs/screenshots/10-search.png" alt="Search"><br><sub>Search</sub></td><td align="center" width="20%"><img src="docs/screenshots/09-backup.png" alt="Backup"><br><sub>Backup</sub></td><td align="center" width="20%"><img src="docs/screenshots/05-stats.png" alt="Stats"><br><sub>Stats</sub></td><td align="center" width="20%"><img src="docs/screenshots/06-stats-item.png" alt="Song stats"><br><sub>Song stats</sub></td><td align="center" width="20%"><img src="docs/screenshots/07-share-card.png" alt="Share card"><br><sub>Share card</sub></td></tr>
+<tr><td align="center" width="20%"><img src="docs/screenshots/11-review-year-clock.png" alt="Yearly review: clock"><br><sub>Yearly review: clock</sub></td><td align="center" width="20%"><img src="docs/screenshots/12-review-year-summary.png" alt="Yearly review: summary"><br><sub>Yearly review: summary</sub></td><td align="center" width="20%"><img src="docs/screenshots/13-review-all-time.png" alt="All-time review"><br><sub>All-time review</sub></td><td align="center" width="20%"><img src="docs/screenshots/14-review-all-time-years.png" alt="All-time review: years"><br><sub>All-time review: years</sub></td><td align="center" width="20%"><img src="docs/screenshots/15-review-all-time-summary.png" alt="All-time review: summary"><br><sub>All-time review: summary</sub></td></tr>
 </table>
 
 ## Building
